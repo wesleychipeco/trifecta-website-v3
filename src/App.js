@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import React from "react";
+
 import { BASE_ROUTES } from "./Routes";
 import { Navbar } from "./components/Navbar";
 import { HomeScreen } from "./screens/home-screen/HomeScreen";
