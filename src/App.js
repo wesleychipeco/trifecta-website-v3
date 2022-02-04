@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
 
-function App() {
+import { BASE_ROUTES } from "./Routes";
+import { Navbar } from "./components/Navbar";
+import { HomeScreen } from "./screens/home-screen/HomeScreen";
+import { TradeHistory } from "./screens/trade-history/TradeHistory";
+
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path={BASE_ROUTES.Home} element={<HomeScreen />} exact />
+        <Route
+          path={BASE_ROUTES.TradeHistory}
+          element={<TradeHistory />}
+          exact
+        />
+      </Routes>
+    </>
   );
-}
-
-export default App;
+};
