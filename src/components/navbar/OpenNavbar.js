@@ -22,15 +22,17 @@ export const OpenNavbar = () => {
 
   return (
     <S.OpenNavbarContainer>
-      <S.OpenBarsContainer>
+      <S.HeaderContainer>
         <S.Logo
           src={require("../../resources/images/trifectalogo.png")}
           alt="logo"
         />
         <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
-      </S.OpenBarsContainer>
-      <S.Link to={BASE_ROUTES.Home}>Home link</S.Link>
-      <S.Link to={BASE_ROUTES.TradeHistory}>Trade history link</S.Link>
+      </S.HeaderContainer>
+      <S.LinkContainer>
+        <S.Link to={BASE_ROUTES.Home}>Home</S.Link>
+        <S.Link to={BASE_ROUTES.TradeHistory}>Trade History</S.Link>
+      </S.LinkContainer>
     </S.OpenNavbarContainer>
   );
 };

@@ -1,42 +1,22 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  FONT_COLOR,
+  HEADER_FONT_FAMILY,
+  PRIMARY_GREEN,
+} from "../../styles/variables";
+
+////////// CLOSED NAVBAR //////////
 
 export const CLOSED_NAVBAR_WIDTH = "5rem";
-export const OPEN_NAVBAR_WIDTH = "15rem";
-
-export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
-  padding: 1.75rem 0 0 1.75rem;
-  width: 2rem;
-  height: 2rem;
-  font-size: 1.75rem;
-`;
-
-export const OpenBarsContainer = styled.div`
-  flex-direction: row;
-  padding: 2.5rem 1rem 1rem 2.5rem;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
-  width: 2rem;
-  height: 2rem;
-  font-size: 2rem;
-  margin-left: 2rem;
-  padding: 0.5rem;
-
-  &:hover {
-    opacity: 0.5;
-  }
-`;
 
 export const ClosedNavbarContainer = styled.div`
   position: absolute;
   left: 0.75rem;
   top: 0.75rem;
   border-radius: 50%;
-  background-color: red;
+  background-color: ${PRIMARY_GREEN};
   width: ${CLOSED_NAVBAR_WIDTH};
   height: ${CLOSED_NAVBAR_WIDTH};
 
@@ -45,13 +25,26 @@ export const ClosedNavbarContainer = styled.div`
   }
 `;
 
+export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
+  padding: 1.75rem 0 0 1.75rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.75rem;
+`;
+
+////////// OPEN //////////
+export const OPEN_NAVBAR_WIDTH = "15rem";
+const OPEN_LEFT_PADDING = "2rem";
+const NAVBAR_VERTICAL_SPACING = "1.5rem";
+
 export const OpenNavbarContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  background-color: green;
+  background-color: ${PRIMARY_GREEN};
   width: ${OPEN_NAVBAR_WIDTH};
-  height: 50rem;
+  height: 30rem;
+  border-radius: 0 1rem 1rem 1rem;
 `;
 
 export const Logo = styled.img`
@@ -59,15 +52,42 @@ export const Logo = styled.img`
   height: 2.5rem;
 `;
 
+export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+  margin-left: 4rem;
+  padding: 0.5rem;
+
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
+export const HeaderContainer = styled.div`
+  flex-direction: row;
+  padding: 1rem 1rem ${NAVBAR_VERTICAL_SPACING} ${OPEN_LEFT_PADDING};
+  justify-content: center;
+  align-items: center;
+`;
+
+export const LinkContainer = styled.div`
+  padding-left: ${OPEN_LEFT_PADDING};
+`;
+
 export const Link = styled(NavLink)`
   display: flex;
   flex-direction: row;
-  color: red;
-  font-size: 1rem;
+  font-size: 1.75rem;
+  text-decoration: none;
+  font-family: ${HEADER_FONT_FAMILY};
+  color: ${FONT_COLOR};
+  margin-bottom: ${NAVBAR_VERTICAL_SPACING};
+
   &.active {
-    color: blue;
+    font-weight: 700;
   }
-  background-color: orange;
-  border-width: 1px;
-  border-style: dashed;
+  &:hover {
+    opacity: 0.6;
+  }
 `;
