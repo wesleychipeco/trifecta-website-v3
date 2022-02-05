@@ -44,7 +44,7 @@ export const OpenNavbarContainer = styled.div`
   background-color: ${PRIMARY_GREEN};
   width: ${OPEN_NAVBAR_WIDTH};
   height: 30rem;
-  border-radius: 0 1rem 1rem 1rem;
+  border-radius: 0 1.5rem 1.5rem 1.5rem;
 `;
 
 export const Logo = styled.img`
