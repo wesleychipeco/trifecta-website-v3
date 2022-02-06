@@ -5,6 +5,8 @@ import { BASE_ROUTES } from "../../Routes";
 import * as S from "./Navbar.styles";
 import { closeNavbar } from "../../store/navbarSlice";
 
+import TrifectaLogo from "../../resources/images/trifectalogo.png";
+
 export const OpenNavbar = () => {
   const dispatch = useDispatch();
   const [currentPath, setCurrentPath] = useState("");
@@ -23,10 +25,7 @@ export const OpenNavbar = () => {
   return (
     <S.OpenNavbarContainer>
       <S.HeaderContainer>
-        <S.Logo
-          src={require("../../resources/images/trifectalogo.png")}
-          alt="logo"
-        />
+        <S.Logo src={TrifectaLogo} alt="logo" />
         <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
       </S.HeaderContainer>
       <S.LinkContainer>

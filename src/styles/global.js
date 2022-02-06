@@ -23,4 +23,9 @@ export default createGlobalStyle`
         font-family: ${HEADER_FONT_FAMILY};
         color: ${FONT_COLOR};
     }
+    #root {
+        display: flex;
+        flex: 1;
+        width: 100%;
+    }
 `;

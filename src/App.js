@@ -18,7 +18,7 @@ export const App = () => {
   const isNavbarOpen = useSelector((state) => state.navbar.isNavbarOpen);
 
   return (
-    <>
+    <S.App>
       <GlobalStyle />
       <T.FlexRow>
         {!isNavbarOpen && <ClosedNavbar />}
@@ -41,6 +41,6 @@ export const App = () => {
           </Routes>
         </S.Body>
       </T.FlexRow>
-    </>
+    </S.App>
   );
 };
