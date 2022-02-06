@@ -38,12 +38,13 @@ const OPEN_LEFT_PADDING = "2rem";
 const NAVBAR_VERTICAL_SPACING = "1.5rem";
 
 export const OpenNavbarContainer = styled.div`
+  z-index: 999;
   position: absolute;
   top: 0;
   left: 0;
   background-color: ${PRIMARY_GREEN};
   width: ${OPEN_NAVBAR_WIDTH};
-  height: 30rem;
+  height: 45rem;
   border-radius: 0 1.5rem 1.5rem 1.5rem;
 `;
 

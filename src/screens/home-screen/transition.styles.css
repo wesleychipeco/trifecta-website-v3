@@ -1,0 +1,41 @@
+.basketball-enter {
+  opacity: 0;
+  transform: translateX(-8rem);
+}
+
+.basketball-enter-active {
+  opacity: 1;
+  transition: all 3000ms ease-out;
+  transform: translateX(0);
+}
+
+.baseball-enter {
+  opacity: 0;
+  transform: translateY(4rem);
+}
+
+.baseball-enter-active {
+  opacity: 1;
+  transition: all 3000ms ease-out;
+  transform: translateY(0);
+}
+
+.football-enter {
+  opacity: 0;
+  transform: translateX(14rem);
+}
+
+.football-enter-active {
+  opacity: 1;
+  transition: all 3000ms ease-out;
+  transform: translateX(0);
+}
+
+.trophy-enter {
+  opacity: 0;
+}
+
+.trophy-enter-active {
+  opacity: 1;
+  transition: all 2000ms ease-out;
+}
