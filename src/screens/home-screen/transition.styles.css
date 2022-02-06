@@ -5,8 +5,8 @@
 
 .basketball-enter-active {
   opacity: 1;
-  transition: all 3000ms linear;
-  transform: translateX(1rem);
+  transition: all 3000ms ease-out;
+  transform: translateX(0);
 }
 
 .baseball-enter {
@@ -16,18 +16,18 @@
 
 .baseball-enter-active {
   opacity: 1;
-  transition: all 3000ms linear;
+  transition: all 3000ms ease-out;
   transform: translateY(0);
 }
 
 .football-enter {
   opacity: 0;
-  transform: translateX(10rem);
+  transform: translateX(14rem);
 }
 
 .football-enter-active {
   opacity: 1;
-  transition: all 3000ms linear;
+  transition: all 3000ms ease-out;
   transform: translateX(0);
 }
 
@@ -37,5 +37,5 @@
 
 .trophy-enter-active {
   opacity: 1;
-  transition: all 2000ms linear;
+  transition: all 2000ms ease-out;
 }

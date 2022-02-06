@@ -24,23 +24,23 @@ export const ImageOpacity = styled.div`
 
 export const Basketball = styled.img`
   position: absolute;
-  max-width: 45%;
+  max-width: 42%;
   max-height: 35rem;
   width: auto;
   heigh: auto;
   top: 51%;
-  left: 4%;
+  left: 5%;
 `;
 
 export const Baseball = styled.img`
   position: absolute;
   z-index: 2;
-  max-width: 40%;
+  max-width: 39%;
   max-height: 40rem;
   width: auto;
   heigh: auto;
   top: 50%;
-  left: 50%;
+  left: 51%;
 `;
 
 export const Football = styled.img`
@@ -61,5 +61,5 @@ export const Trophy = styled.img`
   width: auto;
   height: auto;
   top: 24%;
-  left: 37%;
+  left: 38%;
 `;
