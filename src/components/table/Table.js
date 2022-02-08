@@ -1,30 +1,34 @@
 import React from "react";
 import { useTable } from "react-table";
 
+import * as S from "./Table.styles";
+
 export const Table = ({ columns, data }) => {
   const tableInstance = useTable({ columns, data });
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
   return (
-    <table {...getTableProps()}>
-      <thead>
+    <S.Table {...getTableProps()}>
+      <S.TableHead>
         {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
+          <S.TableHeaderRow {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              <S.TableHeaderCell {...column.getHeaderProps()}>
+                {column.render("Header")}
+              </S.TableHeaderCell>
             ))}
-          </tr>
+          </S.TableHeaderRow>
         ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
+      </S.TableHead>
+      <S.TableBody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()}>
+            <S.TableBodyRow {...row.getRowProps()}>
               {row.cells.map((cell) => {
                 return (
-                  <td {...cell.getCellProps()}>
+                  <S.TableBodyCell {...cell.getCellProps()}>
                     {cell.render((c) => {
                       if (Array.isArray(c.value)) {
                         return c.value.map((each) => (
@@ -36,13 +40,13 @@ export const Table = ({ columns, data }) => {
                       }
                       return c.value;
                     })}
-                  </td>
+                  </S.TableBodyCell>
                 );
               })}
-            </tr>
+            </S.TableBodyRow>
           );
         })}
-      </tbody>
-    </table>
+      </S.TableBody>
+    </S.Table>
   );
 };
