@@ -13,7 +13,7 @@ export const TableHeaderCell = styled.th`
   font-size: 1.3rem;
   font-weight: 900;
   padding: 1.5rem 0.75rem 1.5rem 0.75rem;
-  background-color: gray;
+  background-color: #708090;
 
   &:first-child {
     border-top-left-radius: 0.75rem;
