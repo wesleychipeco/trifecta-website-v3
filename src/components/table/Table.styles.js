@@ -2,18 +2,17 @@ import styled from "styled-components";
 
 export const Table = styled.table`
   border-radius: 1rem;
-  padding: 0 2rem 0 2rem;
   border-spacing: 0 0.75rem;
 `;
 
 export const TableHead = styled.thead``;
 
-export const TableHeaderRow = styled.tr``;
+export const TableHeadRow = styled.tr``;
 
 export const TableHeaderCell = styled.th`
   font-size: 1.3rem;
   font-weight: 900;
-  padding: 1rem 0 1rem 0;
+  padding: 1.5rem 0.75rem 1.5rem 0.75rem;
   background-color: gray;
 
   &:first-child {
@@ -34,7 +33,7 @@ export const TableBodyRow = styled.tr`
 `;
 
 export const TableBodyCell = styled.td`
-  padding: 1rem 0.5rem 1rem 0.5rem;
+  padding: 0.75rem;
   border-style: solid;
   border-color: rgba(169, 169, 169, 0.5);
   border-width: 1px 0 1px 0;
