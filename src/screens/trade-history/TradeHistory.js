@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Table } from "../../components/table/Table";
 import { returnMongoCollection } from "../../database-management";
-import * as S from "./TableHistory.styles";
+import * as S from "./TradeHistory.styles";
 
 export const TradeHistory = () => {
   const [tradeHistory, setTradeHistory] = useState([]);
@@ -26,21 +26,25 @@ export const TradeHistory = () => {
         Header: "Owner 1",
         accessor: "owner1",
         tableHeaderCell: S.OwnersTableHeaderCell,
+        disableSortBy: true,
       },
       {
         Header: "Owner 1 Players Received",
         accessor: "owner1PlayersReceived",
         tableHeaderCell: S.PlayersTableHeaderCell,
+        disableSortBy: true,
       },
       {
         Header: "Owner 2",
         accessor: "owner2",
         tableHeaderCell: S.OwnersTableHeaderCell,
+        disableSortBy: true,
       },
       {
         Header: "Owner 2 Players Received",
         accessor: "owner2PlayersReceived",
         tableHeaderCell: S.PlayersTableHeaderCell,
+        disableSortBy: true,
       },
     ],
     []
@@ -53,6 +57,7 @@ export const TradeHistory = () => {
         columns={columns}
         data={tradeHistory}
         tableBodyCell={S.TradeHistoryTableBodyCell}
+        sortBy={[{ id: "date", desc: true }]}
       />
     </S.Container>
   );

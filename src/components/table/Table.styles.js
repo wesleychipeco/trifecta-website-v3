@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
+import { BACKGROUND_COLOR, PRIMARY_GREEN } from "../../styles/variables";
 
 export const Table = styled.table`
   border-radius: 1rem;
@@ -23,6 +25,15 @@ export const TableHeaderCell = styled.th`
     border-top-right-radius: 0.75rem;
     border-bottom-right-radius: 0.75rem;
   }
+`;
+
+export const TableHeaderSortSpan = styled.span`
+  margin-left: 1rem;
+`;
+
+export const SortIcon = styled(FontAwesomeIcon).attrs({})`
+  color: ${BACKGROUND_COLOR};
+  font-size: 1.5rem;
 `;
 
 export const TableBody = styled.tbody``;

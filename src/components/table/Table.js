@@ -1,5 +1,5 @@
 import React from "react";
-import { useTable } from "react-table";
+import { useSortBy, useTable } from "react-table";
 
 import * as S from "./Table.styles";
 
@@ -12,8 +12,18 @@ export const Table = ({
   tableHeadRow = null,
   tableBodyRow = null,
   tableBodyCell = null,
+  sortBy = [],
 }) => {
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        sortBy,
+      },
+    },
+    useSortBy
+  );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
@@ -35,8 +45,21 @@ export const Table = ({
                 const TableHeaderCellComponent =
                   column?.tableHeaderCell ?? S.TableHeaderCell;
                 return (
-                  <TableHeaderCellComponent {...column.getHeaderProps()}>
+                  <TableHeaderCellComponent
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                  >
                     {column.render("Header")}
+                    <S.TableHeaderSortSpan>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <S.SortIcon icon="caret-square-down" />
+                        ) : (
+                          <S.SortIcon icon="caret-square-up" />
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </S.TableHeaderSortSpan>
                   </TableHeaderCellComponent>
                 );
               })}

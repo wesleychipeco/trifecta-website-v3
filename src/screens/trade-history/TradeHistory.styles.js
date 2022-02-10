@@ -10,6 +10,7 @@ export const Container = styled.div`
 
 export const DateTableHeaderCell = styled(TableHeaderCell)`
   text-align: left;
+  width: 6rem;
 `;
 
 export const OwnersTableHeaderCell = styled(TableHeaderCell)`
@@ -19,7 +20,6 @@ export const OwnersTableHeaderCell = styled(TableHeaderCell)`
 
 export const PlayersTableHeaderCell = styled(TableHeaderCell)`
   text-align: left;
-  background-color: green;
   width: 15rem;
 `;
 
