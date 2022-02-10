@@ -20,27 +20,27 @@ export const TradeHistory = () => {
       {
         Header: "Date",
         accessor: "date",
-        tableHeader: S.DateTableHeaderCell,
+        tableHeaderCell: S.DateTableHeaderCell,
       },
       {
         Header: "Owner 1",
         accessor: "owner1",
-        tableHeader: S.OwnersTableHeaderCell,
+        tableHeaderCell: S.OwnersTableHeaderCell,
       },
       {
         Header: "Owner 1 Players Received",
         accessor: "owner1PlayersReceived",
-        tableHeader: S.PlayersTableHeaderCell,
+        tableHeaderCell: S.PlayersTableHeaderCell,
       },
       {
         Header: "Owner 2",
         accessor: "owner2",
-        tableHeader: S.OwnersTableHeaderCell,
+        tableHeaderCell: S.OwnersTableHeaderCell,
       },
       {
         Header: "Owner 2 Players Received",
         accessor: "owner2PlayersReceived",
-        tableHeader: S.PlayersTableHeaderCell,
+        tableHeaderCell: S.PlayersTableHeaderCell,
       },
     ],
     []

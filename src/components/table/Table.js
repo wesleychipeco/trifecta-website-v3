@@ -33,7 +33,7 @@ export const Table = ({
             <TableHeadRowComponent {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => {
                 const TableHeaderCellComponent =
-                  column?.tableHeader ?? S.TableHeaderCell;
+                  column?.tableHeaderCell ?? S.TableHeaderCell;
                 return (
                   <TableHeaderCellComponent {...column.getHeaderProps()}>
                     {column.render("Header")}
