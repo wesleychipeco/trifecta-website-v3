@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Table } from "../../components/table/Table";
 import { returnMongoCollection } from "../../database-management";
 import * as S from "./TradeHistory.styles";
+import { TradeHistoryTable } from "./TradeHistoryTable";
 
 export const TradeHistory = () => {
   const [tradeHistory, setTradeHistory] = useState([]);
@@ -52,8 +52,8 @@ export const TradeHistory = () => {
 
   return (
     <S.Container>
-      <h1>Trade History Screen</h1>
-      <Table
+      <S.Title>Trifecta Trade History</S.Title>
+      <TradeHistoryTable
         columns={columns}
         data={tradeHistory}
         tableBodyCell={S.TradeHistoryTableBodyCell}

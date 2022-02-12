@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-import { BACKGROUND_COLOR, PRIMARY_GREEN } from "../../styles/variables";
+import { BACKGROUND_COLOR } from "../../styles/variables";
 
 export const Table = styled.table`
   border-radius: 1rem;
@@ -48,6 +48,7 @@ export const TableBodyCell = styled.td`
   border-style: solid;
   border-color: rgba(169, 169, 169, 0.5);
   border-width: 1px 0 1px 0;
+  position: relative;
 
   &:first-child {
     border-width: 1px 0 1px 1px;
