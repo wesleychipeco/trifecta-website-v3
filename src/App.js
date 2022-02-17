@@ -19,12 +19,16 @@ import { FootballStandings } from "./screens/football-standings/FootballStanding
 import { TrifectaStandings } from "./screens/trifecta-standings/TrifectaStandings";
 import { useEffect } from "react";
 import { returnMongoCollection } from "./database-management";
-import { setSeasonVariables } from "./store/navbarSlice";
+import { setSeasonVariables } from "./store/currentVariablesSlice";
+import { setOwnerNames } from "./store/namesSlice";
 
 export const App = () => {
   const dispatch = useDispatch();
   const isNavbarOpen = useSelector((state) => state.navbar.isNavbarOpen);
-  const seasonVariables = useSelector((state) => state.navbar.seasonVariables);
+  const seasonVariables = useSelector(
+    (state) => state.currentVariables.seasonVariables
+  );
+  const ownerNames = useSelector((state) => state.names.ownerNames);
   const { currentYear } = seasonVariables;
 
   useEffect(() => {
@@ -43,6 +47,22 @@ export const App = () => {
       };
 
       loadSeasonVariables();
+    }
+
+    if (Object.keys(ownerNames).length === 0) {
+      const loadOwnerNames = async () => {
+        const collection = await returnMongoCollection("ownerIds");
+        const data = await collection.find({});
+
+        const holder = {};
+        data.forEach((owner) => {
+          const ownerId = owner.ownerId;
+          holder[ownerId] = owner.ownerName;
+        });
+        dispatch(setOwnerNames(holder));
+      };
+
+      loadOwnerNames();
     }
   }, []);
 

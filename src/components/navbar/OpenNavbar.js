@@ -10,7 +10,9 @@ import TrifectaLogo from "../../resources/images/trifectalogo.png";
 export const OpenNavbar = () => {
   // redux state to manage seasonVariables
   const dispatch = useDispatch();
-  const seasonVariables = useSelector((state) => state.navbar.seasonVariables);
+  const seasonVariables = useSelector(
+    (state) => state.currentVariables.seasonVariables
+  );
   const {
     currentYear,
     isBasketballStarted,

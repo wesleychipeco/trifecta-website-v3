@@ -4,12 +4,6 @@ export const navbarSlice = createSlice({
   name: "navbar",
   initialState: {
     isNavbarOpen: false,
-    seasonVariables: {
-      currentYear: "",
-      isBasketballStarted: false,
-      isBaseballStarted: false,
-      isFootballStarted: false,
-    },
   },
   reducers: {
     openNavbar: (state) => {
@@ -18,12 +12,8 @@ export const navbarSlice = createSlice({
     closeNavbar: (state) => {
       state.isNavbarOpen = false;
     },
-    setSeasonVariables: (state, action) => {
-      state.seasonVariables = action.payload;
-    },
   },
 });
 
-export const { openNavbar, closeNavbar, setSeasonVariables } =
-  navbarSlice.actions;
+export const { openNavbar, closeNavbar } = navbarSlice.actions;
 export default navbarSlice.reducer;

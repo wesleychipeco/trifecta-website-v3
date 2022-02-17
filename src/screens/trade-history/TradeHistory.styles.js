@@ -39,7 +39,6 @@ export const HeaderText = styled.p`
 `;
 
 export const DateTableHeaderCell = styled(TableHeaderCell)`
-  text-align: left;
   width: 6rem;
 
   &:hover ${HeaderText} {
@@ -48,12 +47,10 @@ export const DateTableHeaderCell = styled(TableHeaderCell)`
 `;
 
 export const OwnersTableHeaderCell = styled(TableHeaderCell)`
-  text-align: left;
   width: 10rem;
 `;
 
 export const PlayersTableHeaderCell = styled(TableHeaderCell)`
-  text-align: left;
   width: 15rem;
 `;
 
