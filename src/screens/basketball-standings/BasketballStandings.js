@@ -41,7 +41,6 @@ export const BasketballStandings = () => {
 
         setTrifectaStandings(trifectaStandings);
         setH2HStandings(h2hStandings);
-        console.log("ROS", rotoStandings);
         setRotoStandings(rotoStandings);
       }
     };
