@@ -12,8 +12,9 @@ export const TableHead = styled.thead``;
 export const TableHeadRow = styled.tr``;
 
 export const TableHeaderCell = styled.th`
+  text-align: left;
   font-size: 1.3rem;
-  font-weight: 900;
+  font-weight: 500;
   padding: 1.5rem 0.75rem 1.5rem 0.75rem;
   background-color: #708090;
 
@@ -29,6 +30,8 @@ export const TableHeaderCell = styled.th`
 
 export const TableHeaderSortSpan = styled.span`
   margin-left: 1rem;
+  display: flex;
+  align-self: center;
 `;
 
 export const SortIcon = styled(FontAwesomeIcon).attrs({})`

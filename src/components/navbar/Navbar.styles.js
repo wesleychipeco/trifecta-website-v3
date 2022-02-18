@@ -92,3 +92,18 @@ export const Link = styled(NavLink)`
     opacity: 0.6;
   }
 `;
+
+export const CurrentStandings = styled.p`
+  margin: 0;
+  padding: 0;
+  font-size: 1.75rem;
+  text-decoration: none;
+  font-family: ${HEADER_FONT_FAMILY};
+  color: ${FONT_COLOR};
+  margin-bottom: ${NAVBAR_VERTICAL_SPACING};
+
+  &:hover {
+    opacity: 0.6;
+    cursor: pointer;
+  }
+`;

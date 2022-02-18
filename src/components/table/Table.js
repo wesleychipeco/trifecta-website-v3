@@ -2,6 +2,7 @@ import React from "react";
 import { useSortBy, useTable } from "react-table";
 
 import * as S from "./Table.styles";
+import * as G from "../../styles/shared";
 
 export const Table = ({
   columns,
@@ -46,20 +47,24 @@ export const Table = ({
                   column?.tableHeaderCell ?? S.TableHeaderCell;
                 return (
                   <TableHeaderCellComponent
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    {...column.getHeaderProps(
+                      column.getSortByToggleProps({ title: undefined })
+                    )}
                   >
-                    {column.render("Header")}
-                    <S.TableHeaderSortSpan>
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <S.SortIcon icon="caret-square-down" />
+                    <G.FlexRow>
+                      {column.render("Header")}
+                      <S.TableHeaderSortSpan>
+                        {column.isSorted ? (
+                          column.isSortedDesc ? (
+                            <S.SortIcon icon="caret-square-down" />
+                          ) : (
+                            <S.SortIcon icon="caret-square-up" />
+                          )
                         ) : (
-                          <S.SortIcon icon="caret-square-up" />
-                        )
-                      ) : (
-                        ""
-                      )}
-                    </S.TableHeaderSortSpan>
+                          ""
+                        )}
+                      </S.TableHeaderSortSpan>
+                    </G.FlexRow>
                   </TableHeaderCellComponent>
                 );
               })}
