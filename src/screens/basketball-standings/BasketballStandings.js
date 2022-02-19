@@ -16,6 +16,7 @@ import {
   H2HColumns,
   RotoColumns,
   RotoStatsColumns,
+  BasketballColumns,
 } from "./columns";
 import { isYear1AfterYear2, isYear1BeforeYear2 } from "../../utils/years";
 import { returnMongoCollection } from "../../database-management";
@@ -31,6 +32,8 @@ export const BasketballStandings = () => {
   const [trifectaStandingsDisplay, setTrifectaStandings] = useState([]);
   const [h2hStandingsDisplay, setH2HStandings] = useState([]);
   const [rotoStandingsDisplay, setRotoStandings] = useState([]);
+  // only for pre-roto standings
+  const [basketballStandingsDisplay, setBasketballStandings] = useState([]);
 
   useEffect(() => {
     if (isReady) {
@@ -86,6 +89,9 @@ export const BasketballStandings = () => {
           if (isYear1AfterYear2(year, currentYear)) {
             console.log("AHEAD of TIME!");
           } else {
+            if (isYear1BeforeYear2(year, "2020")) {
+              setBasketballStandings(object.basketballStandings);
+            }
             display(trifectaStandings, h2hStandings, rotoStandings);
           }
           return;
@@ -130,6 +136,24 @@ export const BasketballStandings = () => {
         ])
       : TrifectaColumns;
   }, [isReady]);
+
+  // only display
+  if (isYear1BeforeYear2(year, "2020")) {
+    return (
+      <S.FlexColumnCenterContainer>
+        <S.Title>{`${year} Basketball Standings`}</S.Title>
+        <S.TablesContainer>
+          <S.SingleTableContainer>
+            <Table
+              columns={BasketballColumns}
+              data={basketballStandingsDisplay}
+              sortBy={[{ id: "totalTrifectaPoints", desc: true }]}
+            />
+          </S.SingleTableContainer>
+        </S.TablesContainer>
+      </S.FlexColumnCenterContainer>
+    );
+  }
 
   return (
     <S.FlexColumnCenterContainer>
