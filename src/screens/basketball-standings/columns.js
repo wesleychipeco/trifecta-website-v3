@@ -58,7 +58,7 @@ export const H2HColumns = [
   },
   {
     Header: "Win%",
-    accessor: "winPer",
+    accessor: (data) => Number(data.winPer).toFixed(3),
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
@@ -149,12 +149,12 @@ export const RotoStatsColumns = [
   },
   {
     Header: "FG%",
-    accessor: "FGPER",
+    accessor: (data) => Number(data.FGPER).toFixed(3),
     sortDescFirst: true,
   },
   {
     Header: "FT%",
-    accessor: "FTPER",
+    accessor: (data) => Number(data.FTPER).toFixed(3),
     sortDescFirst: true,
   },
   {
@@ -185,6 +185,61 @@ export const RotoStatsColumns = [
   {
     Header: "PTS",
     accessor: "PTS",
+    sortDescFirst: true,
+  },
+];
+
+export const BasketballColumns = [
+  {
+    Header: "Team Name",
+    accessor: "teamName",
+    disableSortBy: true,
+  },
+  {
+    Header: "Owner(s)",
+    accessor: "ownerNames",
+    disableSortBy: true,
+  },
+  {
+    Header: "Wins",
+    accessor: "wins",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Losses",
+    accessor: "losses",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Ties",
+    accessor: "ties",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Win%",
+    accessor: (data) => Number(data.winPer).toFixed(3),
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Trifecta Points",
+    accessor: "trifectaPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Playoff Points",
+    accessor: "playoffPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Total Trifecta Points",
+    accessor: "totalTrifectaPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
 ];

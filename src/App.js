@@ -25,23 +25,24 @@ import { setOwnerNames } from "./store/namesSlice";
 export const App = () => {
   const dispatch = useDispatch();
   const isNavbarOpen = useSelector((state) => state.navbar.isNavbarOpen);
-  const seasonVariables = useSelector(
-    (state) => state.currentVariables.seasonVariables
-  );
+  const isReady = useSelector((state) => state.currentVariables.isReady);
   const ownerNames = useSelector((state) => state.names.ownerNames);
-  const { currentYear } = seasonVariables;
 
   useEffect(() => {
-    if (currentYear === "") {
+    if (!isReady) {
       const loadSeasonVariables = async () => {
         const collection = await returnMongoCollection("seasonVariables");
         const data = await collection.find({});
         const object = data[0];
+        const { basketball, baseball, football } = object;
         const seasonVariables = {
           currentYear: object.currentYear,
-          isBasketballStarted: object.basketball.seasonStarted,
-          isBaseballStarted: object.baseball.seasonStarted,
-          isFootballStarted: object.football.seasonStarted,
+          isBasketballStarted: basketball.seasonStarted,
+          isBasketballInSeason: basketball.inSeason,
+          isBaseballStarted: baseball.seasonStarted,
+          isBaseballInSeason: baseball.inSeason,
+          isFootballStarted: football.seasonStarted,
+          isFootballInSeason: football.inSeason,
         };
         dispatch(setSeasonVariables(seasonVariables));
       };
