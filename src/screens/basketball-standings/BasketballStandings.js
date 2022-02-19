@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import isSameDay from "date-fns/isSameDay";
 
 import { Table } from "../../components/table/Table";
-import * as G from "../../styles/shared";
 import {
   compileTrifectaStandings,
   h2hScrapeToStandings,
@@ -33,56 +33,84 @@ export const BasketballStandings = () => {
   const [rotoStandingsDisplay, setRotoStandings] = useState([]);
 
   useEffect(() => {
-    const scrape = async () => {
-      if (Object.keys(ownerNamesMapping).length > 0) {
-        const { h2hScrape, rotoScrape } = await standingsScraper(year);
-
-        const h2hStandings = await h2hScrapeToStandings(h2hScrape);
-        const rotoStandings = await rotoScrapeToStandings(rotoScrape);
-        const trifectaStandings = await compileTrifectaStandings(
-          h2hStandings,
-          rotoStandings,
-          ownerNamesMapping
-        );
-
+    if (isReady) {
+      // send to local state to display
+      const display = (trifectaStandings, h2hStandings, rotoStandings) => {
         setTrifectaStandings(trifectaStandings);
         setH2HStandings(h2hStandings);
         setRotoStandings(rotoStandings);
-      }
-    };
+      };
 
-    const display = async () => {
-      const collection = await returnMongoCollection("basketballStandings");
-      const data = await collection.find({ year });
-      const object = data[0];
+      // scrape, then display, then save to mongodb with new last scraped
+      const scrape = async (collection) => {
+        if (Object.keys(ownerNamesMapping).length > 0) {
+          const { h2hScrape, rotoScrape } = await standingsScraper(year);
 
-      const { trifectaStandings, h2hStandings, rotoStandings, rotoStats } =
-        object;
+          const h2hStandings = await h2hScrapeToStandings(h2hScrape);
+          const rotoStandings = await rotoScrapeToStandings(rotoScrape);
+          const trifectaStandings = await compileTrifectaStandings(
+            h2hStandings,
+            rotoStandings,
+            ownerNamesMapping
+          );
 
-      const rotoCombined = rotoStandings.map((rotoTeam) => {
-        const foundRotoStats = rotoStats.find(
-          (rotoStatsTeam) => rotoTeam.teamName === rotoStatsTeam.teamName
-        );
-        return {
-          ...rotoTeam,
-          ...foundRotoStats,
-        };
-      });
-      setTrifectaStandings(trifectaStandings);
-      setH2HStandings(h2hStandings);
-      setRotoStandings(rotoCombined);
-    };
+          display(trifectaStandings, h2hStandings, rotoStandings);
 
-    if (isReady) {
-      if (isBasketballStarted && isBasketballInSeason && year === currentYear) {
-        scrape();
-      } else if (isYear1AfterYear2(year, currentYear)) {
-        console.log("AHEAD of TIME!");
-      } else {
-        display();
-      }
+          // delete, then save to mongodb
+          console.log("Delete, then save to mongodb");
+          await collection.deleteMany({ year });
+          await collection.insertOne({
+            year,
+            lastScraped: new Date().toISOString(),
+            trifectaStandings,
+            h2hStandings,
+            rotoStandings,
+          });
+        }
+      };
+
+      // check if need to scrape or just display
+      const check = async () => {
+        const collection = await returnMongoCollection("basketballStandings");
+        const data = await collection.find({ year });
+        const object = data[0] ?? {};
+        const lastScrapedString = object?.lastScraped;
+        const { trifectaStandings, h2hStandings, rotoStandings } = object;
+
+        // if not current year or not started or in season, then just display, do not scrape
+        if (
+          !isBasketballStarted ||
+          !isBasketballInSeason ||
+          year !== currentYear
+        ) {
+          if (isYear1AfterYear2(year, currentYear)) {
+            console.log("AHEAD of TIME!");
+          } else {
+            display(trifectaStandings, h2hStandings, rotoStandings);
+          }
+          return;
+        }
+
+        // if there is no last scraped string (ie brand new, first time entering), scrape
+        if (!lastScrapedString) {
+          scrape(collection);
+        } else {
+          const now = new Date();
+          const alreadyScraped = isSameDay(now, new Date(lastScrapedString));
+
+          // only scrape if not already scraped today
+          if (!alreadyScraped) {
+            scrape(collection);
+          } else {
+            display(trifectaStandings, h2hStandings, rotoStandings);
+          }
+        }
+      };
+
+      ///////////// only 1 function gets run inside useEffect /////////////
+      check();
     }
-  }, [ownerNamesMapping, isReady]);
+  }, [isReady, ownerNamesMapping]);
 
   const TrifectaStandingsColumns = useMemo(() => {
     return isYear1BeforeYear2(year, currentYear)

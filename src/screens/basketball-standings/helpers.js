@@ -96,12 +96,15 @@ export const compileTrifectaStandings = async (
     const { rotoTrifectaPoints } = rotoStandings.find(
       (rotoTeam) => teamName === rotoTeam.teamName
     );
+    const totalTrifectaPoints = h2hTrifectaPoints + rotoTrifectaPoints;
     trifectaStandings.push({
       teamName,
       ownerNames,
       h2hTrifectaPoints,
       rotoTrifectaPoints,
-      totalTrifectaPoints: h2hTrifectaPoints + rotoTrifectaPoints,
+      trifectaPoints: totalTrifectaPoints,
+      playoffPoints: 0,
+      totalTrifectaPoints,
     });
   });
   return trifectaStandings;
