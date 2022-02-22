@@ -50,6 +50,9 @@ export const OpenNavbar = () => {
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>
+        <S.Link to={`${BASE_ROUTES.BaseballStandings}/2021`}>
+          2021 Baseball Standings
+        </S.Link>
         {isStandingsExpanded && (
           <S.Link to={`${BASE_ROUTES.TrifectaStandings}/${currentYear}`}>
             Trifecta Standings
