@@ -78,8 +78,15 @@ export const Table = ({
           return (
             <TableBodyRowComponent {...row.getRowProps()}>
               {row.cells.map((cell) => {
+                let win, points;
+                if (
+                  typeof cell.value === "string" &&
+                  cell.value.indexOf("###") != -1
+                ) {
+                  [points, win] = cell.value.split("###");
+                }
                 return (
-                  <TableBodyCellComponent {...cell.getCellProps()}>
+                  <TableBodyCellComponent {...cell.getCellProps()} win={win}>
                     {cell.render((c) => {
                       if (Array.isArray(c.value)) {
                         return c.value.map((each) => (
@@ -88,6 +95,13 @@ export const Table = ({
                             <br />
                           </div>
                         ));
+                      }
+                      if (
+                        typeof c.value === "string" &&
+                        c.value.indexOf("###") != -1
+                      ) {
+                        [points] = c.value.split("###");
+                        return points;
                       }
                       return c.value;
                     })}
