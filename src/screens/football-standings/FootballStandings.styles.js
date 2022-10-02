@@ -3,6 +3,7 @@ import {
   TableHeaderCell,
   TableBodyCell,
 } from "../../components/table/Table.styles";
+import { PRIMARY_GREEN } from "../../styles/variables";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;
@@ -54,5 +55,5 @@ export const WeeksPointsTableBodyCell = styled(TableBodyCell)`
   width: 2rem;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
   background-color: ${(props) =>
-    props.win === "true" ? "green" : "transparent"};
+    props.win === "true" ? `${PRIMARY_GREEN}` : "transparent"};
 `;

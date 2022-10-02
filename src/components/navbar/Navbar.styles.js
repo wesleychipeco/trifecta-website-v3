@@ -12,7 +12,7 @@ import {
 export const CLOSED_NAVBAR_WIDTH = "5rem";
 
 export const ClosedNavbarContainer = styled.div`
-  position: absolute;
+  position: fixed;
   left: 0.75rem;
   top: 0.75rem;
   border-radius: 50%;
@@ -33,18 +33,18 @@ export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
 `;
 
 ////////// OPEN //////////
-export const OPEN_NAVBAR_WIDTH = "15rem";
-const OPEN_LEFT_PADDING = "2rem";
+export const OPEN_NAVBAR_WIDTH = "17rem";
+const OPEN_LEFT_PADDING = "1.5rem";
 const NAVBAR_VERTICAL_SPACING = "1.5rem";
 
 export const OpenNavbarContainer = styled.div`
   z-index: 999;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background-color: ${PRIMARY_GREEN};
   width: ${OPEN_NAVBAR_WIDTH};
-  height: 45rem;
+  height: 100%;
   border-radius: 0 1.5rem 1.5rem 1.5rem;
 `;
 
@@ -57,7 +57,7 @@ export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
   width: 2rem;
   height: 2rem;
   font-size: 2rem;
-  margin-left: 4rem;
+  margin-left: 8rem;
   padding: 0.5rem;
 
   &:hover {
@@ -91,6 +91,11 @@ export const Link = styled(NavLink)`
   &:hover {
     opacity: 0.6;
   }
+`;
+
+export const IndentedLink = styled(Link)`
+  font-size: 1.75rem;
+  padding-left: 1.5rem;
 `;
 
 export const CurrentStandings = styled.p`
