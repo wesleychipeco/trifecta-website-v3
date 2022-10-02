@@ -50,32 +50,40 @@ export const OpenNavbar = () => {
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>
+        {isStandingsExpanded && (
+          <S.IndentedLink
+            to={`${BASE_ROUTES.TrifectaStandings}/${currentYear}`}
+          >
+            Trifecta Standings
+          </S.IndentedLink>
+        )}
+        {isStandingsExpanded && isBasketballStarted && (
+          <S.IndentedLink
+            to={`${BASE_ROUTES.BasketballStandings}/${currentYear}`}
+          >
+            Basketball Standings
+          </S.IndentedLink>
+        )}
+        {isStandingsExpanded && isBaseballStarted && (
+          <S.IndentedLink
+            to={`${BASE_ROUTES.BaseballStandings}/${currentYear}`}
+          >
+            Baseball Standings
+          </S.IndentedLink>
+        )}
+        {isStandingsExpanded && isFootballStarted && (
+          <S.IndentedLink
+            to={`${BASE_ROUTES.FootballStandings}/${currentYear}`}
+          >
+            Football Standings
+          </S.IndentedLink>
+        )}
         <S.Link to={`${BASE_ROUTES.BaseballStandings}/2021`}>
           2021 Baseball Standings
         </S.Link>
         <S.Link to={`${BASE_ROUTES.FootballStandings}/2021`}>
           2021 Football Standings
         </S.Link>
-        {isStandingsExpanded && (
-          <S.Link to={`${BASE_ROUTES.TrifectaStandings}/${currentYear}`}>
-            Trifecta Standings
-          </S.Link>
-        )}
-        {isStandingsExpanded && isBasketballStarted && (
-          <S.Link to={`${BASE_ROUTES.BasketballStandings}/${currentYear}`}>
-            Basketball Standings
-          </S.Link>
-        )}
-        {isStandingsExpanded && isBaseballStarted && (
-          <S.Link to={`${BASE_ROUTES.BaseballStandings}/${currentYear}`}>
-            Baseball Standings
-          </S.Link>
-        )}
-        {isStandingsExpanded && isFootballStarted && (
-          <S.Link to={`${BASE_ROUTES.FootballStandings}/${currentYear}`}>
-            Football Standings
-          </S.Link>
-        )}
         <S.Link to={STATIC_ROUTES.TradeHistory}>Trade History</S.Link>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
