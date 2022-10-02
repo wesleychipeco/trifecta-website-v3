@@ -53,6 +53,9 @@ export const OpenNavbar = () => {
         <S.Link to={`${BASE_ROUTES.BaseballStandings}/2021`}>
           2021 Baseball Standings
         </S.Link>
+        <S.Link to={`${BASE_ROUTES.FootballStandings}/2021`}>
+          2021 Football Standings
+        </S.Link>
         {isStandingsExpanded && (
           <S.Link to={`${BASE_ROUTES.TrifectaStandings}/${currentYear}`}>
             Trifecta Standings

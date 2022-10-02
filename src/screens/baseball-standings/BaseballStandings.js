@@ -109,7 +109,7 @@ export const BaseballStandings = () => {
 
         // if there is no last scraped string (ie brand new, first time entering), scrape
         if (!lastScrapedString) {
-          console.log("DO NOT SCRAPE");
+          console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
           return;
           scrape(collection);
         } else {
@@ -118,7 +118,7 @@ export const BaseballStandings = () => {
 
           // only scrape if not already scraped today
           if (!alreadyScraped) {
-            console.log("DO NOT SCRAPE");
+            console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
             return;
             scrape(collection);
           } else {
@@ -133,7 +133,8 @@ export const BaseballStandings = () => {
   }, [isReady, ownerNamesMapping]);
 
   const TrifectaStandingsColumns = useMemo(() => {
-    return isYear1BeforeYear2(year, currentYear)
+    return isYear1BeforeYear2(year, currentYear) ||
+      (isBaseballStarted && !isBaseballInSeason && year === currentYear)
       ? insertIntoArray(TrifectaColumns, 4, [
           {
             Header: "Regular Season Trifecta Points",
