@@ -53,8 +53,6 @@ export const LeftTableContainer = styled.div`
 export const WeeksPointsTableBodyCell = styled(TableBodyCell)`
   width: 2rem;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
-  background-color: ${(props) => {
-    console.log("props!!!", props);
-    return props.win === "true" ? "green" : "transparent";
-  }};
+  background-color: ${(props) =>
+    props.win === "true" ? "green" : "transparent"};
 `;
