@@ -84,6 +84,9 @@ export const OpenNavbar = () => {
         <S.Link to={`${BASE_ROUTES.FootballStandings}/2021`}>
           2021 Football Standings
         </S.Link>
+        <S.Link to={`${BASE_ROUTES.TrifectaStandings}/2021`}>
+          2021 Trifecta Standings
+        </S.Link>
         <S.Link to={STATIC_ROUTES.TradeHistory}>Trade History</S.Link>
       </S.LinkContainer>
     </S.OpenNavbarContainer>

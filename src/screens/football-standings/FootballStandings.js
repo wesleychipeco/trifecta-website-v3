@@ -5,9 +5,11 @@ import isSameDay from "date-fns/isSameDay";
 
 import { Table } from "../../components/table/Table";
 import {
+  addOwnerNames,
+  calculateTop5Bottom5Standings,
   compileTrifectaStandings,
   h2hScrapeToStandings,
-  rotoScrapeToStandings,
+  returnOwnerNamesUnderscored,
   standingsScraper,
 } from "./helpers";
 import * as S from "./FootballStandings.styles";
@@ -20,6 +22,7 @@ import {
 import { isYear1AfterYear2, isYear1BeforeYear2 } from "../../utils/years";
 import { returnMongoCollection } from "../../database-management";
 import { insertIntoArray } from "../../utils/arrays";
+import { assignRankPoints } from "../../utils/standings";
 
 export const FootballStandings = () => {
   const { year } = useParams();
@@ -56,27 +59,55 @@ export const FootballStandings = () => {
       // scrape, then display, then save to mongodb with new last scraped
       const scrape = async (collection) => {
         if (Object.keys(ownerNamesMapping).length > 0) {
-          const { h2hScrape, rotoScrape } = await standingsScraper(year);
+          const ownerIdsCollection = await returnMongoCollection("ownerIds");
+          const ownerIdsOwnerNames = await ownerIdsCollection.find({});
+          const { h2hScrape } = await standingsScraper(year);
+          const h2hStandingsWithoutNames = await h2hScrapeToStandings(
+            h2hScrape
+          );
+          const h2hStandings = await addOwnerNames(
+            ownerIdsOwnerNames,
+            h2hStandingsWithoutNames
+          );
 
-          const h2hStandings = await h2hScrapeToStandings(h2hScrape);
-          const rotoStandings = await rotoScrapeToStandings(rotoScrape);
+          const top5Bottom5Collection = await returnMongoCollection(
+            "footballTop5Bottom5Totals"
+          );
+          const top5Bottom5Data = await top5Bottom5Collection.find({ year });
+          const ownerNamesUnderscoredObject = await returnOwnerNamesUnderscored(
+            h2hStandings
+          );
+          const unrankedTop5Bottom5Standings =
+            await calculateTop5Bottom5Standings(
+              top5Bottom5Data[0]["top5Bottom5TotalsObject"],
+              ownerNamesUnderscoredObject
+            );
+          const top5Bottom5Standings = await assignRankPoints(
+            unrankedTop5Bottom5Standings,
+            "winPer",
+            "highToLow",
+            "top5Bottom5TrifectaPoints",
+            10,
+            1
+          );
+
           const trifectaStandings = await compileTrifectaStandings(
             h2hStandings,
-            rotoStandings,
+            top5Bottom5Standings,
             ownerNamesMapping
           );
 
-          display(trifectaStandings, h2hStandings, rotoStandings);
+          display(trifectaStandings, h2hStandings, top5Bottom5Standings);
 
           // delete, then save to mongodb
           console.log("Delete, then save to mongodb");
           await collection.deleteMany({ year });
           await collection.insertOne({
             year,
-            lastScraped: new Date().toISOString(),
+            lastScraped: new Date().toString(),
             trifectaStandings,
             h2hStandings,
-            rotoStandings,
+            top5Bottom5Standings,
           });
         }
       };
@@ -93,7 +124,6 @@ export const FootballStandings = () => {
           top5Bottom5Standings,
           footballStandings,
         } = object;
-        console.log("T5", top5Bottom5Standings);
 
         // if not current year or not started or in season, then just display, do not scrape
         if (!isFootballStarted || !isFootballInSeason || year !== currentYear) {
@@ -112,7 +142,7 @@ export const FootballStandings = () => {
         if (!lastScrapedString) {
           console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
           return;
-          scrape(collection);
+          // scrape(collection);
         } else {
           const now = new Date();
           const alreadyScraped = isSameDay(now, new Date(lastScrapedString));
@@ -123,6 +153,7 @@ export const FootballStandings = () => {
             return;
             scrape(collection);
           } else {
+            console.log("Already scraped");
             display(trifectaStandings, h2hStandings, top5Bottom5Standings);
           }
         }
@@ -160,7 +191,6 @@ export const FootballStandings = () => {
         Header: `Week ${i}`,
         accessor: (data) => {
           const { points, win } = data[`week${i}`];
-          console.log("a", points, "b", win);
           return `${Number(points).toFixed(1)}###${win}`;
         },
         sortDescFirst: true,
