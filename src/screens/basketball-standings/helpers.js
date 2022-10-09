@@ -99,6 +99,7 @@ export const compileTrifectaStandings = async (
     const totalTrifectaPoints = h2hTrifectaPoints + rotoTrifectaPoints;
     trifectaStandings.push({
       teamName,
+      ownerIds: team.ownerIds,
       ownerNames,
       h2hTrifectaPoints,
       rotoTrifectaPoints,
