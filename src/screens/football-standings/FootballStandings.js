@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
 import { Table } from "../../components/table/Table";
@@ -104,7 +105,7 @@ export const FootballStandings = () => {
           await collection.deleteMany({ year });
           await collection.insertOne({
             year,
-            lastScraped: new Date().toString(),
+            lastScraped: format(new Date(), "MM/dd/yy hh:mm a"),
             trifectaStandings,
             h2hStandings,
             top5Bottom5Standings,
@@ -141,8 +142,8 @@ export const FootballStandings = () => {
         // if there is no last scraped string (ie brand new, first time entering), scrape
         if (!lastScrapedString) {
           console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-          return;
-          // scrape(collection);
+          // return;
+          scrape(collection);
         } else {
           const now = new Date();
           const alreadyScraped = isSameDay(now, new Date(lastScrapedString));
@@ -150,7 +151,7 @@ export const FootballStandings = () => {
           // only scrape if not already scraped today
           if (!alreadyScraped) {
             console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-            return;
+            // return;
             scrape(collection);
           } else {
             console.log("Already scraped");

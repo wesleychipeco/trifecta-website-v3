@@ -1,3 +1,6 @@
+import sum from "lodash/sum";
+import format from "date-fns/format";
+import max from "date-fns/max";
 import { returnMongoCollection } from "../../database-management";
 import { SeasonStatus } from "../../utils/years";
 
@@ -13,30 +16,33 @@ export const calculateTrifectaStandings = async (
   const ownerIdsPerTeamArray = teamListsData?.[0]?.teams ?? [];
   const ownerIdsCollection = await returnMongoCollection("ownerIds");
   const ownerIdsOwnerNamesArray = await ownerIdsCollection.find({});
+  let basketballLastScraped,
+    baseballLastScraped,
+    footballLastScraped = null;
 
-  if (basketballSeasonStatus === SeasonStatus.IN_PROGRESS) {
-    const basketballStandings = await retrieveSportStandings(
-      year,
-      "basketball"
-    );
-    console.log("a", basketballStandings);
+  if (basketballSeasonStatus !== SeasonStatus.NOT_STARTED) {
+    const { standings: basketballStandings, lastScraped } =
+      await retrieveSportStandings(year, "basketball");
+    basketballLastScraped = lastScraped;
     trifectaStandingsArray.push(basketballStandings);
   } else {
     trifectaStandingsArray.push(null);
   }
 
-  if (baseballSeasonStatus === SeasonStatus.IN_PROGRESS) {
-    const baseballStandings = await retrieveSportStandings(year, "baseball");
+  if (baseballSeasonStatus !== SeasonStatus.NOT_STARTED) {
+    const { standings: baseballStandings, lastScraped } =
+      await retrieveSportStandings(year, "baseball");
+    baseballLastScraped = lastScraped;
     trifectaStandingsArray.push(baseballStandings);
-    console.log("b", baseballStandings);
   } else {
     trifectaStandingsArray.push(null);
   }
 
-  if (footballSeasonStatus === SeasonStatus.IN_PROGRESS) {
-    const footballStandings = await retrieveSportStandings(year, "football");
+  if (footballSeasonStatus !== SeasonStatus.NOT_STARTED) {
+    const { standings: footballStandings, lastScraped } =
+      await retrieveSportStandings(year, "football");
+    footballLastScraped = lastScraped;
     trifectaStandingsArray.push(footballStandings);
-    console.log("c", footballStandings);
   } else {
     trifectaStandingsArray.push(null);
   }
@@ -46,15 +52,25 @@ export const calculateTrifectaStandings = async (
     ownerIdsPerTeamArray &&
     ownerIdsOwnerNamesArray
   ) {
+    const updatedAsOf = max([
+      new Date(basketballLastScraped),
+      new Date(baseballLastScraped),
+      new Date(footballLastScraped),
+    ]);
+
     // use tirfectaStandingsArray to total trifecta points
-    sumTrifectaPoints(
-      ownerIdsPerTeamArray,
-      ownerIdsOwnerNamesArray,
-      trifectaStandingsArray
-    );
-  } else {
-    console.log("Error compiling trifectaStandingsSportsArray!");
+    return {
+      trifectaStandings: sumTrifectaPoints(
+        ownerIdsPerTeamArray,
+        ownerIdsOwnerNamesArray,
+        trifectaStandingsArray
+      ),
+      updatedAsOf: format(updatedAsOf, "MM/dd/yy hh:mm a"),
+    };
   }
+
+  console.log("Error compiling trifectaStandingsSportsArray!");
+  return [];
 };
 
 const retrieveSportStandings = async (year, sport) => {
@@ -65,12 +81,35 @@ const retrieveSportStandings = async (year, sport) => {
 
   const projection1 = trifectaPointsKey + ".ownerIds";
   const projection2 = trifectaPointsKey + ".totalTrifectaPoints";
+  const projection3 = "lastScraped";
 
   const sportStandingsResponse = await collection.find(
     { year },
-    { projection: { [projection1]: 1, [projection2]: 1 } }
+    { projection: { [projection1]: 1, [projection2]: 1, [projection3]: 1 } }
   );
-  return sportStandingsResponse?.[0] ?? {};
+
+  return {
+    standings: sportStandingsResponse?.[0]?.["trifectaStandings"] ?? {},
+    lastScraped: sportStandingsResponse?.[0]?.["lastScraped"] ?? null,
+  };
+};
+
+const atLeastOneInTheOther = (array1, array2) => {
+  // for each in 1, check 2
+  for (let i1 = 0; i1 < array1.length; i1++) {
+    for (let i2 = 0; i2 < array2.length; i2++) {
+      if (array1[i1] === array2[i2]) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+const returnSportTrifectaPoints = (sportStandings, ownersPerTeam) => {
+  return sportStandings.find((sportsTeam) =>
+    atLeastOneInTheOther(sportsTeam.ownerIds, ownersPerTeam)
+  ).totalTrifectaPoints;
 };
 
 const sumTrifectaPoints = (
@@ -85,7 +124,6 @@ const sumTrifectaPoints = (
   const nullPointsDisplay = "?";
   const trifectaStandings = [];
 
-  console.log("ownerids", ownerIdsPerTeamArray);
   ownerIdsPerTeamArray.forEach((ownersPerTeam) => {
     const teamTrifectaStandings = {};
     const totalTrifectaPointsArray = [];
@@ -96,10 +134,50 @@ const sumTrifectaPoints = (
       ownerIdsOwnerNamesArray,
       ownersPerTeam
     );
+    teamTrifectaStandings.ownerNames = ownerNames.join(", ");
 
-    console.log("ownernames", ownerNames);
-    /////////////////////////////// TODO CONTINUE HERE ///////////////////////
+    if (basketballStandings) {
+      const basketballTrifectaPoints = returnSportTrifectaPoints(
+        basketballStandings,
+        ownersPerTeam
+      );
+      teamTrifectaStandings.basketballTrifectaPoints = basketballTrifectaPoints;
+      totalTrifectaPointsArray.push(basketballTrifectaPoints);
+    } else {
+      teamTrifectaStandings.basketballTrifectaPoints = nullPointsDisplay;
+      totalTrifectaPointsArray.push(nullPoints);
+    }
+
+    if (baseballStandings) {
+      const baseballTrifectaPoints = returnSportTrifectaPoints(
+        baseballStandings,
+        ownersPerTeam
+      );
+      teamTrifectaStandings.baseballTrifectaPoints = baseballTrifectaPoints;
+      totalTrifectaPointsArray.push(baseballTrifectaPoints);
+    } else {
+      teamTrifectaStandings.baseballTrifectaPoints = nullPointsDisplay;
+      totalTrifectaPointsArray.push(nullPoints);
+    }
+
+    if (footballStandings) {
+      const footballTrifectaPoints = returnSportTrifectaPoints(
+        footballStandings,
+        ownersPerTeam
+      );
+      teamTrifectaStandings.footballTrifectaPoints = footballTrifectaPoints;
+      totalTrifectaPointsArray.push(footballTrifectaPoints);
+    } else {
+      teamTrifectaStandings.footballTrifectaPoints = nullPointsDisplay;
+      totalTrifectaPointsArray.push(nullPoints);
+    }
+
+    teamTrifectaStandings.totalTrifectaPoints = sum(totalTrifectaPointsArray);
+    trifectaStandings.push(teamTrifectaStandings);
   });
+  console.log("retur", trifectaStandings);
+
+  return trifectaStandings;
 };
 
 const returnOwnerNamesArray = (ownerIdsOwnerNamesArray, ownersPerTeam) => {
