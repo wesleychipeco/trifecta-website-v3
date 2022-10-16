@@ -185,7 +185,11 @@ export const BaseballStandings = () => {
         </S.SingleTableContainer>
         <S.SingleTableContainer>
           <S.TableTitle>Roto Stats</S.TableTitle>
-          <Table columns={RotoStatsColumns} data={rotoStandingsDisplay} />
+          <Table
+            columns={RotoStatsColumns}
+            data={rotoStandingsDisplay}
+            top3Styling
+          />
         </S.SingleTableContainer>
       </S.TablesContainer>
     </S.FlexColumnCenterContainer>
