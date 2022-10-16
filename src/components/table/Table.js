@@ -47,17 +47,15 @@ export const Table = ({
         top3.push(sortedRows[i].index);
       }
       // only update if top3 from sorted rows and top3Array state is different
-      // AND the column is the same as the one sorted by default and is currently sorted
       if (
         top3?.[0] !== top3Array?.[0] ||
         top3?.[1] !== top3Array?.[1] ||
         top3?.[2] !== top3Array?.[2]
       ) {
-        // will produce warning anti-pattern of updating state (even conditionally) inside a component render
         setTop3Array(top3);
       }
     }
-  }, [data]);
+  }, [data]); // only calculate when data changes (which should only be when first available)
 
   return (
     <TableComponent {...getTableProps()}>
