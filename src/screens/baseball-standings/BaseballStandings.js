@@ -162,6 +162,7 @@ export const BaseballStandings = () => {
             columns={TrifectaStandingsColumns}
             data={trifectaStandingsDisplay}
             sortBy={[{ id: "totalTrifectaPoints", desc: true }]}
+            top3Styling
           />
         </S.SingleTableContainer>
         <S.SingleTableContainer>
@@ -170,6 +171,7 @@ export const BaseballStandings = () => {
             columns={H2HColumns}
             data={h2hStandingsDisplay}
             sortBy={[{ id: "h2hTrifectaPoints", desc: true }]}
+            top3Styling
           />
         </S.SingleTableContainer>
         <S.SingleTableContainer>
@@ -178,11 +180,16 @@ export const BaseballStandings = () => {
             columns={RotoColumns}
             data={rotoStandingsDisplay}
             sortBy={[{ id: "rotoTrifectaPoints", desc: true }]}
+            top3Styling
           />
         </S.SingleTableContainer>
         <S.SingleTableContainer>
           <S.TableTitle>Roto Stats</S.TableTitle>
-          <Table columns={RotoStatsColumns} data={rotoStandingsDisplay} />
+          <Table
+            columns={RotoStatsColumns}
+            data={rotoStandingsDisplay}
+            top3Styling
+          />
         </S.SingleTableContainer>
       </S.TablesContainer>
     </S.FlexColumnCenterContainer>

@@ -181,6 +181,7 @@ export const TrifectaStandings = () => {
             columns={TrifectaStandingsColumns}
             data={trifectaStandingsDisplay}
             sortBy={[{ id: "totalTrifectaPoints", desc: true }]}
+            top3Styling
           />
         </S.SingleTableContainer>
       </S.TablesContainer>
