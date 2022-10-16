@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSortBy, useTable } from "react-table";
 
 import * as S from "./Table.styles";
@@ -14,6 +14,7 @@ export const Table = ({
   tableBodyRow = null,
   tableBodyCell = null,
   sortBy = [],
+  top3Styling = false,
 }) => {
   const tableInstance = useTable(
     {
@@ -35,6 +36,28 @@ export const Table = ({
   const TableBodyComponent = tableBody ?? S.TableBody;
   const TableBodyRowComponent = tableBodyRow ?? S.TableBodyRow;
   const TableBodyCellComponent = tableBodyCell ?? S.TableBodyCell;
+
+  const [top3Array, setTop3Array] = useState([]);
+
+  useEffect(() => {
+    const sortedRows = tableInstance?.sortedRows ?? [];
+    if (top3Styling && sortedRows.length > 0) {
+      const top3 = [];
+      for (let i = 0; i < 3; i++) {
+        top3.push(sortedRows[i].index);
+      }
+      // only update if top3 from sorted rows and top3Array state is different
+      // AND the column is the same as the one sorted by default and is currently sorted
+      if (
+        top3?.[0] !== top3Array?.[0] ||
+        top3?.[1] !== top3Array?.[1] ||
+        top3?.[2] !== top3Array?.[2]
+      ) {
+        // will produce warning anti-pattern of updating state (even conditionally) inside a component render
+        setTop3Array(top3);
+      }
+    }
+  }, [data]);
 
   return (
     <TableComponent {...getTableProps()}>
@@ -76,7 +99,12 @@ export const Table = ({
         {rows.map((row, i) => {
           prepareRow(row);
           return (
-            <TableBodyRowComponent {...row.getRowProps()}>
+            <TableBodyRowComponent
+              {...row.getRowProps()}
+              top3Styling={top3Styling}
+              top3Array={top3Array}
+              index={row.index}
+            >
               {row.cells.map((cell) => {
                 let win, points;
                 if (
