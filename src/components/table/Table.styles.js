@@ -55,7 +55,7 @@ export const TableBodyRow = styled.tr`
       }
       return `${box} ${color};`;
     }
-    return "0.12rem 0.12rem 0.1rem 0.175rem rgba(169, 169, 169, 0.5)";
+    return "0.12rem 0.12rem 0.1rem 0.175rem rgba(169, 169, 169, 0.5);";
   }}
   border-radius: 1rem;
   position: relative;
