@@ -6,8 +6,12 @@ import {
 import { FONT_FAMILY, PRIMARY_GREEN } from "../../styles/variables";
 
 export const Container = styled.div`
-  padding: 0 2rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2rem);
+  padding-right: 2rem;
   justify-content: center;
+  align-items: center;
 `;
 
 export const Title = styled.h1`

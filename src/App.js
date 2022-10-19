@@ -10,6 +10,7 @@ import { ROUTES, STATIC_ROUTES } from "./Routes";
 import GlobalStyle from "./styles/global";
 import { OpenNavbar } from "./components/navbar/OpenNavbar";
 import { ClosedNavbar } from "./components/navbar/ClosedNavbar";
+import { HallOfFame } from "./screens/hall-of-fame/HallOfFame";
 import { HomeScreen } from "./screens/home-screen/HomeScreen";
 import { TradeHistory } from "./screens/trade-history/TradeHistory";
 import "./components/navbar/transition.styles.css";
@@ -21,6 +22,11 @@ import { useEffect } from "react";
 import { returnMongoCollection } from "./database-management";
 import { setSeasonVariables } from "./store/currentVariablesSlice";
 import { setOwnerNames } from "./store/namesSlice";
+import { BasketballHallOfFame } from "./screens/hall-of-fame/BasketballHallOfFame";
+import { BaseballHallOfFame } from "./screens/hall-of-fame/BaseballHallOfFame";
+import { FootballHallOfFame } from "./screens/hall-of-fame/FootballHallOfFame";
+import { OwnerMatchups } from "./screens/owner-matchups/OwnerMatchups";
+import { OwnerRecords } from "./screens/owner-records/OwnerRecords";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -106,6 +112,36 @@ export const App = () => {
             <Route
               path={STATIC_ROUTES.TradeHistory}
               element={<TradeHistory />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.HallOfFame}
+              element={<HallOfFame />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.BasketballHallOfFame}
+              element={<BasketballHallOfFame />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.BaseballHallOfFame}
+              element={<BaseballHallOfFame />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.FootballHallOfFame}
+              element={<FootballHallOfFame />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.GenericOwnerMatchups}
+              element={<OwnerMatchups />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.GenericOwnerRecords}
+              element={<OwnerRecords />}
               exact
             />
           </Routes>

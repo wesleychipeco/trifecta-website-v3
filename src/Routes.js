@@ -1,6 +1,12 @@
 export const STATIC_ROUTES = {
   Home: "/",
   TradeHistory: "/trade-history",
+  HallOfFame: "/halloffame",
+  BasketballHallOfFame: "/halloffame/basketball",
+  BaseballHallOfFame: "/halloffame/baseball",
+  FootballHallOfFame: "/halloffame/football",
+  GenericOwnerMatchups: "/matchups",
+  GenericOwnerRecords: "/records",
 };
 
 export const ROUTES = {
