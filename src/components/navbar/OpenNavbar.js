@@ -54,40 +54,32 @@ export const OpenNavbar = () => {
           <S.IndentedLink
             to={`${BASE_ROUTES.TrifectaStandings}/${currentYear}`}
           >
-            Trifecta Standings
+            {`${currentYear} Trifecta Standings`}
           </S.IndentedLink>
         )}
         {isStandingsExpanded && isBasketballStarted && (
           <S.IndentedLink
             to={`${BASE_ROUTES.BasketballStandings}/${currentYear}`}
           >
-            Basketball Standings
+            {`${currentYear} Basketball Standings`}
           </S.IndentedLink>
         )}
         {isStandingsExpanded && isBaseballStarted && (
           <S.IndentedLink
             to={`${BASE_ROUTES.BaseballStandings}/${currentYear}`}
           >
-            Baseball Standings
+            {`${currentYear} Baseball Standings`}
           </S.IndentedLink>
         )}
         {isStandingsExpanded && isFootballStarted && (
           <S.IndentedLink
             to={`${BASE_ROUTES.FootballStandings}/${currentYear}`}
           >
-            Football Standings
+            {`${currentYear} Football Standings`}
           </S.IndentedLink>
         )}
-        <S.Link to={`${BASE_ROUTES.BaseballStandings}/2021`}>
-          2021 Baseball Standings
-        </S.Link>
-        <S.Link to={`${BASE_ROUTES.FootballStandings}/2021`}>
-          2021 Football Standings
-        </S.Link>
-        <S.Link to={`${BASE_ROUTES.TrifectaStandings}/2021`}>
-          2021 Trifecta Standings
-        </S.Link>
         <S.Link to={STATIC_ROUTES.TradeHistory}>Trade History</S.Link>
+        <S.Link to={STATIC_ROUTES.HallOfFame}>Hall of Fame</S.Link>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
   );
