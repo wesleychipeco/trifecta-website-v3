@@ -55,6 +55,7 @@ export const Table = ({
         setTop3Array(top3);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]); // only calculate when data changes (which should only be when first available)
 
   return (
@@ -107,7 +108,7 @@ export const Table = ({
                 let win, points;
                 if (
                   typeof cell.value === "string" &&
-                  cell.value.indexOf("###") != -1
+                  cell.value.indexOf("###") !== -1
                 ) {
                   [points, win] = cell.value.split("###");
                 }
@@ -124,7 +125,7 @@ export const Table = ({
                       }
                       if (
                         typeof c.value === "string" &&
-                        c.value.indexOf("###") != -1
+                        c.value.indexOf("###") !== -1
                       ) {
                         [points] = c.value.split("###");
                         return points;

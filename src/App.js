@@ -71,6 +71,7 @@ export const App = () => {
 
       loadOwnerNames();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
