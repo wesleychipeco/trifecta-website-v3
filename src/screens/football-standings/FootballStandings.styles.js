@@ -23,7 +23,7 @@ export const TableTitle = styled.h2`
 `;
 
 export const StringTableHeaderCell = styled(TableHeaderCell)`
-  width: 9rem;
+  width: 12rem;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
 `;
 

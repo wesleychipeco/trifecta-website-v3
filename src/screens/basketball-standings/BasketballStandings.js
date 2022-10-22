@@ -184,7 +184,7 @@ export const BasketballStandings = () => {
               top3Styling
             />
           </S.LeftTableContainer>
-          <div>
+          <S.TablesContainer>
             <S.TableTitle>Roto Standings</S.TableTitle>
             <Table
               columns={RotoColumns}
@@ -192,7 +192,7 @@ export const BasketballStandings = () => {
               sortBy={[{ id: "rotoTrifectaPoints", desc: true }]}
               top3Styling
             />
-          </div>
+          </S.TablesContainer>
         </S.TwoTablesContainer>
         <S.SingleTableContainer>
           <S.TableTitle>Roto Stats</S.TableTitle>
