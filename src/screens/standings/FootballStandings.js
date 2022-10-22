@@ -51,9 +51,6 @@ export const FootballStandings = () => {
         const weeksLength = Object.keys(top5Bottom5Standings?.[0]).filter(
           (key) => key.includes("week")
         ).length;
-        console.log("a", trifectaStandings);
-        console.log("b", h2hStandings);
-        console.log("c", top5Bottom5Standings);
         setNumberOfWeeks(weeksLength);
         setTrifectaStandings(trifectaStandings);
         setH2HStandings(h2hStandings);
@@ -101,9 +98,6 @@ export const FootballStandings = () => {
             ownerNamesMapping
           );
 
-          console.log("a", trifectaStandings);
-          console.log("b", h2hStandings);
-          console.log("c", top5Bottom5Standings);
           display(trifectaStandings, h2hStandings, top5Bottom5Standings);
 
           // delete, then save to mongodb
