@@ -31,6 +31,7 @@ export const NumbersTableHeaderCell = styled(TableHeaderCell)`
 export const TablesContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 export const SingleTableContainer = styled(FlexColumnCenterContainer)`
@@ -43,6 +44,6 @@ export const TwoTablesContainer = styled.div`
   margin-bottom: 4rem;
 `;
 
-export const LeftTableContainer = styled.div`
+export const LeftTableContainer = styled(TablesContainer)`
   margin-right: 3rem;
 `;
