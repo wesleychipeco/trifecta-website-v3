@@ -1,4 +1,4 @@
-import * as S from "./BaseballStandings.styles";
+import * as S from "./Standings.styles";
 
 export const TrifectaColumns = [
   {

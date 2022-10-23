@@ -5,9 +5,12 @@ import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
 import { Table } from "../../components/table/Table";
-import * as S from "./TrifectaStandings.styles";
+import * as S from "./Standings.styles";
 import * as G from "../../styles/shared";
-import { TrifectaColumnsPre2019, TrifectaColumnsPost2019 } from "./columns";
+import {
+  TrifectaColumnsPre2019,
+  TrifectaColumnsPost2019,
+} from "./TrifectaColumns";
 import {
   determineSeasonStatus,
   isYear1AfterYear2,
@@ -15,7 +18,7 @@ import {
   SeasonStatus,
 } from "../../utils/years";
 import { returnMongoCollection } from "../../database-management";
-import { calculateTrifectaStandings } from "./helpers";
+import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
 import { BASE_ROUTES } from "../../Routes";
 
 export const TrifectaStandings = () => {

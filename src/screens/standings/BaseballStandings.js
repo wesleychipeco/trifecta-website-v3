@@ -9,14 +9,14 @@ import {
   h2hScrapeToStandings,
   rotoScrapeToStandings,
   standingsScraper,
-} from "./helpers";
-import * as S from "./BaseballStandings.styles";
+} from "./BaseballStandingsHelpers";
+import * as S from "./Standings.styles";
 import {
   TrifectaColumns,
   H2HColumns,
   RotoColumns,
   RotoStatsColumns,
-} from "./columns";
+} from "./BaseballColumns";
 import { isYear1AfterYear2, isYear1BeforeYear2 } from "../../utils/years";
 import { returnMongoCollection } from "../../database-management";
 import { insertIntoArray } from "../../utils/arrays";

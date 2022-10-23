@@ -130,7 +130,7 @@ export const Table = ({
                         [points] = c.value.split("###");
                         return points;
                       }
-                      return c.value;
+                      return c?.value ?? "Error";
                     })}
                   </TableBodyCellComponent>
                 );

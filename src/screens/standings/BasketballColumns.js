@@ -1,4 +1,4 @@
-import * as S from "./FootballStandings.styles";
+import * as S from "./Standings.styles";
 
 export const TrifectaColumns = [
   {
@@ -18,8 +18,8 @@ export const TrifectaColumns = [
     sortDescFirst: true,
   },
   {
-    Header: "T5-B5 Trifecta Points",
-    accessor: "top5Bottom5TrifectaPoints",
+    Header: "Roto Trifecta Points",
+    accessor: "rotoTrifectaPoints",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
@@ -63,18 +63,6 @@ export const H2HColumns = [
     sortDescFirst: true,
   },
   {
-    Header: "Points For",
-    accessor: (data) => Number(data.pointsFor).toFixed(1),
-    tableHeaderCell: S.NumbersTableHeaderCell,
-    sortDescFirst: true,
-  },
-  {
-    Header: "Points Against",
-    accessor: (data) => Number(data.pointsAgainst).toFixed(1),
-    tableHeaderCell: S.NumbersTableHeaderCell,
-    sortDescFirst: true,
-  },
-  {
     Header: "H2H Trifecta Points",
     accessor: "h2hTrifectaPoints",
     tableHeaderCell: S.NumbersTableHeaderCell,
@@ -82,7 +70,7 @@ export const H2HColumns = [
   },
 ];
 
-export const Top5Bottom5Columns = [
+export const RotoColumns = [
   {
     Header: "Team Name",
     accessor: "teamName",
@@ -90,28 +78,118 @@ export const Top5Bottom5Columns = [
     disableSortBy: true,
   },
   {
-    Header: "Wins",
-    accessor: "wins",
+    Header: "FG%",
+    accessor: "FGPERPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
-    Header: "Losses",
-    accessor: "losses",
+    Header: "FT%",
+    accessor: "FTPERPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
-    Header: "Win%",
-    accessor: (data) => Number(data.winPer).toFixed(3),
+    Header: "3PM",
+    accessor: "THREEPMPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
-    Header: "T5-B5 Trifecta Points",
-    accessor: "top5Bottom5TrifectaPoints",
+    Header: "REB",
+    accessor: "REBPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "AST",
+    accessor: "ASTPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "STL",
+    accessor: "STLPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "TO",
+    accessor: "TOPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: false,
+  },
+  {
+    Header: "PTS",
+    accessor: "PTSPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+
+  {
+    Header: "Roto Points",
+    accessor: "totalPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Roto Trifecta Points",
+    accessor: "rotoTrifectaPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
 ];
 
-export const FootballColumns = [
+export const RotoStatsColumns = [
+  {
+    Header: "Team Name",
+    accessor: "teamName",
+    tableHeaderCell: S.StringTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "FG%",
+    accessor: (data) => Number(data.FGPER).toFixed(3),
+    sortDescFirst: true,
+  },
+  {
+    Header: "FT%",
+    accessor: (data) => Number(data.FTPER).toFixed(3),
+    sortDescFirst: true,
+  },
+  {
+    Header: "3PM",
+    accessor: "THREEPM",
+    sortDescFirst: true,
+  },
+  {
+    Header: "REB",
+    accessor: "REB",
+    sortDescFirst: true,
+  },
+  {
+    Header: "AST",
+    accessor: "AST",
+    sortDescFirst: true,
+  },
+  {
+    Header: "STL",
+    accessor: "STL",
+    sortDescFirst: true,
+  },
+  {
+    Header: "TO",
+    accessor: "TO",
+    sortDescFirst: false,
+  },
+  {
+    Header: "PTS",
+    accessor: "PTS",
+    sortDescFirst: true,
+  },
+];
+
+export const BasketballColumns = [
   {
     Header: "Team Name",
     accessor: "teamName",
@@ -143,18 +221,6 @@ export const FootballColumns = [
   {
     Header: "Win%",
     accessor: (data) => Number(data.winPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
-    sortDescFirst: true,
-  },
-  {
-    Header: "Points For",
-    accessor: (data) => Number(data.pointsFor).toFixed(1),
-    tableHeaderCell: S.NumbersTableHeaderCell,
-    sortDescFirst: true,
-  },
-  {
-    Header: "Points Against",
-    accessor: (data) => Number(data.pointsAgainst).toFixed(1),
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
