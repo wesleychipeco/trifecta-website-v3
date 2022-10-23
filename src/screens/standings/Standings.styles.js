@@ -1,9 +1,14 @@
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 import {
   TableHeaderCell,
   TableBodyCell,
 } from "../../components/table/Table.styles";
-import { PRIMARY_GREEN } from "../../styles/variables";
+import {
+  FONT_COLOR,
+  HEADER_FONT_FAMILY,
+  PRIMARY_GREEN,
+} from "../../styles/variables";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;
@@ -57,4 +62,23 @@ export const WeeksPointsTableBodyCell = styled(TableBodyCell)`
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
   background-color: ${(props) =>
     props.win === "true" ? `${PRIMARY_GREEN}` : "transparent"};
+`;
+
+export const TableCaption = styled.p`
+  margin: 0.5rem;
+`;
+export const Link = styled(NavLink)`
+  display: flex;
+  flex-direction: row;
+  font-size: 1rem;
+  text-decoration: none;
+  font-family: ${HEADER_FONT_FAMILY};
+  color: ${FONT_COLOR};
+  font-style: italic;
+  &.active {
+    font-weight: 700;
+  }
+  &:hover {
+    opacity: 0.6;
+  }
 `;
