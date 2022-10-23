@@ -142,8 +142,6 @@ export const FootballStandings = () => {
         // if there is no last scraped string (ie brand new, first time entering), scrape
         if (!lastScrapedString) {
           console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-          console.log("object", object);
-          // display(trifectaStandings, h2hStandings, top5Bottom5Standings);
           // return;
           scrape(collection);
         } else {
