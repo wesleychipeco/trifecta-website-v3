@@ -39,7 +39,6 @@ export const AllTimeRecordsColumns = [
     accessor: (data) => capitalize(data.sport),
     disableSortBy: true,
   },
-  ,
   {
     Header: "Wins",
     accessor: "wins",
