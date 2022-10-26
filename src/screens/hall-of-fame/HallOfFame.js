@@ -68,24 +68,24 @@ export const HallOfFame = () => {
           <S.LabelText>By Owner</S.LabelText>
         </S.OwnerProfilesLabelTextContainer>
         <S.OwnerProfilesColumnContainer column={1}>
-          <OwnerLinks name="Marcus Lam" />
-          <OwnerLinks name="Wesley Chipeco" />
-          <OwnerLinks name="Kevin Okamoto & Joshua Liu" />
-          <OwnerLinks name="Bryan Kuh" />
-          <OwnerLinks name="Joshua Apostol" />
+          <OwnerLinks name="Marcus Lam" teamNumber={1} />
+          <OwnerLinks name="Wesley Chipeco" teamNumber={2} />
+          <OwnerLinks name="Kevin Okamoto & Joshua Liu" teamNumber={3} />
+          <OwnerLinks name="Bryan Kuh" teamNumber={4} />
+          <OwnerLinks name="Joshua Apostol" teamNumber={5} />
         </S.OwnerProfilesColumnContainer>
         <S.OwnerProfilesColumnContainer column={2}>
-          <OwnerLinks name="Joshua Aguirre" />
-          <OwnerLinks name="Tim Fong" />
-          <OwnerLinks name="Ryan Tomimitsu" />
-          <OwnerLinks name="Nick Wang" />
-          <OwnerLinks name="Wayne Fong" />
+          <OwnerLinks name="Joshua Aguirre" teamNumber={6} />
+          <OwnerLinks name="Tim Fong" teamNumber={7} />
+          <OwnerLinks name="Ryan Tomimitsu" teamNumber={8} />
+          <OwnerLinks name="Nick Wang" teamNumber={9} />
+          <OwnerLinks name="Wayne Fong" teamNumber={10} />
         </S.OwnerProfilesColumnContainer>
         <S.OwnerProfilesColumnContainer column={3}>
-          <OwnerLinks name="Joshua Liu" />
-          <OwnerLinks name="Nick Wang & Kevin Okamoto" />
-          <OwnerLinks name="Katie Yamamoto" />
-          <OwnerLinks name="Tim Fong & Wayne Fong" />
+          <OwnerLinks name="Joshua Liu" teamNumber={11} />
+          <OwnerLinks name="Nick Wang & Kevin Okamoto" teamNumber={12} />
+          <OwnerLinks name="Katie Yamamoto" teamNumber={13} />
+          <OwnerLinks name="Tim Fong & Wayne Fong" teamNumber={14} />
         </S.OwnerProfilesColumnContainer>
       </S.OwnerProfilesContainer>
     </S.FlexColumnCenterContainer>
