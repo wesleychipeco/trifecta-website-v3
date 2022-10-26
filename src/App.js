@@ -141,7 +141,7 @@ export const App = () => {
               exact
             />
             <Route
-              path={STATIC_ROUTES.GenericOwnerRecords}
+              path={ROUTES.OwnerRecords}
               element={<OwnerRecords />}
               exact
             />

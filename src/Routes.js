@@ -6,7 +6,7 @@ export const STATIC_ROUTES = {
   BaseballHallOfFame: "/halloffame/baseball",
   FootballHallOfFame: "/halloffame/football",
   GenericOwnerMatchups: "/matchups",
-  GenericOwnerRecords: "/records",
+  GenericOwnerRecords: "/ownerrecords",
 };
 
 export const ROUTES = {
@@ -15,6 +15,7 @@ export const ROUTES = {
   BaseballStandings: "/standings/baseball/:year",
   FootballStandings: "/standings/football/:year",
   TrifectaStandings: "/standings/trifecta/:year",
+  OwnerRecords: "/ownerrecords/:teamNumber",
 };
 
 export const BASE_ROUTES = {
@@ -23,4 +24,5 @@ export const BASE_ROUTES = {
   BaseballStandings: "/standings/baseball",
   FootballStandings: "/standings/football",
   TrifectaStandings: "/standings/trifecta",
+  OwnerRecords: "/ownerrecords",
 };
