@@ -136,7 +136,7 @@ export const App = () => {
               exact
             />
             <Route
-              path={STATIC_ROUTES.GenericOwnerMatchups}
+              path={ROUTES.OwnerMatchups}
               element={<OwnerMatchups />}
               exact
             />
