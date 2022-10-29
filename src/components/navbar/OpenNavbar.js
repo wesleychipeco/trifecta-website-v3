@@ -18,6 +18,7 @@ export const OpenNavbar = () => {
     isBasketballStarted,
     isBaseballStarted,
     isFootballStarted,
+    basketballAhead,
   } = seasonVariables;
 
   // local state
@@ -47,6 +48,13 @@ export const OpenNavbar = () => {
       </S.HeaderContainer>
       <S.LinkContainer>
         <S.Link to={STATIC_ROUTES.Home}>Home</S.Link>
+        {basketballAhead && (
+          <S.Link
+            to={`${BASE_ROUTES.BasketballStandings}/${Number(currentYear) + 1}`}
+          >
+            {`${Number(currentYear) + 1} Basketball Standings`}
+          </S.Link>
+        )}
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>

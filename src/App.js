@@ -49,6 +49,7 @@ export const App = () => {
           isBaseballInSeason: baseball.inSeason,
           isFootballStarted: football.seasonStarted,
           isFootballInSeason: football.inSeason,
+          basketballAhead: object.basketballAhead,
         };
         dispatch(setSeasonVariables(seasonVariables));
       };
