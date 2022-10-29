@@ -12,6 +12,7 @@ export const FlexColumnCenterContainer = styled.div`
 
 export const Title = styled.h1`
   font-size: 3rem;
+  margin-bottom: 1rem;
 `;
 
 export const TableTitle = styled.h2`
@@ -50,4 +51,27 @@ export const TwoTablesContainer = styled.div`
 
 export const LeftTableContainer = styled(TablesContainer)`
   margin-right: 3rem;
+`;
+
+export const LeftContainer = styled.div`
+  position: absolute;
+  left: 12rem;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DropdownContianer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const Subtitle = styled.p`
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+`;
+
+export const DropdownLabel = styled.p`
+  margin: 0 0.75rem 0 0;
+  font-size: 1.25rem;
 `;

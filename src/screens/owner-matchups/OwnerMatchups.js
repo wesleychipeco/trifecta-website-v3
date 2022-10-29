@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { sortBy } from "lodash";
 import { useParams } from "react-router-dom";
 import * as S from "./OwnerMatchups.styles";
 import { returnMongoCollection } from "../../database-management";
@@ -8,6 +9,7 @@ import {
   BMatchupsColumns,
   FootballMatchupsColumns,
 } from "./columns";
+import { MatchupsDropdown } from "./MatchupsDropdown";
 
 const DEFAULT_STATE = {
   totalMatchups: [],
@@ -20,6 +22,7 @@ export const OwnerMatchups = () => {
   const { year, teamNumber } = useParams();
   const [ownerMatchups, setOwnerMatchups] = useState(DEFAULT_STATE);
   const [ownerNames, setOwnerNames] = useState("");
+  const [yearsArray, setYearsArray] = useState([]);
 
   useEffect(() => {
     const load = async () => {
@@ -34,13 +37,18 @@ export const OwnerMatchups = () => {
       const collection = await returnMongoCollection(
         `owner${teamNumber}Matchups`
       );
-      const data = await collection.find({ year });
-      setOwnerMatchups(data?.[0] ?? DEFAULT_STATE);
+      const data = await collection.find({});
+      const yearsOfMatchups = data.map((each) => each.year);
+      const sortedYearsArray = sortBy(yearsOfMatchups);
+      setYearsArray(sortedYearsArray);
+
+      const selectedYearMatchups = data.filter((obj) => obj.year === year);
+      setOwnerMatchups(selectedYearMatchups?.[0] ?? DEFAULT_STATE);
     };
 
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [year, teamNumber]);
 
   const {
     totalMatchups,
@@ -54,7 +62,23 @@ export const OwnerMatchups = () => {
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${ownerNamesDisplay} ${yearDisplay} Head-to-Head Matchups`}</S.Title>
+
       <S.TablesContainer>
+        <S.LeftContainer>
+          {yearsArray.length > 0 && (
+            <S.Subtitle>{`Years Active: ${yearsArray[0]} - ${
+              yearsArray[yearsArray.length - 2]
+            } (${yearsArray.length - 1})`}</S.Subtitle>
+          )}
+          <S.DropdownContianer>
+            <S.DropdownLabel>Switch Year:</S.DropdownLabel>
+            <MatchupsDropdown
+              arrayOfYears={yearsArray}
+              teamNumber={teamNumber}
+              year={year}
+            />
+          </S.DropdownContianer>
+        </S.LeftContainer>
         <S.SingleTableContainer>
           <S.TableTitle>Total Matchups</S.TableTitle>
           <Table

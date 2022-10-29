@@ -15,7 +15,7 @@ export const OwnerLinks = ({ name, teamNumber }) => {
         <S.Spacer />
         <Button
           title={"Matchups"}
-          navTo={`${BASE_ROUTES.OwnerMatchups}/${teamNumber}/2021`}
+          navTo={`${BASE_ROUTES.OwnerMatchups}/${teamNumber}/all`}
         />
       </S.ButtonsContainer>
     </S.Container>
