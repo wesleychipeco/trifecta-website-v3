@@ -12,6 +12,7 @@ export const currentVariables = createSlice({
       isBaseballInSeason: false,
       isFootballStarted: false,
       isFootballInSeason: false,
+      basketballAhead: false,
     },
   },
   reducers: {

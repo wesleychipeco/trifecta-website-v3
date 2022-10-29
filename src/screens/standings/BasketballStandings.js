@@ -24,8 +24,12 @@ import { insertIntoArray } from "../../utils/arrays";
 
 export const BasketballStandings = () => {
   const { year } = useParams();
-  const { currentYear, isBasketballStarted, isBasketballInSeason } =
-    useSelector((state) => state?.currentVariables?.seasonVariables);
+  const {
+    currentYear,
+    isBasketballStarted,
+    isBasketballInSeason,
+    basketballAhead,
+  } = useSelector((state) => state?.currentVariables?.seasonVariables);
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
 
@@ -82,9 +86,10 @@ export const BasketballStandings = () => {
 
         // if not current year or not started or in season, then just display, do not scrape
         if (
-          !isBasketballStarted ||
-          !isBasketballInSeason ||
-          year !== currentYear
+          (!isBasketballStarted ||
+            !isBasketballInSeason ||
+            year !== currentYear) &&
+          !basketballAhead
         ) {
           if (isYear1AfterYear2(year, currentYear)) {
             console.log("AHEAD of TIME!");
