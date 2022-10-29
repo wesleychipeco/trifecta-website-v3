@@ -16,6 +16,7 @@ export const ROUTES = {
   FootballStandings: "/standings/football/:year",
   TrifectaStandings: "/standings/trifecta/:year",
   OwnerRecords: "/ownerrecords/:teamNumber",
+  OwnerMatchups: "/ownermatchups/:teamNumber/:year",
 };
 
 export const BASE_ROUTES = {
@@ -25,4 +26,5 @@ export const BASE_ROUTES = {
   FootballStandings: "/standings/football",
   TrifectaStandings: "/standings/trifecta",
   OwnerRecords: "/ownerrecords",
+  OwnerMatchups: "/ownermatchups",
 };
