@@ -1,14 +1,11 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import {
-  TableHeaderCell,
-  TableBodyCell,
-} from "../../components/table/Table.styles";
+import { TableHeaderCell, TableBodyCell } from "components/table/Table.styles";
 import {
   FONT_COLOR,
   HEADER_FONT_FAMILY,
   PRIMARY_GREEN,
-} from "../../styles/variables";
+} from "styles/variables";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;

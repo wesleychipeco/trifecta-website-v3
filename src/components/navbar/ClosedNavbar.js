@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import * as S from "./Navbar.styles";
-import { openNavbar } from "../../store/navbarSlice";
+import { openNavbar } from "store/navbarSlice";
 
 export const ClosedNavbar = () => {
   const dispatch = useDispatch();

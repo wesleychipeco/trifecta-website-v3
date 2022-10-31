@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { sortBy } from "lodash";
 import { useParams } from "react-router-dom";
 import * as S from "./OwnerMatchups.styles";
-import { returnMongoCollection } from "../../database-management";
-import { Table } from "../../components/table/Table";
+import { returnMongoCollection } from "database-management";
+import { Table } from "components/table/Table";
 import {
   TotalMatchupsColumns,
   BMatchupsColumns,

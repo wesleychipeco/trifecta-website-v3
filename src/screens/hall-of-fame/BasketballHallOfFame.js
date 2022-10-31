@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./SportHallOfFame.styles";
-import { returnMongoCollection } from "../../database-management";
-import { Table } from "../../components/table/Table";
+import { returnMongoCollection } from "database-management";
+import { Table } from "components/table/Table";
 import {
   AllTimeRecordsColumns,
   BestH2HColumns,

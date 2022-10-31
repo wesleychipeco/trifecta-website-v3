@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import isSameDay from "date-fns/isSameDay";
 
-import { Table } from "../../components/table/Table";
 import {
   compileTrifectaStandings,
   h2hScrapeToStandings,
@@ -18,9 +17,10 @@ import {
   RotoStatsColumns,
   BasketballColumns,
 } from "./BasketballColumns";
-import { isYear1AfterYear2, isYear1BeforeYear2 } from "../../utils/years";
-import { returnMongoCollection } from "../../database-management";
-import { insertIntoArray } from "../../utils/arrays";
+import { Table } from "components/table/Table";
+import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
+import { returnMongoCollection } from "database-management";
+import { insertIntoArray } from "utils/arrays";
 
 export const BasketballStandings = () => {
   const { year } = useParams();

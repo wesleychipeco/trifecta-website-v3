@@ -2,13 +2,13 @@ import { capitalize } from "lodash";
 import React, { useMemo } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import { BASE_ROUTES } from "../../Routes";
+import { BASE_ROUTES } from "Routes";
 import {
   BACKGROUND_COLOR,
   FONT_COLOR,
   FONT_FAMILY,
   PRIMARY_GREEN,
-} from "../../styles/variables";
+} from "styles/variables";
 
 export const MatchupsDropdown = ({ arrayOfYears, teamNumber, year }) => {
   const navigate = useNavigate();

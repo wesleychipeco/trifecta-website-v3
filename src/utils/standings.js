@@ -1,4 +1,4 @@
-import { HIGH_TO_LOW } from "../Constants";
+import { HIGH_TO_LOW } from "Constants";
 import pick from "lodash/pick";
 import sum from "lodash/sum";
 import values from "lodash/values";

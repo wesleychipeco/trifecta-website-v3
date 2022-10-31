@@ -4,9 +4,8 @@ import { useSelector } from "react-redux";
 import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
-import { Table } from "../../components/table/Table";
 import * as S from "./Standings.styles";
-import * as G from "../../styles/shared";
+import * as G from "styles/shared";
 import {
   TrifectaColumnsPre2019,
   TrifectaColumnsPost2019,
@@ -16,10 +15,11 @@ import {
   isYear1AfterYear2,
   isYear1BeforeYear2,
   SeasonStatus,
-} from "../../utils/years";
-import { returnMongoCollection } from "../../database-management";
+} from "utils/years";
+import { Table } from "components/table/Table";
+import { returnMongoCollection } from "database-management";
 import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
-import { BASE_ROUTES } from "../../Routes";
+import { BASE_ROUTES } from "Routes";
 
 export const TrifectaStandings = () => {
   const { year } = useParams();

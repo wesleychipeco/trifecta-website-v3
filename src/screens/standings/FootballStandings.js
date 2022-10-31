@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
-import { Table } from "../../components/table/Table";
 import {
   addOwnerNames,
   calculateTop5Bottom5Standings,
@@ -20,10 +19,11 @@ import {
   Top5Bottom5Columns,
   FootballColumns,
 } from "./FootballColumns";
-import { isYear1AfterYear2, isYear1BeforeYear2 } from "../../utils/years";
-import { returnMongoCollection } from "../../database-management";
-import { insertIntoArray } from "../../utils/arrays";
-import { assignRankPoints } from "../../utils/standings";
+import { Table } from "components/table/Table";
+import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
+import { returnMongoCollection } from "database-management";
+import { insertIntoArray } from "utils/arrays";
+import { assignRankPoints } from "utils/standings";
 
 export const FootballStandings = () => {
   const { year } = useParams();
