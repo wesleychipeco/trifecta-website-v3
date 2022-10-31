@@ -12,7 +12,8 @@ import {
   returnOwnerNamesUnderscored,
   standingsScraper,
 } from "./FootballStandingsHelpers";
-import * as S from "styles/Standings.styles";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/FootballStandings.styles";
 import {
   TrifectaColumns,
   H2HColumns,
@@ -247,7 +248,7 @@ export const FootballStandings = () => {
             columns={TestColumns}
             data={top5Bottom5StandingsDisplay}
             sortBy={[{ id: "top5Bottom5TrifectaPoints", desc: true }]}
-            tableBodyCell={S.WeeksPointsTableBodyCell}
+            tableBodyCell={T.WeeksPointsTableBodyCell}
             top3Styling
           />
         </S.SingleTableContainer>

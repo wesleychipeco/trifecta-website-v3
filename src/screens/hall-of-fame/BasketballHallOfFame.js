@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import * as S from "styles/SportHallOfFame.styles";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/SportHallOfFame.styles";
 import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {
@@ -44,9 +45,9 @@ export const BasketballHallOfFame = () => {
         </S.SingleTableContainer>
         <S.SingleTableContainer>
           <S.TableTitle>All-Time Records</S.TableTitle>
-          <S.TableCaption>
+          <T.TableCaption>
             Roto points calculated starting in 2020
-          </S.TableCaption>
+          </T.TableCaption>
           <Table
             columns={AllTimeRecordsColumns}
             data={allTimeRecords}

@@ -9,7 +9,7 @@ import {
   rotoScrapeToStandings,
   standingsScraper,
 } from "./BaseballStandingsHelpers";
-import * as S from "styles/Standings.styles";
+import * as S from "styles/StandardScreen.styles";
 import {
   TrifectaColumns,
   H2HColumns,

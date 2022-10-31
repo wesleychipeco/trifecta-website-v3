@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
-import * as S from "styles/Standings.styles";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/TrifectaStandings.styles";
 import * as G from "styles/shared";
 import {
   TrifectaColumnsPre2019,
@@ -169,12 +170,12 @@ export const TrifectaStandings = () => {
         <G.FlexColumn>
           <S.TableTitle>{`Last updated: ${updatedAsOfDisplay}`}</S.TableTitle>
           <G.FlexRow>
-            <S.TableCaption>
+            <T.TableCaption>
               To update, load in-progress sport's standings:
-            </S.TableCaption>
-            <S.Link
+            </T.TableCaption>
+            <T.Link
               to={`${BASE_ROUTES[updateRoute.replace(" ", "")]}/${currentYear}`}
-            >{`${currentYear} ${updateRoute}`}</S.Link>
+            >{`${currentYear} ${updateRoute}`}</T.Link>
           </G.FlexRow>
         </G.FlexColumn>
       )}

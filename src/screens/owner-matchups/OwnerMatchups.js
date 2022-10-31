@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { sortBy } from "lodash";
 import { useParams } from "react-router-dom";
-import * as S from "styles/OwnerMatchups.styles";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/OwnerScreen.styles";
 import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {
@@ -61,24 +62,24 @@ export const OwnerMatchups = () => {
 
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`${ownerNamesDisplay} ${yearDisplay} Head-to-Head Matchups`}</S.Title>
+      <T.Title>{`${ownerNamesDisplay} ${yearDisplay} Head-to-Head Matchups`}</T.Title>
 
       <S.TablesContainer>
-        <S.LeftContainer>
+        <T.LeftContainer>
           {yearsArray.length > 0 && (
-            <S.Subtitle>{`Years Active: ${yearsArray[0]} - ${
+            <T.Subtitle>{`Years Active: ${yearsArray[0]} - ${
               yearsArray[yearsArray.length - 2]
-            } (${yearsArray.length - 1})`}</S.Subtitle>
+            } (${yearsArray.length - 1})`}</T.Subtitle>
           )}
-          <S.DropdownContianer>
-            <S.DropdownLabel>Switch Year:</S.DropdownLabel>
+          <T.DropdownContianer>
+            <T.DropdownLabel>Switch Year:</T.DropdownLabel>
             <MatchupsDropdown
               arrayOfYears={yearsArray}
               teamNumber={teamNumber}
               year={year}
             />
-          </S.DropdownContianer>
-        </S.LeftContainer>
+          </T.DropdownContianer>
+        </T.LeftContainer>
         <S.SingleTableContainer>
           <S.TableTitle>Total Matchups</S.TableTitle>
           <Table

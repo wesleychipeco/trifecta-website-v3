@@ -1,4 +1,5 @@
-import * as S from "styles/OwnerMatchups.styles";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/OwnerScreen.styles";
 
 export const TotalMatchupsColumns = [
   {
@@ -9,25 +10,25 @@ export const TotalMatchupsColumns = [
   {
     Header: "Basketball Win%",
     accessor: (data) => Number(data.basketballWinPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Baseball Win%",
     accessor: (data) => Number(data.baseballWinPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Football Win%",
     accessor: (data) => Number(data.footballWinPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Total Win%",
     accessor: (data) => Number(data.totalWinPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
 ];
@@ -41,25 +42,25 @@ export const BMatchupsColumns = [
   {
     Header: "Wins",
     accessor: "wins",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Losses",
     accessor: "losses",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Ties",
     accessor: "ties",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Win %",
     accessor: (data) => Number(data.winPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
 ];
@@ -73,43 +74,43 @@ export const FootballMatchupsColumns = [
   {
     Header: "Wins",
     accessor: "wins",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Losses",
     accessor: "losses",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Ties",
     accessor: "ties",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Win %",
     accessor: (data) => Number(data.winPer).toFixed(3),
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Points For",
     accessor: "pointsFor",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Points Against",
     accessor: "pointsAgainst",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
     Header: "Point Differential",
     accessor: "pointsDiff",
-    tableHeaderCell: S.NumbersTableHeaderCell,
+    tableHeaderCell: T.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
 ];

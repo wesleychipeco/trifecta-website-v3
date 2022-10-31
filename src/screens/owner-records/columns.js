@@ -1,5 +1,5 @@
 import { capitalize } from "lodash";
-import * as S from "styles/OwnerRecords.styles";
+import * as S from "styles/StandardScreen.styles";
 
 export const TrifectaHistoryColumns = [
   {
