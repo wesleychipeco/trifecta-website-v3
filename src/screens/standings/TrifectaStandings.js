@@ -152,7 +152,7 @@ export const TrifectaStandings = () => {
       ///////////// only 1 function gets run inside useEffect /////////////
       check();
     }
-  }, [isReady, ownerNamesMapping]);
+  }, [isReady, ownerNamesMapping, year]);
 
   const TrifectaStandingsColumns = isYear1BeforeYear2(year, "2019")
     ? TrifectaColumnsPre2019

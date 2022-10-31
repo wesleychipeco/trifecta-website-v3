@@ -164,7 +164,7 @@ export const FootballStandings = () => {
       ///////////// only 1 function gets run inside useEffect /////////////
       check();
     }
-  }, [isReady, ownerNamesMapping]);
+  }, [isReady, ownerNamesMapping, year]);
 
   const TrifectaStandingsColumns = useMemo(() => {
     return isYear1BeforeYear2(year, currentYear) ||
