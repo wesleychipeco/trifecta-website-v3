@@ -1,4 +1,4 @@
-import * as S from "./HomeScreen.styles";
+import * as S from "styles/HomeScreen.styles";
 
 import BaseballPhoto from "resources/images/Baseball.jpg";
 import BasketballPhoto from "resources/images/Basketball.jpg";

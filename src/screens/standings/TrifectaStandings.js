@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
-import * as S from "./Standings.styles";
+import * as S from "styles/Standings.styles";
 import * as G from "styles/shared";
 import {
   TrifectaColumnsPre2019,

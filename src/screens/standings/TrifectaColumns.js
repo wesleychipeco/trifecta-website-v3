@@ -1,4 +1,4 @@
-import * as S from "./Standings.styles";
+import * as S from "styles/Standings.styles";
 
 export const TrifectaColumnsPre2019 = [
   {

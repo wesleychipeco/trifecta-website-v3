@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-import { BACKGROUND_COLOR } from "../../styles/variables";
+import { BACKGROUND_COLOR } from "./variables";
 
 export const Table = styled.table`
   border-radius: 1rem;

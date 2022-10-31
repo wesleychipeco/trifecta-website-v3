@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TableHeaderCell } from "../../components/table/Table.styles";
+import { TableHeaderCell } from "./Table.styles";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;

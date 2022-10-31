@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "components/button/Button";
 import { BASE_ROUTES } from "Routes";
-import * as S from "./OwnerLinks.styles";
+import * as S from "styles/OwnerLinks.styles";
 
 export const OwnerLinks = ({ name, teamNumber }) => {
   return (

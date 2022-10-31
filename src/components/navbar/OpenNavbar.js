@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
-import * as S from "./Navbar.styles";
+import * as S from "styles/Navbar.styles";
 import { closeNavbar } from "store/navbarSlice";
 
 import TrifectaLogo from "resources/images/trifectalogo.png";

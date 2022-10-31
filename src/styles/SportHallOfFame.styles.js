@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TableHeaderCell } from "../../components/table/Table.styles";
+import { TableHeaderCell } from "./Table.styles";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ export const StringTableHeaderCell = styled(TableHeaderCell)`
 `;
 
 export const NumbersTableHeaderCell = styled(TableHeaderCell)`
-  width: 6rem;
+  width: 3rem;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
 `;
 

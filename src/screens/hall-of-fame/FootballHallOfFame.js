@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import * as S from "./SportHallOfFame.styles";
+import * as S from "styles/SportHallOfFame.styles";
 import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {

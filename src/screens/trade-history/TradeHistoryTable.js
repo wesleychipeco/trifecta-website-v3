@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 
-import * as T from "components/table/Table.styles";
-import * as S from "./TradeHistory.styles";
+import * as T from "styles/Table.styles";
+import * as S from "styles/TradeHistory.styles";
 import * as G from "styles/shared";
 
 const OWNER_INPUT = "owner";

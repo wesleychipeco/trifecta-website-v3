@@ -1,4 +1,4 @@
-import * as S from "./OwnerMatchups.styles";
+import * as S from "styles/OwnerMatchups.styles";
 
 export const TotalMatchupsColumns = [
   {

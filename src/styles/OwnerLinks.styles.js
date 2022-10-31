@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FONT_COLOR, HEADER_FONT_FAMILY } from "../../styles/variables";
+import { FONT_COLOR, HEADER_FONT_FAMILY } from "./variables";
 
 export const Container = styled.div`
   display: flex;

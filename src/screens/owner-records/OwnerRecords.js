@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as S from "./OwnerRecords.styles";
+import * as S from "styles/OwnerRecords.styles";
 import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {

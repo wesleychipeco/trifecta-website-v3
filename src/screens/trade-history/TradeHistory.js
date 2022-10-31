@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
-import * as S from "./TradeHistory.styles";
+import * as S from "styles/TradeHistory.styles";
 import { TradeHistoryTable } from "./TradeHistoryTable";
 
 export const TradeHistory = () => {

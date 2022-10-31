@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { TableHeaderCell, TableBodyCell } from "components/table/Table.styles";
+import { TableHeaderCell, TableBodyCell } from "styles/Table.styles";
 import {
   FONT_COLOR,
   HEADER_FONT_FAMILY,

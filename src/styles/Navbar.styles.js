@@ -1,11 +1,7 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  FONT_COLOR,
-  HEADER_FONT_FAMILY,
-  PRIMARY_GREEN,
-} from "../../styles/variables";
+import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
 
 ////////// CLOSED NAVBAR //////////
 
