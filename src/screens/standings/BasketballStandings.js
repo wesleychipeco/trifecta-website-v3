@@ -86,20 +86,23 @@ export const BasketballStandings = () => {
 
         // if not current year or not started or in season, then just display, do not scrape
         if (
-          (!isBasketballStarted ||
-            !isBasketballInSeason ||
-            year !== currentYear) &&
-          !basketballAhead
+          !isBasketballStarted ||
+          !isBasketballInSeason ||
+          year !== currentYear
         ) {
-          if (isYear1AfterYear2(year, currentYear)) {
-            console.log("AHEAD of TIME!");
+          if (basketballAhead && Number(year) === Number(currentYear) + 1) {
+            console.log("BASKETBALL AHEAD! MOVE TO SCRAPE BLOCK");
           } else {
-            if (isYear1BeforeYear2(year, "2020")) {
-              setBasketballStandings(object.basketballStandings);
+            if (isYear1AfterYear2(year, currentYear)) {
+              console.log("AHEAD of TIME!");
+            } else {
+              if (isYear1BeforeYear2(year, "2020")) {
+                setBasketballStandings(object.basketballStandings);
+              }
+              display(trifectaStandings, h2hStandings, rotoStandings);
             }
-            display(trifectaStandings, h2hStandings, rotoStandings);
+            return;
           }
-          return;
         }
 
         // if there is no last scraped string (ie brand new, first time entering), scrape
@@ -125,7 +128,7 @@ export const BasketballStandings = () => {
       ///////////// only 1 function gets run inside useEffect /////////////
       check();
     }
-  }, [isReady, ownerNamesMapping]);
+  }, [isReady, ownerNamesMapping, year]);
 
   const TrifectaStandingsColumns = useMemo(() => {
     return isYear1BeforeYear2(year, currentYear) ||
