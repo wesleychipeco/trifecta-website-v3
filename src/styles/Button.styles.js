@@ -1,10 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import {
-  FONT_COLOR,
-  HEADER_FONT_FAMILY,
-  PRIMARY_GREEN,
-} from "../../styles/variables";
+import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
 
 export const Container = styled.div`
   border-radius: 3.5rem;

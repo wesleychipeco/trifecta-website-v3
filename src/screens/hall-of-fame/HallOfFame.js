@@ -1,8 +1,8 @@
 import React from "react";
-import * as S from "./HallOfFame.styles";
+import * as S from "styles/HallOfFame.styles";
 
-import { STATIC_ROUTES } from "../../Routes";
-import { Button } from "../../components/button/Button";
+import { STATIC_ROUTES } from "Routes";
+import { Button } from "components/button/Button";
 import { OwnerLinks } from "./OwnerLinks";
 
 export const HallOfFame = () => {

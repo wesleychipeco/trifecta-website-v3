@@ -2,8 +2,8 @@ import axios from "axios";
 import round from "lodash/round";
 import compact from "lodash/compact";
 
-import { HIGH_TO_LOW } from "../../Constants";
-import { assignRankPoints } from "../../utils/standings";
+import { HIGH_TO_LOW } from "Constants";
+import { assignRankPoints } from "utils/standings";
 
 export const standingsScraper = async (year) => {
   const response = await axios.get(

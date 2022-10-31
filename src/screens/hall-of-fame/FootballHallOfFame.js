@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import * as S from "./SportHallOfFame.styles";
-import { returnMongoCollection } from "../../database-management";
-import { Table } from "../../components/table/Table";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/SportHallOfFame.styles";
+import { returnMongoCollection } from "database-management";
+import { Table } from "components/table/Table";
 import {
   FootballAllTimeRecordsColumns,
   FootballPastChampionsColumns,
@@ -45,10 +46,10 @@ export const FootballHallOfFame = () => {
         </S.SingleTableContainer>
         <S.SingleTableContainer>
           <S.TableTitle>All-Time Records</S.TableTitle>
-          <S.TableCaption>
+          <T.TableCaption>
             Excludes 2018, which was not part of Trifecta cycle due to
             re-alignment
-          </S.TableCaption>
+          </T.TableCaption>
           <Table
             columns={FootballAllTimeRecordsColumns}
             data={allTimeRecords}
@@ -65,16 +66,16 @@ export const FootballHallOfFame = () => {
         </S.SingleTableContainer>
         <S.SingleTableContainer>
           <S.TableTitle>Top 5 Highest Scoring Single Weeks</S.TableTitle>
-          <S.TableCaption>
+          <T.TableCaption>
             Highest single week scores from previous scoring formats are also
             recorded below.
-          </S.TableCaption>
-          <S.TableCaption>
+          </T.TableCaption>
+          <T.TableCaption>
             *In 2017, scoring changed from standard to 0.5 PPR.
-          </S.TableCaption>
-          <S.TableCaption>
+          </T.TableCaption>
+          <T.TableCaption>
             **In 2020, additional FLEX starting lineup spot added.
-          </S.TableCaption>
+          </T.TableCaption>
 
           <Table
             columns={FootballHighestSingleWeekColumns}

@@ -1,9 +1,9 @@
-import * as S from "./HomeScreen.styles";
+import * as S from "styles/HomeScreen.styles";
 
-import BaseballPhoto from "../../resources/images/Baseball.jpg";
-import BasketballPhoto from "../../resources/images/Basketball.jpg";
-import FootballPhoto from "../../resources/images/Football.jpg";
-import TrifectaTrophy from "../../resources/images/TrifectaTrophy.png";
+import BaseballPhoto from "resources/images/Baseball.jpg";
+import BasketballPhoto from "resources/images/Basketball.jpg";
+import FootballPhoto from "resources/images/Football.jpg";
+import TrifectaTrophy from "resources/images/TrifectaTrophy.png";
 import { CSSTransition } from "react-transition-group";
 import "./transition.styles.css";
 import { useEffect, useState } from "react";

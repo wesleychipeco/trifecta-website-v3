@@ -1,4 +1,4 @@
-import * as S from "./SportHallOfFame.styles";
+import * as S from "styles/StandardScreen.styles";
 
 export const PastChampionsColumns = [
   {

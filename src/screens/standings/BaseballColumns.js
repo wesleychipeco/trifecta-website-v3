@@ -1,4 +1,4 @@
-import * as S from "./Standings.styles";
+import * as S from "styles/StandardScreen.styles";
 
 export const TrifectaColumns = [
   {

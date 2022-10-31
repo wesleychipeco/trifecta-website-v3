@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
-import { Table } from "../../components/table/Table";
 import {
   addOwnerNames,
   calculateTop5Bottom5Standings,
@@ -13,17 +12,19 @@ import {
   returnOwnerNamesUnderscored,
   standingsScraper,
 } from "./FootballStandingsHelpers";
-import * as S from "./Standings.styles";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/FootballStandings.styles";
 import {
   TrifectaColumns,
   H2HColumns,
   Top5Bottom5Columns,
   FootballColumns,
 } from "./FootballColumns";
-import { isYear1AfterYear2, isYear1BeforeYear2 } from "../../utils/years";
-import { returnMongoCollection } from "../../database-management";
-import { insertIntoArray } from "../../utils/arrays";
-import { assignRankPoints } from "../../utils/standings";
+import { Table } from "components/table/Table";
+import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
+import { returnMongoCollection } from "database-management";
+import { insertIntoArray } from "utils/arrays";
+import { assignRankPoints } from "utils/standings";
 
 export const FootballStandings = () => {
   const { year } = useParams();
@@ -247,7 +248,7 @@ export const FootballStandings = () => {
             columns={TestColumns}
             data={top5Bottom5StandingsDisplay}
             sortBy={[{ id: "top5Bottom5TrifectaPoints", desc: true }]}
-            tableBodyCell={S.WeeksPointsTableBodyCell}
+            tableBodyCell={T.WeeksPointsTableBodyCell}
             top3Styling
           />
         </S.SingleTableContainer>

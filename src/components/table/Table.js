@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSortBy, useTable } from "react-table";
 
-import * as S from "./Table.styles";
-import * as G from "../../styles/shared";
+import * as S from "styles/Table.styles";
+import * as G from "styles/shared";
 
 export const Table = ({
   columns,

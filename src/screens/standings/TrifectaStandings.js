@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import format from "date-fns/format";
 import isSameDay from "date-fns/isSameDay";
 
-import { Table } from "../../components/table/Table";
-import * as S from "./Standings.styles";
-import * as G from "../../styles/shared";
+import * as S from "styles/StandardScreen.styles";
+import * as T from "styles/TrifectaStandings.styles";
+import * as G from "styles/shared";
 import {
   TrifectaColumnsPre2019,
   TrifectaColumnsPost2019,
@@ -16,10 +16,11 @@ import {
   isYear1AfterYear2,
   isYear1BeforeYear2,
   SeasonStatus,
-} from "../../utils/years";
-import { returnMongoCollection } from "../../database-management";
+} from "utils/years";
+import { Table } from "components/table/Table";
+import { returnMongoCollection } from "database-management";
 import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
-import { BASE_ROUTES } from "../../Routes";
+import { BASE_ROUTES } from "Routes";
 
 export const TrifectaStandings = () => {
   const { year } = useParams();
@@ -169,12 +170,12 @@ export const TrifectaStandings = () => {
         <G.FlexColumn>
           <S.TableTitle>{`Last updated: ${updatedAsOfDisplay}`}</S.TableTitle>
           <G.FlexRow>
-            <S.TableCaption>
+            <T.TableCaption>
               To update, load in-progress sport's standings:
-            </S.TableCaption>
-            <S.Link
+            </T.TableCaption>
+            <T.Link
               to={`${BASE_ROUTES[updateRoute.replace(" ", "")]}/${currentYear}`}
-            >{`${currentYear} ${updateRoute}`}</S.Link>
+            >{`${currentYear} ${updateRoute}`}</T.Link>
           </G.FlexRow>
         </G.FlexColumn>
       )}

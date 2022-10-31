@@ -1,5 +1,5 @@
 import React from "react";
-import * as S from "./Button.styles";
+import * as S from "styles/Button.styles";
 
 export const Button = ({ title, navTo }) => {
   return (

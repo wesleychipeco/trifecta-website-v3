@@ -1,9 +1,6 @@
 import styled from "styled-components";
-import {
-  TableHeaderCell,
-  TableBodyCell,
-} from "../../components/table/Table.styles";
-import { FONT_FAMILY, PRIMARY_GREEN } from "../../styles/variables";
+import { TableHeaderCell, TableBodyCell } from "styles/Table.styles";
+import { FONT_FAMILY, PRIMARY_GREEN } from "styles/variables";
 
 export const Container = styled.div`
   display: flex;

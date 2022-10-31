@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { TableHeaderCell } from "../../components/table/Table.styles";
+import { TableHeaderCell } from "./Table.styles";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;
@@ -16,10 +16,6 @@ export const Title = styled.h1`
 
 export const TableTitle = styled.h2`
   margin: 0;
-`;
-
-export const TableCaption = styled.p`
-  margin: 0.25rem 0 0 0;
 `;
 
 export const StringTableHeaderCell = styled(TableHeaderCell)`

@@ -1,8 +1,8 @@
 import sum from "lodash/sum";
 import format from "date-fns/format";
 import max from "date-fns/max";
-import { returnMongoCollection } from "../../database-management";
-import { SeasonStatus } from "../../utils/years";
+import { returnMongoCollection } from "database-management";
+import { SeasonStatus } from "utils/years";
 
 export const calculateTrifectaStandings = async (
   year,
