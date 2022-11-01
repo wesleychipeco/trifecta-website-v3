@@ -10,7 +10,7 @@ import {
   BMatchupsColumns,
   FootballMatchupsColumns,
 } from "./columns";
-import { MatchupsDropdown } from "./MatchupsDropdown";
+import { MatchupsDropdown } from "components/dropdown/MatchupsDropdown";
 
 const DEFAULT_STATE = {
   totalMatchups: [],

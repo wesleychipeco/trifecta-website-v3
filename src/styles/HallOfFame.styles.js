@@ -62,6 +62,7 @@ export const HallOfFameContainer = styled.div`
   box-shadow: 0 0 0.1rem 0.3rem rgba(169, 169, 169, 0.5);
   padding: 1rem;
   margin-bottom: 3rem;
+  flex-wrap: wrap;
 `;
 
 export const HallOfFameLabelTextContainer = styled.div`
@@ -75,6 +76,22 @@ export const LabelText = styled.h4`
   margin: 0;
   padding: 0;
   color: ${FONT_COLOR};
+`;
+
+export const StandingsColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+export const StandingsRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &:first-child {
+    margin-bottom: 1.5rem;
+  }
 `;
 
 export const OwnerProfilesContainer = styled.div`
@@ -113,9 +130,7 @@ export const OwnerProfilesColumnContainer = styled.div`
       return "2rem;";
     }
     return "0;";
-  }}
-
-  
+  }}  
 `;
 
 export const OwnerProfilesLink = styled(NavLink)`
