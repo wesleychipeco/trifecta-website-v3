@@ -108,7 +108,6 @@ export const BasketballStandings = () => {
         // if there is no last scraped string (ie brand new, first time entering), scrape
         if (!lastScrapedString) {
           console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-          return;
           scrape(collection);
         } else {
           const now = new Date();
@@ -117,7 +116,6 @@ export const BasketballStandings = () => {
           // only scrape if not already scraped today
           if (!alreadyScraped) {
             console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-            return;
             scrape(collection);
           } else {
             display(trifectaStandings, h2hStandings, rotoStandings);
@@ -128,6 +126,7 @@ export const BasketballStandings = () => {
       ///////////// only 1 function gets run inside useEffect /////////////
       check();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady, ownerNamesMapping, year]);
 
   const TrifectaStandingsColumns = useMemo(() => {
@@ -148,6 +147,7 @@ export const BasketballStandings = () => {
           },
         ])
       : TrifectaColumns;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
   // only display
