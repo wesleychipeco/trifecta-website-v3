@@ -89,6 +89,23 @@ export const Link = styled(NavLink)`
   }
 `;
 
+export const LinkStyle = styled.a`
+  display: flex;
+  flex-direction: row;
+  font-size: 1.75rem;
+  text-decoration: none;
+  font-family: ${HEADER_FONT_FAMILY};
+  color: ${FONT_COLOR};
+  margin-bottom: ${NAVBAR_VERTICAL_SPACING};
+
+  &.active {
+    font-weight: 700;
+  }
+  &:hover {
+    opacity: 0.6;
+  }
+`;
+
 export const IndentedLink = styled(Link)`
   font-size: 1.75rem;
   padding-left: 1.5rem;

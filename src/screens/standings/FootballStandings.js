@@ -49,10 +49,12 @@ export const FootballStandings = () => {
         h2hStandings,
         top5Bottom5Standings
       ) => {
-        const weeksLength = Object.keys(top5Bottom5Standings?.[0]).filter(
-          (key) => key.includes("week")
-        ).length;
-        setNumberOfWeeks(weeksLength);
+        if (top5Bottom5Standings) {
+          const weeksLength = Object.keys(top5Bottom5Standings?.[0]).filter(
+            (key) => key.includes("week")
+          ).length;
+          setNumberOfWeeks(weeksLength);
+        }
         setTrifectaStandings(trifectaStandings);
         setH2HStandings(h2hStandings);
         setTop5Bottom5Standings(top5Bottom5Standings);

@@ -88,6 +88,12 @@ export const OpenNavbar = () => {
         )}
         <S.Link to={STATIC_ROUTES.TradeHistory}>Trade History</S.Link>
         <S.Link to={STATIC_ROUTES.HallOfFame}>Hall of Fame</S.Link>
+        <S.LinkStyle
+          href="https://docs.google.com/document/d/e/2PACX-1vSXW_8gKkyCY1qz-2rWsUML5H3I38Hnz-K6aKvJjQoAqaqeVBnV_-mWTYxrobup6ALxPoDnKu4kbbwm/pub"
+          target="_blank"
+        >
+          League Manual
+        </S.LinkStyle>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
   );

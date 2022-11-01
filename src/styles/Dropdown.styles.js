@@ -65,10 +65,6 @@ export const MatchupsDropdownCustomStyles = {
 };
 
 export const StandingsDropdownCustomStyles = {
-  // container: (provided) => ({
-  //   ...provided,
-  //   width: "15rem",
-  // }),
   // each option in dropdown
   option: (provided, state) => ({
     ...provided,
@@ -80,6 +76,7 @@ export const StandingsDropdownCustomStyles = {
       opacity: 0.8,
     },
     fontSize: "1.75rem",
+    width: "9.5rem",
   }),
   // overall
   control: (provided) => ({
@@ -93,6 +90,7 @@ export const StandingsDropdownCustomStyles = {
     "&:hover": {
       opacity: 0.8,
     },
+    width: "9.5rem",
   }),
   // placeholder value
   placeholder: (provided) => ({
@@ -107,6 +105,8 @@ export const StandingsDropdownCustomStyles = {
     "&:hover": {
       color: FONT_COLOR,
     },
+    position: "absolute",
+    right: "0rem",
   }),
   // remove line separator
   indicatorSeparator: (provided) => ({
@@ -118,6 +118,9 @@ export const StandingsDropdownCustomStyles = {
     ...provided,
     fontSize: "1.75rem",
     color: FONT_COLOR,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   }),
   // remove white on list options
   menuList: (provided) => ({
