@@ -24,7 +24,6 @@ export const FootballHallOfFame = () => {
     const load = async () => {
       const collection = await returnMongoCollection("hallOfFame");
       const data = await collection.find({ sport: "football" });
-      console.log("d", data);
       setHallOfFameData(data?.[0] ?? DEFAULT_STATE);
     };
 
