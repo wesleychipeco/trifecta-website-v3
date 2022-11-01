@@ -1,11 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { sortBy } from "lodash";
 import * as S from "styles/HallOfFame.styles";
 
 import { STATIC_ROUTES } from "Routes";
 import { Button } from "components/button/Button";
 import { OwnerLinks } from "./OwnerLinks";
+import { returnMongoCollection } from "database-management";
+import { StandingsDropdown } from "components/dropdown/StandingsDropdown";
+import { splitInto2Arrays } from "utils/arrays";
 
 export const HallOfFame = () => {
+  const [sortedYearsArray, setSortedYearsArray] = useState([]);
+  const [pastChampions, setPastChampions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const trifectaCollection = await returnMongoCollection(
+        "trifectaStandings"
+      );
+      const yearsData = await trifectaCollection.find({});
+
+      // remove years that are not 4 characters & dedupe (test/backup files)
+      const filteredYears = yearsData
+        .filter((eachYear) => eachYear.year.length === 4)
+        .map((each1) => each1.year);
+      const yearsArray = sortBy([...new Set(filteredYears)]);
+      const comboYearsArray = splitInto2Arrays(yearsArray);
+      setSortedYearsArray(comboYearsArray);
+
+      const hallOfFameCollection = await returnMongoCollection("hallOfFame");
+      const championsData = await hallOfFameCollection.find({
+        type: "pastChampions",
+      });
+      const pc = championsData?.[0]?.pastChampions ?? [];
+      const comboChampionsArray = splitInto2Arrays(pc);
+      setPastChampions(comboChampionsArray);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>Trifecta Fantasy League Hall of Fame</S.Title>
@@ -15,37 +49,37 @@ export const HallOfFame = () => {
           <br />
           <S.LabelText>Champions</S.LabelText>
         </S.ChampionsTextContainer>
-        <S.ChampionsColumn>
-          <S.Champion>
-            <S.ChampionsText>Season 1: 2015 - 2016</S.ChampionsText>
-            <S.ChampionsText>Joshua Apostol - 27.5 points</S.ChampionsText>
-          </S.Champion>
-          <S.Champion>
-            <S.ChampionsText>Season 2: 2016 - 2017</S.ChampionsText>
-            <S.ChampionsText>Ryan Tomimitsu - 32.5 points</S.ChampionsText>
-          </S.Champion>
-          <S.Champion>
-            <S.ChampionsText>Season 3: 2017 - 2018</S.ChampionsText>
-            <S.ChampionsText>Marcus Lam - 57 points</S.ChampionsText>
-          </S.Champion>
-        </S.ChampionsColumn>
-        <S.ChampionsColumn>
-          <S.Champion>
-            <S.ChampionsText>Season 4: 2018 - 2019</S.ChampionsText>
-            <S.ChampionsText>Joshua Liu - 54 points</S.ChampionsText>
-          </S.Champion>
-          <S.Champion>
-            <S.ChampionsText>Season 5: 2019 - 2020</S.ChampionsText>
-            <S.ChampionsText>Wesley Chipeco - 56.5 points</S.ChampionsText>
-          </S.Champion>
-          <S.Champion>
-            <S.ChampionsText>Season 6: 2020 - 2021</S.ChampionsText>
-            <S.ChampionsText>
-              Joshua Apostol & Wesley Chipeco - 51 points
-            </S.ChampionsText>
-          </S.Champion>
-        </S.ChampionsColumn>
+        {pastChampions.map((pastChamionColumn, i) => {
+          return (
+            <S.ChampionsColumn key={i}>
+              {pastChamionColumn.map((champ) => {
+                return (
+                  <S.Champion key={champ.season}>
+                    <S.ChampionsText>{`Season ${champ.season}: ${champ.years}`}</S.ChampionsText>
+                    <S.ChampionsText>{champ.winner}</S.ChampionsText>
+                  </S.Champion>
+                );
+              })}
+            </S.ChampionsColumn>
+          );
+        })}
       </S.ChampionsContainer>
+      <S.HallOfFameContainer>
+        <S.HallOfFameLabelTextContainer>
+          <S.LabelText>By Year</S.LabelText>
+        </S.HallOfFameLabelTextContainer>
+        <S.StandingsColumnContainer>
+          {sortedYearsArray.map((row, i) => {
+            return (
+              <S.StandingsRowContainer key={i}>
+                {row.map((year) => {
+                  return <StandingsDropdown key={year} year={year} />;
+                })}
+              </S.StandingsRowContainer>
+            );
+          })}
+        </S.StandingsColumnContainer>
+      </S.HallOfFameContainer>
       <S.HallOfFameContainer>
         <S.HallOfFameLabelTextContainer>
           <S.LabelText>By Sport</S.LabelText>
