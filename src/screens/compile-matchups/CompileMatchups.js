@@ -295,7 +295,7 @@ export const CompileMatchups = () => {
       const outerFootballNumber = remappedFootballNumbers[outerOwnerName];
 
       const innerOwnersArray = Object.keys(eachOuterOwnerMatchupsObject).filter(
-        (each) => each != "ownerNames"
+        (each) => each !== "ownerNames"
       );
 
       // loop through each owner's opposing owners to calculate and group together total & each sport's matchups
