@@ -1,11 +1,12 @@
 import axios from "axios";
 import { returnMongoCollection } from "database-management";
 import React, { useEffect, useState } from "react";
-import { sum, uniqBy } from "lodash";
+import { mean, sum, uniqBy } from "lodash";
 
 import { useSelector } from "react-redux";
 import * as S from "styles/CompileMatchups.styles";
 import * as T from "styles/StandardScreen.styles";
+import { calculateWinPer } from "utils/winPer";
 
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
@@ -14,32 +15,45 @@ export const CompileMatchups = () => {
     (state) => state?.currentVariables?.seasonVariables
   );
 
-  const [teamNumbersObject, setTeamNumbersObject] = useState({});
   const [matchupsGlobalObject, setMatchupsGlobalObject] = useState({});
+  const [allTimeTeams, setAllTimeTeams] = useState([]);
+  const [finalGlobalMatchupsObject, setFinalGlobalMatchupsObject] = useState(
+    {}
+  );
 
   useEffect(() => {
     const load = async () => {
       const collection = await returnMongoCollection("teamNumbersPerSport");
       const data = await collection.find({ year: currentYear });
       const teamNumbersObject = data?.[0];
-      setTeamNumbersObject(teamNumbersObject);
+
+      // grab overallTeamNubmers here
+      const collection1 = await returnMongoCollection("allTimeTeams");
+      const allTimeTeams = await collection1.find({});
+      setAllTimeTeams(allTimeTeams);
 
       const mgo = createMatchupsGlobalObject(teamNumbersObject);
-      setMatchupsGlobalObject(mgo);
+      if (Object.keys(mgo).length > 0) {
+        setMatchupsGlobalObject(mgo);
+      }
     };
 
     load();
   }, [currentYear]);
 
+  // function that creates nested matchups object skeleton. Per sport -> Each owner -> Opposing owner's matchups records
   const createMatchupsGlobalObject = (teamNumbersObject) => {
+    if (!teamNumbersObject) {
+      return {};
+    }
     const matchupsGlobalObject = {};
 
+    // for each sport
     for (let i = 0; i < SPORTS_ARRAY.length; i++) {
       const sportMatchupsObject = {};
       const sport = SPORTS_ARRAY[i];
 
       const sportTeamNumbers = teamNumbersObject[sport];
-      //   console.log("try", sport, sportTeamNumbers);
 
       // create inner object that will be same for each
       const everyOwnerMatchupsObject = {};
@@ -60,15 +74,16 @@ export const CompileMatchups = () => {
         };
       }
 
+      // for each owner number, add inner skeleton object
       for (let k = 1; k <= Object.keys(sportTeamNumbers).length; k++) {
         sportMatchupsObject[k] = {
           ownerNames: sportTeamNumbers[k].ownerNames,
           ...JSON.parse(JSON.stringify(everyOwnerMatchupsObject)), // create deep copy
         };
       }
-      //   console.log("sport", sportMatchupsObject);
       matchupsGlobalObject[sport] = sportMatchupsObject;
     }
+
     return matchupsGlobalObject;
   };
 
@@ -80,9 +95,12 @@ export const CompileMatchups = () => {
         return "baseball";
       case 2:
         return "football";
+      default:
+        return "";
     }
   };
 
+  // given matchup results object, return specific record variables
   const getMatchupResults = (sport, matchup) => {
     const homeTeamId = matchup.home.teamId;
     const awayTeamId = matchup.away.teamId;
@@ -135,10 +153,9 @@ export const CompileMatchups = () => {
 
   const startScrape = async () => {
     if (Object.keys(matchupsGlobalObject) === 0) {
-      // do not run
+      // do not run if matchupsGlobalObject not created
       return;
     }
-    console.log("start", matchupsGlobalObject);
 
     const BASKETBALL_URL = `https://fantasy.espn.com/apis/v3/games/fba/seasons/${currentYear}/segments/0/leagues/100660?view=mMatchupScore`;
     const BASEBALL_URL = `https://fantasy.espn.com/apis/v3/games/flb/seasons/${currentYear}/segments/0/leagues/109364?view=mMatchupScore`;
@@ -146,6 +163,7 @@ export const CompileMatchups = () => {
 
     const urlsArray = [BASKETBALL_URL, BASEBALL_URL, FOOTBALL_URL];
 
+    // loop through each sport
     for (let i = 0; i < urlsArray.length; i++) {
       const sport = determineSport(i);
       const sportUrl = urlsArray[i];
@@ -154,10 +172,11 @@ export const CompileMatchups = () => {
 
       const matchupPeriodIdsArray = [];
 
+      // compile all regular season matchups into matchupsGlobalObject
       for (let j = 0; j < schedule.length; j++) {
         const matchup = schedule[j];
-        // console.log("matchup", matchup);
 
+        // only compile matchup records for regular season matchups
         if (matchup.playoffTierType !== "NONE") {
           break;
         }
@@ -218,19 +237,151 @@ export const CompileMatchups = () => {
         console.log("UNEXPECTED NUMBER OF MATCHUPS!!!");
         return;
       }
+
+      // loop through outer then inner objects to total winPer (and pointsDiff)
+      const sportObject = matchupsGlobalObject[sport];
+      for (let k = 1; k <= Object.keys(sportObject).length; k++) {
+        const ownerObject = sportObject[k];
+
+        for (let l = 1; l <= Object.keys(ownerObject).length; l++) {
+          // if outerOwnerNumber === innerOwnerNumber, then same owner
+          if (k === l) {
+            const { wins, losses, ties } = ownerObject[l];
+            // confirm that wins, losses, and ties are 0
+            if (wins !== 0 || losses !== 0 || ties !== 0) {
+              console.log("ERROR: OWNER HAS MATCHUPS AGAINST SELF!");
+              return;
+            }
+            delete matchupsGlobalObject[sport][l][k]; // delete own self from one's inner records
+            continue;
+          }
+
+          const winPer = calculateWinPer(ownerObject[l]);
+          ownerObject[l].winPer = winPer;
+
+          if (sport === "football") {
+            const pointsDiff =
+              ownerObject[l].pointsFor - ownerObject[l].pointsAgainst;
+            ownerObject[l].pointsDiff = Number(pointsDiff.toFixed(1));
+          }
+        }
+      }
     }
-    setMatchupsGlobalObject(matchupsGlobalObject);
-    // make new button for verifying fully scraped matchups
-    // make new function that aggregates all of the matchups and saves to mongoDB
+
+    console.log("matchupsGlobalObject", matchupsGlobalObject);
+    const {
+      basketball: basketballMatchupsObject,
+      baseball: baseballMatchupsObject,
+      football: footballMatchupsObject,
+    } = matchupsGlobalObject;
+
+    const remappedFootballNumbers = {};
+    for (let footballNumber in footballMatchupsObject) {
+      const footballOwnerNames =
+        footballMatchupsObject[footballNumber].ownerNames;
+      remappedFootballNumbers[footballOwnerNames] = footballNumber;
+    }
+    // console.log("remapped football numbers", remappedFootballNumbers);
+
+    // Loop through all owners to compile all sports matchups and calculate totalMatchups
+    for (let m = 1; m <= Object.keys(basketballMatchupsObject).length; m++) {
+      const basketballMatchups = [];
+      const baseballMatchups = [];
+      const footballMatchups = [];
+      const totalMatchups = [];
+
+      const eachOuterOwnerMatchupsObject = basketballMatchupsObject[m];
+      const outerOwnerName = eachOuterOwnerMatchupsObject.ownerNames;
+      const outerFootballNumber = remappedFootballNumbers[outerOwnerName];
+
+      const innerOwnersArray = Object.keys(eachOuterOwnerMatchupsObject).filter(
+        (each) => each != "ownerNames"
+      );
+
+      // loop through each owner's opposing owners to calculate and group together total & each sport's matchups
+      for (let n = 0; n < Object.keys(innerOwnersArray).length; n++) {
+        const innerOwnerKey = innerOwnersArray[n];
+        const innerOwnerMatchupObject =
+          eachOuterOwnerMatchupsObject[innerOwnerKey];
+        const innerOwnerName = innerOwnerMatchupObject.ownerNames;
+        const innerFootballNumber = remappedFootballNumbers[innerOwnerName];
+
+        const innerBasketballMatchupsObject =
+          basketballMatchupsObject[m][innerOwnerKey];
+        const innerBaseballMatchupsObject =
+          baseballMatchupsObject[m][innerOwnerKey];
+        const innerFootballMatchupsObject =
+          footballMatchupsObject[outerFootballNumber][innerFootballNumber];
+
+        const basketballWinPer = innerBasketballMatchupsObject.winPer;
+        const baseballlWinPer = innerBaseballMatchupsObject.winPer;
+        const footballlWinPer = innerFootballMatchupsObject.winPer;
+        const totalWinPer = Number(
+          mean([basketballWinPer, baseballlWinPer, footballlWinPer]).toFixed(3)
+        );
+
+        const totalMatchupsObject = {
+          ownerNames: innerOwnerName,
+          basketballWinPer,
+          baseballlWinPer,
+          footballlWinPer,
+          totalWinPer,
+        };
+
+        basketballMatchups.push(innerBasketballMatchupsObject);
+        baseballMatchups.push(innerBaseballMatchupsObject);
+        footballMatchups.push(innerFootballMatchupsObject);
+        totalMatchups.push(totalMatchupsObject);
+      }
+      const allTimeTeamNumber = allTimeTeams.filter(
+        (team) => team.ownerNames === outerOwnerName
+      )?.[0]?.teamNumber;
+
+      // create object for each owner with appropriate data
+      const finalObjectToUpload = {
+        year: currentYear,
+        ownerNames: outerOwnerName,
+        basketballMatchups,
+        baseballMatchups,
+        footballMatchups,
+        totalMatchups,
+      };
+      finalGlobalMatchupsObject[allTimeTeamNumber] = finalObjectToUpload;
+    }
+
+    setFinalGlobalMatchupsObject({ ...finalGlobalMatchupsObject });
   };
 
-  console.log("here", matchupsGlobalObject);
+  // make new function that aggregates all of the matchups and saves to mongoDB
+  const saveMatchups = async () => {
+    console.log("Uncomment to test!");
+    // for (const teamNumber in finalGlobalMatchupsObject) {
+    //   const collection = await returnMongoCollection(`owner${teamNumber}Matchups`);
+    //   await collection.deleteMany({year: currentYear});
+    //   await collection.insertOne(finalGlobalMatchupsObject[teamNumber])
+    // }
+  };
+
+  console.log("Final Matchups Object:", finalGlobalMatchupsObject);
+
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>Compile Matchups Page</T.Title>
-      <S.Container onClick={startScrape}>
-        <S.ButtonText>{`Start Scrape for ${currentYear}`}</S.ButtonText>
-      </S.Container>
+      {Object.keys(matchupsGlobalObject).length > 0 && (
+        <S.Container onClick={startScrape}>
+          <S.ButtonText>{`Start Scrape for ${currentYear}`}</S.ButtonText>
+        </S.Container>
+      )}
+      {Object.keys(finalGlobalMatchupsObject).length > 0 && (
+        <T.FlexColumnCenterContainer>
+          <S.ButtonText>
+            Check console to verify Final Matchups Object beore saving
+          </S.ButtonText>
+          <S.Container onClick={saveMatchups}>
+            <S.ButtonText>Save Matchups</S.ButtonText>
+          </S.Container>
+        </T.FlexColumnCenterContainer>
+      )}
     </T.FlexColumnCenterContainer>
   );
 };
