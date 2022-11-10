@@ -7,6 +7,7 @@ export const STATIC_ROUTES = {
   FootballHallOfFame: "/halloffame/football",
   GenericOwnerMatchups: "/matchups",
   GenericOwnerRecords: "/ownerrecords",
+  CompileMatchups: "/compilematchups",
 };
 
 export const ROUTES = {

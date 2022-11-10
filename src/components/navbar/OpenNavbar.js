@@ -48,13 +48,6 @@ export const OpenNavbar = () => {
       </S.HeaderContainer>
       <S.LinkContainer>
         <S.Link to={STATIC_ROUTES.Home}>Home</S.Link>
-        {basketballAhead && (
-          <S.Link
-            to={`${BASE_ROUTES.BasketballStandings}/${Number(currentYear) + 1}`}
-          >
-            {`${Number(currentYear) + 1} Basketball Standings`}
-          </S.Link>
-        )}
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>
@@ -84,6 +77,13 @@ export const OpenNavbar = () => {
             to={`${BASE_ROUTES.FootballStandings}/${currentYear}`}
           >
             {`${currentYear} Football Standings`}
+          </S.IndentedLink>
+        )}
+        {isStandingsExpanded && basketballAhead && (
+          <S.IndentedLink
+            to={`${BASE_ROUTES.BasketballStandings}/${Number(currentYear) + 1}`}
+          >
+            {`${Number(currentYear) + 1} Basketball Standings`}
           </S.IndentedLink>
         )}
         <S.Link to={STATIC_ROUTES.TradeHistory}>Trade History</S.Link>
