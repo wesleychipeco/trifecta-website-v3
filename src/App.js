@@ -28,6 +28,7 @@ import { FootballHallOfFame } from "screens/hall-of-fame/FootballHallOfFame";
 import { OwnerMatchups } from "screens/owner-matchups/OwnerMatchups";
 import { OwnerRecords } from "screens/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/compile-matchups/CompileMatchups";
+import { DynastyHome } from "screens/dynasty/DynastyHome";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -92,66 +93,72 @@ export const App = () => {
         <S.Body>
           <Routes>
             <Route path={STATIC_ROUTES.Home} element={<HomeScreen />} exact />
-            <Route
-              path={ROUTES.BasketballStandings}
-              element={<BasketballStandings />}
-              exact
-            />
-            <Route
-              path={ROUTES.BaseballStandings}
-              element={<BaseballStandings />}
-              exact
-            />
-            <Route
-              path={ROUTES.FootballStandings}
-              element={<FootballStandings />}
-              exact
-            />
-            <Route
-              path={ROUTES.TrifectaStandings}
-              element={<TrifectaStandings />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.TradeHistory}
-              element={<TradeHistory />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.HallOfFame}
-              element={<HallOfFame />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.BasketballHallOfFame}
-              element={<BasketballHallOfFame />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.BaseballHallOfFame}
-              element={<BaseballHallOfFame />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.FootballHallOfFame}
-              element={<FootballHallOfFame />}
-              exact
-            />
-            <Route
-              path={ROUTES.OwnerMatchups}
-              element={<OwnerMatchups />}
-              exact
-            />
-            <Route
-              path={ROUTES.OwnerRecords}
-              element={<OwnerRecords />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.CompileMatchups}
-              element={<CompileMatchups />}
-              exact
-            />
+            <Route path={STATIC_ROUTES.TrifectaHome}>
+              <Route path="" element={<HomeScreen />} exact />
+              <Route
+                path={ROUTES.BasketballStandings}
+                element={<BasketballStandings />}
+                exact
+              />
+              <Route
+                path={ROUTES.BaseballStandings}
+                element={<BaseballStandings />}
+                exact
+              />
+              <Route
+                path={ROUTES.FootballStandings}
+                element={<FootballStandings />}
+                exact
+              />
+              <Route
+                path={ROUTES.TrifectaStandings}
+                element={<TrifectaStandings />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.TradeHistory}
+                element={<TradeHistory />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.HallOfFame}
+                element={<HallOfFame />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.BasketballHallOfFame}
+                element={<BasketballHallOfFame />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.BaseballHallOfFame}
+                element={<BaseballHallOfFame />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.FootballHallOfFame}
+                element={<FootballHallOfFame />}
+                exact
+              />
+              <Route
+                path={ROUTES.OwnerMatchups}
+                element={<OwnerMatchups />}
+                exact
+              />
+              <Route
+                path={ROUTES.OwnerRecords}
+                element={<OwnerRecords />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.CompileMatchups}
+                element={<CompileMatchups />}
+                exact
+              />
+            </Route>
+            <Route path={STATIC_ROUTES.DynastyHome}>
+              <Route path="" element={<DynastyHome />} exact />
+            </Route>
           </Routes>
         </S.Body>
       </T.FlexRow>

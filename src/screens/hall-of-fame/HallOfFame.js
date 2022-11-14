@@ -86,15 +86,15 @@ export const HallOfFame = () => {
         </S.HallOfFameLabelTextContainer>
         <Button
           title={"Basketball Hall of Fame"}
-          navTo={STATIC_ROUTES.BasketballHallOfFame}
+          navTo={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.BasketballHallOfFame}`}
         />
         <Button
           title={"Baseball Hall of Fame"}
-          navTo={STATIC_ROUTES.BaseballHallOfFame}
+          navTo={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.BaseballHallOfFame}`}
         />
         <Button
           title={"Football Hall of Fame"}
-          navTo={STATIC_ROUTES.FootballHallOfFame}
+          navTo={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.FootballHallOfFame}`}
         />
       </S.HallOfFameContainer>
       <S.OwnerProfilesContainer>
