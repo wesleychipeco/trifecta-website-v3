@@ -74,6 +74,7 @@ export const StandingsDropdownCustomStyles = {
     margin: 0,
     "&:hover": {
       opacity: 0.8,
+      cursor: "pointer",
     },
     fontSize: "1.75rem",
     width: "9.5rem",
@@ -89,6 +90,7 @@ export const StandingsDropdownCustomStyles = {
     boxShadow: "none",
     "&:hover": {
       opacity: 0.8,
+      cursor: "pointer",
     },
     width: "9.5rem",
   }),
@@ -104,6 +106,7 @@ export const StandingsDropdownCustomStyles = {
     color: FONT_COLOR,
     "&:hover": {
       color: FONT_COLOR,
+      cursor: "pointer",
     },
     position: "absolute",
     right: "0rem",
@@ -121,6 +124,9 @@ export const StandingsDropdownCustomStyles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    "&:hover": {
+      cursor: "pointer",
+    },
   }),
   // remove white on list options
   menuList: (provided) => ({

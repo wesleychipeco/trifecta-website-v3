@@ -51,6 +51,7 @@ export const OpenNavbar = () => {
         </S.HeaderContainer>
         <S.LinkContainer>
           <h2>Dynasty navbar!</h2>
+          <S.Link to={STATIC_ROUTES.DynastyHome}>Dynasty Home</S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
@@ -65,8 +66,7 @@ export const OpenNavbar = () => {
       </S.HeaderContainer>
       <S.LinkContainer>
         <S.Link to={STATIC_ROUTES.Home}>Home</S.Link>
-        {/* <S.Link to={STATIC_ROUTES.TrifectaHome}>Trifecta Home</S.Link> */}
-        {/* <S.Link to={STATIC_ROUTES.DynastyHome}>Dynasty Home</S.Link> */}
+        <S.Link to={STATIC_ROUTES.TrifectaHome}>Trifecta Home</S.Link>
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>

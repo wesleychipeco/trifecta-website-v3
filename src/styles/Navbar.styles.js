@@ -18,6 +18,7 @@ export const ClosedNavbarContainer = styled.div`
 
   &:hover {
     opacity: 0.6;
+    cursor: pointer;
   }
 `;
 
@@ -58,6 +59,7 @@ export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
 
   &:hover {
     opacity: 0.5;
+    cursor: pointer;
   }
 `;
 
