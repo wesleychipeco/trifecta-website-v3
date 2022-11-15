@@ -20,7 +20,7 @@ import {
 import { Table } from "components/table/Table";
 import { returnMongoCollection } from "database-management";
 import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
-import { BASE_ROUTES } from "Routes";
+import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 
 export const TrifectaStandings = () => {
   const { year } = useParams();
@@ -174,7 +174,9 @@ export const TrifectaStandings = () => {
               To update, load in-progress sport's standings:
             </T.TableCaption>
             <T.Link
-              to={`${BASE_ROUTES[updateRoute.replace(" ", "")]}/${currentYear}`}
+              to={`${STATIC_ROUTES.TrifectaHome}/${
+                BASE_ROUTES[updateRoute.replace(" ", "")]
+              }/${currentYear}`}
             >{`${currentYear} ${updateRoute}`}</T.Link>
           </G.FlexRow>
         </G.FlexColumn>

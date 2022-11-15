@@ -2,7 +2,7 @@ import { capitalize } from "lodash";
 import React, { useMemo } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import { BASE_ROUTES } from "Routes";
+import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import { StandingsDropdownCustomStyles } from "styles/Dropdown.styles";
 
 const SPORTS_ARRAY = ["trifecta", "basketball", "baseball", "football"];
@@ -18,7 +18,9 @@ export const StandingsDropdown = ({ year }) => {
 
   const onSelect = (selectedOption) => {
     const routeString = `${selectedOption.label}Standings`;
-    navigate(`${BASE_ROUTES[routeString]}/${year}`);
+    navigate(
+      `${STATIC_ROUTES.TrifectaHome}/${BASE_ROUTES[routeString]}/${year}`
+    );
   };
 
   const options = useMemo(

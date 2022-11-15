@@ -1,4 +1,5 @@
 import * as S from "styles/HomeScreen.styles";
+import * as T from "styles/shared";
 
 import BaseballPhoto from "resources/images/Baseball.jpg";
 import BasketballPhoto from "resources/images/Basketball.jpg";
@@ -7,6 +8,9 @@ import TrifectaTrophy from "resources/images/TrifectaTrophy.png";
 import { CSSTransition } from "react-transition-group";
 import "./transition.styles.css";
 import { useEffect, useState } from "react";
+import { STATIC_ROUTES } from "Routes";
+import { Button } from "components/button/Button";
+import { ERA_1 } from "Constants";
 
 export const HomeScreen = () => {
   const [show, setShow] = useState(false);
@@ -24,6 +28,15 @@ export const HomeScreen = () => {
       <S.TitleContainer>
         <S.TitleText>Trifecta Fantasy League</S.TitleText>
       </S.TitleContainer>
+      <T.FlexRowCentered>
+        <Button title="OG Trifecta" navTo={STATIC_ROUTES.TrifectaHome} />
+        <T.HorizontalSpacer factor={6} />
+        <Button
+          title="3x5 Dynasty - Coming Soon!"
+          navTo={`${STATIC_ROUTES.DynastyHome}/${ERA_1}`}
+          // disabled
+        />
+      </T.FlexRowCentered>
       <S.ImageOpacity>
         <CSSTransition
           in={show}

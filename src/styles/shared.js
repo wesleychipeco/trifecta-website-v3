@@ -25,3 +25,13 @@ export const FlexRowCentered = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const HorizontalSpacer = styled.div`
+  margin-left: ${(props) => `${props.factor * 0.25}rem;`}
+  margin-right: ${(props) => `${props.factor * 0.25}rem;`} 
+`;
+
+export const VerticalSpacer = styled.div`
+  margin-top: ${(props) => `${props.factor * 0.25}rem;`}
+  margin-bottom: ${(props) => `${props.factor * 0.25}rem;`} 
+`;

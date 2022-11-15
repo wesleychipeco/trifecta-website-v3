@@ -10,24 +10,26 @@ import { ROUTES, STATIC_ROUTES } from "Routes";
 import GlobalStyle from "styles/global";
 import { OpenNavbar } from "components/navbar/OpenNavbar";
 import { ClosedNavbar } from "components/navbar/ClosedNavbar";
-import { HallOfFame } from "screens/hall-of-fame/HallOfFame";
+import { HallOfFame } from "screens/trifecta/hall-of-fame/HallOfFame";
 import { HomeScreen } from "screens/home-screen/HomeScreen";
-import { TradeHistory } from "screens/trade-history/TradeHistory";
+import { TradeHistory } from "screens/trifecta/trade-history/TradeHistory";
 import "components/navbar/transition.styles.css";
-import { BasketballStandings } from "screens/standings/BasketballStandings";
-import { BaseballStandings } from "screens/standings/BaseballStandings";
-import { FootballStandings } from "screens/standings/FootballStandings";
-import { TrifectaStandings } from "screens/standings/TrifectaStandings";
+import { BasketballStandings } from "screens/trifecta/standings/BasketballStandings";
+import { BaseballStandings } from "screens/trifecta/standings/BaseballStandings";
+import { FootballStandings } from "screens/trifecta/standings/FootballStandings";
+import { TrifectaStandings } from "screens/trifecta/standings/TrifectaStandings";
 import { useEffect } from "react";
 import { returnMongoCollection } from "database-management";
 import { setSeasonVariables } from "store/currentVariablesSlice";
 import { setOwnerNames } from "store/namesSlice";
-import { BasketballHallOfFame } from "screens/hall-of-fame/BasketballHallOfFame";
-import { BaseballHallOfFame } from "screens/hall-of-fame/BaseballHallOfFame";
-import { FootballHallOfFame } from "screens/hall-of-fame/FootballHallOfFame";
-import { OwnerMatchups } from "screens/owner-matchups/OwnerMatchups";
-import { OwnerRecords } from "screens/owner-records/OwnerRecords";
-import { CompileMatchups } from "screens/compile-matchups/CompileMatchups";
+import { BasketballHallOfFame } from "screens/trifecta/hall-of-fame/BasketballHallOfFame";
+import { BaseballHallOfFame } from "screens/trifecta/hall-of-fame/BaseballHallOfFame";
+import { FootballHallOfFame } from "screens/trifecta/hall-of-fame/FootballHallOfFame";
+import { OwnerMatchups } from "screens/trifecta/owner-matchups/OwnerMatchups";
+import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
+import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
+import { DynastyHome } from "screens/dynasty/DynastyHome";
+import { DynastyStandings } from "screens/dynasty/DynastyStandings";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -92,66 +94,79 @@ export const App = () => {
         <S.Body>
           <Routes>
             <Route path={STATIC_ROUTES.Home} element={<HomeScreen />} exact />
-            <Route
-              path={ROUTES.BasketballStandings}
-              element={<BasketballStandings />}
-              exact
-            />
-            <Route
-              path={ROUTES.BaseballStandings}
-              element={<BaseballStandings />}
-              exact
-            />
-            <Route
-              path={ROUTES.FootballStandings}
-              element={<FootballStandings />}
-              exact
-            />
-            <Route
-              path={ROUTES.TrifectaStandings}
-              element={<TrifectaStandings />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.TradeHistory}
-              element={<TradeHistory />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.HallOfFame}
-              element={<HallOfFame />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.BasketballHallOfFame}
-              element={<BasketballHallOfFame />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.BaseballHallOfFame}
-              element={<BaseballHallOfFame />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.FootballHallOfFame}
-              element={<FootballHallOfFame />}
-              exact
-            />
-            <Route
-              path={ROUTES.OwnerMatchups}
-              element={<OwnerMatchups />}
-              exact
-            />
-            <Route
-              path={ROUTES.OwnerRecords}
-              element={<OwnerRecords />}
-              exact
-            />
-            <Route
-              path={STATIC_ROUTES.CompileMatchups}
-              element={<CompileMatchups />}
-              exact
-            />
+            <Route path={STATIC_ROUTES.TrifectaHome}>
+              <Route path="" element={<HomeScreen />} exact />
+              <Route
+                path={ROUTES.BasketballStandings}
+                element={<BasketballStandings />}
+                exact
+              />
+              <Route
+                path={ROUTES.BaseballStandings}
+                element={<BaseballStandings />}
+                exact
+              />
+              <Route
+                path={ROUTES.FootballStandings}
+                element={<FootballStandings />}
+                exact
+              />
+              <Route
+                path={ROUTES.TrifectaStandings}
+                element={<TrifectaStandings />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.TradeHistory}
+                element={<TradeHistory />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.HallOfFame}
+                element={<HallOfFame />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.BasketballHallOfFame}
+                element={<BasketballHallOfFame />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.BaseballHallOfFame}
+                element={<BaseballHallOfFame />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.FootballHallOfFame}
+                element={<FootballHallOfFame />}
+                exact
+              />
+              <Route
+                path={ROUTES.OwnerMatchups}
+                element={<OwnerMatchups />}
+                exact
+              />
+              <Route
+                path={ROUTES.OwnerRecords}
+                element={<OwnerRecords />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.CompileMatchups}
+                element={<CompileMatchups />}
+                exact
+              />
+            </Route>
+            <Route path={STATIC_ROUTES.DynastyHome}>
+              <Route path={STATIC_ROUTES.DynastyEra}>
+                <Route path="" element={<DynastyHome />} exact />
+                <Route
+                  path={ROUTES.BasketballStandings}
+                  element={<DynastyStandings />}
+                  exact
+                />
+              </Route>
+            </Route>
           </Routes>
         </S.Body>
       </T.FlexRow>

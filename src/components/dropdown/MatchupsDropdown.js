@@ -2,7 +2,7 @@ import { capitalize } from "lodash";
 import React, { useMemo } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import { BASE_ROUTES } from "Routes";
+import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import { MatchupsDropdownCustomStyles } from "styles/Dropdown.styles";
 
 export const MatchupsDropdown = ({ arrayOfYears, teamNumber, year }) => {
@@ -16,7 +16,7 @@ export const MatchupsDropdown = ({ arrayOfYears, teamNumber, year }) => {
 
   const onSelect = (selectedOption) => {
     navigate(
-      `${BASE_ROUTES.OwnerMatchups}/${teamNumber}/${selectedOption.value}`
+      `${STATIC_ROUTES.TrifectaHome}/${BASE_ROUTES.OwnerMatchups}/${teamNumber}/${selectedOption.value}`
     );
   };
 
