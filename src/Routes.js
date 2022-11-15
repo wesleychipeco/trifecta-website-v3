@@ -2,6 +2,7 @@ export const STATIC_ROUTES = {
   Home: "/",
   TrifectaHome: "/trifecta",
   DynastyHome: "/dynasty",
+  DynastyEra: ":era",
   TradeHistory: "trade-history",
   HallOfFame: "hall-of-fame",
   BasketballHallOfFame: "hall-of-fame/basketball",

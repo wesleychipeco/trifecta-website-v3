@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import { closeNavbar } from "store/navbarSlice";
+import { ERA_1 } from "Constants";
 
 import TrifectaLogo from "resources/images/trifectalogo.png";
 
@@ -51,7 +52,15 @@ export const OpenNavbar = () => {
         </S.HeaderContainer>
         <S.LinkContainer>
           <h2>Dynasty navbar!</h2>
-          <S.Link to={STATIC_ROUTES.DynastyHome}>Dynasty Home</S.Link>
+          <S.Link to={STATIC_ROUTES.Home}>Home</S.Link>
+          <S.Link to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}`}>
+            Dynasty Home
+          </S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/basketball/2022`}
+          >
+            Test standings
+          </S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
