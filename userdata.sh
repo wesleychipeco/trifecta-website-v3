@@ -17,4 +17,7 @@ npm install --global yarn
 git clone https://github.com/wesleychipeco/trifecta-website-v3.git
 cd trifecta-website-v3/
 yarn
-yarn start
+cd proxy-server/
+yarn
+cd ..
+yarn dev
