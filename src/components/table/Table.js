@@ -41,7 +41,7 @@ export const Table = ({
 
   useEffect(() => {
     const sortedRows = tableInstance?.sortedRows ?? [];
-    if (top3Styling && sortedRows.length > 0) {
+    if (top3Styling && sortedRows.length > 2) {
       const top3 = [];
       for (let i = 0; i < 3; i++) {
         top3.push(sortedRows[i].index);

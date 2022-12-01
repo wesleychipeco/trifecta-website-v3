@@ -8,14 +8,18 @@ export const DynastyStandings = () => {
   const { era, year } = useParams();
   console.log("era", era, "year", year);
 
+  // const testBasketballLeagueId = "aznbe7wvl8esmlyo";
+
   useEffect(() => {
     const scrape = async () => {
+      const leagueId = "aznbe7wvl8esmlyo";
+
       const data = await axios.post(
-        `http://localhost:5000/basketball-standings`,
+        `http://localhost:5000/standings`,
         {
           msgs: [{ method: "getStandings", data: { view: "ALL" } }],
           ng2: true,
-          href: "https://www.fantrax.com/fantasy/league/aznbe7wvl8esmlyo/standings;view=ALL",
+          href: `https://www.fantrax.com/fantasy/league/${leagueId}/standings;view=ALL`,
           dt: 0,
           at: 0,
           av: null,
@@ -25,6 +29,7 @@ export const DynastyStandings = () => {
         {
           headers: {
             Accept: "application/json",
+            LeagueId: leagueId,
           },
         }
       );

@@ -30,6 +30,7 @@ import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { DynastyStandings } from "screens/dynasty/DynastyStandings";
+import { DynastyBasketballStandings } from "screens/dynasty/DynastyBasketballStandings";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -162,7 +163,7 @@ export const App = () => {
                 <Route path="" element={<DynastyHome />} exact />
                 <Route
                   path={ROUTES.BasketballStandings}
-                  element={<DynastyStandings />}
+                  element={<DynastyBasketballStandings />}
                   exact
                 />
               </Route>
