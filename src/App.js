@@ -30,6 +30,7 @@ import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { DynastyBasketballStandings } from "screens/dynasty/DynastyBasketballStandings";
+import { GLOBAL_VARIABLES } from "Constants";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -40,19 +41,24 @@ export const App = () => {
   useEffect(() => {
     if (!isReady) {
       const loadSeasonVariables = async () => {
-        const collection = await returnMongoCollection("seasonVariables");
+        const collection = await returnMongoCollection(GLOBAL_VARIABLES);
         const data = await collection.find({});
         const object = data[0];
-        const { basketball, baseball, football } = object;
-        const seasonVariables = {
-          currentYear: object.currentYear,
+        const { trifecta: trifectaObject, dynasty: dynastyObject } = object;
+        const { basketball, baseball, football } = trifectaObject;
+        const trifectaVariables = {
+          currentYear: trifectaObject.currentYear,
           isBasketballStarted: basketball.seasonStarted,
           isBasketballInSeason: basketball.inSeason,
           isBaseballStarted: baseball.seasonStarted,
           isBaseballInSeason: baseball.inSeason,
           isFootballStarted: football.seasonStarted,
           isFootballInSeason: football.inSeason,
-          basketballAhead: object.basketballAhead,
+          basketballAhead: trifectaObject.basketballAhead,
+        };
+        const seasonVariables = {
+          trifecta: trifectaVariables,
+          dynasty: dynastyObject,
         };
         dispatch(setSeasonVariables(seasonVariables));
       };

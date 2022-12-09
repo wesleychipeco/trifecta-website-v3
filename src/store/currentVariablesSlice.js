@@ -5,14 +5,21 @@ export const currentVariables = createSlice({
   initialState: {
     isReady: false,
     seasonVariables: {
-      currentYear: "",
-      isBasketballStarted: false,
-      isBasketballInSeason: false,
-      isBaseballStarted: false,
-      isBaseballInSeason: false,
-      isFootballStarted: false,
-      isFootballInSeason: false,
-      basketballAhead: false,
+      trifecta: {
+        currentYear: "",
+        isBasketballStarted: false,
+        isBasketballInSeason: false,
+        isBaseballStarted: false,
+        isBaseballInSeason: false,
+        isFootballStarted: false,
+        isFootballInSeason: false,
+        basketballAhead: false,
+      },
+      dynasty: {
+        currentYear: "",
+        inSeasonLeagues: [],
+        leagueIdMappings: {},
+      },
     },
   },
   reducers: {

@@ -1,4 +1,4 @@
-import { ERA_1 } from "Constants";
+import { ERA_1, GLOBAL_VARIABLES } from "Constants";
 import * as Realm from "realm-web";
 
 const REALM_APP_ID = "trifectafantasyleague-xqqjr";
@@ -16,6 +16,10 @@ export const returnMongoCollection = async (
     default:
       dbName = "trifecta";
       break;
+  }
+
+  if (collectionName === GLOBAL_VARIABLES) {
+    dbName = GLOBAL_VARIABLES;
   }
 
   const app = Realm.App.getApp(REALM_APP_ID);

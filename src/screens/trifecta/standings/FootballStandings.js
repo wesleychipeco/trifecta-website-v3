@@ -29,7 +29,7 @@ import { assignRankPoints } from "utils/standings";
 export const FootballStandings = () => {
   const { year } = useParams();
   const { currentYear, isFootballStarted, isFootballInSeason } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
   );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);

@@ -29,7 +29,9 @@ export const BasketballStandings = () => {
     isBasketballStarted,
     isBasketballInSeason,
     basketballAhead,
-  } = useSelector((state) => state?.currentVariables?.seasonVariables);
+  } = useSelector(
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
+  );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
 

@@ -12,7 +12,7 @@ export const OpenNavbar = () => {
   // redux state to manage seasonVariables
   const dispatch = useDispatch();
   const seasonVariables = useSelector(
-    (state) => state.currentVariables.seasonVariables
+    (state) => state.currentVariables.seasonVariables.trifecta
   );
   const {
     currentYear,
@@ -33,7 +33,7 @@ export const OpenNavbar = () => {
       dispatch(closeNavbar());
     }
 
-    console.log("location", location);
+    // console.log("location", location);
     setCurrentPath(location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
@@ -57,7 +57,7 @@ export const OpenNavbar = () => {
             Dynasty Home
           </S.Link>
           <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/basketball/2022`}
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/basketball/2023`}
           >
             Test standings
           </S.Link>
