@@ -36,7 +36,6 @@ export const formatScrapedStandings = (standings, isFootball = false) => {
 
     for (let j = 0; j < eachDivision.rows.length; j++) {
       const eachTeam = eachDivision.rows[j];
-      console.log("eachteam", eachTeam);
       const divStandingsObj = {
         teamName: eachTeam.fixedCells[1].content,
         wins: eachTeam.cells[0].content,

@@ -24,7 +24,7 @@ import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
 export const BaseballStandings = () => {
   const { year } = useParams();
   const { currentYear, isBaseballStarted, isBaseballInSeason } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
   );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
