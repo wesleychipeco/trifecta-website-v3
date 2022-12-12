@@ -10,7 +10,7 @@ import {
   DynastyStandingsColumns,
 } from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
-import { HIGH_TO_LOW } from "Constants";
+import { ERA_1, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
 
 export const DynastyBasketballStandings = () => {
@@ -38,8 +38,17 @@ export const DynastyBasketballStandings = () => {
 
       const scrape = async (collection) => {
         const leagueId = leagueIdMappings[sportYear];
+        const gmNamesIdsCollection = await returnMongoCollection(
+          "gmNamesIds",
+          ERA_1
+        );
+        const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
+        const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};
         const tableStandings = await standingsScraper(leagueId);
-        const divisionStandings = formatScrapedStandings(tableStandings);
+        const divisionStandings = formatScrapedStandings(
+          tableStandings,
+          gmNamesIdsMapping
+        );
         const dynastyStandings = assignRankPoints(
           Object.values(divisionStandings).flat(1),
           "winPer",
