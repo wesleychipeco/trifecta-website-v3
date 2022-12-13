@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import isSameDay from "date-fns/isSameDay";
-import { capitalize } from "lodash";
+import { capitalize, sortBy } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
@@ -14,6 +14,8 @@ import {
 import { assignRankPoints } from "utils/standings";
 import { ERA_1, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
+
+const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
 export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
@@ -118,7 +120,12 @@ export const DynastySportStandings = ({ sport }) => {
     return sport === "football" ? FootballColumns : BasketballBaseballColumns;
   }, [sport]);
 
-  console.log("standingsC", standingsColumns);
+  const orderedDivisionStandings = useMemo(() => {
+    return Object.keys(divisionStandings).sort((a, b) => {
+      return DIVISION_ORDER_ARRAY.indexOf(a) - DIVISION_ORDER_ARRAY.indexOf(b);
+    });
+  }, [divisionStandings]);
+
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${year} ${capitalize(sport)} Standings for ${era}`}</S.Title>
@@ -135,7 +142,7 @@ export const DynastySportStandings = ({ sport }) => {
           </S.SingleTableContainer>
         </S.SingleTableContainer>
         <S.TwoTablesContainer>
-          {Object.keys(divisionStandings).map((division) => {
+          {orderedDivisionStandings.map((division) => {
             // TODO sort so order is N, S, E, W
             if (division === "North" || division === "South") {
               return (
@@ -155,7 +162,7 @@ export const DynastySportStandings = ({ sport }) => {
           })}
         </S.TwoTablesContainer>
         <S.TwoTablesContainer>
-          {Object.keys(divisionStandings).map((division) => {
+          {orderedDivisionStandings.map((division) => {
             if (division === "East" || division === "West") {
               return (
                 <S.SingleTableContainer key={division}>
