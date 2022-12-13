@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import isSameDay from "date-fns/isSameDay";
+import { capitalize } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
-import { FootballColumns, DynastyStandingsColumns } from "./StandingsColumns";
+import {
+  BasketballBaseballColumns,
+  FootballColumns,
+  DynastyStandingsColumns,
+} from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
 import { ERA_1, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
 
-export const DynastyFootballStandings = () => {
+export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { currentYear, inSeasonLeagues, leagueIdMappings } = useSelector(
@@ -27,7 +32,7 @@ export const DynastyFootballStandings = () => {
 
   useEffect(() => {
     if (isReady) {
-      const sportYear = `football${year}`;
+      const sportYear = `${sport}${year}`;
       const display = async (dynastyStandings, divisionStandings) => {
         setDynastyStandings(dynastyStandings);
         setDivisionStandings(divisionStandings);
@@ -42,11 +47,10 @@ export const DynastyFootballStandings = () => {
         const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
         const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};
         const tableStandings = await standingsScraper(leagueId);
-        console.log("ts", tableStandings);
         const divisionStandings = formatScrapedStandings(
           tableStandings,
           gmNamesIdsMapping,
-          true
+          sport
         );
         const dynastyStandings = assignRankPoints(
           Object.values(divisionStandings).flat(1),
@@ -72,7 +76,7 @@ export const DynastyFootballStandings = () => {
 
       const check = async () => {
         const collection = await returnMongoCollection(
-          "footballStandings",
+          `${sport}Standings`,
           era
         );
         const data = await collection.find({ year });
@@ -108,11 +112,16 @@ export const DynastyFootballStandings = () => {
 
       check();
     }
-  }, [isReady]);
+  }, [isReady, sport, year]);
 
+  const standingsColumns = useMemo(() => {
+    return sport === "football" ? FootballColumns : BasketballBaseballColumns;
+  }, [sport]);
+
+  console.log("standingsC", standingsColumns);
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`${year} Football Standings for ${era}`}</S.Title>
+      <S.Title>{`${year} ${capitalize(sport)} Standings for ${era}`}</S.Title>
       <S.TablesContainer>
         <S.SingleTableContainer>
           <S.SingleTableContainer>
@@ -128,12 +137,12 @@ export const DynastyFootballStandings = () => {
         <S.TwoTablesContainer>
           {Object.keys(divisionStandings).map((division) => {
             // TODO sort so order is N, S, E, W
-            if (division === "AFC" || division === "NFC") {
+            if (division === "North" || division === "South") {
               return (
                 <S.SingleTableContainer key={division}>
                   <S.TableTitle>{division}</S.TableTitle>
                   <Table
-                    columns={FootballColumns}
+                    columns={standingsColumns}
                     data={divisionStandings[division]}
                     sortBy={[{ id: "Win%", desc: true }]}
                     top3Styling
@@ -152,7 +161,7 @@ export const DynastyFootballStandings = () => {
                 <S.SingleTableContainer key={division}>
                   <S.TableTitle>{division}</S.TableTitle>
                   <Table
-                    columns={FootballColumns}
+                    columns={standingsColumns}
                     data={divisionStandings[division]}
                     sortBy={[{ id: "Win%", desc: true }]}
                     top3Styling

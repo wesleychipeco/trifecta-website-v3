@@ -26,11 +26,7 @@ export const standingsScraper = async (leagueId) => {
   return tableStandings;
 };
 
-export const formatScrapedStandings = (
-  standings,
-  namesIdsObject,
-  isFootball = false
-) => {
+export const formatScrapedStandings = (standings, namesIdsObject, sport) => {
   const globalDivisionStandings = {};
 
   for (let i = 0; i < standings.length; i++) {
@@ -53,7 +49,7 @@ export const formatScrapedStandings = (
         divisionRecord: eachTeam.cells[4].content,
         division: divisionName,
       };
-      if (isFootball) {
+      if (sport === "football") {
         divStandingsObj["pointsFor"] = eachTeam.cells[7].content;
         divStandingsObj["pointsAgainst"] = eachTeam.cells[8].content;
       }
