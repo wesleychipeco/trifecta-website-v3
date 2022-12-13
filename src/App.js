@@ -29,8 +29,8 @@ import { OwnerMatchups } from "screens/trifecta/owner-matchups/OwnerMatchups";
 import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
-import { DynastyBasketballStandings } from "screens/dynasty/DynastyBasketballStandings";
 import { GLOBAL_VARIABLES } from "Constants";
+import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -168,7 +168,17 @@ export const App = () => {
                 <Route path="" element={<DynastyHome />} exact />
                 <Route
                   path={ROUTES.BasketballStandings}
-                  element={<DynastyBasketballStandings />}
+                  element={<DynastySportStandings sport="basketball" />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.BaseballStandings}
+                  element={<DynastySportStandings sport="baseball" />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.FootballStandings}
+                  element={<DynastySportStandings sport="football" />}
                   exact
                 />
               </Route>

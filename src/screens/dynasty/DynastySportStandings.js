@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import isSameDay from "date-fns/isSameDay";
+import { capitalize } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
 import {
   BasketballBaseballColumns,
+  FootballColumns,
   DynastyStandingsColumns,
 } from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
 import { ERA_1, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
 
-export const DynastyBasketballStandings = () => {
+export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { currentYear, inSeasonLeagues, leagueIdMappings } = useSelector(
@@ -30,7 +32,7 @@ export const DynastyBasketballStandings = () => {
 
   useEffect(() => {
     if (isReady) {
-      const sportYear = `basketball${year}`;
+      const sportYear = `${sport}${year}`;
       const display = async (dynastyStandings, divisionStandings) => {
         setDynastyStandings(dynastyStandings);
         setDivisionStandings(divisionStandings);
@@ -47,7 +49,8 @@ export const DynastyBasketballStandings = () => {
         const tableStandings = await standingsScraper(leagueId);
         const divisionStandings = formatScrapedStandings(
           tableStandings,
-          gmNamesIdsMapping
+          gmNamesIdsMapping,
+          sport
         );
         const dynastyStandings = assignRankPoints(
           Object.values(divisionStandings).flat(1),
@@ -73,7 +76,7 @@ export const DynastyBasketballStandings = () => {
 
       const check = async () => {
         const collection = await returnMongoCollection(
-          "basketballStandings",
+          `${sport}Standings`,
           era
         );
         const data = await collection.find({ year });
@@ -109,11 +112,16 @@ export const DynastyBasketballStandings = () => {
 
       check();
     }
-  }, [isReady]);
+  }, [isReady, sport, year]);
 
+  const standingsColumns = useMemo(() => {
+    return sport === "football" ? FootballColumns : BasketballBaseballColumns;
+  }, [sport]);
+
+  console.log("standingsC", standingsColumns);
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`${year} Basketball Standings for ${era}`}</S.Title>
+      <S.Title>{`${year} ${capitalize(sport)} Standings for ${era}`}</S.Title>
       <S.TablesContainer>
         <S.SingleTableContainer>
           <S.SingleTableContainer>
@@ -134,7 +142,7 @@ export const DynastyBasketballStandings = () => {
                 <S.SingleTableContainer key={division}>
                   <S.TableTitle>{division}</S.TableTitle>
                   <Table
-                    columns={BasketballBaseballColumns}
+                    columns={standingsColumns}
                     data={divisionStandings[division]}
                     sortBy={[{ id: "Win%", desc: true }]}
                     top3Styling
@@ -153,7 +161,7 @@ export const DynastyBasketballStandings = () => {
                 <S.SingleTableContainer key={division}>
                   <S.TableTitle>{division}</S.TableTitle>
                   <Table
-                    columns={BasketballBaseballColumns}
+                    columns={standingsColumns}
                     data={divisionStandings[division]}
                     sortBy={[{ id: "Win%", desc: true }]}
                     top3Styling

@@ -59,7 +59,22 @@ export const OpenNavbar = () => {
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/basketball/2023`}
           >
-            Test standings
+            2023 Basketball Standings
+          </S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/baseball/2022`}
+          >
+            2022 Baseball Standings
+          </S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/baseball/2021`}
+          >
+            2021 Baseball Standings
+          </S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/football/2022`}
+          >
+            2022 Football Standings
           </S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
