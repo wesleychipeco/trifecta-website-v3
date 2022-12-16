@@ -1,19 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import isSameDay from "date-fns/isSameDay";
-import { capitalize } from "lodash";
+import { capitalize, sortBy } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
-import {
-  BasketballBaseballColumns,
-  FootballColumns,
-  DynastyStandingsColumns,
-} from "./StandingsColumns";
+import { DynastyStandingsColumns } from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
 import { ERA_1, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
+import { calculateWinPer } from "utils/winPer";
+
+const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
 export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
@@ -114,11 +113,154 @@ export const DynastySportStandings = ({ sport }) => {
     }
   }, [isReady, sport, year]);
 
+  const divisionRecordSorter = (rowA, rowB) => {
+    const divRecordA = rowA?.values?.divisionRecord ?? "";
+    const divRecordB = rowB?.values?.divisionRecord ?? "";
+    const divRecordAArray = divRecordA.split("-");
+    const divRecordBArray = divRecordB.split("-");
+
+    if (divRecordAArray.length === 3 && divRecordBArray.length === 3) {
+      const [winsA, lossesA, tiesA] = divRecordAArray;
+      const [winsB, lossesB, tiesB] = divRecordBArray;
+
+      const winPerA = calculateWinPer({
+        wins: Number(winsA),
+        losses: Number(lossesA),
+        ties: Number(tiesA),
+      });
+      const winPerB = calculateWinPer({
+        wins: Number(winsB),
+        losses: Number(lossesB),
+        ties: Number(tiesB),
+      });
+
+      if (winPerA > winPerB) return 1;
+      if (winPerA < winPerB) return -1;
+    }
+
+    return 0;
+  };
+
+  const BasketballBaseballColumns = useMemo(
+    () => [
+      {
+        Header: "Team Name",
+        accessor: "teamName",
+        tableHeaderCell: S.StringTableHeaderCell,
+        disableSortBy: true,
+      },
+      {
+        Header: "W",
+        accessor: "wins",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "L",
+        accessor: "losses",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "T",
+        accessor: "ties",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "Win%",
+        accessor: (data) => Number(data.winPer).toFixed(3),
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "Games Back",
+        accessor: "gamesBack",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: false,
+      },
+      {
+        Header: "Division Record",
+        accessor: "divisionRecord",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortType: divisionRecordSorter,
+        sortDescFirst: true,
+      },
+    ],
+    []
+  );
+
+  const FootballColumns = useMemo(
+    () => [
+      {
+        Header: "Team Name",
+        accessor: "teamName",
+        tableHeaderCell: S.StringTableHeaderCell,
+        disableSortBy: true,
+      },
+      {
+        Header: "W",
+        accessor: "wins",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "L",
+        accessor: "losses",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "T",
+        accessor: "ties",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "Win%",
+        accessor: (data) => Number(data.winPer).toFixed(3),
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "Points For",
+        accessor: (data) => Number(data.pointsFor).toFixed(1),
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "Points Against",
+        accessor: (data) => Number(data.pointsAgainst).toFixed(1),
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: true,
+      },
+      {
+        Header: "Games Back",
+        accessor: "gamesBack",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortDescFirst: false,
+      },
+      {
+        Header: "Division Record",
+        accessor: "divisionRecord",
+        tableHeaderCell: S.NumbersTableHeaderCell,
+        sortType: divisionRecordSorter,
+        sortDescFirst: true,
+      },
+    ],
+    []
+  );
+
   const standingsColumns = useMemo(() => {
     return sport === "football" ? FootballColumns : BasketballBaseballColumns;
-  }, [sport]);
+  }, [sport, FootballColumns, BasketballBaseballColumns]);
 
-  console.log("standingsC", standingsColumns);
+  const orderedDivisionStandings = useMemo(() => {
+    return Object.keys(divisionStandings).sort((a, b) => {
+      return DIVISION_ORDER_ARRAY.indexOf(a) - DIVISION_ORDER_ARRAY.indexOf(b);
+    });
+  }, [divisionStandings]);
+
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${year} ${capitalize(sport)} Standings for ${era}`}</S.Title>
@@ -135,8 +277,7 @@ export const DynastySportStandings = ({ sport }) => {
           </S.SingleTableContainer>
         </S.SingleTableContainer>
         <S.TwoTablesContainer>
-          {Object.keys(divisionStandings).map((division) => {
-            // TODO sort so order is N, S, E, W
+          {orderedDivisionStandings.map((division) => {
             if (division === "North" || division === "South") {
               return (
                 <S.SingleTableContainer key={division}>
@@ -155,7 +296,7 @@ export const DynastySportStandings = ({ sport }) => {
           })}
         </S.TwoTablesContainer>
         <S.TwoTablesContainer>
-          {Object.keys(divisionStandings).map((division) => {
+          {orderedDivisionStandings.map((division) => {
             if (division === "East" || division === "West") {
               return (
                 <S.SingleTableContainer key={division}>
