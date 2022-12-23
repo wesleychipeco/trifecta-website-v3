@@ -1,16 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { capitalize } from "lodash";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_1 } from "Constants";
 
 import TrifectaLogo from "resources/images/trifectalogo.png";
+import { sportYearToSportAndYear } from "utils/years";
 
 export const OpenNavbar = () => {
   // redux state to manage seasonVariables
   const dispatch = useDispatch();
+
+  // trifecta season variables
   const seasonVariables = useSelector(
     (state) => state.currentVariables.seasonVariables.trifecta
   );
@@ -21,6 +25,11 @@ export const OpenNavbar = () => {
     isFootballStarted,
     basketballAhead,
   } = seasonVariables;
+
+  // dynasty season variables
+  const { inSeasonLeagues } = useSelector(
+    (state) => state?.currentVariables?.seasonVariables?.dynasty
+  );
 
   // local state
   const [currentPath, setCurrentPath] = useState("");
@@ -51,31 +60,23 @@ export const OpenNavbar = () => {
           <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
         </S.HeaderContainer>
         <S.LinkContainer>
-          <h2>Dynasty navbar!</h2>
-          <S.Link to={STATIC_ROUTES.Home}>Home</S.Link>
+          <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link>
           <S.Link to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}`}>
             Dynasty Home
           </S.Link>
-          <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/basketball/2023`}
-          >
-            2023 Basketball Standings
-          </S.Link>
-          <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/baseball/2022`}
-          >
-            2022 Baseball Standings
-          </S.Link>
-          <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/baseball/2021`}
-          >
-            2021 Baseball Standings
-          </S.Link>
-          <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/football/2022`}
-          >
-            2022 Football Standings
-          </S.Link>
+          <S.CurrentStandings onClick={expandFunction}>
+            Current Standings
+          </S.CurrentStandings>
+          {isStandingsExpanded &&
+            inSeasonLeagues.map((inSeasonLeague) => {
+              const { sport, year } = sportYearToSportAndYear(inSeasonLeague);
+              return (
+                <S.Link
+                  key={inSeasonLeague}
+                  to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/${sport}/${year}`}
+                >{`${year} ${capitalize(sport)} Standings`}</S.Link>
+              );
+            })}
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
