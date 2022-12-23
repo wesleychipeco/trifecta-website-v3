@@ -77,6 +77,11 @@ export const OpenNavbar = () => {
                 >{`${year} ${capitalize(sport)} Standings`}</S.Link>
               );
             })}
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeHistory}`}
+          >
+            Trade History
+          </S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
@@ -90,7 +95,7 @@ export const OpenNavbar = () => {
         <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
       </S.HeaderContainer>
       <S.LinkContainer>
-        <S.Link to={STATIC_ROUTES.Home}>Home</S.Link>
+        <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link>
         <S.Link to={STATIC_ROUTES.TrifectaHome}>Trifecta Home</S.Link>
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings

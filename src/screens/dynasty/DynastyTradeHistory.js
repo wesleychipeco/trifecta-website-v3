@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/TradeHistory.styles";
 import { TradeHistoryTable } from "components/table/TradeHistoryTable";
+import { ERA_1 } from "Constants";
 
-export const TrifectaTradeHistory = () => {
+export const DynastyTradeHistory = () => {
   const [tradeHistory, setTradeHistory] = useState([]);
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("tradeHistory");
+      const collection = await returnMongoCollection("tradeHistory", ERA_1);
       const data = await collection.find({});
       setTradeHistory(data);
     };
@@ -23,25 +24,25 @@ export const TrifectaTradeHistory = () => {
         tableHeaderCell: S.DateTableHeaderCell,
       },
       {
-        Header: "Owner 1",
+        Header: "GM 1",
         accessor: "owner1",
         tableHeaderCell: S.OwnersTableHeaderCell,
         disableSortBy: true,
       },
       {
-        Header: "Owner 1 Players Received",
+        Header: "GM 1 Players Received",
         accessor: "owner1PlayersReceived",
         tableHeaderCell: S.PlayersTableHeaderCell,
         disableSortBy: true,
       },
       {
-        Header: "Owner 2",
+        Header: "GM 2",
         accessor: "owner2",
         tableHeaderCell: S.OwnersTableHeaderCell,
         disableSortBy: true,
       },
       {
-        Header: "Owner 2 Players Received",
+        Header: "GM 2 Players Received",
         accessor: "owner2PlayersReceived",
         tableHeaderCell: S.PlayersTableHeaderCell,
         disableSortBy: true,
@@ -52,7 +53,7 @@ export const TrifectaTradeHistory = () => {
 
   return (
     <S.Container>
-      <S.Title>Trifecta Trade History</S.Title>
+      <S.Title>Dynasty Trade History</S.Title>
       <TradeHistoryTable
         columns={columns}
         data={tradeHistory}

@@ -20,6 +20,13 @@ export const InputContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
+export const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 75%;
+`;
+
 export const TextInput = styled.input`
   font-family: ${FONT_FAMILY};
   font-size: 1.25rem;
