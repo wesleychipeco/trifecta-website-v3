@@ -12,7 +12,6 @@ import {
 } from "date-fns";
 import "./Calendar.css";
 import * as S from "styles/Calendar.styles";
-import * as T from "styles/shared";
 
 const locales = {
   "en-US": require("date-fns"),
