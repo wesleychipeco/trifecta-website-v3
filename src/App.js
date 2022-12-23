@@ -12,7 +12,7 @@ import { OpenNavbar } from "components/navbar/OpenNavbar";
 import { ClosedNavbar } from "components/navbar/ClosedNavbar";
 import { HallOfFame } from "screens/trifecta/hall-of-fame/HallOfFame";
 import { HomeScreen } from "screens/home-screen/HomeScreen";
-import { TradeHistory } from "screens/trifecta/trade-history/TradeHistory";
+import { TrifectaTradeHistory } from "screens/trifecta/trade-history/TradeHistory";
 import "components/navbar/transition.styles.css";
 import { BasketballStandings } from "screens/trifecta/standings/BasketballStandings";
 import { BaseballStandings } from "screens/trifecta/standings/BaseballStandings";
@@ -31,6 +31,7 @@ import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchu
 import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
+import { DynastyTradeHistory } from "screens/dynasty/DynastyTradeHistory";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -100,6 +101,7 @@ export const App = () => {
         <S.Body>
           <Routes>
             <Route path={STATIC_ROUTES.Home} element={<HomeScreen />} exact />
+            {/* ///////////// Trifecta Break ///////////////*/}
             <Route path={STATIC_ROUTES.TrifectaHome}>
               <Route path="" element={<HomeScreen />} exact />
               <Route
@@ -124,7 +126,7 @@ export const App = () => {
               />
               <Route
                 path={STATIC_ROUTES.TradeHistory}
-                element={<TradeHistory />}
+                element={<TrifectaTradeHistory />}
                 exact
               />
               <Route
@@ -163,6 +165,7 @@ export const App = () => {
                 exact
               />
             </Route>
+            {/* ///////////// Dynasty Break ///////////////*/}
             <Route path={STATIC_ROUTES.DynastyHome}>
               <Route path={STATIC_ROUTES.DynastyEra}>
                 <Route path="" element={<DynastyHome />} exact />
@@ -179,6 +182,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.FootballStandings}
                   element={<DynastySportStandings sport="football" />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.TradeHistory}
+                  element={<DynastyTradeHistory />}
                   exact
                 />
               </Route>

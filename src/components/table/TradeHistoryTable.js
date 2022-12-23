@@ -84,7 +84,7 @@ export const TradeHistoryTable = ({
   const TableBodyCellComponent = tableBodyCell ?? T.TableBodyCell;
 
   return (
-    <>
+    <S.TableContainer>
       <S.InputContainer>
         <S.TextInput
           id={OWNER_INPUT}
@@ -99,7 +99,7 @@ export const TradeHistoryTable = ({
           onChange={handleFilterInputChange}
         />
       </S.InputContainer>
-      <TableComponent {...getTableProps()}>
+      <TableComponent style={{ width: "100%" }} {...getTableProps()}>
         <TableHeadComponent>
           {headerGroups.map((headerGroup) => {
             return (
@@ -161,6 +161,6 @@ export const TradeHistoryTable = ({
           })}
         </TableBodyComponent>
       </TableComponent>
-    </>
+    </S.TableContainer>
   );
 };
