@@ -32,6 +32,7 @@ import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
 import { DynastyTradeHistory } from "screens/dynasty/DynastyTradeHistory";
+import { BannerHOC } from "screens/dynasty/BannerHOC";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -167,7 +168,7 @@ export const App = () => {
             </Route>
             {/* ///////////// Dynasty Break ///////////////*/}
             <Route path={STATIC_ROUTES.DynastyHome}>
-              <Route path={STATIC_ROUTES.DynastyEra}>
+              <Route path={STATIC_ROUTES.DynastyEra} element={<BannerHOC />}>
                 <Route path="" element={<DynastyHome />} exact />
                 <Route
                   path={ROUTES.BasketballStandings}
