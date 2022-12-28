@@ -263,7 +263,7 @@ export const DynastySportStandings = ({ sport }) => {
 
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`${year} ${capitalize(sport)} Standings for ${era}`}</S.Title>
+      <S.Title>{`${year} ${capitalize(sport)} Standings`}</S.Title>
       <S.TablesContainer>
         <S.SingleTableContainer>
           <S.SingleTableContainer>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ScreenContainer = styled.div`
-  padding-top: 4rem;
+  padding-top: 5rem;
 `;
 
 export const AnnouncementsContainer = styled.div`
