@@ -30,6 +30,7 @@ export const LeagueCalendar = ({ events }) => {
   const firstMonth = getMonth(now);
 
   const upcomingEvents = events.filter((event) => isAfter(event.start, now));
+  const next8UpcomingEvents = upcomingEvents.slice(0, 8);
   return (
     <S.OuterContainer>
       <Calendar
@@ -38,13 +39,13 @@ export const LeagueCalendar = ({ events }) => {
         defaultDate={new Date(firstYear, firstMonth, 1)}
         max={new Date(firstYear, firstMonth, getDaysInMonth(now))}
         views={["month"]}
-        style={{ height: 700, width: "65%", paddingRight: "1rem" }}
+        style={{ height: 600, width: "65%", paddingRight: "1rem" }}
         tooltipAccessor="description"
       />
       <S.UpcomingEventsMainContainer>
         <S.UpcomingEventsOuterContainer>
           <S.UpcomingEventsTitle>Upcoming League Events</S.UpcomingEventsTitle>
-          {upcomingEvents.map((event) => {
+          {next8UpcomingEvents.map((event) => {
             const formattedDateTime = format(event.start, "E MMM d h:mma");
             return (
               <S.UpcomingEventsInnerContainer key={event.start}>
