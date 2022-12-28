@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { returnMongoCollection } from "database-management";
+import { format } from "date-fns";
 import { startCase } from "lodash";
 import { LeagueCalendar } from "components/calendar/Calendar";
+import * as S from "styles/DynastyHomeScreen.styles";
 
 export const DynastyHome = () => {
   const { era } = useParams();
-  const [gms, setGMs] = useState([]);
   const [calendarEvents, setCalendarEvents] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("gms", era);
-      const data = await collection.find({});
-      setGMs(data);
-
       const leagueCalendarCollection = await returnMongoCollection(
         "leagueCalendar",
         era
@@ -23,6 +21,7 @@ export const DynastyHome = () => {
         {},
         { sort: { start: 1 } }
       );
+
       const convertedCalendarEvents = calendarEvents.map(
         ({ start, end, ...rest }) => {
           return {
@@ -32,27 +31,47 @@ export const DynastyHome = () => {
           };
         }
       );
+
+      const leagueAnnouncementsCollection = await returnMongoCollection(
+        "leagueAnnouncements",
+        era
+      );
+      const announcements = await leagueAnnouncementsCollection.find(
+        { archived: false },
+        { sort: { date: 1 } }
+      );
+
       setCalendarEvents(convertedCalendarEvents);
+      setAnnouncements(announcements);
     };
 
     load();
   }, []);
 
   return (
-    <div>
-      <h1>{`This is the dynasty home page for the "${startCase(
+    <S.ScreenContainer>
+      {/* <h1>{`This is the dynasty home page for the "${startCase(
         era.replaceAll("-", " ")
-      )}"`}</h1>
-      <h2>League Calendar here</h2>
+      )}"`}</h1> */}
       <LeagueCalendar events={calendarEvents} />
-      <h2>3x5 Standings here</h2>
-      <h2>GMs just for testing</h2>
-      {gms.map((eachGM) => (
-        <div key={eachGM.name}>
-          <p>{`Name: ${eachGM.name}`}</p>
-          <p>{`Team Letter: ${eachGM.letter}`}</p>
-        </div>
-      ))}
-    </div>
+      <S.AnnouncementsContainer>
+        <S.AnnouncementTextContainer>
+          <S.AnnouncementTitle>League</S.AnnouncementTitle>
+          <S.AnnouncementTitle>Announcements</S.AnnouncementTitle>
+        </S.AnnouncementTextContainer>
+        <S.AnnouncementTextContainer>
+          {announcements.map((ann) => {
+            return (
+              <S.Announcement key={ann.title}>
+                <S.AnnouncementDate>
+                  {format(new Date(ann.date), "M/d/yy ")}
+                </S.AnnouncementDate>
+                <S.AnnouncementTitleText>{ann.title}</S.AnnouncementTitleText>
+              </S.Announcement>
+            );
+          })}
+        </S.AnnouncementTextContainer>
+      </S.AnnouncementsContainer>
+    </S.ScreenContainer>
   );
 };
