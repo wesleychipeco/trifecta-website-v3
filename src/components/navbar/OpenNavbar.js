@@ -64,6 +64,11 @@ export const OpenNavbar = () => {
           <S.Link to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}`}>
             Dynasty Home
           </S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.DynastyStandings}`}
+          >
+            3x5 Dynasty Standings
+          </S.Link>
           <S.CurrentStandings onClick={expandFunction}>
             Current Standings
           </S.CurrentStandings>

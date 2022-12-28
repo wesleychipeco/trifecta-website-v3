@@ -18,6 +18,11 @@ export const TableTitle = styled.h2`
   margin: 0;
 `;
 
+export const TableCaption = styled.p`
+  font-size: 1.45rem;
+  margin: 0.25rem 0 0 0;
+`;
+
 export const StringTableHeaderCell = styled(TableHeaderCell)`
   width: 12rem;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;

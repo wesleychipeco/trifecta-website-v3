@@ -33,6 +33,7 @@ import { GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
 import { DynastyTradeHistory } from "screens/dynasty/DynastyTradeHistory";
 import { BannerHOC } from "screens/dynasty/BannerHOC";
+import { DynastyStandings } from "screens/dynasty/DynastyStandings";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -170,6 +171,11 @@ export const App = () => {
             <Route path={STATIC_ROUTES.DynastyHome}>
               <Route path={STATIC_ROUTES.DynastyEra} element={<BannerHOC />}>
                 <Route path="" element={<DynastyHome />} exact />
+                <Route
+                  path={STATIC_ROUTES.DynastyStandings}
+                  element={<DynastyStandings />}
+                  exact
+                />
                 <Route
                   path={ROUTES.BasketballStandings}
                   element={<DynastySportStandings sport="basketball" />}

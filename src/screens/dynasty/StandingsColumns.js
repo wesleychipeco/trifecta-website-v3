@@ -31,3 +31,17 @@ export const DynastyStandingsColumns = [
     sortDescFirst: true,
   },
 ];
+
+export const Dynasty3x5GmColumn = {
+  Header: "GM(s)",
+  accessor: "gm",
+  tableHeaderCell: S.StringTableHeaderCell,
+  disableSortBy: true,
+};
+
+export const Dynasty3x5DynastyPointsColumn = {
+  Header: "Dynasty Points",
+  accessor: "totalDynastyPoints",
+  tableHeaderCell: S.NumbersTableHeaderCell,
+  sortDescFirst: true,
+};

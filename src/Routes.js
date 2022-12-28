@@ -11,6 +11,7 @@ export const STATIC_ROUTES = {
   GenericOwnerMatchups: "matchups",
   GenericOwnerRecords: "owner-records",
   CompileMatchups: "compile-matchups",
+  DynastyStandings: "standings/dynasty",
 };
 
 export const ROUTES = {
