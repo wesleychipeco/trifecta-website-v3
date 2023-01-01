@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
-import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
+import { BASE_ROUTES, STATIC_ROUTES, ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_1 } from "Constants";
@@ -82,6 +82,11 @@ export const OpenNavbar = () => {
                 >{`${year} ${capitalize(sport)} Standings`}</S.Link>
               );
             })}
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/trade-asset-dashboard/a`}
+          >
+            Trade Asset Dashboard: GM Letter A
+          </S.Link>
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeHistory}`}
           >
