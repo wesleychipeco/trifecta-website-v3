@@ -83,9 +83,9 @@ export const OpenNavbar = () => {
               );
             })}
           <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/trade-asset-dashboard/a`}
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/trade-asset-dashboard/chip`}
           >
-            Trade Asset Dashboard: GM Letter A
+            Trade Asset Dashboard: GM Abbreviation CHIP
           </S.Link>
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeHistory}`}

@@ -22,7 +22,7 @@ export const ROUTES = {
   TrifectaStandings: "standings/trifecta/:year",
   OwnerRecords: "owner-records/:teamNumber",
   OwnerMatchups: "owner-matchups/:teamNumber/:year",
-  TradeAssetDashboard: "trade-asset-dashboard/:gmLetter",
+  TradeAssetDashboard: "trade-asset-dashboard/:gmAbbreviation",
 };
 
 export const BASE_ROUTES = {
