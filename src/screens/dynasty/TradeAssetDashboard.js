@@ -4,13 +4,16 @@ import { capitalize } from "lodash";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { retrieveAssets } from "./TradeAssetHelper";
+import * as S from "styles/TradeAssetDashboard.styles";
+import * as T from "styles/StandardScreen.styles";
+import * as U from "styles/shared";
 
 export const TradeAssetDashboard = () => {
   const { era, gmAbbreviation } = useParams();
   const [gmName, setGmName] = useState("");
   const [assets, setAssets] = useState({});
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
-  const { currentYear, inSeasonLeagues, leagueIdMappings } = useSelector(
+  const { inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
 
@@ -21,7 +24,7 @@ export const TradeAssetDashboard = () => {
       const name = gmData?.[0]?.name ?? "";
       setGmName(name);
 
-      const playerRosters = await retrieveAssets(
+      const allAssets = await retrieveAssets(
         gmData,
         inSeasonLeagues,
         leagueIdMappings
@@ -29,13 +32,13 @@ export const TradeAssetDashboard = () => {
 
       const { modifiedCount } = await gmCollection.updateOne(
         { abbreviation: gmAbbreviation },
-        { $set: { assets: playerRosters } }
+        { $set: { assets: allAssets } }
       );
       if (modifiedCount < 1) {
         console.log("Did not successfully update document");
       }
 
-      setAssets(playerRosters);
+      setAssets(allAssets);
     };
 
     if (isReady) {
@@ -44,36 +47,32 @@ export const TradeAssetDashboard = () => {
   }, [isReady]);
 
   return (
-    <div>
-      <h1>{`Trade Asset Dashboard for ${gmName}`}</h1>
-      {Object.keys(assets).map((sport) => {
-        const rosters = assets[sport];
-        return (
-          <div key={sport}>
-            <h2>{capitalize(sport)}</h2>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {rosters.players.map((player) => {
-                  return (
-                    <div key={player}>
-                      <p>{player}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {rosters.draftPicks.map((draftPick) => {
-                  return (
-                    <div key={draftPick}>
-                      <p>{draftPick}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    <T.FlexColumnCenterContainer>
+      <T.Title>{`Trade Asset Dashboard for ${gmName}`}</T.Title>
+      <U.FlexRowCentered>
+        {Object.keys(assets).map((sport) => {
+          const rosters = assets[sport];
+          return (
+            <S.SportContainer key={sport}>
+              <S.SportTitle>{capitalize(sport)}</S.SportTitle>
+              <S.FlexRow>
+                <S.PlayersContainer>
+                  {rosters.players.map((player) => {
+                    return <S.AssetText key={player}>{player}</S.AssetText>;
+                  })}
+                </S.PlayersContainer>
+                <S.DraftPicksContainer>
+                  {rosters.draftPicks.map((draftPick) => {
+                    return (
+                      <S.AssetText key={draftPick}>{draftPick}</S.AssetText>
+                    );
+                  })}
+                </S.DraftPicksContainer>
+              </S.FlexRow>
+            </S.SportContainer>
+          );
+        })}
+      </U.FlexRowCentered>
+    </T.FlexColumnCenterContainer>
   );
 };

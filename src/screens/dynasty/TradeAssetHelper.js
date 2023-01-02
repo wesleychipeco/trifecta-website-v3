@@ -5,8 +5,6 @@ import { numberToOrdinal } from "utils/strings";
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
 export const rosterScraper = async (leagueId, teamId) => {
-  console.log("leagueId", leagueId);
-  console.log("teamid", teamId);
   const data = await axios.post(
     `http://localhost:5000/rosters`,
     {
