@@ -35,6 +35,7 @@ import { DynastyTradeHistory } from "screens/dynasty/DynastyTradeHistory";
 import { BannerHOC } from "screens/dynasty/BannerHOC";
 import { DynastyStandings } from "screens/dynasty/DynastyStandings";
 import { TradeAssetDashboard } from "screens/dynasty/TradeAssetDashboard";
+import { TradeAssetHome } from "screens/dynasty/TradeAssetHome";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -195,6 +196,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.TradeHistory}
                   element={<DynastyTradeHistory />}
+                  exact
+                />
+                <Route
+                  path={STATIC_ROUTES.TradeAssetHome}
+                  element={<TradeAssetHome />}
                   exact
                 />
                 <Route

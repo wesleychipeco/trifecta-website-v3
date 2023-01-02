@@ -12,6 +12,7 @@ export const STATIC_ROUTES = {
   GenericOwnerRecords: "owner-records",
   CompileMatchups: "compile-matchups",
   DynastyStandings: "standings/dynasty",
+  TradeAssetHome: "trade-asset-home",
 };
 
 export const ROUTES = {

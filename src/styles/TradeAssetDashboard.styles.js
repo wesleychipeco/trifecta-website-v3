@@ -1,5 +1,17 @@
 import styled from "styled-components";
 
+export const TradeAssetHomeContainer = styled.div`
+  width: 90%;
+`;
+
+export const TradeAssetHomeRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0 3rem 0;
+`;
+
 export const SportContainer = styled.div`
   display: flex;
   flex-direction: column;
