@@ -23,6 +23,17 @@ app.post("/standings", (req, res) => {
   });
 });
 
+app.post("/rosters", (req, res) => {
+  // use leagueId passed via header
+  const leagueId = req.header("LeagueId");
+  const backendUrl = `https://www.fantrax.com/fxpa/req?leagueId=${leagueId}`;
+
+  // return the data without modification
+  axios.post(backendUrl, req.body).then((response) => {
+    res.send(response.data);
+  });
+});
+
 // console text when app is running
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

@@ -10,3 +10,11 @@ export const splitInto2Arrays = (array) => {
   const array2 = array.slice(halfwayIndex);
   return [array1, array2];
 };
+
+export const splitIntoArraysOfLengthX = (array, length) => {
+  const arrayOfArrays = [];
+  for (let i = 0; i < array.length; i += length) {
+    arrayOfArrays.push(array.slice(i, i + length));
+  }
+  return arrayOfArrays;
+};

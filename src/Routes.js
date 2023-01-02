@@ -12,6 +12,7 @@ export const STATIC_ROUTES = {
   GenericOwnerRecords: "owner-records",
   CompileMatchups: "compile-matchups",
   DynastyStandings: "standings/dynasty",
+  TradeAssetHome: "trade-asset-home",
 };
 
 export const ROUTES = {
@@ -22,6 +23,7 @@ export const ROUTES = {
   TrifectaStandings: "standings/trifecta/:year",
   OwnerRecords: "owner-records/:teamNumber",
   OwnerMatchups: "owner-matchups/:teamNumber/:year",
+  TradeAssetDashboard: "trade-asset-dashboard/:gmAbbreviation",
 };
 
 export const BASE_ROUTES = {
