@@ -16,9 +16,9 @@ export const calculateTrifectaStandings = async (
   const ownerIdsPerTeamArray = teamListsData?.[0]?.teams ?? [];
   const ownerIdsCollection = await returnMongoCollection("ownerIds");
   const ownerIdsOwnerNamesArray = await ownerIdsCollection.find({});
-  let basketballLastScraped,
-    baseballLastScraped,
-    footballLastScraped = null;
+  let basketballLastScraped = null;
+  let baseballLastScraped = null;
+  let footballLastScraped = null;
 
   if (basketballSeasonStatus !== SeasonStatus.NOT_STARTED) {
     const { standings: basketballStandings, lastScraped } =
