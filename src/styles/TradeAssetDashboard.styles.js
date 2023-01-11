@@ -52,3 +52,7 @@ export const AssetText = styled.p`
   font-size: 1.15rem;
   margin: 0.65rem 0 0.65rem 0;
 `;
+
+export const FaabText = styled(AssetText)`
+  text-align: center;
+`;

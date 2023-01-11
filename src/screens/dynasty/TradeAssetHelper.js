@@ -32,10 +32,15 @@ export const rosterScraper = async (leagueId, teamId) => {
       },
     }
   );
-  const extracted = data.data.responses[0].data.tables.map(
-    (table) => table.rows
-  );
-  return flatten(extracted);
+
+  const rawData = data.data.responses[0].data;
+  const extracted = rawData.tables.map((table) => table.rows);
+  const faab = rawData.miscData.transactionSalaryBudgetInfo[0].display;
+
+  return {
+    roster: flatten(extracted),
+    faab: faab,
+  };
 };
 
 export const retrieveAssets = async (
@@ -60,7 +65,9 @@ export const retrieveAssets = async (
       const inSeasonSport = inSeasonSportArray[0];
       const leagueId = leagueIdMappings[inSeasonSport];
       const teamId = gmData?.[0]?.mappings?.[inSeasonSport];
-      const roster = await rosterScraper(leagueId, teamId);
+      //console.log("league", leagueId, "team", teamId);
+      const { roster, faab } = await rosterScraper(leagueId, teamId);
+      //console.log("roster scraper", roster);
 
       const formattedPlayers = roster
         .filter((player) => player?.scorer !== undefined)
@@ -79,12 +86,15 @@ export const retrieveAssets = async (
 
       sportsRosters[sport] = {
         players: formattedPlayers,
+        faab,
       };
     } else {
       // if not in season, just use from db data
       const savedPlayers = gmData?.[0]?.assets?.[sport]?.players;
+      const savedFaab = gmData?.[0]?.assets?.[sport]?.faab;
       sportsRosters[sport] = {
         players: savedPlayers,
+        faab: savedFaab,
       };
     }
 

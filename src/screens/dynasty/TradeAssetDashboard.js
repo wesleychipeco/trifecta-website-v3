@@ -29,6 +29,7 @@ export const TradeAssetDashboard = () => {
         inSeasonLeagues,
         leagueIdMappings
       );
+      console.log("allassets", allAssets);
 
       const { modifiedCount } = await gmCollection.updateOne(
         { abbreviation: gmAbbreviation },
@@ -55,6 +56,7 @@ export const TradeAssetDashboard = () => {
           return (
             <S.SportContainer key={sport}>
               <S.SportTitle>{capitalize(sport)}</S.SportTitle>
+              <S.FaabText>{`FAAB remaining: ${rosters.faab}`}</S.FaabText>
               <S.FlexRow>
                 <S.PlayersContainer>
                   {rosters.players.map((player) => {
