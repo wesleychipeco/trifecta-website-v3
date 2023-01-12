@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
-import { capitalize } from "lodash";
+import { capitalize, upperCase } from "lodash";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -176,7 +176,9 @@ export const TradeAssetDashboard = () => {
 
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`Trade Asset Dashboard for ${gmName}`}</S.Title>
+      <S.Title>{`Trade Asset Dashboard for ${gmName} (${upperCase(
+        gmAbbreviation
+      )})`}</S.Title>
       <S.OuterTradeBlockContainer>
         <S.Subtitle>Trade Block</S.Subtitle>
         <S.SaveMessageText>{saveMessage}</S.SaveMessageText>
