@@ -26,6 +26,20 @@ export const FlexRowCentered = styled.div`
   align-items: center;
 `;
 
+export const FlexColumnStart = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+`;
+
+export const FlexRowStart = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+`;
+
 export const HorizontalSpacer = styled.div`
   margin-left: ${(props) => `${props.factor * 0.25}rem;`}
   margin-right: ${(props) => `${props.factor * 0.25}rem;`} 
