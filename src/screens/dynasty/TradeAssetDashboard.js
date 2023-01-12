@@ -10,7 +10,7 @@ import { retrieveAssets } from "./TradeAssetHelper";
 import * as S from "styles/TradeAssetDashboard.styles";
 import * as T from "styles/Dropdown.styles";
 
-const TRADE_BLOCK_SECTIONS = [
+const ALL_TRADE_BLOCK_SECTIONS = [
   {
     key: "available",
     text: "Available for Trade",
@@ -18,6 +18,17 @@ const TRADE_BLOCK_SECTIONS = [
   {
     key: "seeking",
     text: "Seeking In Return",
+  },
+  {
+    key: "untouchable",
+    text: "Untouchable",
+  },
+];
+
+const ASSIGNABLE_TRADE_BLOCK_SECTIONS = [
+  {
+    key: "available",
+    text: "Available for Trade",
   },
   {
     key: "untouchable",
@@ -34,6 +45,7 @@ export const TradeAssetDashboard = () => {
     untouchable: [],
   });
   const [assets, setAssets] = useState({});
+  const [saveMessage, setSaveMessage] = useState("");
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
@@ -62,7 +74,7 @@ export const TradeAssetDashboard = () => {
         { $set: { assets: allAssets } }
       );
       if (modifiedCount < 1) {
-        console.log("Did not successfully update document");
+        console.log("Did NOT successfully update assets!");
       }
 
       setAssets(allAssets);
@@ -72,6 +84,15 @@ export const TradeAssetDashboard = () => {
       loadData();
     }
   }, [isReady]);
+
+  const options = useMemo(
+    () =>
+      ASSIGNABLE_TRADE_BLOCK_SECTIONS.map((section) => ({
+        value: section.key,
+        label: capitalize(section.key),
+      })),
+    []
+  );
 
   const modifyTradeBlock = (section, asset, isAdd) => {
     const oldTradeBlockSection = tradeBlock[section];
@@ -92,18 +113,31 @@ export const TradeAssetDashboard = () => {
     modifyTradeBlock(section, asset, false);
   };
 
-  const addAdd = (event, player) => {
+  const addPlayer = (event, player) => {
     addToTradeBlock(event.value, player);
   };
 
-  const options = useMemo(
-    () =>
-      TRADE_BLOCK_SECTIONS.map((section) => ({
-        value: section.key,
-        label: capitalize(section.key),
-      })),
-    []
-  );
+  const timeoutSaveMessage = (message) => {
+    setSaveMessage(message);
+    setTimeout(() => {
+      setSaveMessage("");
+    }, 3000);
+  };
+
+  const saveTradeBlock = async () => {
+    const gmCollection = await returnMongoCollection("gms", era);
+    console.log("FINAL TRADE BLOCK", tradeBlock);
+
+    const { modifiedCount } = await gmCollection.updateOne(
+      { abbreviation: gmAbbreviation },
+      { $set: { tradeBlock } }
+    );
+    if (modifiedCount < 1) {
+      timeoutSaveMessage("Did NOT successfully update trade block!");
+    } else if (modifiedCount === 1) {
+      timeoutSaveMessage("Trade block saved successfully!");
+    }
+  };
 
   const DropdownIndicator = (props) => {
     return (
@@ -118,8 +152,10 @@ export const TradeAssetDashboard = () => {
       <S.Title>{`Trade Asset Dashboard for ${gmName}`}</S.Title>
       <S.OuterTradeBlockContainer>
         <S.Subtitle>Trade Block</S.Subtitle>
+        <S.SaveMessageText>{saveMessage}</S.SaveMessageText>
+        <S.SaveButton onClick={saveTradeBlock}>Save</S.SaveButton>
         <S.InnerTradeBlockContainer>
-          {TRADE_BLOCK_SECTIONS.map((section) => {
+          {ALL_TRADE_BLOCK_SECTIONS.map((section) => {
             const keyName = section.key;
             return (
               <S.TradeBlockSection key={section.key}>
@@ -163,7 +199,7 @@ export const TradeAssetDashboard = () => {
                         <Select
                           placeholder=""
                           defaultValue=""
-                          onChange={(e) => addAdd(e, player)}
+                          onChange={(e) => addPlayer(e, player)}
                           options={options}
                           components={{ DropdownIndicator }}
                           styles={T.TradeBlockDropdownCustomStyles}

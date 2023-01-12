@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
 
 export const TradeAssetHomeContainer = styled.div`
   width: 90%;
@@ -28,7 +29,6 @@ export const OuterTradeBlockContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   width: 100%;
 `;
 
@@ -37,7 +37,7 @@ export const InnerTradeBlockContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: 100%;
-  margin: 0.5rem 0 2rem 0;
+  margin: 1rem 0 2rem 0;
 
   width: 100%;
 `;
@@ -47,6 +47,41 @@ export const Subtitle = styled.h2`
   padding: 0;
   font-size: 2rem;
   font-weight: 700;
+`;
+
+export const SaveButton = styled.button`
+  position: absolute;
+  align-self: end;
+
+  margin: 0;
+  padding: 0;
+  width: 6rem;
+  height: 2.5rem;
+  background-color: ${PRIMARY_GREEN};
+  border-radius: 3.5rem;
+  border: 0;
+
+  font-size: 1.5rem;
+  font-family: ${HEADER_FONT_FAMILY};
+  font-weight: 700;
+  color: ${FONT_COLOR};
+  &:hover {
+    opacity: 0.6;
+    cursor: pointer;
+  }
+`;
+
+export const SaveMessageText = styled.p`
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+  font-style: italic;
+
+  position: absolute;
+  align-self: end;
+  right: 11.5rem;
+  top: 8.4rem;
+  text-align: right;
 `;
 
 export const TradeBlockSection = styled.div`
