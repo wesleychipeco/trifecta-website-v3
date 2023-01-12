@@ -17,7 +17,7 @@ const ALL_TRADE_BLOCK_SECTIONS = [
   },
   {
     key: "seeking",
-    text: "Seeking In Return",
+    text: "Seeking in Return",
   },
   {
     key: "untouchable",
@@ -37,6 +37,7 @@ const ASSIGNABLE_TRADE_BLOCK_SECTIONS = [
 ];
 
 export const TradeAssetDashboard = () => {
+  // setup
   const { era, gmAbbreviation } = useParams();
   const [gmName, setGmName] = useState("");
   const [tradeBlock, setTradeBlock] = useState({
@@ -46,11 +47,17 @@ export const TradeAssetDashboard = () => {
   });
   const [assets, setAssets] = useState({});
   const [saveMessage, setSaveMessage] = useState("");
+  const [manualInputs, setManualInputs] = useState({
+    available: "",
+    seeking: "",
+    untouchable: "",
+  });
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
 
+  // load data on page ready
   useEffect(() => {
     const loadData = async () => {
       const gmCollection = await returnMongoCollection("gms", era);
@@ -85,6 +92,7 @@ export const TradeAssetDashboard = () => {
     }
   }, [isReady]);
 
+  // options for select dropdown
   const options = useMemo(
     () =>
       ASSIGNABLE_TRADE_BLOCK_SECTIONS.map((section) => ({
@@ -94,6 +102,7 @@ export const TradeAssetDashboard = () => {
     []
   );
 
+  // functions to correctly modify the immutable state
   const modifyTradeBlock = (section, asset, isAdd) => {
     const oldTradeBlockSection = tradeBlock[section];
     const newTradeBlockSection = isAdd
@@ -117,6 +126,32 @@ export const TradeAssetDashboard = () => {
     addToTradeBlock(event.value, player);
   };
 
+  // manual text input functions
+  const onChangeHandler = (section, event) => {
+    const copyManualInputs = { ...manualInputs };
+    copyManualInputs[section] = event.target.value;
+    setManualInputs(copyManualInputs);
+  };
+
+  const addFromManualInput = (section) => {
+    const assetToAdd = manualInputs[section];
+    addToTradeBlock(section, assetToAdd);
+
+    const copyManualInputs = { ...manualInputs };
+    copyManualInputs[section] = "";
+    setManualInputs(copyManualInputs);
+  };
+
+  // custom dropdown indicator for react-select using font awesome icon
+  const DropdownIndicator = (props) => {
+    return (
+      <components.DropdownIndicator {...props}>
+        <FontAwesomeIcon icon="fa-plus" size="lg" />
+      </components.DropdownIndicator>
+    );
+  };
+
+  // functions to save trade block to mongodb
   const timeoutSaveMessage = (message) => {
     setSaveMessage(message);
     setTimeout(() => {
@@ -137,14 +172,6 @@ export const TradeAssetDashboard = () => {
     } else if (modifiedCount === 1) {
       timeoutSaveMessage("Trade block saved successfully!");
     }
-  };
-
-  const DropdownIndicator = (props) => {
-    return (
-      <components.DropdownIndicator {...props}>
-        <FontAwesomeIcon icon="fa-plus" size="lg" />
-      </components.DropdownIndicator>
-    );
   };
 
   return (
@@ -178,7 +205,20 @@ export const TradeAssetDashboard = () => {
                     );
                   })}
                 </S.TradeBlockDisplaySection>
-                <S.TradeBlockWriteSection>Two</S.TradeBlockWriteSection>
+                <S.TradeBlockWriteSection>
+                  <S.ManualInput
+                    type="text"
+                    name={section.key}
+                    placeholder="Manually enter assets here..."
+                    onChange={(e) => onChangeHandler(section.key, e)}
+                    value={manualInputs[section.key]}
+                  />
+                  <S.AddManualInputButton
+                    onClick={() => addFromManualInput(section.key)}
+                  >
+                    Add
+                  </S.AddManualInputButton>
+                </S.TradeBlockWriteSection>
               </S.TradeBlockSection>
             );
           })}

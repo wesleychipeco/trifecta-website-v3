@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
+import {
+  FONT_COLOR,
+  FONT_FAMILY,
+  HEADER_FONT_FAMILY,
+  PRIMARY_GREEN,
+} from "./variables";
 
 export const TradeAssetHomeContainer = styled.div`
   width: 90%;
@@ -45,7 +50,7 @@ export const InnerTradeBlockContainer = styled.div`
 export const Subtitle = styled.h2`
   margin: 0;
   padding: 0;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
 `;
 
@@ -61,7 +66,7 @@ export const SaveButton = styled.button`
   border-radius: 3.5rem;
   border: 0;
 
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-family: ${HEADER_FONT_FAMILY};
   font-weight: 700;
   color: ${FONT_COLOR};
@@ -90,7 +95,7 @@ export const TradeBlockSection = styled.div`
   border: 0.25rem solid rgba(169, 169, 169, 0.5);
   border-radius: 1rem;
   padding: 1rem;
-  width: 25%;
+  width: 26%;
 `;
 
 export const TradeBlockDisplaySection = styled.div`
@@ -101,7 +106,46 @@ export const TradeBlockDisplaySection = styled.div`
 
 export const TradeBlockWriteSection = styled.div`
   display: flex;
-  background-color: blue;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  margin: 1rem 0 0 0;
+`;
+
+export const ManualInput = styled.input`
+  width: 65%;
+  height: 2rem;
+  font-size: 1.15rem;
+  font-family: ${FONT_FAMILY};
+  text-align: left;
+
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+  outline: none;
+  border: 3px solid black;
+
+  &:focus {
+    border: 3px solid ${PRIMARY_GREEN};
+  }
+`;
+
+export const AddManualInputButton = styled.button`
+  margin: 0 0 0 1rem;
+  padding: 0;
+  width: 4.5rem;
+  height: 2.5rem;
+  background-color: ${PRIMARY_GREEN};
+  border-radius: 3.5rem;
+  border: 0;
+
+  font-size: 1.4rem;
+  font-family: ${HEADER_FONT_FAMILY};
+  font-weight: 700;
+  color: ${FONT_COLOR};
+  &:hover {
+    opacity: 0.6;
+    cursor: pointer;
+  }
 `;
 
 export const AllAssetsContainer = styled.div`
