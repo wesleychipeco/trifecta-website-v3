@@ -28,6 +28,7 @@ import { FootballHallOfFame } from "screens/hall-of-fame/FootballHallOfFame";
 import { OwnerMatchups } from "screens/owner-matchups/OwnerMatchups";
 import { OwnerRecords } from "screens/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/compile-matchups/CompileMatchups";
+import { CompileTotalMatchups } from "screens/compile-matchups/CompileTotalMatchups";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -150,6 +151,11 @@ export const App = () => {
             <Route
               path={STATIC_ROUTES.CompileMatchups}
               element={<CompileMatchups />}
+              exact
+            />
+            <Route
+              path={STATIC_ROUTES.CompileTotalMatchups}
+              element={<CompileTotalMatchups />}
               exact
             />
           </Routes>

@@ -8,6 +8,7 @@ export const STATIC_ROUTES = {
   GenericOwnerMatchups: "/matchups",
   GenericOwnerRecords: "/ownerrecords",
   CompileMatchups: "/compilematchups",
+  CompileTotalMatchups: "/compiletotalmatchups",
 };
 
 export const ROUTES = {
