@@ -23,7 +23,7 @@ export const ClosedNavbarContainer = styled.div`
 `;
 
 export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
-  padding: 1.75rem 0 0 1.75rem;
+  padding: 1.5rem 0 0 1.5rem;
   width: 2rem;
   height: 2rem;
   font-size: 1.75rem;
@@ -54,7 +54,6 @@ export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
   width: 2rem;
   height: 2rem;
   font-size: 2rem;
-  margin-left: 8rem;
   padding: 0.5rem;
 
   &:hover {
@@ -64,14 +63,27 @@ export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
 `;
 
 export const HeaderContainer = styled.div`
+  display: flex;
   flex-direction: row;
   padding: 1rem 1rem ${NAVBAR_VERTICAL_SPACING} ${OPEN_LEFT_PADDING};
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
 export const LinkContainer = styled.div`
   padding-left: ${OPEN_LEFT_PADDING};
+`;
+
+export const WelcomeText = styled.p`
+  font-size: 1.3rem;
+  text-decoration: none;
+  font-style: italic;
+  font-family: ${HEADER_FONT_FAMILY};
+  color: ${FONT_COLOR};
+  backgound-color: red;
+  padding: 0;
+  margin: 0;
+  text-align: center;
 `;
 
 export const Link = styled(NavLink)`

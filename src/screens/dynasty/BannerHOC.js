@@ -1,10 +1,10 @@
-import { Banner } from "components/banner/Banner";
+import { EraBanner } from "components/banner/EraBanner";
 import { Outlet } from "react-router-dom";
 
-export const BannerHOC = () => {
+export const EraBannerHOC = () => {
   return (
     <div>
-      <Banner />
+      <EraBanner />
       <Outlet />
     </div>
   );

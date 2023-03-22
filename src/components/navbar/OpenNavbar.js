@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
-import { BASE_ROUTES, STATIC_ROUTES, ROUTES } from "Routes";
+import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_1 } from "Constants";
 
 import TrifectaLogo from "resources/images/trifectalogo.png";
 import { sportYearToSportAndYear } from "utils/years";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const OpenNavbar = () => {
   // redux state to manage seasonVariables
@@ -51,12 +52,19 @@ export const OpenNavbar = () => {
     toggleStandingsExpansion(!isStandingsExpanded);
   }, [toggleStandingsExpansion, isStandingsExpanded]);
 
+  const { isAuthenticated, user } = useAuth0();
+
   // dynasty navbar
   if (location.pathname.startsWith("/dynasty")) {
     return (
       <S.OpenNavbarContainer>
         <S.HeaderContainer>
           <S.Logo src={TrifectaLogo} alt="logo" />
+          {isAuthenticated && (
+            <S.WelcomeText>{`Welcome, ${
+              user.name.split(" ")?.[0] ?? ""
+            }!`}</S.WelcomeText>
+          )}
           <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
         </S.HeaderContainer>
         <S.LinkContainer>
