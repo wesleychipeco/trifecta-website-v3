@@ -7,7 +7,7 @@ import * as T from "styles/shared";
 export const SignInBanner = () => {
   const location = useLocation();
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const title = isAuthenticated ? `Log Out` : "Sign In";
+  const title = isAuthenticated ? "Log Out" : "Sign In";
 
   const loginOnClick = useCallback(() => {
     loginWithRedirect();
