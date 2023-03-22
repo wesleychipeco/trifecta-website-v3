@@ -1,16 +1,17 @@
-import { startCase } from "lodash";
 import { useParams } from "react-router-dom";
+import { startCase } from "lodash";
 import * as S from "styles/Banner.styles";
 import * as T from "styles/shared";
 
-export const Banner = () => {
+export const EraBanner = () => {
   const { era } = useParams();
+  return null;
 
   return (
-    <S.BannerContainer>
+    <S.EraBannerContainer>
       <T.FlexColumnCentered>
         <S.BannerText>{startCase(era.replace("-", " "))}</S.BannerText>
       </T.FlexColumnCentered>
-    </S.BannerContainer>
+    </S.EraBannerContainer>
   );
 };

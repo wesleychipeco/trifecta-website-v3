@@ -32,10 +32,11 @@ import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
 import { DynastyTradeHistory } from "screens/dynasty/DynastyTradeHistory";
-import { BannerHOC } from "screens/dynasty/BannerHOC";
+import { EraBannerHOC } from "screens/dynasty/BannerHOC";
 import { DynastyStandings } from "screens/dynasty/DynastyStandings";
 import { TradeAssetDashboard } from "screens/dynasty/TradeAssetDashboard";
 import { TradeAssetHome } from "screens/dynasty/TradeAssetHome";
+import { SignInBanner } from "components/banner/SignInBanner";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -102,6 +103,7 @@ export const App = () => {
         >
           <OpenNavbar />
         </CSSTransition>
+        <SignInBanner />
         <S.Body>
           <Routes>
             <Route path={STATIC_ROUTES.Home} element={<HomeScreen />} exact />
@@ -171,7 +173,7 @@ export const App = () => {
             </Route>
             {/* ///////////// Dynasty Break ///////////////*/}
             <Route path={STATIC_ROUTES.DynastyHome}>
-              <Route path={STATIC_ROUTES.DynastyEra} element={<BannerHOC />}>
+              <Route path={STATIC_ROUTES.DynastyEra} element={<EraBannerHOC />}>
                 <Route path="" element={<DynastyHome />} exact />
                 <Route
                   path={STATIC_ROUTES.DynastyStandings}
