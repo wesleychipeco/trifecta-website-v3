@@ -40,7 +40,7 @@ export const BaseballStandings = () => {
         trifectaStandings,
         h2hStandings,
         rotoStandings,
-        rotoStats
+        rotoStats = []
       ) => {
         // For standings pre-2018, rotoStandings and rotoStats have different data
         // For standings 2018 and beyond, rotoStandings has all data needed
