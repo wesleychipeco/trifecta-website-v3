@@ -111,7 +111,7 @@ export const RotoColumns = [
     Header: "OBP",
     accessor: "OBPPoints",
     tableHeaderCell: S.NumbersTableHeaderCell,
-    sortDescFirst: false,
+    sortDescFirst: true,
   },
   {
     Header: "SO",
@@ -188,12 +188,12 @@ export const RotoStatsColumns = [
   {
     Header: "K",
     accessor: "K",
-    sortDescFirst: true,
+    sortDescFirst: false,
   },
   {
     Header: "SB",
     accessor: "SB",
-    sortDescFirst: false,
+    sortDescFirst: true,
   },
   {
     Header: "OBP",
@@ -226,8 +226,8 @@ export const RotoStatsColumns = [
     sortDescFirst: false,
   },
   {
-    Header: "WIHP",
+    Header: "WHIP",
     accessor: (data) => Number(data.WHIP).toFixed(3),
-    sortDescFirst: true,
+    sortDescFirst: false,
   },
 ];

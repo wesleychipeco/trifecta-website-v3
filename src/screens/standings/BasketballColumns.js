@@ -117,7 +117,7 @@ export const RotoColumns = [
     Header: "TO",
     accessor: "TOPoints",
     tableHeaderCell: S.NumbersTableHeaderCell,
-    sortDescFirst: false,
+    sortDescFirst: true,
   },
   {
     Header: "PTS",
