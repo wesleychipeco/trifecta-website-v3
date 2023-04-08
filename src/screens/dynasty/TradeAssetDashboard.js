@@ -54,6 +54,7 @@ export const TradeAssetDashboard = () => {
     untouchable: "",
   });
   const [hasEditAccess, setHasEditAccess] = useState(false);
+  const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
@@ -68,11 +69,7 @@ export const TradeAssetDashboard = () => {
       const name = gmData?.[0]?.name ?? "";
       setGmName(name);
 
-      console.log("hi", isAuthenticated, user);
       if (isAuthenticated) {
-        console.log("---------------------------------------------");
-        console.log("user", user);
-        console.log("gmdata", gmData);
         setHasEditAccess(user.email === gmData?.[0]?.email);
       }
 
@@ -123,6 +120,7 @@ export const TradeAssetDashboard = () => {
     const copyTradeBlock = { ...tradeBlock };
     copyTradeBlock[section] = newTradeBlockSection;
     setTradeBlock(copyTradeBlock);
+    setIsSaveButtonEnabled(true);
   };
 
   const addToTradeBlock = (section, player) => {
@@ -182,6 +180,7 @@ export const TradeAssetDashboard = () => {
       timeoutSaveMessage("Did NOT successfully update trade block!");
     } else if (modifiedCount === 1) {
       timeoutSaveMessage("Trade block saved successfully!");
+      setIsSaveButtonEnabled(false);
     }
   };
 
@@ -194,7 +193,12 @@ export const TradeAssetDashboard = () => {
         <S.Subtitle>Trade Block</S.Subtitle>
         <S.SaveMessageText>{saveMessage}</S.SaveMessageText>
         {hasEditAccess && (
-          <S.SaveButton onClick={saveTradeBlock}>Save</S.SaveButton>
+          <S.SaveButton
+            disabled={!isSaveButtonEnabled}
+            onClick={saveTradeBlock}
+          >
+            Save
+          </S.SaveButton>
         )}
         <S.InnerTradeBlockContainer>
           {ALL_TRADE_BLOCK_SECTIONS.map((section) => {
