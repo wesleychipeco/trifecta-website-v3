@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select, { components } from "react-select";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { retrieveAssets } from "./TradeAssetHelper";
 import * as S from "styles/TradeAssetDashboard.styles";
@@ -52,10 +53,13 @@ export const TradeAssetDashboard = () => {
     seeking: "",
     untouchable: "",
   });
+  const [hasEditAccess, setHasEditAccess] = useState(false);
+  const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
+  const { isAuthenticated, user } = useAuth0();
 
   // load data on page ready
   useEffect(() => {
@@ -64,6 +68,10 @@ export const TradeAssetDashboard = () => {
       const gmData = await gmCollection.find({ abbreviation: gmAbbreviation });
       const name = gmData?.[0]?.name ?? "";
       setGmName(name);
+
+      if (isAuthenticated) {
+        setHasEditAccess(user.email === gmData?.[0]?.email);
+      }
 
       const tradeBlockData = gmData?.[0]?.tradeBlock ?? {};
       console.log("tradeBlockData", tradeBlockData);
@@ -90,7 +98,7 @@ export const TradeAssetDashboard = () => {
     if (isReady) {
       loadData();
     }
-  }, [isReady]);
+  }, [isReady, user]);
 
   // options for select dropdown
   const options = useMemo(
@@ -112,6 +120,7 @@ export const TradeAssetDashboard = () => {
     const copyTradeBlock = { ...tradeBlock };
     copyTradeBlock[section] = newTradeBlockSection;
     setTradeBlock(copyTradeBlock);
+    setIsSaveButtonEnabled(true);
   };
 
   const addToTradeBlock = (section, player) => {
@@ -171,6 +180,7 @@ export const TradeAssetDashboard = () => {
       timeoutSaveMessage("Did NOT successfully update trade block!");
     } else if (modifiedCount === 1) {
       timeoutSaveMessage("Trade block saved successfully!");
+      setIsSaveButtonEnabled(false);
     }
   };
 
@@ -182,7 +192,14 @@ export const TradeAssetDashboard = () => {
       <S.OuterTradeBlockContainer>
         <S.Subtitle>Trade Block</S.Subtitle>
         <S.SaveMessageText>{saveMessage}</S.SaveMessageText>
-        <S.SaveButton onClick={saveTradeBlock}>Save</S.SaveButton>
+        {hasEditAccess && (
+          <S.SaveButton
+            disabled={!isSaveButtonEnabled}
+            onClick={saveTradeBlock}
+          >
+            Save
+          </S.SaveButton>
+        )}
         <S.InnerTradeBlockContainer>
           {ALL_TRADE_BLOCK_SECTIONS.map((section) => {
             const keyName = section.key;
@@ -194,33 +211,37 @@ export const TradeAssetDashboard = () => {
                     return (
                       <S.AssetContainer key={asset}>
                         <S.AssetText>{asset}</S.AssetText>
-                        <S.XIconContainer>
-                          <FontAwesomeIcon
-                            icon="fa-circle-xmark"
-                            size="lg"
-                            onClick={() =>
-                              removeFromTradeBlock(section.key, asset)
-                            }
-                          />
-                        </S.XIconContainer>
+                        {hasEditAccess && (
+                          <S.XIconContainer>
+                            <FontAwesomeIcon
+                              icon="fa-circle-xmark"
+                              size="lg"
+                              onClick={() =>
+                                removeFromTradeBlock(section.key, asset)
+                              }
+                            />
+                          </S.XIconContainer>
+                        )}
                       </S.AssetContainer>
                     );
                   })}
                 </S.TradeBlockDisplaySection>
-                <S.TradeBlockWriteSection>
-                  <S.ManualInput
-                    type="text"
-                    name={section.key}
-                    placeholder="Manually enter assets here..."
-                    onChange={(e) => onChangeHandler(section.key, e)}
-                    value={manualInputs[section.key]}
-                  />
-                  <S.AddManualInputButton
-                    onClick={() => addFromManualInput(section.key)}
-                  >
-                    Add
-                  </S.AddManualInputButton>
-                </S.TradeBlockWriteSection>
+                {hasEditAccess && (
+                  <S.TradeBlockWriteSection>
+                    <S.ManualInput
+                      type="text"
+                      name={section.key}
+                      placeholder="Manually enter assets here..."
+                      onChange={(e) => onChangeHandler(section.key, e)}
+                      value={manualInputs[section.key]}
+                    />
+                    <S.AddManualInputButton
+                      onClick={() => addFromManualInput(section.key)}
+                    >
+                      Add
+                    </S.AddManualInputButton>
+                  </S.TradeBlockWriteSection>
+                )}
               </S.TradeBlockSection>
             );
           })}
@@ -238,15 +259,17 @@ export const TradeAssetDashboard = () => {
                   {rosters.players.map((player) => {
                     return (
                       <S.AssetContainer key={player}>
-                        <Select
-                          placeholder=""
-                          defaultValue=""
-                          onChange={(e) => addPlayer(e, player)}
-                          options={options}
-                          components={{ DropdownIndicator }}
-                          styles={T.TradeBlockDropdownCustomStyles}
-                          isSearchable={false}
-                        />
+                        {hasEditAccess && (
+                          <Select
+                            placeholder=""
+                            defaultValue=""
+                            onChange={(e) => addPlayer(e, player)}
+                            options={options}
+                            components={{ DropdownIndicator }}
+                            styles={T.TradeBlockDropdownCustomStyles}
+                            isSearchable={false}
+                          />
+                        )}
                         <S.AssetText>{player}</S.AssetText>
                       </S.AssetContainer>
                     );
