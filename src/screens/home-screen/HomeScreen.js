@@ -10,7 +10,7 @@ import "./transition.styles.css";
 import { useEffect, useState } from "react";
 import { STATIC_ROUTES } from "Routes";
 import { Button } from "components/button/Button";
-import { ERA_1 } from "Constants";
+import { ERA_0 } from "Constants";
 
 export const HomeScreen = () => {
   const [show, setShow] = useState(false);
@@ -33,7 +33,7 @@ export const HomeScreen = () => {
         <T.HorizontalSpacer factor={6} />
         <Button
           title="3x5 Dynasty - Coming Soon!"
-          navTo={`${STATIC_ROUTES.DynastyHome}/${ERA_1}`}
+          navTo={`${STATIC_ROUTES.DynastyHome}/${ERA_0}`}
           // disabled
         />
       </T.FlexRowCentered>
