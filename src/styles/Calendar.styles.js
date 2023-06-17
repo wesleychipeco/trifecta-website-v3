@@ -19,7 +19,7 @@ export const UpcomingEventsTitle = styled.h2`
 
 export const DateContainer = styled.div`
   width: 65%;
-  padding-left: 2.5rem;
+  padding-left: 1rem;
 `;
 
 export const EventContainer = styled.div`
