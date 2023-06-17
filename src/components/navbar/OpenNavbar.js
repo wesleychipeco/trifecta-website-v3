@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
+import * as T from "styles/shared";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_0 } from "Constants";
 
@@ -59,7 +60,15 @@ export const OpenNavbar = () => {
     return (
       <S.OpenNavbarContainer>
         <S.HeaderContainer>
-          <S.Logo src={TrifectaLogo} alt="logo" />
+          <S.TooltipCard>
+            <S.Link to={STATIC_ROUTES.Home} noHoverFade>
+              <T.FlexColumn>
+                <S.Logo src={TrifectaLogo} alt="logo" />
+                <S.Tooltip>Home</S.Tooltip>
+              </T.FlexColumn>
+            </S.Link>
+          </S.TooltipCard>
+
           {isAuthenticated && (
             <S.WelcomeText>{`Welcome, ${
               user.name.split(" ")?.[0] ?? ""
@@ -68,7 +77,7 @@ export const OpenNavbar = () => {
           <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
         </S.HeaderContainer>
         <S.LinkContainer>
-          <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link>
+          {/* <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link> */}
           <S.Link to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}`}>
             Dynasty Home
           </S.Link>
@@ -113,7 +122,7 @@ export const OpenNavbar = () => {
         <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
       </S.HeaderContainer>
       <S.LinkContainer>
-        <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link>
+        {/* <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link> */}
         <S.Link to={STATIC_ROUTES.TrifectaHome}>Trifecta Home</S.Link>
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
