@@ -39,7 +39,7 @@ export const LeagueCalendar = ({ events }) => {
         defaultDate={new Date(firstYear, firstMonth, 1)}
         max={new Date(firstYear, firstMonth, getDaysInMonth(now))}
         views={["month"]}
-        style={{ height: 600, width: "65%", paddingRight: "1rem" }}
+        style={{ height: 525, width: "50%", paddingRight: "0.5rem" }}
         tooltipAccessor="description"
       />
       <S.UpcomingEventsMainContainer>

@@ -8,7 +8,7 @@ import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
 import { DynastyStandingsColumns } from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
-import { ERA_1, HIGH_TO_LOW } from "Constants";
+import { ERA_0, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
 
@@ -41,7 +41,7 @@ export const DynastySportStandings = ({ sport }) => {
         const leagueId = leagueIdMappings[sportYear];
         const gmNamesIdsCollection = await returnMongoCollection(
           "gmNamesIds",
-          ERA_1
+          ERA_0
         );
         const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
         const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};

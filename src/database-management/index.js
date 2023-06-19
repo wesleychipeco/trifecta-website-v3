@@ -1,4 +1,4 @@
-import { ERA_1, GLOBAL_VARIABLES } from "Constants";
+import { ERA_0, GLOBAL_VARIABLES } from "Constants";
 import * as Realm from "realm-web";
 
 const REALM_APP_ID = "trifectafantasyleague-xqqjr";
@@ -10,7 +10,7 @@ export const returnMongoCollection = async (
 ) => {
   let dbName;
   switch (dynastyEra) {
-    case ERA_1:
+    case ERA_0:
       dbName = "dynasty1";
       break;
     default:

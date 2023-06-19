@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
+import {
+  BACKGROUND_COLOR,
+  FONT_COLOR,
+  HEADER_FONT_FAMILY,
+  PRIMARY_GREEN,
+} from "./variables";
 
 ////////// CLOSED NAVBAR //////////
 
@@ -48,6 +53,25 @@ export const OpenNavbarContainer = styled.div`
 export const Logo = styled.img`
   width: 2.5rem;
   height: 2.5rem;
+`;
+
+export const Tooltip = styled.span`
+  visibility: hidden;
+  background-color: ${BACKGROUND_COLOR};
+  position: absolute;
+  top: 3.6rem;
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.1rem;
+  opacity: 0;
+  transition: opacity 0.75s;
+`;
+
+export const TooltipCard = styled.div`
+  & ${Logo}:hover + ${Tooltip} {
+    visibility: visible;
+    opacity 1;
+  }
 `;
 
 export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
@@ -99,7 +123,7 @@ export const Link = styled(NavLink)`
     font-weight: 700;
   }
   &:hover {
-    opacity: 0.6;
+    opacity: ${(props) => (props.noHoverFade ? 1 : 0.6)};
   }
 `;
 
