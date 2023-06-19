@@ -118,7 +118,14 @@ export const OpenNavbar = () => {
   return (
     <S.OpenNavbarContainer>
       <S.HeaderContainer>
-        <S.Logo src={TrifectaLogo} alt="logo" />
+        <S.TooltipCard>
+          <S.Link to={STATIC_ROUTES.Home} noHoverFade>
+            <T.FlexColumn>
+              <S.Logo src={TrifectaLogo} alt="logo" />
+              <S.Tooltip>Home</S.Tooltip>
+            </T.FlexColumn>
+          </S.Link>
+        </S.TooltipCard>
         <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
       </S.HeaderContainer>
       <S.LinkContainer>
