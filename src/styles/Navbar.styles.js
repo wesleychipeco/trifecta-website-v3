@@ -20,11 +20,19 @@ export const ClosedNavbarContainer = styled.div`
   background-color: ${PRIMARY_GREEN};
   width: ${CLOSED_NAVBAR_WIDTH};
   height: ${CLOSED_NAVBAR_WIDTH};
+  display: flex;
+  justify-content: center;
 
   &:hover {
-    opacity: 0.6;
+    background-color: ${PRIMARY_GREEN}99;
     cursor: pointer;
   }
+`;
+
+export const TrifectaSymbol = styled.img`
+  width: 4rem;
+  height: 4rem;
+  padding-top: 0.2rem;
 `;
 
 export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
@@ -147,6 +155,11 @@ export const LinkStyle = styled.a`
 export const IndentedLink = styled(Link)`
   font-size: 1.75rem;
   padding-left: 1.5rem;
+`;
+
+export const BottomLink = styled(Link)`
+  position: absolute;
+  bottom: 0;
 `;
 
 export const CurrentStandings = styled.p`

@@ -25,7 +25,7 @@ export const SignInBannerContainer = styled.div`
   align-items: center;
 
   &:hover {
-    opacity: 0.5;
+    background-color: ${PRIMARY_GREEN}99;
     cursor: pointer;
   }
 `;

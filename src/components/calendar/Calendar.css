@@ -147,7 +147,7 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-today {
-  background-color: #306f2c;
+  background-color: #ec5800;
 }
 
 .rbc-toolbar {
@@ -176,14 +176,14 @@ button.rbc-input::-moz-focus-inner {
   font-weight: 700;
 }
 .rbc-toolbar button {
-  color: white;
+  color: black;
   display: inline-block;
   margin: 0;
   text-align: center;
   vertical-align: middle;
   background: none;
   background-image: none;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   line-height: normal;
@@ -196,30 +196,30 @@ button.rbc-input::-moz-focus-inner {
   background-image: none;
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  background-color: #306f2c;
-  border-color: #adadad;
+  background-color: #ec580099;
+  border: 1px solid black;
   font-weight: 700;
-  border: 2px solid #ccc;
 }
 .rbc-toolbar button:active:hover,
 .rbc-toolbar button:active:focus,
 .rbc-toolbar button.rbc-active:hover,
 .rbc-toolbar button.rbc-active:focus {
-  border-color: #adadad;
+  border-color: black;
 }
 .rbc-toolbar button:focus {
-  border-color: #adadad;
+  border-color: black;
 }
 .rbc-toolbar button:hover {
-  color: #373a3c;
-  background-color: #e6e6e6;
-  border-color: #adadad;
+  color: black;
+  background-color: #ec580099;
+  border: 1px solid black;
+  font-weight: 700;
 }
 
 .rbc-btn-group {
   display: inline-block;
   white-space: nowrap;
-  background-color: #306f2c;
+  background-color: #ec5800;
   size: "2rem";
 }
 .rbc-btn-group > button:first-child:not(:last-child) {
