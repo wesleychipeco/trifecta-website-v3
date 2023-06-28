@@ -43,7 +43,7 @@ export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
 `;
 
 ////////// OPEN //////////
-export const OPEN_NAVBAR_WIDTH = "17rem";
+export const OPEN_NAVBAR_WIDTH = "22rem";
 const OPEN_LEFT_PADDING = "1.5rem";
 const NAVBAR_VERTICAL_SPACING = "1.5rem";
 
@@ -55,7 +55,7 @@ export const OpenNavbarContainer = styled.div`
   background-color: ${PRIMARY_ORANGE};
   width: ${OPEN_NAVBAR_WIDTH};
   height: 100%;
-  border-radius: 0 1.5rem 1.5rem 1.5rem;
+  border-radius: 0 1.5rem 1.5rem 0;
 `;
 
 export const Logo = styled.img`
@@ -63,30 +63,27 @@ export const Logo = styled.img`
   height: 2.5rem;
 `;
 
-export const Tooltip = styled.span`
-  visibility: hidden;
-  background-color: ${BACKGROUND_COLOR};
-  position: absolute;
-  top: 3.6rem;
-  font-size: 1.5rem;
-  border-radius: 0.5rem;
-  padding: 0.1rem;
-  opacity: 0;
-  transition: opacity 0.75s;
+export const HorizontalLogo = styled.img`
+  width: 100%;
+  height: 100%;
 `;
 
-export const TooltipCard = styled.div`
-  & ${Logo}:hover + ${Tooltip} {
-    visibility: visible;
-    opacity 1;
-  }
+export const SecondRowDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 0rem;
+  padding-top: 0rem;
 `;
 
 export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
   width: 2rem;
   height: 2rem;
   font-size: 2rem;
-  padding: 0.5rem;
+  padding: 0 0.5rem 0 0.5rem;
+  align-self: flex-end;
 
   &:hover {
     opacity: 0.5;
@@ -96,10 +93,10 @@ export const CloseIcon = styled(FontAwesomeIcon).attrs({})`
 
 export const HeaderContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  padding: 1rem 1rem ${NAVBAR_VERTICAL_SPACING} ${OPEN_LEFT_PADDING};
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  padding: 0 0.75rem 0 0.75rem;
 `;
 
 export const LinkContainer = styled.div`
@@ -107,15 +104,24 @@ export const LinkContainer = styled.div`
 `;
 
 export const WelcomeText = styled.p`
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   text-decoration: none;
   font-style: italic;
   font-family: ${HEADER_FONT_FAMILY};
   color: ${FONT_COLOR};
-  backgound-color: red;
+  font-weight: 500;
   padding: 0;
   margin: 0;
   text-align: center;
+`;
+
+export const LogoLink = styled(NavLink)`
+  margin 0;
+  padding 0;
+
+  &:hover {
+    opacity: 0.6;
+  }
 `;
 
 export const Link = styled(NavLink)`
@@ -131,7 +137,7 @@ export const Link = styled(NavLink)`
     font-weight: 700;
   }
   &:hover {
-    opacity: ${(props) => (props.noHoverFade ? 1 : 0.6)};
+    opacity: 0.6;
   }
 `;
 
@@ -154,7 +160,7 @@ export const LinkStyle = styled.a`
 
 export const IndentedLink = styled(Link)`
   font-size: 1.75rem;
-  padding-left: 1.5rem;
+  padding-left: 1.75rem;
 `;
 
 export const BottomLink = styled(Link)`
