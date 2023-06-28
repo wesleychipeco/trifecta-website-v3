@@ -6,5 +6,5 @@ export const HEADER_FONT_FAMILY = "'Rubik', sans-serif";
 export const FONT_COLOR = "#000000";
 // export const FONT_COLOR = "#f5fffa";
 
-export const PRIMARY_GREEN = "#EC5800";
-// export const PRIMARY_GREEN = "#306f2c";
+export const PRIMARY_ORANGE = "#EC5800";
+// export const PRIMARY_ORANGE = "#306f2c";

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { TableHeaderCell, TableBodyCell } from "styles/Table.styles";
-import { FONT_FAMILY, PRIMARY_GREEN } from "styles/variables";
+import { FONT_FAMILY, PRIMARY_ORANGE } from "styles/variables";
 
 export const Container = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ export const TextInput = styled.input`
   border: 3px solid black;
 
   &:focus {
-    border: 3px solid ${PRIMARY_GREEN};
+    border: 3px solid ${PRIMARY_ORANGE};
   }
 `;
 

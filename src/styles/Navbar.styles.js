@@ -5,7 +5,7 @@ import {
   BACKGROUND_COLOR,
   FONT_COLOR,
   HEADER_FONT_FAMILY,
-  PRIMARY_GREEN,
+  PRIMARY_ORANGE,
 } from "./variables";
 
 ////////// CLOSED NAVBAR //////////
@@ -17,14 +17,14 @@ export const ClosedNavbarContainer = styled.div`
   left: 0.75rem;
   top: 0.75rem;
   border-radius: 50%;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   width: ${CLOSED_NAVBAR_WIDTH};
   height: ${CLOSED_NAVBAR_WIDTH};
   display: flex;
   justify-content: center;
 
   &:hover {
-    background-color: ${PRIMARY_GREEN}99;
+    background-color: ${PRIMARY_ORANGE}99;
     cursor: pointer;
   }
 `;
@@ -52,7 +52,7 @@ export const OpenNavbarContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   width: ${OPEN_NAVBAR_WIDTH};
   height: 100%;
   border-radius: 0 1.5rem 1.5rem 1.5rem;

@@ -3,7 +3,7 @@ import {
   FONT_COLOR,
   FONT_FAMILY,
   HEADER_FONT_FAMILY,
-  PRIMARY_GREEN,
+  PRIMARY_ORANGE,
 } from "./variables";
 
 export const TradeAssetHomeContainer = styled.div`
@@ -62,7 +62,7 @@ export const SaveButton = styled.button`
   padding: 0;
   width: 6rem;
   height: 2.5rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   border-radius: 3.5rem;
   border: 0;
 
@@ -130,7 +130,7 @@ export const ManualInput = styled.input`
   border: 3px solid black;
 
   &:focus {
-    border: 3px solid ${PRIMARY_GREEN};
+    border: 3px solid ${PRIMARY_ORANGE};
   }
 `;
 
@@ -139,7 +139,7 @@ export const AddManualInputButton = styled.button`
   padding: 0;
   width: 4.5rem;
   height: 2.5rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   border-radius: 3.5rem;
   border: 0;
 

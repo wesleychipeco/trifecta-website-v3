@@ -10,12 +10,9 @@ import "./transition.styles.css";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { STATIC_ROUTES } from "Routes";
-import { Button } from "components/button/Button";
 import { ERA_0 } from "Constants";
 
-import TrifectaBannerWhite from "resources/images/White_Horizontal_Trifecta_Trns.png";
 import TrifectaBannerGoldTransparent from "resources/images/Goldtrim_Horizontal_Trifecta_Trns.png";
-import TrifectaBannerGold from "resources/images/Goldtrim_Horizontal_Trifecta.jpg";
 
 export const HomeScreen = () => {
   const [show, setShow] = useState(false);

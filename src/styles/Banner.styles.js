@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { PRIMARY_GREEN } from "./variables";
+import { PRIMARY_ORANGE } from "./variables";
 
 export const EraBannerContainer = styled.div`
   left: 7rem;
   top: 1.7rem;
   position: fixed;
   height: 3rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   border-radius: 5rem;
   display: flex;
   justify-content: center;
@@ -18,14 +18,14 @@ export const SignInBannerContainer = styled.div`
   top: 1.7rem;
   position: fixed;
   height: 3rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   border-radius: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &:hover {
-    background-color: ${PRIMARY_GREEN}99;
+    background-color: ${PRIMARY_ORANGE}99;
     cursor: pointer;
   }
 `;
