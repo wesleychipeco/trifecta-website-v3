@@ -68,6 +68,41 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
 - Each trifecta season, create new gmail account `trifectacommissioner<year>@gmail.com`
 - Sign up for free AWS tier
 - In November, renew trifectafantasyleague domain
+- Create SSL certificate in Amazon Certificate Manager (ACM)
+  - In ACM, request a certificate for \*.trifectafantasyleague.com
+  - Login to DNS validation (NameCheap) and add CNAME host and target from ACM in order to validate
+- Create Load Balancer Security Group
+  - Allow inbound traffic rules
+    - HTTP on Port 80 from all sources (0.0.0.0/0)
+    - HTTPS on Port 443 from all sources (0.0.0.0/0)
+  - Modify outbound traffic rule
+    - All traffic, all protocol, all port range, destination is EC2 Security Group (go back and fill in after creating EC2 security group)
+- Create EC2 Security Group
+  - Allow inbound traffic rules
+    - SSH on Port 22
+    - Custom TCP on Port 3000 from all traffic
+    - Custom TCP on Port 3000 from Load Balancer Security Group 
+- Create Launch Template
+  - Specify AMI, instance type, create new key pair, desired capacity
+  - Select EC2 security group to use
+  - Under "Advanced Details" copy and paste in `user-data.sh` bash script in this repository
+- Create Auto Scaling Group
+  - After creating Launch Template, under "Actions" button, "Create Auto Scaling group"
+  - Choose availability zones, subnets, and desired capacities
+- Launch Instances from Template (from EC2 instance page)
+- Check that webserver is up and reachable from "Public IPv4 DNS" port 3000
+- Create Application Load Balancer
+  - Internet-facing
+  - ipv4
+  - Webserver Target Group receiving HTTP traffic on port 3000
+  - 2 Listeners: 1) HTTP on Port 80 and 2) HTTPS on Port 443 (SSL termination with ACM cert)
+  - Make available in all AZs
+  - Select Load Balancer security group
+  - Create Target Group for routing traffic target
+    - Register Target EC2 instance to the Target Group
+- Register Load Balancer domain to DNS targets (NameCheap)
+- Check that website is reachable via trifectafantasyleague.com domain
+-------------- OLD INSTRUCTIONS ---------------
 - Create SSL termination in Amazon Certificate Manager (ACM)
   - Request a certificate for: \*.trifectafantasyleague.com
   - Use DNS validation to validate ownership of domain (login via NameCheap)
