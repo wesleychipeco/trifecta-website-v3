@@ -4,12 +4,10 @@ import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
-import * as T from "styles/shared";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_0 } from "Constants";
 
-import TrifectaLogo from "resources/images/trifectalogo.png";
-import TrifectaLogoHorizontalBlack from "resources/images/Shaded_Horizontal_Trifecta_Trns_Crop.png";
+import TrifectaLogoHorizontalBlack from "resources/images/ShadedHorizontalLogo.png";
 import { sportYearToSportAndYear } from "utils/years";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -66,10 +64,6 @@ export const OpenNavbar = () => {
           </S.LogoLink>
         </S.HeaderContainer>
         <S.LinkContainer>
-          {/* <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link> */}
-          {/* <S.Link to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}`}>
-            Dynasty Home
-          </S.Link> */}
           <S.SecondRowDiv>
             <S.WelcomeText>{`Welcome, ${
               user?.name.split(" ")?.[0] ?? "Guest"
@@ -127,8 +121,6 @@ export const OpenNavbar = () => {
           }!`}</S.WelcomeText>
           <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
         </S.SecondRowDiv>
-        {/* <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link> */}
-        {/* <S.Link to={STATIC_ROUTES.TrifectaHome}>Trifecta Home</S.Link> */}
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>

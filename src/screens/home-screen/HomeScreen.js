@@ -1,5 +1,4 @@
 import * as S from "styles/HomeScreen.styles";
-import * as T from "styles/shared";
 
 import BaseballPhoto from "resources/images/Baseball.jpg";
 import BasketballPhoto from "resources/images/Basketball.jpg";
@@ -12,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { STATIC_ROUTES } from "Routes";
 import { ERA_0 } from "Constants";
 
-import TrifectaBannerGoldTransparent from "resources/images/Goldtrim_Horizontal_Trifecta_Trns.png";
+import TrifectaBannerGoldTransparent from "resources/images/GoldHorizontalLogo.png";
 
 export const HomeScreen = () => {
   const [show, setShow] = useState(false);

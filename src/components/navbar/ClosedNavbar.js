@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import * as S from "styles/Navbar.styles";
 import { openNavbar } from "store/navbarSlice";
 import { useLocation } from "react-router-dom";
-import TrifectaLogoBlack from "resources/images/Shaded_Symbol_Trifecta_Trns_Crop.png";
+import TrifectaLogoBlack from "resources/images/ShadedSymbolLogo.png";
 
 export const ClosedNavbar = () => {
   const dispatch = useDispatch();
