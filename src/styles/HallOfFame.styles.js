@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { FONT_COLOR, HEADER_FONT_FAMILY } from "./variables";
 
 const CONTENT_WIDTH = "75%";
+const BOX_SHADOW = "0 0 0.1rem 0.3rem rgba(0, 0, 0, 0.9)";
 
 export const FlexColumnCenterContainer = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ export const ChampionsContainer = styled.div`
   align-items: stretch;
   width: ${CONTENT_WIDTH};
   border-radius: 1rem;
-  box-shadow: 0 0 0.1rem 0.3rem rgba(169, 169, 169, 0.5);
+  box-shadow: ${BOX_SHADOW};
   padding: 1rem;
   margin-bottom: 3rem;
 `;
@@ -59,7 +60,7 @@ export const HallOfFameContainer = styled.div`
   width: ${CONTENT_WIDTH};
   min-width: 50%;
   border-radius: 1rem;
-  box-shadow: 0 0 0.1rem 0.3rem rgba(169, 169, 169, 0.5);
+  box-shadow: ${BOX_SHADOW};
   padding: 1rem;
   margin-bottom: 3rem;
   flex-wrap: wrap;
@@ -101,7 +102,7 @@ export const OwnerProfilesContainer = styled.div`
   width: ${CONTENT_WIDTH};
   min-width: 50%;
   border-radius: 1rem;
-  box-shadow: 0 0 0.1rem 0.3rem rgba(169, 169, 169, 0.5);
+  box-shadow: ${BOX_SHADOW};
   padding: 1rem;
   margin-bottom: 3rem;
 `;

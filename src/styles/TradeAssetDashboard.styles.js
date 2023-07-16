@@ -97,7 +97,7 @@ export const SaveMessageText = styled.p`
 export const TradeBlockSection = styled.div`
   display: flex;
   flex-direction: column;
-  border: 0.25rem solid rgba(169, 169, 169, 0.5);
+  border: 0.25rem solid black;
   border-radius: 1rem;
   padding: 1rem;
   width: 26%;
@@ -164,7 +164,7 @@ export const SportContainer = styled.div`
   flex-direction: column;
   align-self: flex-start;
   padding: 1rem;
-  border: 0.25rem solid rgba(169, 169, 169, 0.5);
+  border: 0.25rem solid black;
   border-radius: 1rem;
 `;
 
