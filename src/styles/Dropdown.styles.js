@@ -2,14 +2,14 @@ import {
   BACKGROUND_COLOR,
   FONT_COLOR,
   FONT_FAMILY,
-  PRIMARY_GREEN,
+  PRIMARY_ORANGE,
 } from "./variables";
 
 export const MatchupsDropdownCustomStyles = {
   // each option in dropdown
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: PRIMARY_GREEN,
+    backgroundColor: PRIMARY_ORANGE,
     color: FONT_COLOR,
     fontWeight: state.isSelected ? 800 : "normal",
     margin: 0,
@@ -21,7 +21,7 @@ export const MatchupsDropdownCustomStyles = {
   // overall
   control: (provided) => ({
     ...provided,
-    backgroundColor: PRIMARY_GREEN,
+    backgroundColor: PRIMARY_ORANGE,
     borderRadius: "0.5rem",
     border: 0,
     borderColor: BACKGROUND_COLOR,
@@ -68,7 +68,7 @@ export const StandingsDropdownCustomStyles = {
   // each option in dropdown
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: PRIMARY_GREEN,
+    backgroundColor: PRIMARY_ORANGE,
     color: FONT_COLOR,
     fontWeight: state.isSelected ? 800 : "normal",
     margin: 0,
@@ -82,7 +82,7 @@ export const StandingsDropdownCustomStyles = {
   // overall
   control: (provided) => ({
     ...provided,
-    backgroundColor: PRIMARY_GREEN,
+    backgroundColor: PRIMARY_ORANGE,
     borderRadius: "0.5rem",
     border: 0,
     borderColor: BACKGROUND_COLOR,
@@ -148,7 +148,7 @@ export const TradeBlockDropdownCustomStyles = {
     width: "8rem",
     "&:hover": {
       cursor: "pointer",
-      backgroundColor: PRIMARY_GREEN,
+      backgroundColor: PRIMARY_ORANGE,
     },
     fontSize: "1.15rem",
   }),
@@ -178,7 +178,7 @@ export const TradeBlockDropdownCustomStyles = {
   // arrow icon
   dropdownIndicator: (provided) => ({
     ...provided,
-    backgroundColor: PRIMARY_GREEN,
+    backgroundColor: PRIMARY_ORANGE,
     borderRadius: "100%",
     padding: "0.15rem",
     color: FONT_COLOR,

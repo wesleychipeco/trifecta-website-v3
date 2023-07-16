@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
+import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_ORANGE } from "./variables";
 
 export const Container = styled.div`
   border-radius: 3.5rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   opacity: ${(props) => (props.disabled ? 0.3 : 1)};
 
   &:hover {

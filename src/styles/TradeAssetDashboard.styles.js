@@ -3,7 +3,7 @@ import {
   FONT_COLOR,
   FONT_FAMILY,
   HEADER_FONT_FAMILY,
-  PRIMARY_GREEN,
+  PRIMARY_ORANGE,
 } from "./variables";
 
 export const TradeAssetHomeContainer = styled.div`
@@ -62,7 +62,7 @@ export const SaveButton = styled.button`
   padding: 0;
   width: 6rem;
   height: 2.5rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   border-radius: 3.5rem;
   border: 0;
 
@@ -97,7 +97,7 @@ export const SaveMessageText = styled.p`
 export const TradeBlockSection = styled.div`
   display: flex;
   flex-direction: column;
-  border: 0.25rem solid rgba(169, 169, 169, 0.5);
+  border: 0.25rem solid black;
   border-radius: 1rem;
   padding: 1rem;
   width: 26%;
@@ -130,7 +130,7 @@ export const ManualInput = styled.input`
   border: 3px solid black;
 
   &:focus {
-    border: 3px solid ${PRIMARY_GREEN};
+    border: 3px solid ${PRIMARY_ORANGE};
   }
 `;
 
@@ -139,7 +139,7 @@ export const AddManualInputButton = styled.button`
   padding: 0;
   width: 4.5rem;
   height: 2.5rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   border-radius: 3.5rem;
   border: 0;
 
@@ -164,7 +164,7 @@ export const SportContainer = styled.div`
   flex-direction: column;
   align-self: flex-start;
   padding: 1rem;
-  border: 0.25rem solid rgba(169, 169, 169, 0.5);
+  border: 0.25rem solid black;
   border-radius: 1rem;
 `;
 

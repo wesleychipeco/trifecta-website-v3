@@ -4,11 +4,10 @@ import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
-import * as T from "styles/shared";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_0 } from "Constants";
 
-import TrifectaLogo from "resources/images/trifectalogo.png";
+import TrifectaLogoHorizontalBlack from "resources/images/ShadedHorizontalLogo.png";
 import { sportYearToSportAndYear } from "utils/years";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -53,34 +52,24 @@ export const OpenNavbar = () => {
     toggleStandingsExpansion(!isStandingsExpanded);
   }, [toggleStandingsExpansion, isStandingsExpanded]);
 
-  const { isAuthenticated, user } = useAuth0();
+  const { user } = useAuth0();
 
   // dynasty navbar
   if (location.pathname.startsWith("/dynasty")) {
     return (
       <S.OpenNavbarContainer>
         <S.HeaderContainer>
-          <S.TooltipCard>
-            <S.Link to={STATIC_ROUTES.Home} noHoverFade>
-              <T.FlexColumn>
-                <S.Logo src={TrifectaLogo} alt="logo" />
-                <S.Tooltip>Home</S.Tooltip>
-              </T.FlexColumn>
-            </S.Link>
-          </S.TooltipCard>
-
-          {isAuthenticated && (
-            <S.WelcomeText>{`Welcome, ${
-              user.name.split(" ")?.[0] ?? ""
-            }!`}</S.WelcomeText>
-          )}
-          <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
+          <S.LogoLink to={STATIC_ROUTES.Home}>
+            <S.HorizontalLogo src={TrifectaLogoHorizontalBlack} alt="logo" />
+          </S.LogoLink>
         </S.HeaderContainer>
         <S.LinkContainer>
-          {/* <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link> */}
-          <S.Link to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}`}>
-            Dynasty Home
-          </S.Link>
+          <S.SecondRowDiv>
+            <S.WelcomeText>{`Welcome, ${
+              user?.name.split(" ")?.[0] ?? "Guest"
+            }!`}</S.WelcomeText>
+            <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
+          </S.SecondRowDiv>
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}/${STATIC_ROUTES.DynastyStandings}`}
           >
@@ -93,10 +82,10 @@ export const OpenNavbar = () => {
             inSeasonLeagues.map((inSeasonLeague) => {
               const { sport, year } = sportYearToSportAndYear(inSeasonLeague);
               return (
-                <S.Link
+                <S.IndentedLink
                   key={inSeasonLeague}
                   to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}/standings/${sport}/${year}`}
-                >{`${year} ${capitalize(sport)} Standings`}</S.Link>
+                >{`${year} ${capitalize(sport)} Standings`}</S.IndentedLink>
               );
             })}
           <S.Link
@@ -109,6 +98,9 @@ export const OpenNavbar = () => {
           >
             Trade History
           </S.Link>
+          <S.BottomLink to={`${STATIC_ROUTES.TrifectaHome}`}>
+            OG Trifecta
+          </S.BottomLink>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
@@ -118,19 +110,17 @@ export const OpenNavbar = () => {
   return (
     <S.OpenNavbarContainer>
       <S.HeaderContainer>
-        <S.TooltipCard>
-          <S.Link to={STATIC_ROUTES.Home} noHoverFade>
-            <T.FlexColumn>
-              <S.Logo src={TrifectaLogo} alt="logo" />
-              <S.Tooltip>Home</S.Tooltip>
-            </T.FlexColumn>
-          </S.Link>
-        </S.TooltipCard>
-        <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
+        <S.LogoLink to={STATIC_ROUTES.Home}>
+          <S.HorizontalLogo src={TrifectaLogoHorizontalBlack} alt="logo" />
+        </S.LogoLink>
       </S.HeaderContainer>
       <S.LinkContainer>
-        {/* <S.Link to={STATIC_ROUTES.Home}>Website Home</S.Link> */}
-        <S.Link to={STATIC_ROUTES.TrifectaHome}>Trifecta Home</S.Link>
+        <S.SecondRowDiv>
+          <S.WelcomeText>{`Welcome, ${
+            user?.name.split(" ")?.[0] ?? "Guest"
+          }!`}</S.WelcomeText>
+          <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
+        </S.SecondRowDiv>
         <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>
@@ -187,6 +177,7 @@ export const OpenNavbar = () => {
         >
           League Manual
         </S.LinkStyle>
+        <S.BottomLink to={`/`}>3x5 Dynasty</S.BottomLink>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
   );

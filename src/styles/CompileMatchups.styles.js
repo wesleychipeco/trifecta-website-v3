@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_GREEN } from "./variables";
+import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_ORANGE } from "./variables";
 
 export const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   border-radius: 3.5rem;
-  background-color: ${PRIMARY_GREEN};
+  background-color: ${PRIMARY_ORANGE};
   width: 20rem;
 
   &:hover {
