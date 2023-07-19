@@ -4,7 +4,7 @@ import {
   FONT_FAMILY,
   HEADER_FONT_FAMILY,
   PRIMARY_ORANGE,
-} from "./variables";
+} from "./global";
 
 export const TradeAssetHomeContainer = styled.div`
   width: 90%;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { TableHeaderCell, TableBodyCell } from "styles/Table.styles";
-import { FONT_FAMILY, PRIMARY_ORANGE } from "styles/variables";
+import { FONT_FAMILY, PRIMARY_ORANGE } from "styles/global";
 
 export const Container = styled.div`
   display: flex;

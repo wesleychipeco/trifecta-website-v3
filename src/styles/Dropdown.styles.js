@@ -3,7 +3,7 @@ import {
   FONT_COLOR,
   FONT_FAMILY,
   PRIMARY_ORANGE,
-} from "./variables";
+} from "./global";
 
 export const MatchupsDropdownCustomStyles = {
   // each option in dropdown

@@ -6,7 +6,7 @@ import {
   FONT_COLOR,
   HEADER_FONT_FAMILY,
   PRIMARY_ORANGE,
-} from "./variables";
+} from "./global";
 
 ////////// CLOSED NAVBAR //////////
 

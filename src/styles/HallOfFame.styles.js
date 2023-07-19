@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { FONT_COLOR, HEADER_FONT_FAMILY } from "./variables";
+import { FONT_COLOR, HEADER_FONT_FAMILY } from "./global";
 
 const CONTENT_WIDTH = "75%";
 const BOX_SHADOW = "0 0 0.1rem 0.3rem rgba(0, 0, 0, 0.9)";

@@ -1,11 +1,14 @@
 import { createGlobalStyle } from "styled-components";
 
-import {
-  BACKGROUND_COLOR,
-  FONT_COLOR,
-  FONT_FAMILY,
-  HEADER_FONT_FAMILY,
-} from "./variables";
+export const BACKGROUND_COLOR = "#E6BE8A";
+
+export const FONT_FAMILY = "'Roboto', sans-serif";
+export const HEADER_FONT_FAMILY = "'Rubik', sans-serif";
+export const FONT_COLOR = "#000000";
+
+export const PRIMARY_ORANGE = "#EC5800";
+
+export const MOBILE_PIXEL_WIDTH = "400px";
 
 export default createGlobalStyle`
     html, body {

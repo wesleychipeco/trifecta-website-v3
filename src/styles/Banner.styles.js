@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PRIMARY_ORANGE } from "./variables";
+import { PRIMARY_ORANGE } from "./global";
 
 export const EraBannerContainer = styled.div`
   left: 7rem;
