@@ -1,8 +1,18 @@
 import styled from "styled-components";
+import { MOBILE_MAX_WIDTH } from "./global";
 
 export const OuterContainer = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    flex-direction: column;
+  }
+`;
+
+export const OuterCalendarContainer = styled.div`
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 `;
 
 export const CalendarContainer = styled.div`
@@ -13,13 +23,12 @@ export const CalendarContainer = styled.div`
 export const UpcomingEventsTitle = styled.h2`
   margin: 0 0 1rem 0;
   padding: 0;
-  font-size: 2.25rem;
+  font-size: 2rem;
   align-self: center;
 `;
 
 export const DateContainer = styled.div`
   width: 65%;
-  padding-left: 1rem;
 `;
 
 export const EventContainer = styled.div`

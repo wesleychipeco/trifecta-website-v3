@@ -25,11 +25,11 @@ export const HomeScreen = () => {
       setShowDelay(true);
     }, 500);
 
-    // if (!location.pathname.startsWith("/trifecta")) {
-    //   setTimeout(() => {
-    //     navigate(`${STATIC_ROUTES.DynastyHome}/${ERA_0}`);
-    //   }, 4000);
-    // }
+    if (!location.pathname.startsWith("/trifecta")) {
+      setTimeout(() => {
+        navigate(`${STATIC_ROUTES.DynastyHome}/${ERA_0}`);
+      }, 4000);
+    }
   }, []);
 
   return (

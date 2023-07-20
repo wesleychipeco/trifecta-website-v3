@@ -5,12 +5,14 @@ import {
   BACKGROUND_COLOR,
   FONT_COLOR,
   HEADER_FONT_FAMILY,
+  MOBILE_MAX_WIDTH,
   PRIMARY_ORANGE,
 } from "./global";
 
 ////////// CLOSED NAVBAR //////////
 
 export const CLOSED_NAVBAR_WIDTH = "5rem";
+export const CLOSED_NAVBAR_MOBILE_WIDTH = "3.5rem";
 
 export const ClosedNavbarContainer = styled.div`
   position: fixed;
@@ -27,12 +29,25 @@ export const ClosedNavbarContainer = styled.div`
     background-color: ${PRIMARY_ORANGE}99;
     cursor: pointer;
   }
+
+  @media ${MOBILE_MAX_WIDTH} {
+    left: 0.5rem;
+    top: 0.5rem;
+
+    width: ${CLOSED_NAVBAR_MOBILE_WIDTH};
+    height: ${CLOSED_NAVBAR_MOBILE_WIDTH};
+  }
 `;
 
 export const TrifectaSymbol = styled.img`
   width: 4rem;
   height: 4rem;
   padding-top: 0.2rem;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
 `;
 
 export const ClosedBars = styled(FontAwesomeIcon).attrs({})`

@@ -12,6 +12,7 @@ export const FlexColumnCenterContainer = styled.div`
 
 export const Title = styled.h1`
   font-size: 3rem;
+  margin: 1rem 0 0.5rem 0;
 `;
 
 export const TableTitle = styled.h2`

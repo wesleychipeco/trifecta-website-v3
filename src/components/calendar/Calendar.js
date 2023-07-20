@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import { useMediaQuery } from "react-responsive";
 import {
   format,
   parse,
@@ -12,6 +13,7 @@ import {
 } from "date-fns";
 import "./Calendar.css";
 import * as S from "styles/Calendar.styles";
+import { MOBILE_MAX_WIDTH } from "styles/global";
 
 const locales = {
   "en-US": require("date-fns"),
@@ -25,6 +27,7 @@ const localizer = dateFnsLocalizer({
 });
 
 export const LeagueCalendar = ({ events }) => {
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const now = new Date();
   const firstYear = getYear(now);
   const firstMonth = getMonth(now);
@@ -33,15 +36,19 @@ export const LeagueCalendar = ({ events }) => {
   const next8UpcomingEvents = upcomingEvents.slice(0, 8);
   return (
     <S.OuterContainer>
-      <Calendar
-        events={events}
-        localizer={localizer}
-        defaultDate={new Date(firstYear, firstMonth, 1)}
-        max={new Date(firstYear, firstMonth, getDaysInMonth(now))}
-        views={["month"]}
-        style={{ height: 525, width: "50%", paddingRight: "0.5rem" }}
-        tooltipAccessor="description"
-      />
+      {!isMobile && (
+        <S.OuterCalendarContainer>
+          <Calendar
+            events={events}
+            localizer={localizer}
+            defaultDate={new Date(firstYear, firstMonth, 1)}
+            max={new Date(firstYear, firstMonth, getDaysInMonth(now))}
+            views={["month"]}
+            style={{ height: 525 }}
+            tooltipAccessor="description"
+          />
+        </S.OuterCalendarContainer>
+      )}
       <S.UpcomingEventsMainContainer>
         <S.UpcomingEventsOuterContainer>
           <S.UpcomingEventsTitle>Upcoming League Events</S.UpcomingEventsTitle>
