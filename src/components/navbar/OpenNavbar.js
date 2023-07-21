@@ -98,9 +98,7 @@ export const OpenNavbar = () => {
           >
             Trade History
           </S.Link>
-          <S.BottomLink to={`${STATIC_ROUTES.TrifectaHome}`}>
-            OG Trifecta
-          </S.BottomLink>
+          <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );

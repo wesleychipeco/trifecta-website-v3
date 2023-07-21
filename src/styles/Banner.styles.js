@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PRIMARY_ORANGE } from "./global";
+import { MOBILE_MAX_WIDTH, PRIMARY_ORANGE } from "./global";
 
 export const EraBannerContainer = styled.div`
   left: 7rem;
@@ -28,6 +28,13 @@ export const SignInBannerContainer = styled.div`
     background-color: ${PRIMARY_ORANGE}99;
     cursor: pointer;
   }
+
+  @media ${MOBILE_MAX_WIDTH} {
+    right: 0.25rem;
+    top: 0.5rem;
+    height: 2rem;
+    width: 5rem;
+  }
 `;
 
 export const BannerText = styled.h5`
@@ -36,4 +43,9 @@ export const BannerText = styled.h5`
   margin: 0;
   text-align: center;
   padding: 2rem 2.5rem 2rem 2.5rem;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1.25rem;
+    padding: 0;
+  }
 `;
