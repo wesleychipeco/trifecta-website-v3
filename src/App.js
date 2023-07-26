@@ -90,6 +90,10 @@ export const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // TODO:
+  // Dynasty Trade Assets Home Page and Dashboard
+  // Trifecta Hall of Fame
+  // Dynasty Home Page
   return (
     <S.App>
       <GlobalStyle />

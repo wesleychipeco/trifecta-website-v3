@@ -30,6 +30,7 @@ export const SignInBannerContainer = styled.div`
   }
 
   @media ${MOBILE_MAX_WIDTH} {
+    position: absolute;
     right: 0.25rem;
     top: 0.5rem;
     height: 2rem;

@@ -15,7 +15,6 @@ export const CLOSED_NAVBAR_WIDTH = "5rem";
 export const CLOSED_NAVBAR_MOBILE_WIDTH = "3.5rem";
 
 export const ClosedNavbarContainer = styled.div`
-  z-index: 999;
   position: fixed;
   left: 0.75rem;
   top: 0.75rem;
@@ -32,6 +31,7 @@ export const ClosedNavbarContainer = styled.div`
   }
 
   @media ${MOBILE_MAX_WIDTH} {
+    position: absolute;
     left: 0.5rem;
     top: 0.5rem;
 
