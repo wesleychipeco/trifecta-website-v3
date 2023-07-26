@@ -11,6 +11,7 @@ export const ScrollTable = styled.div`
 `;
 
 export const Table = styled.table`
+  border-radius: 1rem;
   border-spacing: 0 0.75rem;
   padding: 0;
   margin: 0 0.5rem 0 0rem;
