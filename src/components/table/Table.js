@@ -114,7 +114,13 @@ export const Table = ({
                     [points, win] = cell.value.split("###");
                   }
                   return (
-                    <TableBodyCellComponent {...cell.getCellProps()} win={win}>
+                    <TableBodyCellComponent
+                      {...cell.getCellProps()}
+                      win={win}
+                      top3Styling={top3Styling}
+                      top3Array={top3Array}
+                      index={row.index}
+                    >
                       {cell.render((c) => {
                         if (Array.isArray(c.value)) {
                           return c.value.map((each) => (

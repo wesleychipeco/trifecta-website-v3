@@ -113,7 +113,20 @@ export const TableBodyCell = styled.td`
       left: 0;
       position: sticky;
       background-color: ${BACKGROUND_COLOR};
-      box-shadow: inset 0rem 0rem 0.05rem 0.14rem rgba(0, 0, 0, 0.9);
+      box-shadow: ${(props) => {
+        const box = "inset 0rem 0rem 0.05rem 0.14rem";
+        let color = "rgba(0, 0, 0, 0.9)";
+        if (props.top3Styling) {
+          if (props.top3Array?.[0] === props.index) {
+            color = "rgba(255, 215, 0, 1)";
+          } else if (props.top3Array?.[1] === props.index) {
+            color = "rgba(112, 128, 144, 0.9)";
+          } else if (props.top3Array?.[2] === props.index) {
+            color = "rgba(205, 127, 50, 1)";
+          }
+        }
+        return `${box} ${color};`;
+      }};
     }
   }
 `;
