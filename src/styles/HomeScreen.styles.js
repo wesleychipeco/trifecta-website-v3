@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { MOBILE_MAX_WIDTH } from "./global";
+import {
+  MOBILE_MAX_WIDTH,
+  MOBILE_TITLE_FONT_SIZE,
+  TITLE_FONT_SIZE,
+} from "./global";
 
 export const HomeContainer = styled.div`
   width: 95%;
@@ -15,8 +19,12 @@ export const TitleContainer = styled.div`
 
 export const TitleText = styled.h1`
   z-index: 5;
-  font-size: 3rem;
+  font-size: ${TITLE_FONT_SIZE};
   margin-bottom: 0.75rem;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: ${MOBILE_TITLE_FONT_SIZE};
+  }
 `;
 
 export const ImageOpacity = styled.div`

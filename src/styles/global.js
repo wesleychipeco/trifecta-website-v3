@@ -11,6 +11,9 @@ export const PRIMARY_ORANGE = "#EC5800";
 const MOBILE_PIXEL_WIDTH = "450px";
 export const MOBILE_MAX_WIDTH = `(max-width: ${MOBILE_PIXEL_WIDTH})`;
 
+export const TITLE_FONT_SIZE = "3rem";
+export const MOBILE_TITLE_FONT_SIZE = "1.7rem";
+
 export default createGlobalStyle`
     html, body {
         display: flex;

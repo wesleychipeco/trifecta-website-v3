@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { FONT_COLOR, HEADER_FONT_FAMILY } from "./global";
+import {
+  FONT_COLOR,
+  HEADER_FONT_FAMILY,
+  MOBILE_MAX_WIDTH,
+  MOBILE_TITLE_FONT_SIZE,
+  TITLE_FONT_SIZE,
+} from "./global";
 
 const CONTENT_WIDTH = "75%";
 const BOX_SHADOW = "0 0 0.1rem 0.3rem rgba(0, 0, 0, 0.9)";
@@ -14,8 +20,12 @@ export const FlexColumnCenterContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 3rem;
+  font-size: ${TITLE_FONT_SIZE};
   margin-bottom: ;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: ${MOBILE_TITLE_FONT_SIZE};
+  }
 `;
 
 export const ChampionsContainer = styled.div`

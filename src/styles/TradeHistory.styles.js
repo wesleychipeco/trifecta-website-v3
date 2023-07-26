@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import { TableHeaderCell, TableBodyCell } from "styles/Table.styles";
-import { FONT_FAMILY, MOBILE_MAX_WIDTH, PRIMARY_ORANGE } from "styles/global";
+import {
+  FONT_FAMILY,
+  MOBILE_MAX_WIDTH,
+  MOBILE_TITLE_FONT_SIZE,
+  PRIMARY_ORANGE,
+  TITLE_FONT_SIZE,
+} from "styles/global";
 import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
 
 export const Container = styled.div`
@@ -18,10 +24,10 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 3rem;
+  font-size: ${TITLE_FONT_SIZE};
 
   @media ${MOBILE_MAX_WIDTH} {
-    font-size: 1.7rem;
+    font-size: ${MOBILE_TITLE_FONT_SIZE};
     text-align: center;
     width: 15rem;
   }

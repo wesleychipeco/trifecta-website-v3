@@ -3,7 +3,10 @@ import {
   FONT_COLOR,
   FONT_FAMILY,
   HEADER_FONT_FAMILY,
+  MOBILE_MAX_WIDTH,
+  MOBILE_TITLE_FONT_SIZE,
   PRIMARY_ORANGE,
+  TITLE_FONT_SIZE,
 } from "./global";
 
 export const TradeAssetHomeContainer = styled.div`
@@ -26,8 +29,12 @@ export const FlexColumnCenterContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 3rem;
+  font-size: ${TITLE_FONT_SIZE};
   text-align: center;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: ${MOBILE_TITLE_FONT_SIZE};
+  }
 `;
 
 export const OuterTradeBlockContainer = styled.div`

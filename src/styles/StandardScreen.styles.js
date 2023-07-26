@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { TableHeaderCell } from "./Table.styles";
-import { MOBILE_MAX_WIDTH } from "./global";
+import { MOBILE_MAX_WIDTH, TITLE_FONT_SIZE } from "./global";
 import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
 
 export const FlexColumnCenterContainer = styled.div`
@@ -18,7 +18,7 @@ export const FlexColumnCenterContainer = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 3rem;
+  font-size: ${TITLE_FONT_SIZE};
   margin: 1rem 0 0.5rem 0;
 
   @media ${MOBILE_MAX_WIDTH} {
