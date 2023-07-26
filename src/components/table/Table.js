@@ -59,86 +59,88 @@ export const Table = ({
   }, [data]); // only calculate when data changes (which should only be when first available)
 
   return (
-    <TableComponent {...getTableProps()}>
-      <TableHeadComponent>
-        {headerGroups.map((headerGroup) => {
-          return (
-            <TableHeadRowComponent {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => {
-                const TableHeaderCellComponent =
-                  column?.tableHeaderCell ?? S.TableHeaderCell;
-                return (
-                  <TableHeaderCellComponent
-                    {...column.getHeaderProps(
-                      column.getSortByToggleProps({ title: undefined })
-                    )}
-                  >
-                    <G.FlexRow>
-                      {column.render("Header")}
-                      <S.TableHeaderSortSpan>
-                        {column.isSorted ? (
-                          column.isSortedDesc ? (
-                            <S.SortIcon icon="caret-square-down" />
+    <S.ScrollTable>
+      <TableComponent {...getTableProps()}>
+        <TableHeadComponent>
+          {headerGroups.map((headerGroup) => {
+            return (
+              <TableHeadRowComponent {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => {
+                  const TableHeaderCellComponent =
+                    column?.tableHeaderCell ?? S.TableHeaderCell;
+                  return (
+                    <TableHeaderCellComponent
+                      {...column.getHeaderProps(
+                        column.getSortByToggleProps({ title: undefined })
+                      )}
+                    >
+                      <G.FlexRow>
+                        {column.render("Header")}
+                        <S.TableHeaderSortSpan>
+                          {column.isSorted ? (
+                            column.isSortedDesc ? (
+                              <S.SortIcon icon="caret-square-down" />
+                            ) : (
+                              <S.SortIcon icon="caret-square-up" />
+                            )
                           ) : (
-                            <S.SortIcon icon="caret-square-up" />
-                          )
-                        ) : (
-                          ""
-                        )}
-                      </S.TableHeaderSortSpan>
-                    </G.FlexRow>
-                  </TableHeaderCellComponent>
-                );
-              })}
-            </TableHeadRowComponent>
-          );
-        })}
-      </TableHeadComponent>
-      <TableBodyComponent {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <TableBodyRowComponent
-              {...row.getRowProps()}
-              top3Styling={top3Styling}
-              top3Array={top3Array}
-              index={row.index}
-            >
-              {row.cells.map((cell) => {
-                let win, points;
-                if (
-                  typeof cell.value === "string" &&
-                  cell.value.indexOf("###") !== -1
-                ) {
-                  [points, win] = cell.value.split("###");
-                }
-                return (
-                  <TableBodyCellComponent {...cell.getCellProps()} win={win}>
-                    {cell.render((c) => {
-                      if (Array.isArray(c.value)) {
-                        return c.value.map((each) => (
-                          <div key={each}>
-                            {each}
-                            <br />
-                          </div>
-                        ));
-                      }
-                      if (
-                        typeof c.value === "string" &&
-                        c.value.indexOf("###") !== -1
-                      ) {
-                        [points] = c.value.split("###");
-                        return points;
-                      }
-                      return c?.value ?? "Error";
-                    })}
-                  </TableBodyCellComponent>
-                );
-              })}
-            </TableBodyRowComponent>
-          );
-        })}
-      </TableBodyComponent>
-    </TableComponent>
+                            ""
+                          )}
+                        </S.TableHeaderSortSpan>
+                      </G.FlexRow>
+                    </TableHeaderCellComponent>
+                  );
+                })}
+              </TableHeadRowComponent>
+            );
+          })}
+        </TableHeadComponent>
+        <TableBodyComponent {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <TableBodyRowComponent
+                {...row.getRowProps()}
+                top3Styling={top3Styling}
+                top3Array={top3Array}
+                index={row.index}
+              >
+                {row.cells.map((cell) => {
+                  let win, points;
+                  if (
+                    typeof cell.value === "string" &&
+                    cell.value.indexOf("###") !== -1
+                  ) {
+                    [points, win] = cell.value.split("###");
+                  }
+                  return (
+                    <TableBodyCellComponent {...cell.getCellProps()} win={win}>
+                      {cell.render((c) => {
+                        if (Array.isArray(c.value)) {
+                          return c.value.map((each) => (
+                            <div key={each}>
+                              {each}
+                              <br />
+                            </div>
+                          ));
+                        }
+                        if (
+                          typeof c.value === "string" &&
+                          c.value.indexOf("###") !== -1
+                        ) {
+                          [points] = c.value.split("###");
+                          return points;
+                        }
+                        return c?.value ?? "Error";
+                      })}
+                    </TableBodyCellComponent>
+                  );
+                })}
+              </TableBodyRowComponent>
+            );
+          })}
+        </TableBodyComponent>
+      </TableComponent>
+    </S.ScrollTable>
   );
 };

@@ -33,7 +33,7 @@ export const SignInBannerContainer = styled.div`
     right: 0.25rem;
     top: 0.5rem;
     height: 2rem;
-    width: 5rem;
+    width: 4rem;
   }
 `;
 
@@ -45,7 +45,7 @@ export const BannerText = styled.h5`
   padding: 2rem 2.5rem 2rem 2.5rem;
 
   @media ${MOBILE_MAX_WIDTH} {
-    font-size: 1.25rem;
+    font-size: 1rem;
     padding: 0;
   }
 `;

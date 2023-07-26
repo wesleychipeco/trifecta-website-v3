@@ -22,9 +22,9 @@ export const Title = styled.h1`
   margin: 1rem 0 0.5rem 0;
 
   @media ${MOBILE_MAX_WIDTH} {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
     text-align: center;
-    width: 16rem;
+    width: 15rem;
   }
 `;
 
@@ -35,6 +35,7 @@ export const TableTitle = styled.h2`
     font-size: 1.25rem;
     text-align: center;
     width: 16rem;
+    align-self: center;
   }
 `;
 
@@ -46,6 +47,7 @@ export const TableCaption = styled.p`
     font-size: 1rem;
     margin: 0;
     text-align: center;
+    align-self: center;
   }
 `;
 
@@ -76,6 +78,7 @@ export const TablesContainer = styled.div`
 
   @media ${MOBILE_MAX_WIDTH} {
     width: 100%;
+    align-items: flex-start;
   }
 `;
 
@@ -84,6 +87,8 @@ export const SingleTableContainer = styled(FlexColumnCenterContainer)`
 
   @media ${MOBILE_MAX_WIDTH} {
     margin-bottom: 1rem;
+    align-items: flex-start;
+    width: 100%;
   }
 `;
 
@@ -95,6 +100,8 @@ export const TwoTablesContainer = styled.div`
   @media ${MOBILE_MAX_WIDTH} {
     flex-direction: column;
     margin-bottom: 1rem;
+    align-items: flex-start;
+    width: 100%;
   }
 `;
 
