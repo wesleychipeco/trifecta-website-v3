@@ -15,6 +15,7 @@ export const CLOSED_NAVBAR_WIDTH = "5rem";
 export const CLOSED_NAVBAR_MOBILE_WIDTH = "3.5rem";
 
 export const ClosedNavbarContainer = styled.div`
+  z-index: 999;
   position: fixed;
   left: 0.75rem;
   top: 0.75rem;
@@ -59,6 +60,7 @@ export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
 
 ////////// OPEN //////////
 export const OPEN_NAVBAR_WIDTH = "22rem";
+export const MOBILE_OPEN_NAVBAR_WIDTH = "100vw";
 const OPEN_LEFT_PADDING = "1.5rem";
 const NAVBAR_VERTICAL_SPACING = "1.5rem";
 
@@ -71,6 +73,11 @@ export const OpenNavbarContainer = styled.div`
   width: ${OPEN_NAVBAR_WIDTH};
   height: 100%;
   border-radius: 0 1.5rem 1.5rem 0;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    width: ${MOBILE_OPEN_NAVBAR_WIDTH};
+    border-radius: 0;
+  }
 `;
 
 export const Logo = styled.img`

@@ -9,7 +9,7 @@ export const ClosedNavbar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  if (location.pathname === "/") {
+  if (location.pathname === "/" || location.pathname === "/trifecta") {
     return null;
   }
 

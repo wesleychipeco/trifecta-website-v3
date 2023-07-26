@@ -8,12 +8,15 @@ import { CSSTransition } from "react-transition-group";
 import "./transition.styles.css";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { STATIC_ROUTES } from "Routes";
 import { ERA_0 } from "Constants";
 
 import TrifectaBannerGoldTransparent from "resources/images/GoldHorizontalLogo.png";
+import { MOBILE_MAX_WIDTH } from "styles/global";
 
 export const HomeScreen = () => {
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const [show, setShow] = useState(false);
   const [showDelay, setShowDelay] = useState(false);
   const location = useLocation();
@@ -28,6 +31,10 @@ export const HomeScreen = () => {
     if (!location.pathname.startsWith("/trifecta")) {
       setTimeout(() => {
         navigate(`${STATIC_ROUTES.DynastyHome}/${ERA_0}`);
+      }, 4000);
+    } else if (isMobile) {
+      setTimeout(() => {
+        navigate(`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`);
       }, 4000);
     }
   }, []);
