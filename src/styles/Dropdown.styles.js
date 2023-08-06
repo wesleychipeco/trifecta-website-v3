@@ -226,3 +226,141 @@ export const TradeBlockDropdownCustomStyles = {
     backgroundColor: BACKGROUND_COLOR,
   }),
 };
+
+//////////////////////////////////////////////////
+const MOBILE_FONT_SIZE = "1rem";
+const MOBILE_WIDTH = "6rem";
+
+export const MobileStandingsDropdownCustomStyles = {
+  // each option in dropdown
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: PRIMARY_ORANGE,
+    color: FONT_COLOR,
+    fontWeight: state.isSelected ? 800 : "normal",
+    margin: 0,
+    "&:hover": {
+      opacity: 0.8,
+      cursor: "pointer",
+    },
+    fontSize: MOBILE_FONT_SIZE,
+    width: MOBILE_WIDTH,
+  }),
+  // overall
+  control: (provided) => ({
+    ...provided,
+    backgroundColor: PRIMARY_ORANGE,
+    borderRadius: "0.5rem",
+    border: 0,
+    borderColor: BACKGROUND_COLOR,
+    color: FONT_COLOR,
+    boxShadow: "none",
+    "&:hover": {
+      opacity: 0.8,
+      cursor: "pointer",
+    },
+    width: MOBILE_WIDTH,
+  }),
+  // placeholder value
+  placeholder: (provided) => ({
+    ...provided,
+    color: FONT_COLOR,
+    fontFamily: FONT_FAMILY,
+  }),
+  // arrow icon
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: FONT_COLOR,
+    "&:hover": {
+      color: FONT_COLOR,
+      cursor: "pointer",
+    },
+    position: "absolute",
+    right: "0rem",
+  }),
+  // remove line separator
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    display: "none",
+  }),
+  // displayed value
+  singleValue: (provided) => ({
+    ...provided,
+    fontSize: MOBILE_FONT_SIZE,
+    color: FONT_COLOR,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  }),
+  // remove white on list options
+  menuList: (provided) => ({
+    ...provided,
+    paddingTop: 0,
+    paddingBottom: 0,
+    width: MOBILE_WIDTH,
+  }),
+};
+
+export const MobileMatchupsDropdownCustomStyles = {
+  // each option in dropdown
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: PRIMARY_ORANGE,
+    color: FONT_COLOR,
+    fontWeight: state.isSelected ? 800 : "normal",
+    margin: 0,
+    "&:hover": {
+      opacity: 0.8,
+    },
+    fontSize: MOBILE_FONT_SIZE,
+    width: MOBILE_WIDTH,
+  }),
+  // overall
+  control: (provided) => ({
+    ...provided,
+    backgroundColor: PRIMARY_ORANGE,
+    borderRadius: "0.5rem",
+    border: 0,
+    borderColor: BACKGROUND_COLOR,
+    color: FONT_COLOR,
+    boxShadow: "none",
+    "&:hover": {
+      opacity: 0.8,
+    },
+    width: MOBILE_WIDTH,
+  }),
+  // placeholder value
+  placeholder: (provided) => ({
+    ...provided,
+    color: FONT_COLOR,
+    fontFamily: FONT_FAMILY,
+  }),
+  // arrow icon
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: FONT_COLOR,
+    "&:hover": {
+      color: FONT_COLOR,
+    },
+  }),
+  // remove line separator
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    display: "none",
+  }),
+  // displayed value
+  singleValue: (provided) => ({
+    ...provided,
+    fontSize: MOBILE_FONT_SIZE,
+    color: FONT_COLOR,
+  }),
+  // remove white on list options
+  menuList: (provided) => ({
+    ...provided,
+    paddingTop: 0,
+    paddingBottom: 0,
+  }),
+};

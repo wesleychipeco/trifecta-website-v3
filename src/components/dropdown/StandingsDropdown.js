@@ -1,13 +1,19 @@
 import { capitalize } from "lodash";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
-import { StandingsDropdownCustomStyles } from "styles/Dropdown.styles";
+import {
+  MobileStandingsDropdownCustomStyles,
+  StandingsDropdownCustomStyles,
+} from "styles/Dropdown.styles";
+import { MOBILE_MAX_WIDTH } from "styles/global";
 
 const SPORTS_ARRAY = ["trifecta", "basketball", "baseball", "football"];
 
 export const StandingsDropdown = ({ year }) => {
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const navigate = useNavigate();
   const currentlySelected = useMemo(() => {
     return {
@@ -38,7 +44,11 @@ export const StandingsDropdown = ({ year }) => {
       defaultValue={currentlySelected}
       onChange={onSelect}
       options={options}
-      styles={StandingsDropdownCustomStyles}
+      styles={
+        isMobile
+          ? MobileStandingsDropdownCustomStyles
+          : StandingsDropdownCustomStyles
+      }
       isSearchable={false}
     />
   );

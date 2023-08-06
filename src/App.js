@@ -91,8 +91,6 @@ export const App = () => {
   }, []);
 
   // TODO:
-  // Dynasty Trade Assets Home Page and Dashboard
-  // Trifecta Hall of Fame
   // Dynasty Home Page
   return (
     <S.App>

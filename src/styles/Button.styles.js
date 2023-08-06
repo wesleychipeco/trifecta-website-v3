@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { FONT_COLOR, HEADER_FONT_FAMILY, PRIMARY_ORANGE } from "./global";
+import {
+  FONT_COLOR,
+  HEADER_FONT_FAMILY,
+  MOBILE_MAX_WIDTH,
+  PRIMARY_ORANGE,
+} from "./global";
 
 export const Container = styled.div`
   border-radius: 3.5rem;
@@ -21,4 +26,9 @@ export const Link = styled(NavLink)`
   color: ${FONT_COLOR};
   padding: 0.8rem;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "cursor")};
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1rem;
+    font-weight: 500;
+  }
 `;
