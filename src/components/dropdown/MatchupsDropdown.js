@@ -1,11 +1,17 @@
 import { capitalize } from "lodash";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
-import { MatchupsDropdownCustomStyles } from "styles/Dropdown.styles";
+import {
+  MatchupsDropdownCustomStyles,
+  MobileMatchupsDropdownCustomStyles,
+} from "styles/Dropdown.styles";
+import { MOBILE_MAX_WIDTH } from "styles/global";
 
 export const MatchupsDropdown = ({ arrayOfYears, teamNumber, year }) => {
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const navigate = useNavigate();
   const currentlySelected = useMemo(() => {
     return {
@@ -33,7 +39,11 @@ export const MatchupsDropdown = ({ arrayOfYears, teamNumber, year }) => {
       defaultValue={currentlySelected}
       onChange={onSelect}
       options={options}
-      styles={MatchupsDropdownCustomStyles}
+      styles={
+        isMobile
+          ? MobileMatchupsDropdownCustomStyles
+          : MatchupsDropdownCustomStyles
+      }
       isSearchable={false}
     />
   );

@@ -5,12 +5,14 @@ import {
   BACKGROUND_COLOR,
   FONT_COLOR,
   HEADER_FONT_FAMILY,
+  MOBILE_MAX_WIDTH,
   PRIMARY_ORANGE,
-} from "./variables";
+} from "./global";
 
 ////////// CLOSED NAVBAR //////////
 
 export const CLOSED_NAVBAR_WIDTH = "5rem";
+export const CLOSED_NAVBAR_MOBILE_WIDTH = "3.5rem";
 
 export const ClosedNavbarContainer = styled.div`
   position: fixed;
@@ -27,12 +29,26 @@ export const ClosedNavbarContainer = styled.div`
     background-color: ${PRIMARY_ORANGE}99;
     cursor: pointer;
   }
+
+  @media ${MOBILE_MAX_WIDTH} {
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+
+    width: ${CLOSED_NAVBAR_MOBILE_WIDTH};
+    height: ${CLOSED_NAVBAR_MOBILE_WIDTH};
+  }
 `;
 
 export const TrifectaSymbol = styled.img`
   width: 4rem;
   height: 4rem;
   padding-top: 0.2rem;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
 `;
 
 export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
@@ -44,6 +60,7 @@ export const ClosedBars = styled(FontAwesomeIcon).attrs({})`
 
 ////////// OPEN //////////
 export const OPEN_NAVBAR_WIDTH = "22rem";
+export const MOBILE_OPEN_NAVBAR_WIDTH = "100vw";
 const OPEN_LEFT_PADDING = "1.5rem";
 const NAVBAR_VERTICAL_SPACING = "1.5rem";
 
@@ -56,6 +73,11 @@ export const OpenNavbarContainer = styled.div`
   width: ${OPEN_NAVBAR_WIDTH};
   height: 100%;
   border-radius: 0 1.5rem 1.5rem 0;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    width: ${MOBILE_OPEN_NAVBAR_WIDTH};
+    border-radius: 0;
+  }
 `;
 
 export const Logo = styled.img`

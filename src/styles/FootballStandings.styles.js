@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { TableBodyCell } from "styles/Table.styles";
-import { PRIMARY_ORANGE } from "styles/variables";
+import { PRIMARY_ORANGE } from "styles/global";
 
 export const WeeksPointsTableBodyCell = styled(TableBodyCell)`
   width: 2rem;

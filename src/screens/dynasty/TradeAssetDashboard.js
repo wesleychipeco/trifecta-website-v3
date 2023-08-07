@@ -6,10 +6,12 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select, { components } from "react-select";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useMediaQuery } from "react-responsive";
 
 import { retrieveAssets } from "./TradeAssetHelper";
 import * as S from "styles/TradeAssetDashboard.styles";
 import * as T from "styles/Dropdown.styles";
+import { MOBILE_MAX_WIDTH } from "styles/global";
 
 const ALL_TRADE_BLOCK_SECTIONS = [
   {
@@ -60,6 +62,7 @@ export const TradeAssetDashboard = () => {
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
   const { isAuthenticated, user } = useAuth0();
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
 
   // load data on page ready
   useEffect(() => {
@@ -155,7 +158,7 @@ export const TradeAssetDashboard = () => {
   const DropdownIndicator = (props) => {
     return (
       <components.DropdownIndicator {...props}>
-        <FontAwesomeIcon icon="fa-plus" size="lg" />
+        <FontAwesomeIcon icon="fa-plus" size={isMobile ? "md" : "lg"} />
       </components.DropdownIndicator>
     );
   };
@@ -205,17 +208,17 @@ export const TradeAssetDashboard = () => {
             const keyName = section.key;
             return (
               <S.TradeBlockSection key={section.key}>
-                <S.SportTitle>{section.text}</S.SportTitle>
+                <S.SectionTitle>{section.text}</S.SectionTitle>
                 <S.TradeBlockDisplaySection>
                   {tradeBlock[keyName].map((asset) => {
                     return (
                       <S.AssetContainer key={asset}>
-                        <S.AssetText>{asset}</S.AssetText>
+                        <S.AssetText>{`+ ${asset}`}</S.AssetText>
                         {hasEditAccess && (
                           <S.XIconContainer>
                             <FontAwesomeIcon
                               icon="fa-circle-xmark"
-                              size="lg"
+                              size={isMobile ? "md" : "lg"}
                               onClick={() =>
                                 removeFromTradeBlock(section.key, asset)
                               }
@@ -252,7 +255,7 @@ export const TradeAssetDashboard = () => {
           const rosters = assets[sport];
           return (
             <S.SportContainer key={sport}>
-              <S.SportTitle>{capitalize(sport)}</S.SportTitle>
+              <S.SectionTitle>{capitalize(sport)}</S.SectionTitle>
               <S.FaabText>{`FAAB remaining: ${rosters.faab}`}</S.FaabText>
               <S.FlexRow>
                 <S.PlayersContainer>
@@ -270,7 +273,7 @@ export const TradeAssetDashboard = () => {
                             isSearchable={false}
                           />
                         )}
-                        <S.AssetText>{player}</S.AssetText>
+                        <S.AssetText>{`+ ${player}`}</S.AssetText>
                       </S.AssetContainer>
                     );
                   })}

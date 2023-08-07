@@ -98,9 +98,7 @@ export const OpenNavbar = () => {
           >
             Trade History
           </S.Link>
-          <S.BottomLink to={`${STATIC_ROUTES.TrifectaHome}`}>
-            OG Trifecta
-          </S.BottomLink>
+          <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
@@ -177,7 +175,7 @@ export const OpenNavbar = () => {
         >
           League Manual
         </S.LinkStyle>
-        <S.BottomLink to={`/`}>3x5 Dynasty</S.BottomLink>
+        <S.Link to={`/`}>3x5 Dynasty</S.Link>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
   );
