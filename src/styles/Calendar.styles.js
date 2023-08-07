@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MOBILE_MAX_WIDTH } from "./global";
+import { MOBILE_MAX_WIDTH, MOBILE_TITLE_FONT_SIZE } from "./global";
 
 export const OuterContainer = styled.div`
   display: flex;
@@ -25,6 +25,11 @@ export const UpcomingEventsTitle = styled.h2`
   padding: 0;
   font-size: 2rem;
   align-self: center;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: ${MOBILE_TITLE_FONT_SIZE};
+    margin: 0.5rem 0 0.5rem 0;
+  }
 `;
 
 export const DateContainer = styled.div`
@@ -39,6 +44,10 @@ export const EventText = styled.p`
   margin: 0.75rem 0 0.75rem 0;
   padding: 0;
   font-size: 1.5rem;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1rem;
+  }
 `;
 
 export const UpcomingEventsMainContainer = styled.div`

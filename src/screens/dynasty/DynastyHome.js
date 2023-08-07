@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 import { returnMongoCollection } from "database-management";
 import { format } from "date-fns";
 import { pick } from "lodash";
@@ -11,8 +12,10 @@ import {
   Dynasty3x5DynastyPointsColumn,
   Dynasty3x5GmColumn,
 } from "./StandingsColumns";
+import { MOBILE_MAX_WIDTH } from "styles/global";
 
 export const DynastyHome = () => {
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const { era } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
 
@@ -86,6 +89,7 @@ export const DynastyHome = () => {
           data={dynastyStandings}
           sortBy={[{ id: "totalDynastyPoints", desc: true }]}
           top3Styling
+          scrollTableHeight={isMobile && "28rem"}
         />
       </S.StandingsContainer>
       <S.InformationContainer>

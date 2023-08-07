@@ -90,8 +90,6 @@ export const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // TODO:
-  // Dynasty Home Page
   return (
     <S.App>
       <GlobalStyle />

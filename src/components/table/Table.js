@@ -15,6 +15,7 @@ export const Table = ({
   tableBodyCell = null,
   sortBy = [],
   top3Styling = false,
+  scrollTableHeight = false,
 }) => {
   const tableInstance = useTable(
     {
@@ -59,7 +60,7 @@ export const Table = ({
   }, [data]); // only calculate when data changes (which should only be when first available)
 
   return (
-    <S.ScrollTable>
+    <S.ScrollTable scrollTableHeight={scrollTableHeight}>
       <TableComponent {...getTableProps()}>
         <TableHeadComponent>
           {headerGroups.map((headerGroup) => {

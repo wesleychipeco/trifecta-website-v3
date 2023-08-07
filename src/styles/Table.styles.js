@@ -5,7 +5,13 @@ import { BACKGROUND_COLOR, MOBILE_MAX_WIDTH, PRIMARY_ORANGE } from "./global";
 export const ScrollTable = styled.div`
   @media ${MOBILE_MAX_WIDTH} {
     width: 100%;
-    height: 100%;
+    height: ${(props) => {
+      if (props.scrollTableHeight && props.scrollTableHeight.length > 0) {
+        return props.scrollTableHeight;
+      } else {
+        return "100%";
+      }
+    }};
     overflow: scroll;
   }
 `;
@@ -15,6 +21,10 @@ export const Table = styled.table`
   border-spacing: 0 0.75rem;
   padding: 0;
   margin: 0 0.5rem 0 0rem;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    min-width: 100%;
+  }
 `;
 
 export const TableHead = styled.thead``;
