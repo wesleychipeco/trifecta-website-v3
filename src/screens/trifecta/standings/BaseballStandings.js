@@ -42,11 +42,12 @@ export const BaseballStandings = () => {
         rotoStandings,
         rotoStats
       ) => {
+        const rotoStatsFillIn = rotoStats ? rotoStats : rotoStandings;
         // For standings pre-2018, rotoStandings and rotoStats have different data
         // For standings 2018 and beyond, rotoStandings has all data needed
         const rotoCombined = [];
         rotoStandings.forEach((eachRotoStandings) => {
-          const foundRotoStats = rotoStats.find(
+          const foundRotoStats = rotoStatsFillIn.find(
             (eachRotoStats) =>
               eachRotoStandings.teamName === eachRotoStats.teamName
           );
