@@ -187,7 +187,7 @@ button.rbc-input::-moz-focus-inner {
   background: none;
   background-image: none;
   border: 1px solid black;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 4px;
   line-height: normal;
   white-space: nowrap;

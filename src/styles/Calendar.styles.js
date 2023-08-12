@@ -43,7 +43,7 @@ export const EventContainer = styled.div`
 export const EventText = styled.p`
   margin: 0.75rem 0 0.75rem 0;
   padding: 0;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
 
   @media ${MOBILE_MAX_WIDTH} {
     font-size: 1rem;

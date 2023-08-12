@@ -86,7 +86,7 @@ export const Announcement = styled.div`
 `;
 
 export const AnnouncementDate = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   width: 10rem;
   margin: 0;
 
@@ -97,7 +97,7 @@ export const AnnouncementDate = styled.p`
 `;
 
 export const AnnouncementTitleText = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   width: 100%;
   margin: 0;
 
