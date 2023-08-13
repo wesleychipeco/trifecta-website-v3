@@ -84,7 +84,7 @@ export const TradeHistoryTable = ({
   const TableBodyCellComponent = tableBodyCell ?? T.TableBodyCell;
 
   return (
-    <>
+    <S.TableContainer>
       <S.InputContainer>
         <S.TextInput
           id={OWNER_INPUT}
@@ -99,68 +99,70 @@ export const TradeHistoryTable = ({
           onChange={handleFilterInputChange}
         />
       </S.InputContainer>
-      <TableComponent {...getTableProps()}>
-        <TableHeadComponent>
-          {headerGroups.map((headerGroup) => {
-            return (
-              <TableHeadRowComponent {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const TableHeaderCellComponent =
-                    column?.tableHeaderCell ?? T.TableHeaderCell;
-                  return (
-                    <TableHeaderCellComponent
-                      {...column.getHeaderProps(
-                        column.getSortByToggleProps({ title: undefined })
-                      )}
-                    >
-                      <G.FlexRow>
-                        <S.HeaderText>{column.render("Header")}</S.HeaderText>
-                        <T.TableHeaderSortSpan>
-                          {column.isSorted ? (
-                            column.isSortedDesc ? (
-                              <T.SortIcon icon="caret-square-down" />
+      <T.ScrollTable>
+        <TableComponent style={{ width: "100%" }} {...getTableProps()}>
+          <TableHeadComponent>
+            {headerGroups.map((headerGroup) => {
+              return (
+                <TableHeadRowComponent {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => {
+                    const TableHeaderCellComponent =
+                      column?.tableHeaderCell ?? T.TableHeaderCell;
+                    return (
+                      <TableHeaderCellComponent
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps({ title: undefined })
+                        )}
+                      >
+                        <G.FlexRow>
+                          <S.HeaderText>{column.render("Header")}</S.HeaderText>
+                          <T.TableHeaderSortSpan>
+                            {column.isSorted ? (
+                              column.isSortedDesc ? (
+                                <T.SortIcon icon="caret-square-down" />
+                              ) : (
+                                <T.SortIcon icon="caret-square-up" />
+                              )
                             ) : (
-                              <T.SortIcon icon="caret-square-up" />
-                            )
-                          ) : (
-                            ""
-                          )}
-                        </T.TableHeaderSortSpan>
-                      </G.FlexRow>
-                    </TableHeaderCellComponent>
-                  );
-                })}
-              </TableHeadRowComponent>
-            );
-          })}
-        </TableHeadComponent>
-        <TableBodyComponent {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <TableBodyRowComponent {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <TableBodyCellComponent {...cell.getCellProps()}>
-                      {cell.render((c) => {
-                        if (Array.isArray(c.value)) {
-                          return c.value.map((each) => (
-                            <div key={each}>
-                              {each}
-                              <br />
-                            </div>
-                          ));
-                        }
-                        return c.value;
-                      })}
-                    </TableBodyCellComponent>
-                  );
-                })}
-              </TableBodyRowComponent>
-            );
-          })}
-        </TableBodyComponent>
-      </TableComponent>
-    </>
+                              ""
+                            )}
+                          </T.TableHeaderSortSpan>
+                        </G.FlexRow>
+                      </TableHeaderCellComponent>
+                    );
+                  })}
+                </TableHeadRowComponent>
+              );
+            })}
+          </TableHeadComponent>
+          <TableBodyComponent {...getTableBodyProps()}>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <TableBodyRowComponent {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <TableBodyCellComponent {...cell.getCellProps()}>
+                        {cell.render((c) => {
+                          if (Array.isArray(c.value)) {
+                            return c.value.map((each) => (
+                              <div key={each}>
+                                + {each}
+                                <br />
+                              </div>
+                            ));
+                          }
+                          return c.value;
+                        })}
+                      </TableBodyCellComponent>
+                    );
+                  })}
+                </TableBodyRowComponent>
+              );
+            })}
+          </TableBodyComponent>
+        </TableComponent>
+      </T.ScrollTable>
+    </S.TableContainer>
   );
 };

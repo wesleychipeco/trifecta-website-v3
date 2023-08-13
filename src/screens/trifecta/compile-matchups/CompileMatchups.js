@@ -12,7 +12,7 @@ const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
 export const CompileMatchups = () => {
   const { currentYear } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
   );
 
   const [matchupsGlobalObject, setMatchupsGlobalObject] = useState({});

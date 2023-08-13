@@ -23,3 +23,10 @@ export const determineSeasonStatus = (seasonStarted, inSeason) => {
 
   return SeasonStatus.NOT_STARTED;
 };
+
+export const sportYearToSportAndYear = (sportYear) => {
+  return {
+    sport: sportYear.slice(0, sportYear.length - 4),
+    year: sportYear.slice(sportYear.length - 4),
+  };
+};

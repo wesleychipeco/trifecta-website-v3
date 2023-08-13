@@ -24,7 +24,7 @@ import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
 export const BaseballStandings = () => {
   const { year } = useParams();
   const { currentYear, isBaseballStarted, isBaseballInSeason } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
   );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
@@ -42,11 +42,12 @@ export const BaseballStandings = () => {
         rotoStandings,
         rotoStats = []
       ) => {
+        const rotoStatsFillIn = rotoStats ? rotoStats : rotoStandings;
         // For standings pre-2018, rotoStandings and rotoStats have different data
         // For standings 2018 and beyond, rotoStandings has all data needed
         const rotoCombined = [];
         rotoStandings.forEach((eachRotoStandings) => {
-          const foundRotoStats = rotoStats.find(
+          const foundRotoStats = rotoStatsFillIn.find(
             (eachRotoStats) =>
               eachRotoStandings.teamName === eachRotoStats.teamName
           );

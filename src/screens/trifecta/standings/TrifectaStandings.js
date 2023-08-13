@@ -20,7 +20,7 @@ import {
 import { Table } from "components/table/Table";
 import { returnMongoCollection } from "database-management";
 import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
-import { BASE_ROUTES } from "Routes";
+import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 
 export const TrifectaStandings = () => {
   const { year } = useParams();
@@ -32,7 +32,9 @@ export const TrifectaStandings = () => {
     isBaseballInSeason,
     isFootballStarted,
     isFootballInSeason,
-  } = useSelector((state) => state?.currentVariables?.seasonVariables);
+  } = useSelector(
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
+  );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
 

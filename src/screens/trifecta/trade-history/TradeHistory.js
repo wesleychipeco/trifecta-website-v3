@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/TradeHistory.styles";
-import { TradeHistoryTable } from "./TradeHistoryTable";
+import { TradeHistoryTable } from "components/table/TradeHistoryTable";
 
-export const TradeHistory = () => {
+export const TrifectaTradeHistory = () => {
   const [tradeHistory, setTradeHistory] = useState([]);
 
   useEffect(() => {

@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+proxy-server/node_modules
 
 proxy-server/node_modules
 
