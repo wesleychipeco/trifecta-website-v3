@@ -14,6 +14,7 @@ node -e "console.log('Running Node.js ' + process.version)"
 npm install --global yarn
 
 # clone repo and start yarn
+cd /home/ec2-user
 git clone https://github.com/wesleychipeco/trifecta-website-v3.git
 cd trifecta-website-v3/
 yarn

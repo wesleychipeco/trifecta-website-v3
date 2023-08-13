@@ -168,21 +168,23 @@ export const TrifectaStandings = () => {
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${year} Trifecta Standings`}</S.Title>
-      {shouldDisplayUpdateMessage && updatedAsOfDisplay && (
-        <G.FlexColumn>
-          <S.TableTitle>{`Last updated: ${updatedAsOfDisplay}`}</S.TableTitle>
-          <G.FlexRow>
-            <T.TableCaption>
-              To update, load in-progress sport's standings:
-            </T.TableCaption>
-            <T.Link
-              to={`${STATIC_ROUTES.TrifectaHome}/${
-                BASE_ROUTES[updateRoute.replace(" ", "")]
-              }/${currentYear}`}
-            >{`${currentYear} ${updateRoute}`}</T.Link>
-          </G.FlexRow>
-        </G.FlexColumn>
-      )}
+      {shouldDisplayUpdateMessage &&
+        updatedAsOfDisplay &&
+        year === currentYear && (
+          <G.FlexColumn>
+            <S.TableTitle>{`Last updated: ${updatedAsOfDisplay}`}</S.TableTitle>
+            <G.FlexRow>
+              <T.TableCaption>
+                To update, load in-progress sport's standings:
+              </T.TableCaption>
+              <T.Link
+                to={`${
+                  BASE_ROUTES[updateRoute.replace(" ", "")]
+                }/${currentYear}`}
+              >{`${currentYear} ${updateRoute}`}</T.Link>
+            </G.FlexRow>
+          </G.FlexColumn>
+        )}
       <S.TablesContainer>
         <S.SingleTableContainer>
           <Table

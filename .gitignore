@@ -6,6 +6,8 @@
 .pnp.js
 proxy-server/node_modules
 
+proxy-server/node_modules
+
 # testing
 /coverage
 

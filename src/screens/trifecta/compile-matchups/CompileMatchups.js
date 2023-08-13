@@ -260,6 +260,9 @@ export const CompileMatchups = () => {
           ownerObject[l].winPer = winPer;
 
           if (sport === "football") {
+            ownerObject[l].pointsFor = ownerObject[l].pointsFor.toFixed(1);
+            ownerObject[l].pointsAgainst =
+              ownerObject[l].pointsAgainst.toFixed(1);
             const pointsDiff =
               ownerObject[l].pointsFor - ownerObject[l].pointsAgainst;
             ownerObject[l].pointsDiff = Number(pointsDiff.toFixed(1));
@@ -314,17 +317,17 @@ export const CompileMatchups = () => {
           footballMatchupsObject[outerFootballNumber][innerFootballNumber];
 
         const basketballWinPer = innerBasketballMatchupsObject.winPer;
-        const baseballlWinPer = innerBaseballMatchupsObject.winPer;
-        const footballlWinPer = innerFootballMatchupsObject.winPer;
+        const baseballWinPer = innerBaseballMatchupsObject.winPer;
+        const footballWinPer = innerFootballMatchupsObject.winPer;
         const totalWinPer = Number(
-          mean([basketballWinPer, baseballlWinPer, footballlWinPer]).toFixed(3)
+          mean([basketballWinPer, baseballWinPer, footballWinPer]).toFixed(3)
         );
 
         const totalMatchupsObject = {
           ownerNames: innerOwnerName,
           basketballWinPer,
-          baseballlWinPer,
-          footballlWinPer,
+          baseballWinPer,
+          footballWinPer,
           totalWinPer,
         };
 
@@ -356,9 +359,12 @@ export const CompileMatchups = () => {
   const saveMatchups = async () => {
     console.log("Uncomment to test!");
     // for (const teamNumber in finalGlobalMatchupsObject) {
-    //   const collection = await returnMongoCollection(`owner${teamNumber}Matchups`);
-    //   await collection.deleteMany({year: currentYear});
-    //   await collection.insertOne(finalGlobalMatchupsObject[teamNumber])
+    //   const collection = await returnMongoCollection(
+    //     `owner${teamNumber}Matchups`
+    //   );
+    //   await collection.deleteMany({ year: currentYear });
+    //   await collection.insertOne(finalGlobalMatchupsObject[teamNumber]);
+    //   console.log("Completed teamNumber", teamNumber);
     // }
   };
 

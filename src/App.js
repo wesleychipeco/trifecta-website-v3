@@ -28,6 +28,7 @@ import { FootballHallOfFame } from "screens/trifecta/hall-of-fame/FootballHallOf
 import { OwnerMatchups } from "screens/trifecta/owner-matchups/OwnerMatchups";
 import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
+import { CompileTotalMatchups } from "screens/compile-matchups/CompileTotalMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
@@ -168,6 +169,11 @@ export const App = () => {
               <Route
                 path={STATIC_ROUTES.CompileMatchups}
                 element={<CompileMatchups />}
+                exact
+              />
+              <Route
+                path={STATIC_ROUTES.CompileTotalMatchups}
+                element={<CompileTotalMatchups />}
                 exact
               />
             </Route>
