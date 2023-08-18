@@ -98,6 +98,12 @@ export const OpenNavbar = () => {
           >
             Trade History
           </S.Link>
+          <S.LinkStyle
+            href="https://docs.google.com/document/d/e/2PACX-1vTIm5e2yuQH6z-_BkcbPe_5vgC2W098GkofewNtlk_pfsQiWlhJ0FU5BgKhQLp7Bw3uJXaXudl5gaBE/pub"
+            target="_blank"
+          >
+            League Constitution
+          </S.LinkStyle>
           <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>

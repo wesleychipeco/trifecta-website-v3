@@ -6,7 +6,7 @@ const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
 export const rosterScraper = async (leagueId, teamId) => {
   const data = await axios.post(
-    `http://localhost:5000/rosters`,
+    `https://www.trifectafantasyleague.com:444/rosters`,
     {
       msgs: [
         {

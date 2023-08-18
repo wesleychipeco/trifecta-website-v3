@@ -3,7 +3,11 @@ const app = express();
 const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://www.trifectafantasyleague.com",
+  })
+);
 app.use(bodyParser.json());
 const port = 5000;
 
@@ -35,6 +39,6 @@ app.post("/rosters", (req, res) => {
 });
 
 // console text when app is running
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
