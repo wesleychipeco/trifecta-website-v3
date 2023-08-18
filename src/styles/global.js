@@ -8,7 +8,7 @@ export const FONT_COLOR = "#000000";
 
 export const PRIMARY_ORANGE = "#EC5800";
 
-const MOBILE_PIXEL_WIDTH = "450px";
+const MOBILE_PIXEL_WIDTH = "1000px";
 export const MOBILE_MAX_WIDTH = `(max-width: ${MOBILE_PIXEL_WIDTH})`;
 
 export const TITLE_FONT_SIZE = "3rem";
