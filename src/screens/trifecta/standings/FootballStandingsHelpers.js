@@ -14,7 +14,7 @@ export const standingsScraper = async (year) => {
 
   const teams = response?.data?.teams ?? [];
   teams.forEach((team) => {
-    const teamName = `${team.location} ${team.nickname}`;
+    const teamName = team.name;
     const ownerIds = team.owners;
 
     h2hScrape.push({
