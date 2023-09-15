@@ -71,6 +71,7 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
   - Kill screen
   - Create new build folder with date `mkdir build-9-14`
 - While on local machine...
+  - Switch to main branch
   - To save previous build, rename build folder to something for a "previous version" `build-8-17`
   - Build and package the code at the root directory `yarn build`
   - While in Downloads folder, "scp" the build directory to the directory in the EC2 instance `scp -ri "<keypair>.pem" ..\Documents\trifecta-website-v3\build\* ec2-user@<ec2-instance-ip>:build-9-14/.`
