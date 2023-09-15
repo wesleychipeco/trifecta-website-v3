@@ -5,7 +5,7 @@ import { capitalize } from "lodash";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import { closeNavbar } from "store/navbarSlice";
-import { ERA_0 } from "Constants";
+import { ERA_1 } from "Constants";
 
 import TrifectaLogoHorizontalBlack from "resources/images/ShadedHorizontalLogo.png";
 import { sportYearToSportAndYear } from "utils/years";
@@ -71,7 +71,7 @@ export const OpenNavbar = () => {
             <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
           </S.SecondRowDiv>
           <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}/${STATIC_ROUTES.DynastyStandings}`}
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.DynastyStandings}`}
           >
             3x5 Dynasty Standings
           </S.Link>
@@ -84,17 +84,17 @@ export const OpenNavbar = () => {
               return (
                 <S.IndentedLink
                   key={inSeasonLeague}
-                  to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}/standings/${sport}/${year}`}
+                  to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/${sport}/${year}`}
                 >{`${year} ${capitalize(sport)} Standings`}</S.IndentedLink>
               );
             })}
           <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}/${STATIC_ROUTES.TradeAssetHome}`}
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeAssetHome}`}
           >
             Trade Assets Home
           </S.Link>
           <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_0}/${STATIC_ROUTES.TradeHistory}`}
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeHistory}`}
           >
             Trade History
           </S.Link>
