@@ -13,6 +13,7 @@ import {
 } from "date-fns";
 import "./Calendar.css";
 import * as S from "styles/Calendar.styles";
+import * as T from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 
 const locales = {
@@ -55,10 +56,11 @@ export const LeagueCalendar = ({ events }) => {
           {next8UpcomingEvents.map((event) => {
             const formattedDateTime = format(event.start, "E MMM d h:mma");
             return (
-              <S.UpcomingEventsInnerContainer key={event.start}>
+              <S.UpcomingEventsInnerContainer key={event.title}>
                 <S.DateContainer>
                   <S.EventText>{formattedDateTime}</S.EventText>
                 </S.DateContainer>
+                <T.HorizontalSpacer factor={2} />
                 <S.EventContainer>
                   <S.EventText>{event.title}</S.EventText>
                 </S.EventContainer>

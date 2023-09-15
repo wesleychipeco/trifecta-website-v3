@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 app.use(
   cors({
     origin: "https://www.trifectafantasyleague.com",
+    // origin: "*",
   })
 );
 app.use(bodyParser.json());

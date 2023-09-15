@@ -3,6 +3,7 @@ import axios from "axios";
 export const standingsScraper = async (leagueId) => {
   const data = await axios.post(
     `https://www.trifectafantasyleague.com:444/standings`,
+    // `http://localhost:5000/standings`,
     {
       msgs: [{ method: "getStandings", data: { view: "ALL" } }],
       ng2: true,

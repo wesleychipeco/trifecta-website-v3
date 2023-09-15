@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/TradeHistory.styles";
 import { TradeHistoryTable } from "components/table/TradeHistoryTable";
-import { ERA_0 } from "Constants";
+import { ERA_1 } from "Constants";
 
 export const DynastyTradeHistory = () => {
   const [tradeHistory, setTradeHistory] = useState([]);
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("tradeHistory", ERA_0);
+      const collection = await returnMongoCollection("tradeHistory", ERA_1);
       const data = await collection.find({});
       setTradeHistory(data);
     };

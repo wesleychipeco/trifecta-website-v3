@@ -61,7 +61,26 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
 ## AWS Architecture
 
 - NameCheap Domain -> ELB with SSL termination -> EC2 instance running yarn server (in AutoScaling Group)
-- To make changes to production website, after merging PR to master, terminate running EC2 instance. This will trigger the ASG to start new EC2 instance with most-up-to-date master branch
+
+## Deployment Instructions
+
+- Log into AWS console
+- SSH into EC2 instance
+- While in EC2 instance...
+  - Attach to react screen `screen -x react`
+  - Kill screen
+  - Create new build folder with date `mkdir build-9-14`
+- While on local machine...
+  - Switch to main branch
+  - To save previous build, rename build folder to something for a "previous version" `build-8-17`
+  - Build and package the code at the root directory `yarn build`
+  - While in Downloads folder, "scp" the build directory to the directory in the EC2 instance `scp -ri "<keypair>.pem" ..\Documents\trifecta-website-v3\build\* ec2-user@<ec2-instance-ip>:build-9-14/.`
+- Back on EC2 instance...
+
+  - Serve the packaged server `serve -s build-9-14/`
+  - Detach from screen `ctrl + a + d`
+
+- If server changes are needed, "scp" the proxy-server directory to the EC2 instance and run `yarn start`
 
 ## Each year reboot
 
@@ -81,11 +100,10 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
   - Allow inbound traffic rules
     - SSH on Port 22
     - Custom TCP on Port 3000 from all traffic
-    - Custom TCP on Port 3000 from Load Balancer Security Group 
+    - Custom TCP on Port 3000 from Load Balancer Security Group
 - Create Launch Template
   - Specify AMI, instance type, create new key pair, desired capacity
   - Select EC2 security group to use
-  - Under "Advanced Details" copy and paste in `user-data.sh` bash script in this repository
 - Create Auto Scaling Group
   - After creating Launch Template, under "Actions" button, "Create Auto Scaling group"
   - Choose availability zones, subnets, and desired capacities
@@ -102,7 +120,7 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
     - Register Target EC2 instance to the Target Group
 - Register Load Balancer domain to DNS targets (NameCheap)
 - Check that website is reachable via trifectafantasyleague.com domain
--------------- OLD INSTRUCTIONS ---------------
+  -------------- OLD INSTRUCTIONS ---------------
 - Create SSL termination in Amazon Certificate Manager (ACM)
   - Request a certificate for: \*.trifectafantasyleague.com
   - Use DNS validation to validate ownership of domain (login via NameCheap)

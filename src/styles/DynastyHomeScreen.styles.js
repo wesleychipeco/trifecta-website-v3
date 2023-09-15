@@ -22,7 +22,6 @@ export const ScreenContainer = styled.div`
 export const StandingsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 42%;
 
   @media ${MOBILE_MAX_WIDTH} {
     width: 100%;
@@ -38,6 +37,11 @@ export const StandingsTitle = styled(TitleText)`
 export const InformationContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 80%;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    width: 100%;
+  }
 `;
 
 export const AnnouncementsContainer = styled.div`

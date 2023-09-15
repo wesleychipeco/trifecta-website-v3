@@ -82,16 +82,18 @@ export const DynastyHome = () => {
 
   return (
     <S.ScreenContainer>
-      <S.StandingsContainer>
-        <S.StandingsTitle>Dynasty Standings</S.StandingsTitle>
-        <Table
-          columns={DynastyStandingsColumns}
-          data={dynastyStandings}
-          sortBy={[{ id: "totalDynastyPoints", desc: true }]}
-          top3Styling
-          scrollTableHeight={isMobile && "28rem"}
-        />
-      </S.StandingsContainer>
+      {dynastyStandings.length > 0 && (
+        <S.StandingsContainer>
+          <S.StandingsTitle>Dynasty Standings</S.StandingsTitle>
+          <Table
+            columns={DynastyStandingsColumns}
+            data={dynastyStandings}
+            sortBy={[{ id: "totalDynastyPoints", desc: true }]}
+            top3Styling
+            scrollTableHeight={isMobile && "28rem"}
+          />
+        </S.StandingsContainer>
+      )}
       <S.InformationContainer>
         <LeagueCalendar events={calendarEvents} />
         <S.AnnouncementsContainer>
