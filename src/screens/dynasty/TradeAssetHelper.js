@@ -5,9 +5,13 @@ import { numberToOrdinal } from "utils/strings";
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
 export const rosterScraper = async (leagueId, teamId) => {
+  const url =
+    process.env.REACT_APP_IS_LOCAL === "true"
+      ? `http://localhost:5000/rosters`
+      : `https://www.trifectafantasyleague.com:444/rosters`;
+
   const data = await axios.post(
-    `https://www.trifectafantasyleague.com:444/rosters`,
-    // `http://localhost:5000/rosters`,
+    url,
     {
       msgs: [
         {
@@ -127,8 +131,8 @@ const addDefaultDraftPicks = async (sport) => {
   }
 
   const defaultDraftPicks = [];
-  const startingYear = 2024;
-  for (let year = startingYear; year < startingYear + 5; year++) {
+  const startingYear = 2025;
+  for (let year = startingYear; year < startingYear + 4; year++) {
     for (let i = 1; i <= draftPicks; i++) {
       const draftPick = `${year} ${i}${numberToOrdinal(i)} Rd Pick`;
       defaultDraftPicks.push(draftPick);

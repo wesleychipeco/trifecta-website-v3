@@ -1,9 +1,13 @@
 import axios from "axios";
 
 export const standingsScraper = async (leagueId) => {
+  const url =
+    process.env.REACT_APP_IS_LOCAL === "true"
+      ? `http://localhost:5000/standings`
+      : `https://www.trifectafantasyleague.com:444/standings`;
+
   const data = await axios.post(
-    `https://www.trifectafantasyleague.com:444/standings`,
-    // `http://localhost:5000/standings`,
+    url,
     {
       msgs: [{ method: "getStandings", data: { view: "ALL" } }],
       ng2: true,

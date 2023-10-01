@@ -73,7 +73,8 @@ export const TradeAssetDashboard = () => {
       setGmName(name);
 
       if (isAuthenticated) {
-        setHasEditAccess(user.email === gmData?.[0]?.email);
+        const emails = gmData?.[0]?.emails ?? [];
+        setHasEditAccess(emails.includes(user.email));
       }
 
       const tradeBlockData = gmData?.[0]?.tradeBlock ?? {};
