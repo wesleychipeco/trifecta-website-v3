@@ -222,7 +222,7 @@ export const TradeBlockDropdownCustomStyles = {
     paddingBottom: 0,
     width: "8.5rem",
     border: "0.25rem solid rgba(169, 169, 169, 0.8)",
-    borderRadius: "1rem",
+    borderRadius: "0.25rem",
     backgroundColor: BACKGROUND_COLOR,
   }),
 };

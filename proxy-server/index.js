@@ -3,10 +3,14 @@ const app = express();
 const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
+
+const corsOrigin = process.env.REACT_APP_IS_LOCAL
+  ? "*"
+  : "https://www.trifectafantasyleague.com";
+
 app.use(
   cors({
-    origin: "https://www.trifectafantasyleague.com",
-    // origin: "*",
+    origin: corsOrigin,
   })
 );
 app.use(bodyParser.json());
