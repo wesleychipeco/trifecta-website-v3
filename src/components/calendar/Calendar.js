@@ -45,7 +45,7 @@ export const LeagueCalendar = ({ events }) => {
             defaultDate={new Date(firstYear, firstMonth, 1)}
             max={new Date(firstYear, firstMonth, getDaysInMonth(now))}
             views={["month"]}
-            style={{ height: 525, width: 550 }}
+            style={{ height: 600, width: 600 }}
             tooltipAccessor="description"
           />
         </S.OuterCalendarContainer>
