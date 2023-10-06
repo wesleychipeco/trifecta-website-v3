@@ -1,6 +1,6 @@
-#### 3x5 Trifecta Website README
+# 3x5 Trifecta Website README
 
-### Architecture
+## Architecture
 
 - trifectafantasyleague.com domain maintained by NameCheap
 - DNS redirect via CNAME host to AWS Elastic Load Balancer
@@ -13,13 +13,13 @@
 
 ![Architecture Diagram](src/resources/images/3x5-website-architecture-diagram.png "Architecture Diagram")
 
-### Commissioner Upkeep Actions
+## Commissioner Upkeep Actions
 
 - The Commissioner will be responsible for updating certain parameters and variables to allow the website to stay up to date
 
-## Data Updates
+### Data Updates
 
-# When a new dynasty season starts
+##### When a new dynasty season starts
 
 Fantrax Data
 
@@ -41,23 +41,23 @@ teamId
 - Add a new record to the `gmNamesIds` collection with `leagueId`, `sportYear`, and `mappings` using `leagueId` and `teamIds`
 - In each GM's record in the "gm" collection, add a key-value pair of `sportYear` to `teamId`
 
-# When dynasty playoffs start
+##### When dynasty playoffs start
 
 - On Fantrax, set consolation bracket matchups
 
-# When a dynasty season ends
+##### When a dynasty season ends
 
 - Remove the `sportYear` from the `globalVariables.globalVariables.dynasty.inSeasonLeagues` array
 - Add playoff points to season sport standings
 
-# When a trade occurs
+##### When a trade occurs
 
 - Manually execute all available aspects of the trade
 - Add a new record to the `tradeHistory` collection
 
-## Website Updates
+### Website Updates
 
-# When a UI and/or proxy server website is needed
+##### When a UI and/or proxy server website is needed
 
 - On local machine on merged main branch, at root level `yarn build`
 - SSH into AWS instance using key file on local machine
@@ -70,7 +70,7 @@ teamId
 - Detach from the screen
 - Delete the now oldest folder so that there are 2 copies of "build/proxy-server" folder
 
-## Each year reboot
+### Each year reboot
 
 - Each July, create new gmail account `trifectacommissioner<year>@gmail.com`
 - Sign up for free AWS tier
