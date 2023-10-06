@@ -1,90 +1,78 @@
-### Manual Commissioner To-do Actions
+#### 3x5 Trifecta Website README
 
-## Fantasy League Commissioner Upkeep
+### Architecture
 
-- Set draft date and owner selection slot via reverse regular season standings of 2 sports ago
-- After draft, organize division into Evens and Odds
-- Create schedule based off of Trifecta Schedules Google sheet (Rank teams in each division E1 to E5 and O1 to O5 via last same sport season's standings)
-- Manually edit each team's H2H schedule
-- During playoffs, change initial consolation bracket matchup to be 7 vs 10 and 8 vs 9 instead of ESPN's ladder setup
+- trifectafantasyleague.com domain maintained by NameCheap
+- DNS redirect via CNAME host to AWS Elastic Load Balancer
+- Elastic Load Balancer supports https using SSL termination with a generated cert from Amazon Certificate Manager
+- ELB routes traffic to AWS instance, where react server is running and handling requests
+- Security group settings only allow traffic through the ELB to reach the react server
+- All data is stored on a free tier MongoDB instance
+- All AWS resources are operated on the free tier and renewed each year to keep infrastruture costs free
+- Proxy node server used to bypass CORS security on Fantrax API and fetch data
 
-## Website Related
+![Architecture Diagram](src/resources/images/3x5-website-architecture-diagram.png "Architecture Diagram")
 
-- Each season's rule changes, update Trifecta League Manual accordingly
-- Enter MongoDB data (see **Data that needs to be updated in MongoDB manually** below)
+### Commissioner Upkeep Actions
 
-## START/END NEW SPORT
+- The Commissioner will be responsible for updating certain parameters and variables to allow the website to stay up to date
 
-To start a sport, set its "seasonStarted" and "inSeason" of that sport to `true`  
-If "seasonStarted" is `false`, standings will not be displayed at all  
-To end a sport, set its "seasonStarted" to `true` and "inSeason" to `false` --- equivalent to "seasonEnded" = `true`  
-Then immediately manually add `playoffPoints` and `totalTrifectaPoints` to sports's `trifectaStandings` for each owner, putting ? for playoff points and same total while playoffs are happening until playoffs finish
-Code looks for "seasonStarted" = `true` and "inSeason" = `false` to decide to look for `playoffPoints` and `totalTrifectaPoints`
-~~Also for each owner, go to the that owner's current year's matchups and scrape the just completed season~~
+## Data Updates
 
-## START NEW TRIFECTA SEASON
+# When a new dynasty season starts
 
-Update `seasonVariables` collection with new "currentYear", each sport's variables (set "basketball": "seasonStarted" and "inSeason" to true, set everything else to false)
-Set `basektballAhead` to true, which will allow basketball of next trifecta season plus football of previous season to be updated
-Update `teamNumbersPerSport` collection for new Trifecta Season (per Trifecta season, maps "teamNumber" to "ownerNames") - used in Matchups  
-Update `teamLists` collection for new Trifecta Season (per Trifecta Season, array of participating "ownerIds") - used in Trifecta Standings
-Then to update "ALL" matchups to include the just completed Trifecta season, ~~go to the commissioner page and scrape~~ have to do manually as of now
+Fantrax Data
 
-## ADD NEW TRIFECTA OWNER
+- Set all divisions
+- Change all Head-to-Head matchups for the reguar season
+- Complete all offseason trades
+- Update carryover FAAB
+- Figure out when dynasty playoffs start, and set a phone reminder to set consolation bracket matchups
 
-Add new owner to `allTimeTeams` collection in Mongo (matchups dropdown will auto populate with current season) - used in Matchups  
-If not already updated, update `teamNumbersPerSport` collection (per Trifecta season, maps "teamNumber" to "ownerNames") - used in Matchups  
-If not already updated, update `teamLists` collection (per Trifecta Season, array of participating "ownerIds") - used in Trifecta Standings  
-`ownerIds` and `ownerTeamNumbersList` are not used, but rather both just refernce collections for visual check via the UI
+leagueId
 
-## Each time a new collection is created in MongoDB, to be able to interact with it, need to first add rules in Stitch
+- Using inspect on Fantrax website, find the `leagueId`
+- Add the `sportYear` with the `leagueId` to the `leagueIdMappings` object
+- Add the `leaguedId` to the `globalVariables.globalVariables.dynasty.inSeasonLeagues` array
 
-- Go to MongoDB Realm tab
-- Click on correct, registered application
-- Go to "Rules" tab on sidebar and add rules for Read/Write to collection
+teamId
 
-## Data that needs to be updated in MongoDB manually
+- Using inspect on Fantrax website standings page, under payload method "getStandings", responses[0].data.fantasyTeamInfo, find each team's `teamId`
+- Add a new record to the `gmNamesIds` collection with `leagueId`, `sportYear`, and `mappings` using `leagueId` and `teamIds`
+- In each GM's record in the "gm" collection, add a key-value pair of `sportYear` to `teamId`
 
-- After sport's playoffs are complete, playoff points and total trifecta points
-- Trade History
-- Hall of Fame (at end of Trifecta season)
-- Owner Profiles (at end of Trifecta season)
-- Owner Matchups (at end of Trifecta season) [Need to make script that will do this automatically]
+# When dynasty playoffs start
 
-## Pages that pull live data from API
+- On Fantrax, set consolation bracket matchups
 
-- Individual standings of sports that are in-season (only regular season standings)
-- Trifecta standings of completely finished (regular season and playoffs) sports
+# When a dynasty season ends
 
-### Website Development and AWS Stuff
+- Remove the `sportYear` from the `globalVariables.globalVariables.dynasty.inSeasonLeagues` array
+- Add playoff points to season sport standings
 
-## AWS Architecture
+# When a trade occurs
 
-- NameCheap Domain -> ELB with SSL termination -> EC2 instance running yarn server (in AutoScaling Group)
+- Manually execute all available aspects of the trade
+- Add a new record to the `tradeHistory` collection
 
-## Deployment Instructions
+## Website Updates
 
-- Log into AWS console
-- SSH into EC2 instance
-- While in EC2 instance...
-  - Attach to react screen `screen -x react`
-  - Kill screen
-  - Create new build folder with date `mkdir build-9-14`
-- While on local machine...
-  - Switch to main branch
-  - To save previous build, rename build folder to something for a "previous version" `build-8-17`
-  - Build and package the code at the root directory `yarn build`
-  - While in Downloads folder, "scp" the build directory to the directory in the EC2 instance `scp -ri "<keypair>.pem" ..\Documents\trifecta-website-v3\build\* ec2-user@<ec2-instance-ip>:build-9-14/.`
-- Back on EC2 instance...
+# When a UI and/or proxy server website is needed
 
-  - Serve the packaged server `serve -s build-9-14/`
-  - Detach from screen `ctrl + a + d`
-
-- If server changes are needed, "scp" the proxy-server directory to the EC2 instance and run `yarn start`
+- On local machine on merged main branch, at root level `yarn build`
+- SSH into AWS instance using key file on local machine
+- On EC2 instance, create new folder with today's date `mkdir build-9-30` or `mkdir proxy-server-9-30`
+- On local machine, `scp` the local "build/proxy-server" folder to newly created "build/proxy-server" folder on AWS instance
+- On EC2 instance, attach to "react" or "proxy" screen
+- Kill process
+- For new UI build, re-serve new build `serve -s build-9-30/`
+- For new proxy server, cd to new proxy-server folder, install node packages, and run proxy server using npm run
+- Detach from the screen
+- Delete the now oldest folder so that there are 2 copies of "build/proxy-server" folder
 
 ## Each year reboot
 
-- Each trifecta season, create new gmail account `trifectacommissioner<year>@gmail.com`
+- Each July, create new gmail account `trifectacommissioner<year>@gmail.com`
 - Sign up for free AWS tier
 - In November, renew trifectafantasyleague domain
 - Create SSL certificate in Amazon Certificate Manager (ACM)
@@ -104,9 +92,6 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
 - Create Launch Template
   - Specify AMI, instance type, create new key pair, desired capacity
   - Select EC2 security group to use
-- Create Auto Scaling Group
-  - After creating Launch Template, under "Actions" button, "Create Auto Scaling group"
-  - Choose availability zones, subnets, and desired capacities
 - Launch Instances from Template (from EC2 instance page)
 - Check that webserver is up and reachable from "Public IPv4 DNS" port 3000
 - Create Application Load Balancer
@@ -120,29 +105,3 @@ If not already updated, update `teamLists` collection (per Trifecta Season, arra
     - Register Target EC2 instance to the Target Group
 - Register Load Balancer domain to DNS targets (NameCheap)
 - Check that website is reachable via trifectafantasyleague.com domain
-  -------------- OLD INSTRUCTIONS ---------------
-- Create SSL termination in Amazon Certificate Manager (ACM)
-  - Request a certificate for: \*.trifectafantasyleague.com
-  - Use DNS validation to validate ownership of domain (login via NameCheap)
-- Create Application Load Balancer
-  - Internet-facing
-  - ipv4
-  - 2 Listeners: 1) HTTP on Port 80 and 2) HTTPS on Port 443
-  - Make available in all AZs
-  - Attach ACM SSL termination certificate to ELB
-  - Create new Security Group
-    - Allow all traffic into ELB only on ports 80 and 443
-  - Create Target Group for routing traffic target
-    - Webserver Target Group receiving only HTTP traffic on port 3000
-    - Register Target EC2 instance to the Target Group (After create EC2 instance)
-- Create Auto Scaling Group
-  - First create Launch Template
-    - Specify AMI, instance type, key pair, desired capacity, minimum and maximum capacity
-    - Create new EC2-specific security group, only allowing SSH access and TCP connections on Port 3000 from ELB SG
-    - Under "Advanced Details" copy and paste in `user-data.sh` bash script in this repo
-  - Next create Auto Scaling Group
-    - Configure settings, scaling policies, and namely, attaching to an existing load balancer
-  - EC2 instance should be launched
-  - Check that user data script is run and webserver is active and reachable at localhost:3000
-  - Check that website is reachable via load balancer public IP DNS name
-- Register public DNS name of ELB to trifectafantasyleague.com DNS resolution (on NameCheap)
