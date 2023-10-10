@@ -2,6 +2,33 @@ import styled from "styled-components";
 import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
 import { MOBILE_MAX_WIDTH, TITLE_FONT_SIZE } from "./global";
 
+export const DraftsHomeContainer = styled.div`
+  width: 85%;
+  margin-top: 2rem;
+`;
+
+export const DraftsHomeRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 3rem 0;
+`;
+
+export const DraftsHeader = styled.h2`
+  margin: 0;
+  font-size: 2rem;
+  text-align: center;
+  text-decoration: underline;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1.25rem;
+    text-align: center;
+    width: 16rem;
+    align-self: center;
+  }
+`;
+
 export const FlexColumnCenterContainer = styled.div`
   display: flex;
   flex-direction: column;

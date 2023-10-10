@@ -94,6 +94,11 @@ export const OpenNavbar = () => {
             Trade Assets Home
           </S.Link>
           <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.DraftsHome}`}
+          >
+            Drafts
+          </S.Link>
+          <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeHistory}`}
           >
             Trade History
@@ -105,11 +110,6 @@ export const OpenNavbar = () => {
             League Constitution
           </S.LinkStyle>
           <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
-          <S.Link
-            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/draft-results/basketball/startup`}
-          >
-            Draft Results
-          </S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
