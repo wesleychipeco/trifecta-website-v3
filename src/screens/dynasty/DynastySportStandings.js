@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import isSameDay from "date-fns/isSameDay";
 import { capitalize, sortBy } from "lodash";
@@ -6,11 +6,13 @@ import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
-import { DynastyStandingsColumns } from "./StandingsColumns";
+import { DynastyStandingsColumnsRaw } from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
 import { ERA_1, HIGH_TO_LOW } from "Constants";
 import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
+import { addKeyValueToEachObjectInArray, insertIntoArray } from "utils/arrays";
+import { PlayoffColumns } from "./StandingsColumns";
 
 const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
@@ -51,13 +53,19 @@ export const DynastySportStandings = ({ sport }) => {
           gmNamesIdsMapping,
           sport
         );
-        const dynastyStandings = assignRankPoints(
+        const dynastyStandingsNoPlayoffs = assignRankPoints(
           Object.values(divisionStandings).flat(1),
           "winPer",
           HIGH_TO_LOW,
-          "dynastyPoints",
+          "totalDynastyPoints",
           16,
           1
+        );
+
+        const dynastyStandings = addKeyValueToEachObjectInArray(
+          dynastyStandingsNoPlayoffs,
+          { dynastyPoints: "totalDynastyPoints" },
+          { playoffPoints: 0 }
         );
 
         display(dynastyStandings, divisionStandings);
@@ -113,7 +121,7 @@ export const DynastySportStandings = ({ sport }) => {
     }
   }, [isReady, sport, year]);
 
-  const divisionRecordSorter = (rowA, rowB) => {
+  const divisionRecordSorter = useCallback((rowA, rowB) => {
     const divRecordA = rowA?.values?.divisionRecord ?? "";
     const divRecordB = rowB?.values?.divisionRecord ?? "";
     const divRecordAArray = divRecordA.split("-");
@@ -139,9 +147,19 @@ export const DynastySportStandings = ({ sport }) => {
     }
 
     return 0;
-  };
+  }, []);
 
-  const BasketballBaseballColumns = useMemo(
+  const DynastyStandingsColumns = useMemo(() => {
+    if (!isReady) {
+      return [];
+    }
+    const sportYear = `${sport}${year}`;
+    return !inSeasonLeagues.includes(sportYear)
+      ? insertIntoArray(DynastyStandingsColumnsRaw, 4, PlayoffColumns)
+      : DynastyStandingsColumnsRaw;
+  }, [isReady, sport, year]);
+
+  const BasketballBaseballDivisionColumns = useMemo(
     () => [
       {
         Header: "Team Name",
@@ -190,7 +208,7 @@ export const DynastySportStandings = ({ sport }) => {
     []
   );
 
-  const FootballColumns = useMemo(
+  const FootballDivisionColumns = useMemo(
     () => [
       {
         Header: "Team Name",
@@ -251,9 +269,11 @@ export const DynastySportStandings = ({ sport }) => {
     []
   );
 
-  const standingsColumns = useMemo(() => {
-    return sport === "football" ? FootballColumns : BasketballBaseballColumns;
-  }, [sport, FootballColumns, BasketballBaseballColumns]);
+  const divisionStandingsColumns = useMemo(() => {
+    return sport === "football"
+      ? FootballDivisionColumns
+      : BasketballBaseballDivisionColumns;
+  }, [sport, FootballDivisionColumns, BasketballBaseballDivisionColumns]);
 
   const orderedDivisionStandings = useMemo(() => {
     return Object.keys(divisionStandings).sort((a, b) => {
@@ -271,7 +291,7 @@ export const DynastySportStandings = ({ sport }) => {
             <Table
               columns={DynastyStandingsColumns}
               data={dynastyStandings}
-              sortBy={[{ id: "dynastyPoints", desc: true }]}
+              sortBy={[{ id: "totalDynastyPoints", desc: true }]}
               top3Styling
             />
           </S.SingleTableContainer>
@@ -283,7 +303,7 @@ export const DynastySportStandings = ({ sport }) => {
                 <S.SingleTableContainer key={division}>
                   <S.TableTitle>{division}</S.TableTitle>
                   <Table
-                    columns={standingsColumns}
+                    columns={divisionStandingsColumns}
                     data={divisionStandings[division]}
                     sortBy={[{ id: "Win%", desc: true }]}
                     top3Styling
@@ -302,7 +322,7 @@ export const DynastySportStandings = ({ sport }) => {
                 <S.SingleTableContainer key={division}>
                   <S.TableTitle>{division}</S.TableTitle>
                   <Table
-                    columns={standingsColumns}
+                    columns={divisionStandingsColumns}
                     data={divisionStandings[division]}
                     sortBy={[{ id: "Win%", desc: true }]}
                     top3Styling
