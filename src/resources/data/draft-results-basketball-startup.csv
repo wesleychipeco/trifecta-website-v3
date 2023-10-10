@@ -1,0 +1,241 @@
+Player ID,Round,Pick,Ov Pick,Pos,Player,Team,Fantasy Team
+*03e75*,1,1,1,C,Nikola Jokic,DEN,ACP
+*04kj6*,1,2,2,PG,Luka Doncic,DAL,MLAM
+*05qtv*,1,3,3,PG,Tyrese Haliburton,IND,TC
+*03xmv*,1,4,4,SF,Jayson Tatum,BOS,CLIU
+*04qro*,1,5,5,SG,Shai Gilgeous-Alexander,OKC,PAN
+*06cch*,1,6,6,PF,Victor Wembanyama,SA,KLIU
+*03al2*,1,7,7,C,Joel Embiid,PHI,JTTA
+*031m2*,1,8,8,PF,Giannis Antetokounmpo,MIL,GMK
+*05qug*,1,9,9,SG,Anthony Edwards,MIN,TFLA
+*01enh*,1,10,10,PG,Stephen Curry,GS,LB
+*05qto*,1,11,11,PG,LaMelo Ball,CHA,WGMO
+*05uib*,1,12,12,PG,Cade Cunningham,DET,JLIU
+*04qrk*,1,13,13,PG,Trae Young,ATL,JAGO
+*02nf1*,1,14,14,PF,Anthony Davis,LAL,DAVE
+*04qrj*,1,15,15,C,Jaren Jackson,MEM,CHIP
+*03nwm*,1,16,16,SG,Devin Booker,PHO,JH
+*04qrn*,2,1,17,SF,Mikal Bridges,BKN,JH
+*03ad3*,2,2,18,C,Karl-Anthony Towns,MIN,CHIP
+*001aw*,2,3,19,SF,Kevin Durant,PHO,DAVE
+*04ewe*,2,4,20,SG,Donovan Mitchell,CLE,JAGO
+*06211*,2,5,21,PF,Chet Holmgren,OKC,JLIU
+*042n7*,2,6,22,PF,Domantas Sabonis,SAC,WGMO
+*04ewf*,2,7,23,C,Bam Adebayo,MIA,LB
+*05uid*,2,8,24,C,Evan Mobley,CLE,TFLA
+*049kb*,2,9,25,PG,De'Aaron Fox,SAC,GMK
+*051ol*,2,10,26,PG,Darius Garland,CLE,JTTA
+*04azw*,2,11,27,PF,Lauri Markkanen,UTA,KLIU
+*02nf6*,2,12,28,PG,Damian Lillard,MIL,PAN
+*027oj*,2,13,29,PG,Kyrie Irving,DAL,CLIU
+*06210*,2,14,30,SF,Paolo Banchero,ORL,TC
+*06cdn*,2,15,31,PG,Scoot Henderson,POR,MLAM
+*04848*,2,16,32,PG,Fred VanVleet,HOU,ACP
+*03el5*,3,1,33,PF,Kristaps Porzingis,BOS,ACP
+*051oh*,3,2,34,PF,Zion Williamson,NO,MLAM
+*05uiq*,3,3,35,C,Alperen Sengun,HOU,TC
+*0621b*,3,4,36,SG,Jalen Williams,OKC,CLIU
+*03ad2*,3,5,37,C,Myles Turner,IND,PAN
+*042nq*,3,6,38,PG,Dejounte Murray,ATL,KLIU
+*05uig*,3,7,39,SG,Josh Giddey,OKC,JTTA
+*05qt3*,3,8,40,SG,Desmond Bane,MEM,GMK
+*042n4*,3,9,41,PG,Jamal Murray,DEN,TFLA
+*04qsa*,3,10,42,PG,Jalen Brunson,NY,LB
+*03lls*,3,11,43,SF,Jaylen Brown,BOS,WGMO
+*05uie*,3,12,44,SF,Scottie Barnes,TOR,JLIU
+*049kd*,3,13,45,C,Deandre Ayton,POR,JAGO
+*0011e*,3,14,46,SF,LeBron James,LAL,DAVE
+*042nm*,3,15,47,PF,Pascal Siakam,TOR,CHIP
+*027p0*,3,16,48,C,Nikola Vucevic,CHI,JH
+*05uus*,4,1,49,SG,Austin Reaves,LAL,JH
+*05qsq*,4,2,50,SG,Tyrese Maxey,PHI,CHIP
+*01eo6*,4,3,51,SG,James Harden,PHI,DAVE
+*04ewn*,4,4,52,SF,OG Anunoby,TOR,JAGO
+*051oi*,4,5,53,PG,Ja Morant,MEM,JLIU
+*0621l*,4,6,54,C,Walker Kessler,UTA,WGMO
+*05uii*,4,7,55,SF,Franz Wagner,ORL,LB
+*051pb*,4,8,56,C,Nicolas Claxton,BKN,TFLA
+*03ajv*,4,9,57,PF,Julius Randle,NY,GMK
+*05qtr*,4,10,58,SG,Devin Vassell,SA,JTTA
+*03ams*,4,11,59,SG,Zach LaVine,CHI,KLIU
+*042n1*,4,12,60,SF,Brandon Ingram,NO,PAN
+*051p8*,4,13,61,SG,Jordan Poole,WAS,CLIU
+*051ot*,4,14,62,SG,Tyler Herro,MIA,TC
+*027oz*,4,15,63,SF,Kawhi Leonard,LAC,MLAM
+*01uyj*,4,16,64,SF,Paul George,LAC,ACP
+*027pe*,5,1,65,SF,Jimmy Butler,MIA,JH
+*01eo9*,5,2,66,PG,Jrue Holiday,BOS,CHIP
+*04ewm*,5,3,67,C,Jarrett Allen,CLE,DAVE
+*03aq2*,5,4,68,PF,Jerami Grant,POR,JAGO
+*05uic*,5,5,69,SG,Jalen Green,HOU,JLIU
+*04qs1*,5,6,70,SG,Anfernee Simons,POR,WGMO
+*01eon*,5,7,71,SG,DeMar DeRozan,CHI,LB
+*06214*,5,8,72,SG,Jaden Ivey,DET,TFLA
+*02nf3*,5,9,73,SG,Bradley Beal,PHO,GMK
+*06213*,5,10,74,SF,Keegan Murray,SAC,JTTA
+*02xg9*,5,11,75,C,Rudy Gobert,MIN,KLIU
+*04ewt*,5,12,76,SG,Derrick White,BOS,PAN
+*06212*,5,13,77,PF,Jabari Smith,HOU,CLIU
+*04ewk*,5,14,78,PF,John Collins,UTA,TC
+*005ki*,5,15,79,C,Brook Lopez,MIL,MLAM
+*04qrp*,5,16,80,SF,Miles Bridges,CHA,ACP
+*031lx*,6,1,81,SG,CJ McCollum,NO,ACP
+*027ou*,6,2,82,SG,Klay Thompson,GS,MLAM
+*06ccf*,6,3,83,SF,Ausar Thompson,DET,TC
+*042n6*,6,4,84,C,Jakob Poeltl,TOR,CLIU
+*06ca8*,6,5,85,SF,Amen Thompson,HOU,PAN
+*03ad4*,6,6,86,PG,D'Angelo Russell,LAL,KLIU
+*04ewr*,6,7,87,PF,Kyle Kuzma,WAS,JTTA
+*051p9*,6,8,88,SF,Keldon Johnson,SA,GMK
+*051or*,6,9,89,PF,Cameron Johnson,BKN,TFLA
+*04qrr*,6,10,90,SF,Michael Porter,DEN,LB
+*049s6*,6,11,91,PG,Markelle Fultz,ORL,WGMO
+*0621c*,6,12,92,C,Jalen Duren,DET,JLIU
+*05qtt*,6,13,93,C,Onyeka Okongwu,ATL,JAGO
+*03nwl*,6,14,94,PG,Terry Rozier,CHA,DAVE
+*051pi*,6,15,95,PF,Daniel Gafford,WAS,CHIP
+*03e74*,6,16,96,PG,Spencer Dinwiddie,BKN,JH
+*02ym0*,7,1,97,SF,Andrew Wiggins,GS,JH
+*05qtq*,7,2,98,PG,Tre Jones,SA,CHIP
+*03ad0*,7,3,99,PG,Tyus Jones,WAS,DAVE
+*0621g*,7,4,100,PF,Tari Eason,HOU,JAGO
+*0621e*,7,5,101,C,Mark Williams,CHA,JLIU
+*04qrl*,7,6,102,C,Wendell Carter,ORL,WGMO
+*05uir*,7,7,103,SF,Trey Murphy,NO,LB
+*06215*,7,8,104,SG,Bennedict Mathurin,IND,TFLA
+*027oo*,7,9,105,C,Jonas Valanciunas,NO,GMK
+*03al1*,7,10,106,PG,Marcus Smart,MEM,JTTA
+*05qu9*,7,11,107,PG,Immanuel Quickley,NY,KLIU
+*06216*,7,12,108,SG,Shaedon Sharpe,POR,PAN
+*04qs4*,7,13,109,C,Robert Williams,POR,CLIU
+*04qse*,7,14,110,SG,Gary Trent,TOR,TC
+*042n3*,7,15,111,SG,Buddy Hield,IND,MLAM
+*03lg1*,7,16,112,PG,Ben Simmons,BKN,ACP
+*06cca*,8,1,113,SF,Brandon Miller,CHA,ACP
+*02ng3*,8,2,114,SF,Khris Middleton,MIL,MLAM
+*051os*,8,3,115,PF,P.J. Washington,CHA,TC
+*05qu0*,8,4,116,PF,Jaden McDaniels,MIN,CLIU
+*03e6s*,8,5,117,C,Clint Capela,ATL,PAN
+*05qtj*,8,6,118,SF,Deni Avdija,WAS,KLIU
+*04ewu*,8,7,119,SG,Josh Hart,NY,JTTA
+*04qrw*,8,8,120,SG,Kevin Huerter,SAC,GMK
+*0017e*,8,9,121,PG,Chris Paul,GS,TFLA
+*04ex8*,8,10,122,SG,Dillon Brooks,HOU,LB
+*04ewc*,8,11,123,PF,Zach Collins,SA,WGMO
+*06218*,8,12,124,PF,Jeremy Sochan,SA,JLIU
+*027p4*,8,13,125,PF,Tobias Harris,PHI,JAGO
+*0527l*,8,14,126,SG,Luguentz Dort,OKC,DAVE
+*05uj9*,8,15,127,SF,Herbert Jones,NO,CHIP
+*005kc*,8,16,128,PG,Russell Westbrook,LAC,JH
+*03e6n*,9,1,129,C,Jusuf Nurkic,PHO,JH
+*051oj*,9,2,130,SG,RJ Barrett,NY,CHIP
+*02nfz*,9,3,131,PF,Draymond Green,GS,DAVE
+*04qsj*,9,4,132,PG,Bruce Brown,DEN,JAGO
+*06cab*,9,5,133,PF,Jarace Walker,IND,JLIU
+*04qrm*,9,6,134,SG,Collin Sexton,UTA,WGMO
+*05uiz*,9,7,135,SG,Quentin Grimes,NY,LB
+*04qsd*,9,8,136,C,Mitchell Robinson,NY,TFLA
+*042nw*,9,9,137,PG,Malcolm Brogdon,POR,GMK
+*03nwn*,9,10,138,PF,Bobby Portis,MIL,JTTA
+*042nt*,9,11,139,C,Ivica Zubac,LAC,KLIU
+*04qsm*,9,12,140,PG,De'Anthony Melton,PHI,PAN
+*05uiu*,9,13,141,SF,Jalen Johnson,ATL,CLIU
+*06cc8*,9,14,142,C,Dereck Lively,DAL,TC
+*0527h*,9,15,143,C,Naz Reid,MIN,MLAM
+*03nwq*,9,16,144,PF,Christian Wood,LAL,ACP
+*03byk*,10,1,145,SG,Jordan Clarkson,UTA,ACP
+*05qsx*,10,2,146,PF,Obi Toppin,IND,MLAM
+*049kc*,10,3,147,SG,Malik Monk,SAC,TC
+*0621u*,10,4,148,SG,Andrew Nembhard,IND,CLIU
+*05qt0*,10,5,149,SF,Saddiq Bey,ATL,PAN
+*05qub*,10,6,150,C,Isaiah Stewart,DET,KLIU
+*04qsi*,10,7,151,PF,Jarred Vanderbilt,LAL,JTTA
+*031m4*,10,8,152,PG,Dennis Schroder,TOR,GMK
+*05qsl*,10,9,153,PF,Patrick Williams,CHI,TFLA
+*027pg*,10,10,154,SF,Bojan Bogdanovic,DET,LB
+*06cby*,10,11,155,SG,Keyonte George,UTA,WGMO
+*06cc5*,10,12,156,PG,Anthony Black,ORL,JLIU
+*06217*,10,13,157,PG,Dyson Daniels,NO,JAGO
+*03aq3*,10,14,158,SF,Kyle Anderson,MIN,DAVE
+*03e6u*,10,15,159,SG,Bogdan Bogdanovic,ATL,CHIP
+*03al0*,10,16,160,PF,Aaron Gordon,DEN,JH
+*05qu1*,11,1,161,C,James Wiseman,DET,JH
+*06ca7*,11,2,162,SF,Cam Whitmore,HOU,CHIP
+*0015e*,11,3,163,PG,Mike Conley,MIN,DAVE
+*0621j*,11,4,164,SF,Malaki Branham,SA,JAGO
+*06cc0*,11,5,165,PF,Taylor Hendricks,UTA,JLIU
+*051p2*,11,6,166,PF,Grant Williams,DAL,WGMO
+*03r7z*,11,7,167,SG,Norman Powell,LAC,LB
+*031lz*,11,8,168,C,Steven Adams,MEM,TFLA
+*051ok*,11,9,169,SF,De'Andre Hunter,ATL,GMK
+*,11,10,170,,,,JTTA
+*,11,11,171,,,,KLIU
+*,11,12,172,,,,PAN
+*,11,13,173,,,,CLIU
+*,11,14,174,,,,TC
+*,11,15,175,,,,MLAM
+*,11,16,176,,,,ACP
+*,12,1,177,,,,ACP
+*,12,2,178,,,,MLAM
+*,12,3,179,,,,TC
+*,12,4,180,,,,CLIU
+*,12,5,181,,,,PAN
+*,12,6,182,,,,KLIU
+*,12,7,183,,,,JTTA
+*,12,8,184,,,,GMK
+*,12,9,185,,,,TFLA
+*,12,10,186,,,,LB
+*,12,11,187,,,,WGMO
+*,12,12,188,,,,JLIU
+*,12,13,189,,,,JAGO
+*,12,14,190,,,,DAVE
+*,12,15,191,,,,CHIP
+*,12,16,192,,,,JH
+*,13,1,193,,,,JH
+*,13,2,194,,,,CHIP
+*,13,3,195,,,,DAVE
+*,13,4,196,,,,JAGO
+*,13,5,197,,,,JLIU
+*,13,6,198,,,,WGMO
+*,13,7,199,,,,LB
+*,13,8,200,,,,TFLA
+*,13,9,201,,,,GMK
+*,13,10,202,,,,JTTA
+*,13,11,203,,,,KLIU
+*,13,12,204,,,,PAN
+*,13,13,205,,,,CLIU
+*,13,14,206,,,,TC
+*,13,15,207,,,,MLAM
+*,13,16,208,,,,ACP
+*,14,1,209,,,,ACP
+*,14,2,210,,,,MLAM
+*,14,3,211,,,,TC
+*,14,4,212,,,,CLIU
+*,14,5,213,,,,PAN
+*,14,6,214,,,,KLIU
+*,14,7,215,,,,JTTA
+*,14,8,216,,,,GMK
+*,14,9,217,,,,TFLA
+*,14,10,218,,,,LB
+*,14,11,219,,,,WGMO
+*,14,12,220,,,,JLIU
+*,14,13,221,,,,JAGO
+*,14,14,222,,,,DAVE
+*,14,15,223,,,,CHIP
+*,14,16,224,,,,JH
+*,15,1,225,,,,JH
+*,15,2,226,,,,CHIP
+*,15,3,227,,,,DAVE
+*,15,4,228,,,,JAGO
+*,15,5,229,,,,JLIU
+*,15,6,230,,,,WGMO
+*,15,7,231,,,,LB
+*,15,8,232,,,,TFLA
+*,15,9,233,,,,GMK
+*,15,10,234,,,,JTTA
+*,15,11,235,,,,KLIU
+*,15,12,236,,,,PAN
+*,15,13,237,,,,CLIU
+*,15,14,238,,,,TC
+*,15,15,239,,,,MLAM
+*,15,16,240,,,,ACP

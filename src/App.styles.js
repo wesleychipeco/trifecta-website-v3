@@ -5,7 +5,7 @@ export const App = styled.div`
   width: 100%;
 `;
 
-const NAVBAR_BODY_PADDING = "8rem";
+const NAVBAR_BODY_PADDING = "7rem";
 export const MOBILE_NAVBAR_BODY_PADDING = "0.5rem";
 export const Body = styled.div`
   padding-left: ${NAVBAR_BODY_PADDING};

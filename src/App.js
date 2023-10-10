@@ -38,6 +38,7 @@ import { DynastyStandings } from "screens/dynasty/DynastyStandings";
 import { TradeAssetDashboard } from "screens/dynasty/TradeAssetDashboard";
 import { TradeAssetHome } from "screens/dynasty/TradeAssetHome";
 import { SignInBanner } from "components/banner/SignInBanner";
+import { DraftResults } from "screens/dynasty/DraftResults";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -214,6 +215,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.TradeAssetDashboard}
                   element={<TradeAssetDashboard />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.DraftResults}
+                  element={<DraftResults />}
                   exact
                 />
               </Route>

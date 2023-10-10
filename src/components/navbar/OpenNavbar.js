@@ -105,6 +105,11 @@ export const OpenNavbar = () => {
             League Constitution
           </S.LinkStyle>
           <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/draft-results/basketball/startup`}
+          >
+            Draft Results
+          </S.Link>
         </S.LinkContainer>
       </S.OpenNavbarContainer>
     );
