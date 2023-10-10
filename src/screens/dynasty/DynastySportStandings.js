@@ -75,7 +75,7 @@ export const DynastySportStandings = ({ sport }) => {
         await collection.deleteMany({ year });
         await collection.insertOne({
           year,
-          // lastScraped: new Date().toISOString(),
+          lastScraped: new Date().toISOString(),
           dynastyStandings,
           divisionStandings,
         });
