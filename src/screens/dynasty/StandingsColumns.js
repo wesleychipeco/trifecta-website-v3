@@ -1,6 +1,6 @@
 import * as S from "styles/StandardScreen.styles";
 
-export const DynastyStandingsColumns = [
+export const DynastyStandingsColumnsRaw = [
   {
     Header: "Team Name",
     accessor: "teamName",
@@ -26,7 +26,22 @@ export const DynastyStandingsColumns = [
   },
   {
     Header: "Dynasty Points",
+    accessor: "totalDynastyPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+];
+
+export const PlayoffColumns = [
+  {
+    Header: "Regular Season Dynasty Points",
     accessor: "dynastyPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Playoff Points",
+    accessor: "playoffPoints",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
