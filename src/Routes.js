@@ -14,6 +14,7 @@ export const STATIC_ROUTES = {
   CompileTotalMatchups: "compile-total-matchups",
   DynastyStandings: "standings/dynasty",
   TradeAssetHome: "trade-asset-home",
+  DraftsHome: "drafts-home",
 };
 
 export const ROUTES = {
@@ -25,6 +26,7 @@ export const ROUTES = {
   OwnerRecords: "owner-records/:teamNumber",
   OwnerMatchups: "owner-matchups/:teamNumber/:year",
   TradeAssetDashboard: "trade-asset-dashboard/:gmAbbreviation",
+  DraftResults: "draft/:sport/:year",
 };
 
 export const BASE_ROUTES = {

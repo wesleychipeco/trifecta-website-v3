@@ -94,6 +94,11 @@ export const OpenNavbar = () => {
             Trade Assets Home
           </S.Link>
           <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.DraftsHome}`}
+          >
+            Drafts
+          </S.Link>
+          <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeHistory}`}
           >
             Trade History
