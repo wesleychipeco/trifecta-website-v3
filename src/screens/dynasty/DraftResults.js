@@ -21,7 +21,6 @@ export const DraftResults = () => {
         download: true,
         complete: (contents) => {
           if (contents.errors.length == 0) {
-            console.log("con", contents.data);
             createGrid(contents.data);
           }
         },
@@ -71,6 +70,14 @@ export const DraftResults = () => {
 
       arrayOfPicks.push(pickObject);
     }
+
+    // after ending final loop, add last arrayOfPicks to arrayOfRounds
+    const toAdd =
+      arrayOfPicks[0]?.fantasyTeam === firstPickGM
+        ? arrayOfPicks
+        : arrayOfPicks.reverse();
+    arrayOfRounds.push(toAdd);
+
     setDraftResultsGrid(arrayOfRounds);
   };
 
