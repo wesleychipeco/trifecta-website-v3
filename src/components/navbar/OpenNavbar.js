@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
@@ -14,6 +14,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 export const OpenNavbar = () => {
   // redux state to manage seasonVariables
   const dispatch = useDispatch();
+  const version = useMemo(() => {
+    const { version } = require("../../../package.json");
+    return version;
+  });
 
   // trifecta season variables
   const seasonVariables = useSelector(
@@ -111,6 +115,7 @@ export const OpenNavbar = () => {
           </S.LinkStyle>
           <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
         </S.LinkContainer>
+        <S.VersionNumber>{`v${version}`}</S.VersionNumber>
       </S.OpenNavbarContainer>
     );
   }
@@ -187,6 +192,7 @@ export const OpenNavbar = () => {
           League Manual
         </S.LinkStyle>
         <S.Link to={`/`}>3x5 Dynasty</S.Link>
+        <S.VersionNumber>{`v${version}`}</S.VersionNumber>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
   );
