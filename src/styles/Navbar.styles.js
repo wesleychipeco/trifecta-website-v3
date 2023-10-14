@@ -204,3 +204,13 @@ export const CurrentStandings = styled.p`
     cursor: pointer;
   }
 `;
+
+export const VersionNumber = styled.p`
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+`;
