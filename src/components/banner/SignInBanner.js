@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { useLocation } from "react-router-dom";
+import ReactGA from "react-ga4";
 import * as S from "styles/Banner.styles";
 import * as T from "styles/shared";
 
@@ -11,10 +12,20 @@ export const SignInBanner = () => {
 
   const loginOnClick = useCallback(() => {
     loginWithRedirect();
+    ReactGA.event({
+      category: "userLogin",
+      action: "login",
+      label: "user login",
+    });
   }, []);
 
   const logoutOnClick = useCallback(() => {
     logout({ returnTo: window.location.origin });
+    ReactGA.event({
+      category: "userLogin",
+      action: "logout",
+      label: "user logout",
+    });
   }, [window.location]);
 
   if (location.pathname.startsWith("/dynasty")) {

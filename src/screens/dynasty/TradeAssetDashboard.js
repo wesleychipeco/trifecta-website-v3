@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select, { components } from "react-select";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMediaQuery } from "react-responsive";
+import ReactGA from "react-ga4";
 
 import { retrieveAssets } from "./TradeAssetHelper";
 import * as S from "styles/TradeAssetDashboard.styles";
@@ -173,6 +174,11 @@ export const TradeAssetDashboard = () => {
   };
 
   const saveTradeBlock = async () => {
+    ReactGA.event({
+      category: "tradeBlock",
+      action: "save",
+      label: "save trade block",
+    });
     const gmCollection = await returnMongoCollection("gms", era);
     console.log("FINAL TRADE BLOCK", tradeBlock);
 
