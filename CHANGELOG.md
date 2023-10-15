@@ -1,4 +1,12 @@
-### PR links(https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
+### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
+
+## [3.7.1] - 2023-10-14
+
+### Added
+
+#### [PR-61] - 2023-10-14
+
+- Enable Google Analytics
 
 ## [3.7.0] - 2023-10-13
 
