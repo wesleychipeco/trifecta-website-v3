@@ -40,6 +40,8 @@ import { TradeAssetHome } from "screens/dynasty/TradeAssetHome";
 import { SignInBanner } from "components/banner/SignInBanner";
 import { DraftResults } from "screens/dynasty/DraftResults";
 import { DraftsHome } from "screens/dynasty/DraftsHome";
+import { CommissionerHome } from "screens/dynasty/CommissionerHome";
+import { CommissionerEnterTrade } from "screens/dynasty/CommissionerEnterTrade";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -226,6 +228,16 @@ export const App = () => {
                 <Route
                   path={ROUTES.DraftResults}
                   element={<DraftResults />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.CommissionerHome}
+                  element={<CommissionerHome />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.CommissionerEnterTrade}
+                  element={<CommissionerEnterTrade />}
                   exact
                 />
               </Route>
