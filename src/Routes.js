@@ -35,7 +35,7 @@ export const ROUTES = {
   OwnerRecords: "owner-records/:teamNumber",
   OwnerMatchups: "owner-matchups/:teamNumber/:year",
   TradeAssetDashboard: "trade-asset-dashboard/:gmAbbreviation",
-  DraftResults: "draft/:sport/:year",
+  DraftBoard: "draft/:sport/:year",
 };
 
 export const BASE_ROUTES = {

@@ -6,7 +6,7 @@ import { Button } from "components/button/Button";
 import { capitalize } from "lodash";
 import { STATIC_ROUTES } from "Routes";
 import { splitIntoArraysOfLengthX } from "utils/arrays";
-import * as S from "styles/DraftResults.styles";
+import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/StandardScreen.styles";
 
 export const DraftsHome = () => {
@@ -20,7 +20,6 @@ export const DraftsHome = () => {
       const draftCollection = await returnMongoCollection("drafts", era);
       const draftData = await draftCollection.find({ type: "status" });
       const draft = draftData?.[0] ?? {};
-      console.log("draft data", draft);
       const { completedDrafts, futureDrafts } = draft;
 
       setCompletedDraftsArray(splitIntoArraysOfLengthX(completedDrafts, 3));
@@ -82,7 +81,7 @@ export const DraftsHome = () => {
                     key={draft}
                     title={title}
                     navTo={`${STATIC_ROUTES.DynastyHome}/${era}/draft/${sport}/${year}`}
-                    disabled
+                    disabled={year !== "startup"}
                   />
                 );
               })}

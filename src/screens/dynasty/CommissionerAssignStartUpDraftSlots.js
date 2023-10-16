@@ -14,6 +14,7 @@ import {
 } from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
+import { assignStartupDraftSlots } from "./AssignDraftSlotsHelper";
 
 const ALPHABET = [
   "A",
@@ -129,7 +130,19 @@ export const CommissionerAssignStartupDraftSlots = () => {
     }
   }, [draftSlotAssignments, selectedSport]);
 
-  const saveDraftSlots = useCallback(() => {
+  const saveToDB = async (era, sport, year, grid) => {
+    const draftsCollection = returnMongoCollection("drafts", era);
+    const draftObject = {
+      type: `${sport}-${year}`,
+      grid,
+      createdAt: new Date().toISOString(),
+    };
+
+    (await draftsCollection).insertOne(draftObject);
+    timeoutSaveMessage("Successfully saved grid to drafts collection");
+  };
+
+  const saveDraftSlots = useCallback(async () => {
     // check for duplicates
     const draftSlotsArray = Object.values(draftSlotAssignments);
     console.log("draft slots array", draftSlotsArray);
@@ -139,9 +152,9 @@ export const CommissionerAssignStartupDraftSlots = () => {
       return;
     }
 
-    // do assignment logic
-    console.log("its ok");
-  }, [draftSlotAssignments]);
+    const grid = assignStartupDraftSlots(selectedSport, draftSlotAssignments);
+    await saveToDB(era, selectedSport, "startup", grid);
+  }, [era, draftSlotAssignments, selectedSport]);
 
   return (
     <T.FlexColumnCenterContainer>
