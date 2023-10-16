@@ -1,22 +1,44 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { capitalize } from "lodash";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { parse } from "papaparse";
 import DraftResultsCSV from "resources/data/draft-results-basketball-startup.csv";
 import { DraftCard } from "components/draft/DraftCard";
-import * as S from "styles/DraftResults.styles";
+import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
+import { returnMongoCollection } from "database-management";
 
-export const DraftResults = () => {
+export const DraftBoard = () => {
   const { era, sport, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
 
   const [draftResultsHeader, setDraftResultsHeader] = useState([]);
   const [draftResultsGrid, setDraftResultsGrid] = useState([]);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    if (isReady) {
+    const checkForCompletedOrFuture = async () => {
+      const draftsCollection = await returnMongoCollection("drafts", era);
+      const draftsData = await draftsCollection.find();
+      const draftStatusObject =
+        draftsData.filter((record) => record.type === "status")?.[0] ?? {};
+      const { completedDrafts } = draftStatusObject;
+
+      const sportYear = `${sport}-${year}`;
+      const isCompletedDraft = completedDrafts.includes(sportYear);
+      setIsCompleted(isCompletedDraft);
+
+      if (isCompletedDraft) {
+        loadCompletedDraft();
+      } else {
+        const draftGrid =
+          draftsData.filter((record) => record.type === sportYear)?.[0] ?? {};
+        loadFutureDraft(draftGrid);
+      }
+    };
+
+    const loadCompletedDraft = () => {
       parse(DraftResultsCSV, {
         download: true,
         complete: (contents) => {
@@ -25,10 +47,20 @@ export const DraftResults = () => {
           }
         },
       });
+    };
+
+    const loadFutureDraft = ({ grid }) => {
+      setDraftResultsHeader(grid[0]);
+      setDraftResultsGrid(grid);
+    };
+
+    // enter function
+    if (isReady) {
+      checkForCompletedOrFuture();
     }
   }, [isReady, era, sport, year]);
 
-  const createGrid = (arrayOfArrays) => {
+  const createGrid = useCallback((arrayOfArrays) => {
     const arrayOfRounds = [];
     let firstPickGM = "";
 
@@ -48,8 +80,10 @@ export const DraftResults = () => {
         if (startingRound === 1) {
           setDraftResultsHeader(arrayOfPicks);
         }
+
+        // need to test non-startup (non reversal) supplemental drafts
         const toAdd =
-          arrayOfPicks[0]?.fantasyTeam === firstPickGM
+          arrayOfPicks[0]?.fantasyTeam === firstPickGM && year === "startup"
             ? arrayOfPicks
             : arrayOfPicks.reverse();
 
@@ -79,13 +113,18 @@ export const DraftResults = () => {
     arrayOfRounds.push(toAdd);
 
     setDraftResultsGrid(arrayOfRounds);
-  };
+    // console.log("GRID!!!!!!!!!!", arrayOfRounds);
+  }, []);
+
+  const conditionalTitleText = useMemo(() => {
+    return isCompleted ? "Results" : "Board";
+  }, [isCompleted]);
 
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${capitalize(sport)} ${capitalize(
         year
-      )} Draft Results`}</S.Title>
+      )} Draft ${conditionalTitleText}`}</S.Title>
       <S.FlexColumnContainer>
         <T.VerticalSpacer factor={4} />
         <S.FlexRowContainer>
@@ -103,7 +142,11 @@ export const DraftResults = () => {
               {round.map((pick) => {
                 return (
                   <S.EachColumn key={pick?.overallPick}>
-                    <DraftCard data={pick} sport={sport} />
+                    <DraftCard
+                      data={pick}
+                      sport={sport}
+                      isCompleted={isCompleted}
+                    />
                   </S.EachColumn>
                 );
               })}
@@ -111,6 +154,7 @@ export const DraftResults = () => {
           );
         })}
       </S.FlexColumnContainer>
+      <T.VerticalSpacer factor={4} />
     </S.FlexColumnCenterContainer>
   );
 };

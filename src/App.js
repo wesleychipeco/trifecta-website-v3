@@ -38,10 +38,11 @@ import { DynastyStandings } from "screens/dynasty/DynastyStandings";
 import { TradeAssetDashboard } from "screens/dynasty/TradeAssetDashboard";
 import { TradeAssetHome } from "screens/dynasty/TradeAssetHome";
 import { SignInBanner } from "components/banner/SignInBanner";
-import { DraftResults } from "screens/dynasty/DraftResults";
 import { DraftsHome } from "screens/dynasty/DraftsHome";
+import { DraftBoard } from "screens/dynasty/DraftBoard";
 import { CommissionerHome } from "screens/dynasty/CommissionerHome";
 import { CommissionerEnterTrade } from "screens/dynasty/CommissionerEnterTrade";
+import { CommissionerAssignStartupDraftSlots } from "screens/dynasty/CommissionerAssignStartUpDraftSlots";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -226,8 +227,8 @@ export const App = () => {
                   exact
                 />
                 <Route
-                  path={ROUTES.DraftResults}
-                  element={<DraftResults />}
+                  path={ROUTES.DraftBoard}
+                  element={<DraftBoard />}
                   exact
                 />
                 <Route
@@ -238,6 +239,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.CommissionerEnterTrade}
                   element={<CommissionerEnterTrade />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.CommissionerAssignStartupDraftSlots}
+                  element={<CommissionerAssignStartupDraftSlots />}
                   exact
                 />
               </Route>

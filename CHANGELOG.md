@@ -2,6 +2,13 @@
 
 ### Added
 
+#### [PR-63] - 2023-10-16
+
+- Commissioner action to assign startup draft picks and save to DB
+- Display future draft board grid (also potentially including traded draft picks)
+
+### Added
+
 #### [PR-62] - 2023-10-15
 
 - Commissioner Actions home page
