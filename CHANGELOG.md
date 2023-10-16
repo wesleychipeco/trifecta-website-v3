@@ -6,6 +6,7 @@
 
 - Commissioner Actions home page
 - Commissioner Enter Trade fully working
+- Rename trade history player search label to "assets"
 
 ## [3.7.1] - 2023-10-14
 
