@@ -15,7 +15,7 @@ const COMMISSIONER_ACTION_BUTTONS = [
   {
     title: "Assign Startup Draft Slots",
     path: ROUTES.CommissionerAssignStartupDraftSlots,
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Assign Supplemental Draft Slots",
