@@ -30,7 +30,7 @@ export const DynastyTradeHistory = () => {
         disableSortBy: true,
       },
       {
-        Header: "GM 1 Players Received",
+        Header: "GM 1 Assets Received",
         accessor: "owner1PlayersReceived",
         tableHeaderCell: S.PlayersTableHeaderCell,
         disableSortBy: true,
@@ -42,7 +42,7 @@ export const DynastyTradeHistory = () => {
         disableSortBy: true,
       },
       {
-        Header: "GM 2 Players Received",
+        Header: "GM 2 Assets Received",
         accessor: "owner2PlayersReceived",
         tableHeaderCell: S.PlayersTableHeaderCell,
         disableSortBy: true,

@@ -95,7 +95,7 @@ export const TradeHistoryTable = ({
         <S.TextInput
           id={PLAYER_INPUT}
           type="text"
-          placeholder="Search By Player"
+          placeholder="Search By Asset"
           onChange={handleFilterInputChange}
         />
       </S.InputContainer>

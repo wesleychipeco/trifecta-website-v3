@@ -1,5 +1,12 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Added
+
+#### [PR-62] - 2023-10-15
+
+- Commissioner Actions home page
+- Commissioner Enter Trade fully working
+
 ## [3.7.1] - 2023-10-14
 
 ### Added
