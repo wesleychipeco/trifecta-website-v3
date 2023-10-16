@@ -39,7 +39,9 @@ export const OpenNavbar = () => {
   // local state
   const [currentPath, setCurrentPath] = useState("");
   const [isStandingsExpanded, toggleStandingsExpansion] = useState(false);
+  const [isCommissioner, setIsCommissioner] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
     // skip initial render when current path is empty still
@@ -50,13 +52,19 @@ export const OpenNavbar = () => {
     // console.log("location", location);
     setCurrentPath(location.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, [location.pathname, isAuthenticated]);
+
+  useEffect(() => {
+    // check if user is signed in as commissioner
+    if (isAuthenticated) {
+      const userName = user?.name ?? "";
+      setIsCommissioner(userName.includes("Chipeco"));
+    }
+  }, [currentPath, isAuthenticated, user]);
 
   const expandFunction = useCallback(() => {
     toggleStandingsExpansion(!isStandingsExpanded);
   }, [toggleStandingsExpansion, isStandingsExpanded]);
-
-  const { user } = useAuth0();
 
   // dynasty navbar
   if (location.pathname.startsWith("/dynasty")) {
@@ -114,6 +122,13 @@ export const OpenNavbar = () => {
             League Constitution
           </S.LinkStyle>
           <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
+          {isCommissioner && (
+            <S.Link
+              to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.CommissionerHome}`}
+            >
+              Commissioner Actions
+            </S.Link>
+          )}
         </S.LinkContainer>
         <S.VersionNumber>{`v${version}`}</S.VersionNumber>
       </S.OpenNavbarContainer>

@@ -15,6 +15,15 @@ export const STATIC_ROUTES = {
   DynastyStandings: "standings/dynasty",
   TradeAssetHome: "trade-asset-home",
   DraftsHome: "drafts-home",
+  CommissionerHome: "commissioner-home",
+  CommissionerEnterTrade: "commissioner-enter-trade",
+  CommissionerAssignStartupDraftSlots:
+    "commissioner-assign-startup-draft-slots",
+  CommissionerAssignSupplementalDraftSlots:
+    "commissioner-assign-supplemental-draft-slots",
+  CommissionerStartNewSport: "commissioner-start-new-sport",
+  CommissionerEndSportRegularSeason: "commissioner-end-sport-regular-season",
+  CommissionerCompleteSport: "commissioner-complete-sport",
 };
 
 export const ROUTES = {
