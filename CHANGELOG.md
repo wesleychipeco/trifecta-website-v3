@@ -2,6 +2,12 @@
 
 ### Added
 
+#### [PR-64] - 2023-10-19
+
+- Commissioner action to initialize supplementary draft picks and save to DB
+
+### Added
+
 #### [PR-63] - 2023-10-16
 
 - Commissioner action to assign startup draft picks and save to DB
