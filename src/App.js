@@ -43,6 +43,7 @@ import { DraftBoard } from "screens/dynasty/DraftBoard";
 import { CommissionerHome } from "screens/dynasty/CommissionerHome";
 import { CommissionerEnterTrade } from "screens/dynasty/CommissionerEnterTrade";
 import { CommissionerAssignStartupDraftSlots } from "screens/dynasty/CommissionerAssignStartUpDraftSlots";
+import { CommissionerInitializeSupplementalDraftPicks } from "screens/dynasty/CommissionerInitializeSupplementalDraftPicks";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -244,6 +245,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.CommissionerAssignStartupDraftSlots}
                   element={<CommissionerAssignStartupDraftSlots />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.CommissionerInitializeSupplementalDraftPicks}
+                  element={<CommissionerInitializeSupplementalDraftPicks />}
                   exact
                 />
               </Route>
