@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "components/button/Button";
 import { ROUTES, STATIC_ROUTES } from "Routes";
-import { splitInto2Arrays } from "utils/arrays";
+import { splitIntoArraysOfLengthX } from "utils/arrays";
 import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
 
 const COMMISSIONER_ACTION_BUTTONS = [
   {
-    title: "Enter Trade",
+    title: "Enter Trade History",
     path: ROUTES.CommissionerEnterTrade,
     disabled: false,
+  },
+  {
+    title: "Trade Draft Picks",
+    path: "",
+    disabled: true,
   },
   {
     title: "Assign Startup Draft Slots",
@@ -37,6 +42,11 @@ const COMMISSIONER_ACTION_BUTTONS = [
     path: ROUTES.CommissionerCompleteSport,
     disabled: true,
   },
+  {
+    title: "Initialize Supplemental Draft Picks",
+    path: ROUTES.CommissionerInitializeSupplementalDraftPicks,
+    disabled: false,
+  },
 ];
 
 export const CommissionerHome = () => {
@@ -44,11 +54,9 @@ export const CommissionerHome = () => {
   const [buttonsArray, setButtonsArray] = useState([]);
 
   useEffect(() => {
-    // pull database info here
-    console.log("era", era);
-    const splitArray = splitInto2Arrays(COMMISSIONER_ACTION_BUTTONS);
+    const splitArray = splitIntoArraysOfLengthX(COMMISSIONER_ACTION_BUTTONS, 3);
     setButtonsArray(splitArray);
-  }, [era]);
+  }, []);
 
   return (
     <T.FlexColumnCenterContainer>
