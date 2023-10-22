@@ -4,7 +4,9 @@ const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
 
-const corsOrigin = "*";
+const corsOrigin = process.env.REACT_APP_IS_LOCAL
+  ? "*"
+  : "https://www.trifectafantasyleague.com";
 
 app.use(
   cors({
