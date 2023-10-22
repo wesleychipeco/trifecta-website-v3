@@ -31,19 +31,19 @@ import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchu
 import { CompileTotalMatchups } from "screens/compile-matchups/CompileTotalMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { GLOBAL_VARIABLES } from "Constants";
-import { DynastySportStandings } from "screens/dynasty/DynastySportStandings";
-import { DynastyTradeHistory } from "screens/dynasty/DynastyTradeHistory";
+import { DynastySportStandings } from "screens/dynasty/standings/DynastySportStandings";
+import { DynastyTradeHistory } from "screens/dynasty/trade-history/DynastyTradeHistory";
 import { EraBannerHOC } from "screens/dynasty/BannerHOC";
-import { DynastyStandings } from "screens/dynasty/DynastyStandings";
-import { TradeAssetDashboard } from "screens/dynasty/TradeAssetDashboard";
-import { TradeAssetHome } from "screens/dynasty/TradeAssetHome";
+import { DynastyStandings } from "screens/dynasty/standings/DynastyStandings";
+import { TradeAssetDashboard } from "screens/dynasty/trade-asset-dashboard/TradeAssetDashboard";
+import { TradeAssetHome } from "screens/dynasty/trade-asset-dashboard/TradeAssetHome";
 import { SignInBanner } from "components/banner/SignInBanner";
-import { DraftsHome } from "screens/dynasty/DraftsHome";
-import { DraftBoard } from "screens/dynasty/DraftBoard";
-import { CommissionerHome } from "screens/dynasty/CommissionerHome";
-import { CommissionerEnterTrade } from "screens/dynasty/CommissionerEnterTrade";
-import { CommissionerAssignStartupDraftSlots } from "screens/dynasty/CommissionerAssignStartUpDraftSlots";
-import { CommissionerInitializeSupplementalDraftPicks } from "screens/dynasty/CommissionerInitializeSupplementalDraftPicks";
+import { DraftsHome } from "screens/dynasty/drafts/DraftsHome";
+import { DraftBoard } from "screens/dynasty/drafts/DraftBoard";
+import { CommissionerHome } from "screens/dynasty/commissioner/CommissionerHome";
+import { CommissionerEnterTrade } from "screens/dynasty/commissioner/CommissionerEnterTrade";
+import { CommissionerAssignStartupDraftSlots } from "screens/dynasty/commissioner/CommissionerAssignStartUpDraftSlots";
+import { CommissionerInitializeSupplementalDraftPicks } from "screens/dynasty/commissioner/CommissionerInitializeSupplementalDraftPicks";
 
 export const App = () => {
   const dispatch = useDispatch();
