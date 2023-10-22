@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button } from "components/button/Button";
-import { ROUTES, STATIC_ROUTES } from "Routes";
-import { splitInto2Arrays } from "utils/arrays";
-import * as S from "styles/CommissionerInitializeSupplementalDraftPicks.styles";
+import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
 import { returnMongoCollection } from "database-management";
 import { numberToOrdinal } from "utils/strings";
@@ -107,11 +104,11 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>Initialize Supplemental Draft Picks</T.Title>
-      <S.CommissionerInitializeSupplementaryDraftPicksText>
+      <S.InitializeSupplementaryDraftPicksText>
         Enter Year (First year of Supplemental Drafts)
-      </S.CommissionerInitializeSupplementaryDraftPicksText>
-      <S.CommissionerInitializeSupplementaryDraftPicksRowContainer>
-        <S.ManualInput
+      </S.InitializeSupplementaryDraftPicksText>
+      <S.InitializeSupplementaryDraftPicksRowContainer>
+        <S.InitializeDraftPicksManualInput
           type="text"
           name="startingYear"
           placeholder="Enter year..."
@@ -121,7 +118,7 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         <S.SaveButton onClick={saveInitialSupplementalDraftPicks}>
           Save
         </S.SaveButton>
-      </S.CommissionerInitializeSupplementaryDraftPicksRowContainer>
+      </S.InitializeSupplementaryDraftPicksRowContainer>
       <S.SaveMessageText>{saveMessageText}</S.SaveMessageText>
     </T.FlexColumnCenterContainer>
   );

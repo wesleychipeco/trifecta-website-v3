@@ -72,6 +72,7 @@ export const TradeAssetDashboard = () => {
       const gmData = await gmCollection.find({ abbreviation: gmAbbreviation });
       const name = gmData?.[0]?.name ?? "";
       setGmName(name);
+      console.log("HI!!!!!", gmData);
 
       if (isAuthenticated) {
         const emails = gmData?.[0]?.emails ?? [];

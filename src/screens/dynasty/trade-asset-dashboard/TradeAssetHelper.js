@@ -72,10 +72,13 @@ export const retrieveAssets = async (
       const teamId = gmData?.[0]?.mappings?.[inSeasonSport];
       //console.log("league", leagueId, "team", teamId);
       const { roster, faab } = await rosterScraper(leagueId, teamId);
-      //console.log("roster scraper", roster);
+      // console.log("roster", roster);
 
       const formattedPlayers = roster
-        .filter((player) => player?.scorer !== undefined)
+        .filter(
+          (player) =>
+            player?.scorer !== undefined && player?.scorerColumn !== "Totals"
+        )
         .map((player) => {
           const name = player.scorer.name;
           const team = player.scorer?.teamShortName ?? player.scorer?.shortName;

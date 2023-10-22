@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import Select from "react-select";
 import { returnMongoCollection } from "database-management";
 
-import * as S from "styles/CommissionerAssignDraftSlots.styles";
+import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
 import * as U from "styles/shared";
 import {
@@ -159,11 +159,11 @@ export const CommissionerAssignStartupDraftSlots = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>Assign Startup Draft Picks</T.Title>
-      <S.CommissionerAssignDraftSlotsRowContainer>
+      <S.AssignDraftSlotsRowContainer>
         {gmsArray.map((gm, index) => {
           return (
-            <S.CommissionerAssignDraftSlotsEachRow key={index}>
-              <S.CommissionerAssignDraftSlotsText>{`TEAM ${ALPHABET[index]}: ${gm}`}</S.CommissionerAssignDraftSlotsText>
+            <S.AssignDraftSlotsEachRow key={index}>
+              <S.AssignDraftSlotsText>{`TEAM ${ALPHABET[index]}: ${gm}`}</S.AssignDraftSlotsText>
               <Select
                 placeholder="Select draft slot"
                 options={options}
@@ -175,11 +175,11 @@ export const CommissionerAssignStartupDraftSlots = () => {
                 }
                 isSearchable={false}
               />
-            </S.CommissionerAssignDraftSlotsEachRow>
+            </S.AssignDraftSlotsEachRow>
           );
         })}
-      </S.CommissionerAssignDraftSlotsRowContainer>
-      <S.CommissionerAssignDraftSlotsEachRow>
+      </S.AssignDraftSlotsRowContainer>
+      <S.AssignDraftSlotsEachRow>
         <Select
           placeholder="Select sport"
           options={sportsOptions}
@@ -200,7 +200,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
             Save
           </S.SaveButton>
         </U.FlexColumnCentered>
-      </S.CommissionerAssignDraftSlotsEachRow>
+      </S.AssignDraftSlotsEachRow>
     </T.FlexColumnCenterContainer>
   );
 };

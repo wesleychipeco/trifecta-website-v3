@@ -1,5 +1,15 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.7.2] - 2023-10-22
+
+### Added
+
+#### [PR-65] - 2023-10-22
+
+- Refactor including moving all dynasty screens files into own folders
+- Commissioner styles cleanup
+- Fix a bug preventing load of Trade Asset Dashboard
+
 ### Added
 
 #### [PR-64] - 2023-10-19

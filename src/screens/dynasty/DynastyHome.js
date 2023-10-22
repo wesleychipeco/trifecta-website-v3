@@ -11,7 +11,7 @@ import { Table } from "components/table/Table";
 import {
   Dynasty3x5DynastyPointsColumn,
   Dynasty3x5GmColumn,
-} from "./StandingsColumns";
+} from "./standings/StandingsColumns";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 
 export const DynastyHome = () => {
