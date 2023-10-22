@@ -61,10 +61,10 @@ export const CommissionerHome = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>Commissioner Actions Page</T.Title>
-      <S.CommissionerHomeContainer>
+      <S.HomeContainer>
         {buttonsArray.map((row, i) => {
           return (
-            <S.CommissionerHomeRowContainer key={i}>
+            <S.HomeRowContainer key={i}>
               {row.map((button) => {
                 const { title, path, disabled } = button;
                 return (
@@ -76,10 +76,10 @@ export const CommissionerHome = () => {
                   />
                 );
               })}
-            </S.CommissionerHomeRowContainer>
+            </S.HomeRowContainer>
           );
         })}
-      </S.CommissionerHomeContainer>
+      </S.HomeContainer>
     </T.FlexColumnCenterContainer>
   );
 };

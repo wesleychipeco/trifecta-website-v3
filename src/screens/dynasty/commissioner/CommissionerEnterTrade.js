@@ -6,7 +6,7 @@ import Select from "react-select";
 import { returnMongoCollection } from "database-management";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import * as S from "styles/CommissionerEnterTrade.styles";
+import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
 import * as U from "styles/shared";
 import {
@@ -170,7 +170,7 @@ export const CommissionerEnterTrade = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>Enter Trade</T.Title>
-      <S.CommissionerEnterTradeDateContainer>
+      <S.EnterTradeDateContainer>
         <S.SectionTitle>Date</S.SectionTitle>
         <S.ManualInput
           type="text"
@@ -179,13 +179,16 @@ export const CommissionerEnterTrade = () => {
           onChange={(e) => onChangeDate(e)}
           value={date}
         />
-        <S.SaveButton disabled={!isSaveButtonEnabled} onClick={saveTrade}>
+        <S.EnterTradeSaveButton
+          disabled={!isSaveButtonEnabled}
+          onClick={saveTrade}
+        >
           Save
-        </S.SaveButton>
-        <S.SaveMessageText>{saveMessage}</S.SaveMessageText>
-      </S.CommissionerEnterTradeDateContainer>
-      <S.CommissionerEnterTradeRowContainer>
-        <S.CommissionerEnterTradeGMContainer>
+        </S.EnterTradeSaveButton>
+        <S.EnterTradeSaveMessageText>{saveMessage}</S.EnterTradeSaveMessageText>
+      </S.EnterTradeDateContainer>
+      <S.EnterTradeRowContainer>
+        <S.EnterTradeGMContainer>
           <S.SectionTitle>GM 1</S.SectionTitle>
           <U.VerticalSpacer factor={6} />
           <Select
@@ -200,11 +203,11 @@ export const CommissionerEnterTrade = () => {
             }
             isSearchable={false}
           />
-        </S.CommissionerEnterTradeGMContainer>
+        </S.EnterTradeGMContainer>
 
         <U.HorizontalSpacer factor={2} />
 
-        <S.CommissionerEnterTradeAssetContainer>
+        <S.EnterTradeAssetContainer>
           <S.SectionTitle>GM 1 Assets Received</S.SectionTitle>
           <U.FlexRow>
             <S.ManualInput
@@ -234,11 +237,11 @@ export const CommissionerEnterTrade = () => {
               </S.AssetContainer>
             );
           })}
-        </S.CommissionerEnterTradeAssetContainer>
+        </S.EnterTradeAssetContainer>
 
         <U.HorizontalSpacer factor={8} />
 
-        <S.CommissionerEnterTradeGMContainer>
+        <S.EnterTradeGMContainer>
           <S.SectionTitle>GM 2</S.SectionTitle>
           <U.VerticalSpacer factor={6} />
           <Select
@@ -253,11 +256,11 @@ export const CommissionerEnterTrade = () => {
             }
             isSearchable={false}
           />
-        </S.CommissionerEnterTradeGMContainer>
+        </S.EnterTradeGMContainer>
 
         <U.HorizontalSpacer factor={2} />
 
-        <S.CommissionerEnterTradeAssetContainer>
+        <S.EnterTradeAssetContainer>
           <S.SectionTitle>GM 2 Assets Received</S.SectionTitle>
           <U.FlexRow>
             <S.ManualInput
@@ -287,8 +290,8 @@ export const CommissionerEnterTrade = () => {
               </S.AssetContainer>
             );
           })}
-        </S.CommissionerEnterTradeAssetContainer>
-      </S.CommissionerEnterTradeRowContainer>
+        </S.EnterTradeAssetContainer>
+      </S.EnterTradeRowContainer>
     </T.FlexColumnCenterContainer>
   );
 };
