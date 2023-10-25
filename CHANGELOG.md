@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Added
+
+#### [PR-66] - 2023-10-24
+
+- Save initialized supplementary draft picks to drafts collection
+
 ## [3.7.2] - 2023-10-22
 
 ### Added

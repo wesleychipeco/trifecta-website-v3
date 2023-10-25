@@ -1,15 +1,16 @@
 import { invert } from "lodash";
 
-const BASKETBALL_STARTUP_DRAFT_ROUNDS = 15;
-const BASEBALL_STARTUP_DRAFT_ROUNDS = 30;
-const FOOTBALL_STARTUP_DRAFT_ROUNDS = 18;
+export const BASKETBALL_STARTUP_DRAFT_ROUNDS = 15;
+export const BASEBALL_STARTUP_DRAFT_ROUNDS = 30;
+export const FOOTBALL_STARTUP_DRAFT_ROUNDS = 18;
 
-const BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 4;
-const BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 7;
-const FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 5;
+export const BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 4;
+export const BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 7;
+export const FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 5;
 
-const ROUND_REVERSAL = 5;
-const NUMBER_OF_TEAMS = 16;
+export const SPORTS_ARRAY = ["basketball", "baseball", "football"];
+export const ROUND_REVERSAL = 5;
+export const NUMBER_OF_TEAMS = 16;
 
 const assignDraftSlots = (sport, draftSlotAssignments, isStartup = false) => {
   const byPickNumbersDraftSlotAssignments = invert(draftSlotAssignments);

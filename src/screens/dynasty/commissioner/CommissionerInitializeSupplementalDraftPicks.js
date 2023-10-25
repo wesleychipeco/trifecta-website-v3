@@ -5,6 +5,12 @@ import * as T from "styles/StandardScreen.styles";
 import { returnMongoCollection } from "database-management";
 import { numberToOrdinal } from "utils/strings";
 import { cloneDeep } from "lodash";
+import {
+  BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
+  BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
+  FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
+  NUMBER_OF_TEAMS,
+} from "./AssignDraftSlotsHelper";
 
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
@@ -37,10 +43,9 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
     }, 3000);
   }, []);
 
-  const saveInitialSupplementalDraftPicks = useCallback(async () => {
-    console.log("starting year", startingYear, startingYear.length);
+  const saveInitialSupplementalDraftPicksPerGM = useCallback(async () => {
+    let numberOfTeamsCompleted = 0;
     const numberYear = Number(startingYear);
-    console.log("ny", numberYear);
     if (startingYear.length !== 4 || isNaN(numberYear)) {
       // throw error
       timeoutSaveMessage("Enter a valid year!");
@@ -59,13 +64,13 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         let draftPicks;
         switch (sport) {
           case "basketball":
-            draftPicks = 4;
+            draftPicks = BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
             break;
           case "baseball":
-            draftPicks = 7;
+            draftPicks = BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
             break;
           case "football":
-            draftPicks = 5;
+            draftPicks = FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
             break;
           default:
             draftPicks = 0;
@@ -87,17 +92,88 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         { name },
         { $set: { assets: copyAssets } }
       );
-      if (modifiedCount < 1) {
-        timeoutSaveMessage(
-          "Did NOT successfully update assets with initialized supplemental draft picks!"
-        );
-      } else if (modifiedCount === 1) {
-        timeoutSaveMessage(
-          "Initial supplemental draft picks saved successfully!"
-        );
+      numberOfTeamsCompleted += modifiedCount;
+    }
+
+    if (numberOfTeamsCompleted < NUMBER_OF_TEAMS) {
+      timeoutSaveMessage(
+        "Did NOT successfully update assets with initialized supplemental draft picks!"
+      );
+    } else if (numberOfTeamsCompleted === NUMBER_OF_TEAMS) {
+      timeoutSaveMessage(
+        "Initial supplemental draft picks saved successfully to GMs collection!"
+      );
+    }
+
+    // save to drafts collection in DB the raw list (and figure out how to display non-grid)
+  }, [startingYear, era]);
+
+  const saveInitialSupplementalDraftPicksPerDraft = useCallback(async () => {
+    const numberYear = Number(startingYear);
+    if (startingYear.length !== 4 || isNaN(numberYear)) {
+      // throw error
+      timeoutSaveMessage("Enter a valid year!");
+      return;
+    }
+
+    const draftsCollection = await returnMongoCollection("drafts", era);
+    const copyGmsData = cloneDeep(gmsData);
+    for (let i = 0; i < SPORTS_ARRAY.length; i++) {
+      const sport = SPORTS_ARRAY[i];
+
+      let draftPicks;
+      switch (sport) {
+        case "basketball":
+          draftPicks = BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
+          break;
+        case "baseball":
+          draftPicks = BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
+          break;
+        case "football":
+          draftPicks = FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
+          break;
+        default:
+          draftPicks = 0;
+          break;
+      }
+
+      for (let year = numberYear; year < numberYear + 4; year++) {
+        const eachSportYearGmPicksGrid = [];
+        const sportYear = `${sport}-${year}`;
+
+        for (
+          let teamNumber = 0;
+          teamNumber < copyGmsData.length;
+          teamNumber++
+        ) {
+          const eachGmPicks = [];
+          const { abbreviation } = copyGmsData[teamNumber];
+
+          for (let i = 1; i <= draftPicks; i++) {
+            const draftPick = `${i}${numberToOrdinal(i)} Rd Pick`;
+            const draftPickObject = {
+              fantasyTeam: abbreviation,
+              pick: draftPick,
+            };
+            eachGmPicks.push(draftPickObject);
+          }
+          eachSportYearGmPicksGrid.push(eachGmPicks);
+        }
+
+        // console.log(`SPORT-YEAR ${sportYear}: `, eachSportYearGmPicksGrid);
+
+        // save each as sportYear keyed record in mongodb
+        await draftsCollection.insertOne({
+          type: sportYear,
+          picks: eachSportYearGmPicksGrid,
+          createdAt: new Date().toISOString(),
+        });
       }
     }
 
+    timeoutSaveMessage(
+      "Initial supplemental draft picks saved successfully to drafts collection!"
+    );
     // save to drafts collection in DB the raw list (and figure out how to display non-grid)
   }, [startingYear, era]);
 
@@ -115,8 +191,11 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
           onChange={onChangeYear}
           value={startingYear}
         />
-        <S.SaveButton onClick={saveInitialSupplementalDraftPicks}>
-          Save
+        <S.SaveButton onClick={saveInitialSupplementalDraftPicksPerGM}>
+          Save Per GM
+        </S.SaveButton>
+        <S.SaveButton onClick={saveInitialSupplementalDraftPicksPerDraft}>
+          Save Per Draft
         </S.SaveButton>
       </S.InitializeSupplementaryDraftPicksRowContainer>
       <S.SaveMessageText>{saveMessageText}</S.SaveMessageText>
