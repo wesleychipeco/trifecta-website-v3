@@ -36,7 +36,7 @@ export const DraftsHome = () => {
       const title =
         year === "startup"
           ? `${capitalize(sport)} ${capitalize(year)}`
-          : `${year} Supplemental ${capitalize(sport)}`;
+          : `${year} ${capitalize(sport)} Supplemental`;
 
       return {
         title,
@@ -70,7 +70,7 @@ export const DraftsHome = () => {
         })}
       </S.DraftsHomeContainer>
       <S.DraftsHomeContainer>
-        <S.DraftsHeader>{`Future Draft Boards (In Development)`}</S.DraftsHeader>
+        <S.DraftsHeader>{`Future Draft Boards`}</S.DraftsHeader>
         {futureDraftsArray.map((row, i) => {
           return (
             <S.DraftsHomeRowContainer key={i}>
@@ -81,7 +81,6 @@ export const DraftsHome = () => {
                     key={draft}
                     title={title}
                     navTo={`${STATIC_ROUTES.DynastyHome}/${era}/draft/${sport}/${year}`}
-                    disabled={year !== "startup"}
                   />
                 );
               })}

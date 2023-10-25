@@ -15,6 +15,7 @@ export const DraftBoard = () => {
 
   const [draftResultsHeader, setDraftResultsHeader] = useState([]);
   const [draftResultsGrid, setDraftResultsGrid] = useState([]);
+  const [draftResultsPicks, setDraftResultsPicks] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
@@ -49,9 +50,20 @@ export const DraftBoard = () => {
       });
     };
 
-    const loadFutureDraft = ({ grid }) => {
-      setDraftResultsHeader(grid[0]);
-      setDraftResultsGrid(grid);
+    const loadFutureDraft = ({ grid, picks }) => {
+      if (grid) {
+        setDraftResultsHeader(grid[0]);
+        setDraftResultsGrid(grid);
+      } else if (picks) {
+        const headerRow = picks.map((eachGm) => {
+          return {
+            fantasyTeam: eachGm[0]["fantasyTeam"],
+          };
+        });
+
+        setDraftResultsHeader(headerRow);
+        setDraftResultsPicks(picks);
+      }
     };
 
     // enter function
@@ -130,9 +142,9 @@ export const DraftBoard = () => {
         <S.FlexRowContainer>
           {draftResultsHeader.map((headerObject) => {
             return (
-              <S.EachColumn key={headerObject.fantasyTeam}>
+              <S.ColumnWidthRow key={headerObject.fantasyTeam}>
                 <S.TeamHeaderText>{headerObject?.fantasyTeam}</S.TeamHeaderText>
-              </S.EachColumn>
+              </S.ColumnWidthRow>
             );
           })}
         </S.FlexRowContainer>
@@ -141,18 +153,37 @@ export const DraftBoard = () => {
             <S.FlexRowContainer key={i}>
               {round.map((pick) => {
                 return (
-                  <S.EachColumn key={pick?.overallPick}>
+                  <S.ColumnWidthRow key={pick?.overallPick}>
                     <DraftCard
                       data={pick}
                       sport={sport}
                       isCompleted={isCompleted}
                     />
-                  </S.EachColumn>
+                  </S.ColumnWidthRow>
                 );
               })}
             </S.FlexRowContainer>
           );
         })}
+        <S.FlexRowContainer>
+          {draftResultsPicks.map((gm, i) => {
+            return (
+              <S.ColumnWidthColumn key={i}>
+                {gm.map((pick) => {
+                  return (
+                    <S.FlexColumnContainerWithBorder key={pick?.pick}>
+                      <DraftCard
+                        data={pick}
+                        sport={sport}
+                        isCompleted={isCompleted}
+                      />
+                    </S.FlexColumnContainerWithBorder>
+                  );
+                })}
+              </S.ColumnWidthColumn>
+            );
+          })}
+        </S.FlexRowContainer>
       </S.FlexColumnContainer>
       <T.VerticalSpacer factor={4} />
     </S.FlexColumnCenterContainer>
