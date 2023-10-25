@@ -66,12 +66,24 @@ export const FlexColumnContainer = styled.div`
   min-width: 0;
 `;
 
-export const EachColumn = styled.div`
-  flex-direction: row;
+const ColumnWidth = styled.div`
   width: calc(100% / 16);
   justify-content: center;
   border: 1px solid;
   min-width: 0;
+`;
+
+export const ColumnWidthColumn = styled(ColumnWidth)`
+  flex-direction: column;
+`;
+
+export const ColumnWidthRow = styled(ColumnWidth)`
+  flex-direction: row;
+`;
+
+export const FlexColumnContainerWithBorder = styled(FlexColumnCenterContainer)`
+  border-top: 1px solid;
+  width: 100%;
 `;
 
 export const TeamHeaderText = styled.h3`

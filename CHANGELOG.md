@@ -2,6 +2,12 @@
 
 ### Added
 
+#### [PR-67] - 2023-10-25
+
+- Display future non-assigned supplementary pick draft board
+
+### Added
+
 #### [PR-66] - 2023-10-24
 
 - Save initialized supplementary draft picks to drafts collection
