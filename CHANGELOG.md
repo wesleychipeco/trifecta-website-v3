@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.7.3] - 2023-10-28
+
+### Added
+
+#### [PR-69] - 2023-10-28
+
+- Colors per GM on draft boards
+
 ### Added
 
 #### [PR-68] - 2023-10-28
