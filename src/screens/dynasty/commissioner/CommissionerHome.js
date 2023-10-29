@@ -25,7 +25,7 @@ const COMMISSIONER_ACTION_BUTTONS = [
   {
     title: "Assign Supplemental Draft Slots",
     path: ROUTES.CommissionerAssignSupplementalDraftSlots,
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Start New Sport",

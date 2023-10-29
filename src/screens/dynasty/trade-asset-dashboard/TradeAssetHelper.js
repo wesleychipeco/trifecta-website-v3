@@ -1,6 +1,7 @@
 import axios from "axios";
 import { flatten } from "lodash";
 import { numberToOrdinal } from "utils/strings";
+import { STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS } from "Constants";
 
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
@@ -134,7 +135,7 @@ const addDefaultDraftPicks = async (sport) => {
   }
 
   const defaultDraftPicks = [];
-  const startingYear = 2025;
+  const startingYear = STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS;
   for (let year = startingYear; year < startingYear + 4; year++) {
     for (let i = 1; i <= draftPicks; i++) {
       const draftPick = `${year} ${i}${numberToOrdinal(i)} Rd Pick`;

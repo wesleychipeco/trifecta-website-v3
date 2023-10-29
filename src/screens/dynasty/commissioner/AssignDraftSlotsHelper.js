@@ -1,4 +1,6 @@
 import { invert } from "lodash";
+import { returnMongoCollection } from "database-management";
+import { NUMBER_OF_TEAMS } from "Constants";
 
 export const BASKETBALL_STARTUP_DRAFT_ROUNDS = 15;
 export const BASEBALL_STARTUP_DRAFT_ROUNDS = 30;
@@ -10,9 +12,12 @@ export const FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 5;
 
 export const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 export const ROUND_REVERSAL = 5;
-export const NUMBER_OF_TEAMS = 16;
 
-const assignDraftSlots = (sport, draftSlotAssignments, isStartup = false) => {
+export const createDraftGrid = (
+  sport,
+  draftSlotAssignments,
+  isStartup = false
+) => {
   const byPickNumbersDraftSlotAssignments = invert(draftSlotAssignments);
   const orderedDraftSlotNumbers = Object.keys(
     byPickNumbersDraftSlotAssignments
@@ -21,24 +26,30 @@ const assignDraftSlots = (sport, draftSlotAssignments, isStartup = false) => {
     (pickNumber) => byPickNumbersDraftSlotAssignments[pickNumber]
   );
 
-  let startupRounds;
+  let numberOfRounds;
   switch (sport) {
     case "basketball":
-      startupRounds = BASKETBALL_STARTUP_DRAFT_ROUNDS;
+      numberOfRounds = isStartup
+        ? BASKETBALL_STARTUP_DRAFT_ROUNDS
+        : BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
       break;
     case "baseball":
-      startupRounds = BASEBALL_STARTUP_DRAFT_ROUNDS;
+      numberOfRounds = isStartup
+        ? BASEBALL_STARTUP_DRAFT_ROUNDS
+        : BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
       break;
     case "football":
-      startupRounds = FOOTBALL_STARTUP_DRAFT_ROUNDS;
+      numberOfRounds = isStartup
+        ? FOOTBALL_STARTUP_DRAFT_ROUNDS
+        : FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
       break;
     default:
-      startupRounds = 0;
+      numberOfRounds = 0;
       break;
   }
 
   const arrayOfRounds = [];
-  for (let round = 1; round <= startupRounds; round++) {
+  for (let round = 1; round <= numberOfRounds; round++) {
     let isEvenRound = round % 2 === 0;
 
     // reverse even & odd after round 5 for startup drafts
@@ -51,13 +62,15 @@ const assignDraftSlots = (sport, draftSlotAssignments, isStartup = false) => {
       const arrayIndex = pickNumber - 1;
       const abbreviation = orderedAbbreviations[arrayIndex];
 
-      const pickInRound = isEvenRound
-        ? NUMBER_OF_TEAMS - pickNumber + 1
-        : pickNumber;
+      const pickInRound =
+        isEvenRound && isStartup
+          ? NUMBER_OF_TEAMS - pickNumber + 1
+          : pickNumber;
 
-      const overallPick = isEvenRound
-        ? round * NUMBER_OF_TEAMS - pickNumber + 1
-        : (round - 1) * NUMBER_OF_TEAMS + pickNumber;
+      const overallPick =
+        isEvenRound && isStartup
+          ? round * NUMBER_OF_TEAMS - pickNumber + 1
+          : (round - 1) * NUMBER_OF_TEAMS + pickNumber;
 
       // console.log(
       //   `(${abbreviation}) Slot #${pickNumber}: ${round}-${pickInRound} (${overallPick})`
@@ -80,9 +93,55 @@ const assignDraftSlots = (sport, draftSlotAssignments, isStartup = false) => {
 };
 
 export const assignStartupDraftSlots = (sport, draftSlotAssignments) => {
-  return assignDraftSlots(sport, draftSlotAssignments, true);
+  return createDraftGrid(sport, draftSlotAssignments, true);
 };
 
-export const assignSupplementaryDraftSlots = (sport, draftSlotAssignments) => {
-  return assignDraftSlots(sport, draftSlotAssignments, false);
+export const assignSupplementalDraftSlots = async (
+  era,
+  sport,
+  year,
+  draftSlotAssignments
+) => {
+  const draftGrid = createDraftGrid(sport, draftSlotAssignments, false);
+
+  const draftsCollection = await returnMongoCollection("drafts", era);
+  const draft = await draftsCollection.find({ type: `${sport}-${year}` });
+  const draftPicks = draft?.[0]?.picks ?? [];
+
+  // create list of draft picks that are are traded
+  const tradedDraftPicksArray = [];
+  for (let i = 0; i < draftPicks.length; i++) {
+    const gmPicks = draftPicks[i];
+    for (let j = 0; j < gmPicks.length; j++) {
+      const eachPick = gmPicks[j];
+      if (eachPick.tradedTo) {
+        tradedDraftPicksArray.push({
+          fantasyTeam: eachPick.fantasyTeam,
+          tradedTo: eachPick.tradedTo,
+          round: eachPick.pick.charAt(0),
+        });
+      }
+    }
+  }
+  // console.log("tradedDraftPicksArray", tradedDraftPicksArray);
+
+  for (let x = 0; x < tradedDraftPicksArray.length; x++) {
+    const tradedPickObject = tradedDraftPicksArray[x];
+
+    const tradedPickRound = Number(tradedPickObject.round);
+    const roundIndex = tradedPickRound - 1;
+
+    const originatingTeamPickIndex =
+      draftSlotAssignments[tradedPickObject.fantasyTeam] - 1;
+
+    // console.log(
+    //   "pick in question",
+    //   startingDraftGrid[roundIndex][originatingTeamPickIndex]
+    // );
+
+    draftGrid[roundIndex][originatingTeamPickIndex]["tradedTo"] =
+      tradedPickObject.tradedTo;
+  }
+
+  return draftGrid;
 };

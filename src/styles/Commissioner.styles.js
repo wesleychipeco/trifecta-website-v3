@@ -203,7 +203,7 @@ export const EnterTradeSaveMessageText = styled(SaveMessageText)`
 
 /////////////////// Initialize Supplemental Draft Picks ////////////////
 
-export const InitializeSupplementaryDraftPicksRowContainer = styled(
+export const InitializeSupplementalDraftPicksRowContainer = styled(
   ROW_CONTAINER
 )`
   width: 25%;
@@ -212,7 +212,7 @@ export const InitializeSupplementaryDraftPicksRowContainer = styled(
   flex-wrap: wrap;
 `;
 
-export const InitializeSupplementaryDraftPicksText = styled.h4`
+export const InitializeSupplementalDraftPicksText = styled.h4`
   margin: 0;
   padding: 2rem 0 0 0;
   font-size: 1.5rem;

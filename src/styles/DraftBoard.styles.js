@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
 import { MOBILE_MAX_WIDTH, TITLE_FONT_SIZE } from "./global";
+import { NUMBER_OF_TEAMS } from "Constants";
 
 export const DraftsHomeContainer = styled.div`
   width: 85%;
@@ -67,7 +68,7 @@ export const FlexColumnContainer = styled.div`
 `;
 
 const ColumnWidth = styled.div`
-  width: calc(100% / 16);
+  width: calc(100% / ${NUMBER_OF_TEAMS});
   justify-content: center;
   border: 1px solid;
   min-width: 0;
@@ -87,7 +88,7 @@ export const FlexColumnContainerWithBorder = styled(FlexColumnCenterContainer)`
 `;
 
 export const TeamHeaderText = styled.h3`
-  margin: 0;
+  margin: 0.3rem 0 0.3rem 0;
   padding: 0;
   font-size: 1rem;
   text-align: center;

@@ -14,16 +14,21 @@ import {
 } from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
-import { assignStartupDraftSlots } from "./AssignDraftSlotsHelper";
-import { ALPHABET, NUMBER_OF_TEAMS } from "Constants";
+import { assignSupplementalDraftSlots } from "./AssignDraftSlotsHelper";
+import {
+  ALPHABET,
+  NUMBER_OF_TEAMS,
+  STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS,
+} from "Constants";
 
-export const CommissionerAssignStartupDraftSlots = () => {
+export const CommissionerAssignSupplementalDraftSlots = () => {
   const { era } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const [gmsArray, setGmsArray] = useState([]);
-  const [draftSlotAssignments, setDraftSlotAssignments] = useState([]);
+  const [draftSlotAssignments, setDraftSlotAssignments] = useState({});
   const [selectedSport, setSelectedSport] = useState("");
+  const [selectedYear, setSelectedYear] = useState(0);
   const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
   const [saveMessageText, setSaveMessageText] = useState("");
 
@@ -82,8 +87,26 @@ export const CommissionerAssignStartupDraftSlots = () => {
     });
   }, []);
 
+  const yearOptions = useMemo(() => {
+    const yearArray = [];
+    const startingYear = STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS;
+    for (let year = startingYear; year < startingYear + 4; year++) {
+      const yearObj = {
+        value: year,
+        label: year,
+      };
+      yearArray.push(yearObj);
+    }
+
+    return yearArray;
+  }, []);
+
   const handleSportChange = useCallback((event) => {
     setSelectedSport(event?.value);
+  }, []);
+
+  const handleYearChange = useCallback((event) => {
+    setSelectedYear(event?.value);
   }, []);
 
   const handleDraftSlotChange = useCallback(
@@ -102,7 +125,11 @@ export const CommissionerAssignStartupDraftSlots = () => {
   useEffect(() => {
     for (let i = 0; i < Object.keys(draftSlotAssignments).length; i++) {
       const key = Object.keys(draftSlotAssignments)[i];
-      if (draftSlotAssignments[key] === 0 || selectedSport === "") {
+      if (
+        draftSlotAssignments[key] === 0 ||
+        selectedSport === "" ||
+        selectedYear === 0
+      ) {
         setIsSaveButtonEnabled(false);
         break;
       }
@@ -110,37 +137,110 @@ export const CommissionerAssignStartupDraftSlots = () => {
       // if all assignments are made and are no longer 0, enable save button
       setIsSaveButtonEnabled(true);
     }
-  }, [draftSlotAssignments, selectedSport]);
+  }, [draftSlotAssignments, selectedSport, selectedYear]);
 
-  const saveToDB = async (era, sport, year, grid) => {
-    const draftsCollection = returnMongoCollection("drafts", era);
+  const saveToDraftsDB = useCallback(async (era, sport, year, grid) => {
+    const draftsCollection = await returnMongoCollection("drafts", era);
+    const sportYear = `${sport}-${year}`;
+
+    // delete record before re-adding with "grid" key instead of "picks"
+    (await draftsCollection).deleteOne({ type: sportYear });
     const draftObject = {
-      type: `${sport}-${year}`,
+      type: sportYear,
       grid,
       createdAt: new Date().toISOString(),
     };
 
     (await draftsCollection).insertOne(draftObject);
     timeoutSaveMessage("Successfully saved grid to drafts collection");
-  };
+  }, []);
+
+  const modifyAndSaveGmAssets = useCallback(async (era, sport, year, grid) => {
+    const gmsCollection = await returnMongoCollection("gms", era);
+    const gms = await gmsCollection.find({});
+
+    let modifiedCountTotal = 0;
+    // Loop through each team's assets to find the sport and year's supplemental draft picks
+    for (let i = 0; i < gms.length; i++) {
+      const eachGm = gms[i];
+      const gmAbbreviation = eachGm.abbreviation;
+      const gmSportDraftPicks = eachGm["assets"][sport]["draftPicks"];
+
+      const modifiedGmSportDraftPicks = gmSportDraftPicks.map(
+        (eachPickOfGm) => {
+          const isCorrectYear = eachPickOfGm.substr(0, 4) === `${year}`;
+
+          if (isCorrectYear) {
+            const isTradedPick = eachPickOfGm.includes("via");
+            const roundNumber = eachPickOfGm.substr(5, 1);
+            const arrayIndexNumber = roundNumber - 1;
+            const roundOfPicks = grid[arrayIndexNumber];
+
+            // loop through each pick in the appropriate round to find the correct overallPick number from grid
+            let overallPickNumber;
+            for (let j = 0; j < roundOfPicks.length; j++) {
+              const eachPickInGrid = roundOfPicks[j];
+              const teamToMatch = isTradedPick
+                ? eachPickOfGm.substr(eachPickOfGm.indexOf("via") + 4) // use team acquired pick from, to pick from grid
+                : gmAbbreviation; // else use own placement in grid
+
+              if (eachPickInGrid.fantasyTeam === teamToMatch) {
+                overallPickNumber = eachPickInGrid.overallPick;
+                break;
+              }
+            } // end of for lopp through round of the grid
+            return `${eachPickOfGm} (${overallPickNumber})`;
+          }
+
+          // if not appropriate year, just return back original draft pick asset text
+          return eachPickOfGm;
+        } // end of if (isCorrectYear)
+      ); // end of map
+
+      console.log(
+        `final list for ${gmAbbreviation}: ${modifiedGmSportDraftPicks}`
+      );
+
+      const keyString = `assets.${sport}.draftPicks`;
+      const { modifiedCount } = await gmsCollection.updateOne(
+        { abbreviation: gmAbbreviation },
+        { $set: { [keyString]: modifiedGmSportDraftPicks } }
+      );
+      modifiedCountTotal += modifiedCount;
+    } // end of for loop through gms
+
+    if (modifiedCountTotal === NUMBER_OF_TEAMS) {
+      timeoutSaveMessage(
+        "Successfully saved updated draft assets to all GM records"
+      );
+    }
+  }, []);
 
   const saveDraftSlots = useCallback(async () => {
     // check for duplicates
     const draftSlotsArray = Object.values(draftSlotAssignments);
-    console.log("draft slots array", draftSlotsArray);
     const uniqueArray = uniq(draftSlotsArray);
     if (uniqueArray.length != NUMBER_OF_TEAMS) {
       timeoutSaveMessage("Warning!!! Not all draft slot values are unique");
       return;
     }
 
-    const grid = assignStartupDraftSlots(selectedSport, draftSlotAssignments);
-    await saveToDB(era, selectedSport, "startup", grid);
-  }, [era, draftSlotAssignments, selectedSport]);
+    // create grid
+    const grid = await assignSupplementalDraftSlots(
+      era,
+      selectedSport,
+      selectedYear,
+      draftSlotAssignments
+    );
+    console.log("Grid!", grid);
+
+    await saveToDraftsDB(era, selectedSport, selectedYear, grid);
+    await modifyAndSaveGmAssets(era, selectedSport, selectedYear, grid);
+  }, [era, draftSlotAssignments, selectedSport, selectedYear]);
 
   return (
     <T.FlexColumnCenterContainer>
-      <T.Title>Assign Startup Draft Picks</T.Title>
+      <T.Title>Assign Supplemental Draft Picks</T.Title>
       <S.AssignDraftSlotsRowContainer>
         {gmsArray.map((gm, index) => {
           return (
@@ -166,6 +266,17 @@ export const CommissionerAssignStartupDraftSlots = () => {
           placeholder="Select sport"
           options={sportsOptions}
           onChange={handleSportChange}
+          styles={
+            isMobile
+              ? MobileMatchupsDropdownCustomStyles
+              : MatchupsDropdownCustomStyles
+          }
+          isSearchable={false}
+        />
+        <Select
+          placeholder="Select year"
+          options={yearOptions}
+          onChange={handleYearChange}
           styles={
             isMobile
               ? MobileMatchupsDropdownCustomStyles

@@ -25,7 +25,7 @@ export const ExtraContainer = styled.div`
 `;
 
 export const PlayerText = styled.h6`
-  font-size: 0.95rem;
+  font-size: 1rem;
   margin: 0.25rem 0 0.25rem 0;
   padding: 0;
   font-weight: 500;
