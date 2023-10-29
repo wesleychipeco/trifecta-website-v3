@@ -96,7 +96,7 @@ export const assignStartupDraftSlots = (sport, draftSlotAssignments) => {
   return createDraftGrid(sport, draftSlotAssignments, true);
 };
 
-export const assignSupplementaryDraftSlots = async (
+export const assignSupplementalDraftSlots = async (
   era,
   sport,
   year,

@@ -180,10 +180,10 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>Initialize Supplemental Draft Picks</T.Title>
-      <S.InitializeSupplementaryDraftPicksText>
+      <S.InitializeSupplementalDraftPicksText>
         Enter Year (First year of Supplemental Drafts)
-      </S.InitializeSupplementaryDraftPicksText>
-      <S.InitializeSupplementaryDraftPicksRowContainer>
+      </S.InitializeSupplementalDraftPicksText>
+      <S.InitializeSupplementalDraftPicksRowContainer>
         <S.InitializeDraftPicksManualInput
           type="text"
           name="startingYear"
@@ -197,7 +197,7 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         <S.SaveButton onClick={saveInitialSupplementalDraftPicksPerDraft}>
           Save Per Draft
         </S.SaveButton>
-      </S.InitializeSupplementaryDraftPicksRowContainer>
+      </S.InitializeSupplementalDraftPicksRowContainer>
       <S.SaveMessageText>{saveMessageText}</S.SaveMessageText>
     </T.FlexColumnCenterContainer>
   );

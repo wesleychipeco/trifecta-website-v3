@@ -14,7 +14,7 @@ import {
 } from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
-import { assignSupplementaryDraftSlots } from "./AssignDraftSlotsHelper";
+import { assignSupplementalDraftSlots } from "./AssignDraftSlotsHelper";
 import {
   ALPHABET,
   NUMBER_OF_TEAMS,
@@ -226,7 +226,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
     }
 
     // create grid
-    const grid = await assignSupplementaryDraftSlots(
+    const grid = await assignSupplementalDraftSlots(
       era,
       selectedSport,
       selectedYear,
