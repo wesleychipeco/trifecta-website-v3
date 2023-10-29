@@ -142,9 +142,13 @@ export const DraftBoard = () => {
         <S.FlexRowContainer>
           {draftResultsHeader.map((headerObject) => {
             return (
-              <S.ColumnWidthRow key={headerObject.fantasyTeam}>
+              <S.HeaderRow
+                key={headerObject.fantasyTeam}
+                fantasyTeam={headerObject.fantasyTeam}
+                tradedTo={false}
+              >
                 <S.TeamHeaderText>{headerObject?.fantasyTeam}</S.TeamHeaderText>
-              </S.ColumnWidthRow>
+              </S.HeaderRow>
             );
           })}
         </S.FlexRowContainer>
@@ -153,13 +157,19 @@ export const DraftBoard = () => {
             <S.FlexRowContainer key={i}>
               {round.map((pick) => {
                 return (
-                  <S.ColumnWidthRow key={pick?.overallPick}>
+                  <S.GridPickContainer
+                    key={pick?.overallPick}
+                    sport={sport}
+                    position={pick?.position}
+                    fantasyTeam={pick?.fantasyTeam}
+                    tradedTo={pick?.tradedTo ?? false}
+                  >
                     <DraftCard
                       data={pick}
                       sport={sport}
                       isCompleted={isCompleted}
                     />
-                  </S.ColumnWidthRow>
+                  </S.GridPickContainer>
                 );
               })}
             </S.FlexRowContainer>
@@ -171,13 +181,18 @@ export const DraftBoard = () => {
               <S.ColumnWidthColumn key={i}>
                 {gm.map((pick) => {
                   return (
-                    <S.FlexColumnContainerWithBorder key={pick?.pick}>
+                    <S.PickPickContainer
+                      key={pick?.pick}
+                      position={pick?.position}
+                      fantasyTeam={pick?.fantasyTeam}
+                      tradedTo={pick?.tradedTo ?? false}
+                    >
                       <DraftCard
                         data={pick}
                         sport={sport}
                         isCompleted={isCompleted}
                       />
-                    </S.FlexColumnContainerWithBorder>
+                    </S.PickPickContainer>
                   );
                 })}
               </S.ColumnWidthColumn>

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
 import { MOBILE_MAX_WIDTH, TITLE_FONT_SIZE } from "./global";
 import { NUMBER_OF_TEAMS } from "Constants";
+import { determineBackgroundColor } from "./DraftCardColors";
 
 export const DraftsHomeContainer = styled.div`
   width: 85%;
@@ -82,9 +83,19 @@ export const ColumnWidthRow = styled(ColumnWidth)`
   flex-direction: row;
 `;
 
-export const FlexColumnContainerWithBorder = styled(FlexColumnCenterContainer)`
+export const HeaderRow = styled(ColumnWidthRow)`
+  background-color: ${(props) => determineBackgroundColor(props)};
+`;
+
+export const GridPickContainer = styled(ColumnWidth)`
+  flex-direction: row;
+  background-color: ${(props) => determineBackgroundColor(props)};
+`;
+
+export const PickPickContainer = styled(FlexColumnCenterContainer)`
   border-top: 1px solid;
   width: 100%;
+  background-color: ${(props) => determineBackgroundColor(props)};
 `;
 
 export const TeamHeaderText = styled.h3`

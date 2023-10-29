@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colorPositionMatcher } from "./DraftCardColors";
 
 export const PaddingContainer = styled.div`
   flex-direction: column;
@@ -7,9 +6,6 @@ export const PaddingContainer = styled.div`
   align-items: flex-start;
   padding: 0.25rem 0.1rem 0.25rem 0.1rem;
   width: 98%;
-
-  background-color: ${(props) =>
-    colorPositionMatcher(props.sport, props.position)};
 `;
 
 export const DraftPickNumberText = styled.p`

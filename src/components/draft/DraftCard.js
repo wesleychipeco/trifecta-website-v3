@@ -20,7 +20,7 @@ export const DraftCard = ({ data, sport, isCompleted }) => {
   const nonCompletedText =
     round && overallPick ? `${round}-${pick} (${overallPick})` : pick;
   return (
-    <S.PaddingContainer sport={sport} position={position}>
+    <S.PaddingContainer>
       <S.DraftPickNumberText>{nonCompletedText}</S.DraftPickNumberText>
 
       {isCompleted && (
