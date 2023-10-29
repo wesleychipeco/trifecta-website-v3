@@ -87,7 +87,7 @@ export const FlexColumnContainerWithBorder = styled(FlexColumnCenterContainer)`
 `;
 
 export const TeamHeaderText = styled.h3`
-  margin: 0;
+  margin: 0.3rem 0 0.3rem 0;
   padding: 0;
   font-size: 1rem;
   text-align: center;
