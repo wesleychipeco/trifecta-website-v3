@@ -2,6 +2,16 @@
 
 ### Added
 
+#### [PR-68] - 2023-10-28
+
+- Assign supplementary draft slots. Create grid and update GM asset draft pick text
+- Also better use of global exported CONSTANTS
+- Also rename all uses of "supplementary" to "supplemental"
+
+### Added
+
+### Added
+
 #### [PR-67] - 2023-10-25
 
 - Display future non-assigned supplementary pick draft board
