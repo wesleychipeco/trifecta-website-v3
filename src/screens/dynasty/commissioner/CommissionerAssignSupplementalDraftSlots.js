@@ -14,30 +14,12 @@ import {
 } from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
+import { assignSupplementaryDraftSlots } from "./AssignDraftSlotsHelper";
 import {
+  ALPHABET,
   NUMBER_OF_TEAMS,
-  assignSupplementaryDraftSlots,
-} from "./AssignDraftSlotsHelper";
-import { STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS } from "Constants";
-
-const ALPHABET = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-];
+  STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS,
+} from "Constants";
 
 export const CommissionerAssignSupplementalDraftSlots = () => {
   const { era } = useParams();
@@ -238,7 +220,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
     // check for duplicates
     const draftSlotsArray = Object.values(draftSlotAssignments);
     const uniqueArray = uniq(draftSlotsArray);
-    if (uniqueArray.length != 16) {
+    if (uniqueArray.length != NUMBER_OF_TEAMS) {
       timeoutSaveMessage("Warning!!! Not all draft slot values are unique");
       return;
     }

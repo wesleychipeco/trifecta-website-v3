@@ -15,25 +15,7 @@ import {
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
 import { assignStartupDraftSlots } from "./AssignDraftSlotsHelper";
-
-const ALPHABET = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-];
+import { ALPHABET, NUMBER_OF_TEAMS } from "Constants";
 
 export const CommissionerAssignStartupDraftSlots = () => {
   const { era } = useParams();
@@ -147,7 +129,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
     const draftSlotsArray = Object.values(draftSlotAssignments);
     console.log("draft slots array", draftSlotsArray);
     const uniqueArray = uniq(draftSlotsArray);
-    if (uniqueArray.length != 16) {
+    if (uniqueArray.length != NUMBER_OF_TEAMS) {
       timeoutSaveMessage("Warning!!! Not all draft slot values are unique");
       return;
     }

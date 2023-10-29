@@ -1,5 +1,6 @@
 import { invert } from "lodash";
 import { returnMongoCollection } from "database-management";
+import { NUMBER_OF_TEAMS } from "Constants";
 
 export const BASKETBALL_STARTUP_DRAFT_ROUNDS = 15;
 export const BASEBALL_STARTUP_DRAFT_ROUNDS = 30;
@@ -11,7 +12,6 @@ export const FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS = 5;
 
 export const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 export const ROUND_REVERSAL = 5;
-export const NUMBER_OF_TEAMS = 16;
 
 export const createDraftGrid = (
   sport,

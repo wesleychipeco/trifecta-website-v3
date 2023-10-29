@@ -8,7 +8,7 @@ import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
 import { DynastyStandingsColumnsRaw } from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
-import { ERA_1, HIGH_TO_LOW } from "Constants";
+import { ERA_1, HIGH_TO_LOW, NUMBER_OF_TEAMS } from "Constants";
 import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
 import { addKeyValueToEachObjectInArray, insertIntoArray } from "utils/arrays";
@@ -58,7 +58,7 @@ export const DynastySportStandings = ({ sport }) => {
           "winPer",
           HIGH_TO_LOW,
           "totalDynastyPoints",
-          16,
+          NUMBER_OF_TEAMS,
           1
         );
 

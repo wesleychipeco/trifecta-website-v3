@@ -9,8 +9,8 @@ import {
   BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
   BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
   FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
-  NUMBER_OF_TEAMS,
 } from "./AssignDraftSlotsHelper";
+import { NUMBER_OF_TEAMS } from "Constants";
 
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
