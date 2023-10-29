@@ -189,6 +189,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
           const isCorrectYear = eachPickOfGm.substr(0, 4) === `${year}`;
 
           if (isCorrectYear) {
+            const isTradedPick = eachPickOfGm.includes("via");
             const roundNumber = eachPickOfGm.substr(5, 1);
             const arrayIndexNumber = roundNumber - 1;
             const roundOfPicks = grid[arrayIndexNumber];
@@ -197,7 +198,11 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
             let overallPickNumber;
             for (let j = 0; j < roundOfPicks.length; j++) {
               const eachPickInGrid = roundOfPicks[j];
-              if (eachPickInGrid.fantasyTeam === gmAbbreviation) {
+              const teamToMatch = isTradedPick
+                ? eachPickOfGm.substr(eachPickOfGm.indexOf("via") + 4) // use team acquired pick from, to pick from grid
+                : gmAbbreviation; // else use own placement in grid
+
+              if (eachPickInGrid.fantasyTeam === teamToMatch) {
                 overallPickNumber = eachPickInGrid.overallPick;
                 break;
               }
@@ -210,14 +215,16 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
         } // end of if (isCorrectYear)
       ); // end of map
 
-      // console.log("final list", modifiedGmSportDraftPicks);
+      console.log(
+        `final list for ${gmAbbreviation}: ${modifiedGmSportDraftPicks}`
+      );
 
       const keyString = `assets.${sport}.draftPicks`;
       const { modifiedCount } = await gmsCollection.updateOne(
         { abbreviation: gmAbbreviation },
         { $set: { [keyString]: modifiedGmSportDraftPicks } }
       );
-      modifiedCount += modifiedCountTotal;
+      modifiedCountTotal += modifiedCount;
     } // end of for loop through gms
 
     if (modifiedCountTotal === NUMBER_OF_TEAMS) {
@@ -243,6 +250,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
       selectedYear,
       draftSlotAssignments
     );
+    console.log("Grid!", grid);
 
     await saveToDraftsDB(era, selectedSport, selectedYear, grid);
     await modifyAndSaveGmAssets(era, selectedSport, selectedYear, grid);
