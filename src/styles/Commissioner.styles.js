@@ -222,3 +222,11 @@ export const InitializeSupplementalDraftPicksText = styled.h4`
 export const InitializeDraftPicksManualInput = styled(ManualInput)`
   width: 50%;
 `;
+
+/////////////////// Trade Future Draft Picks ////////////////
+export const TradeDraftPicksRowContainer = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;

@@ -71,7 +71,6 @@ export const FlexColumnContainer = styled.div`
 const ColumnWidth = styled.div`
   width: calc(100% / ${NUMBER_OF_TEAMS});
   justify-content: center;
-  border: 1px solid;
   min-width: 0;
 `;
 
@@ -85,6 +84,7 @@ export const ColumnWidthRow = styled(ColumnWidth)`
 
 export const HeaderRow = styled(ColumnWidthRow)`
   background-color: ${(props) => determineBackgroundColor(props)};
+  outline: 1px solid;
 `;
 
 export const GridPickContainer = styled(ColumnWidth)`
@@ -93,7 +93,7 @@ export const GridPickContainer = styled(ColumnWidth)`
 `;
 
 export const PickPickContainer = styled(FlexColumnCenterContainer)`
-  border-top: 1px solid;
+  outline: 1px solid;
   width: 100%;
   background-color: ${(props) => determineBackgroundColor(props)};
 `;
