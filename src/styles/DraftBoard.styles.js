@@ -84,8 +84,7 @@ export const ColumnWidthRow = styled(ColumnWidth)`
 
 export const HeaderRow = styled(ColumnWidthRow)`
   background-color: ${(props) => determineBackgroundColor(props)};
-  border-width: 2px 1px 1px 1px;
-  border-style: solid;
+  outline: 1px solid;
 `;
 
 export const GridPickContainer = styled(ColumnWidth)`
@@ -94,7 +93,7 @@ export const GridPickContainer = styled(ColumnWidth)`
 `;
 
 export const PickPickContainer = styled(FlexColumnCenterContainer)`
-  border: 1px solid;
+  outline: 1px solid;
   width: 100%;
   background-color: ${(props) => determineBackgroundColor(props)};
 `;
