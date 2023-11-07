@@ -121,8 +121,8 @@ const colorGmMatcher = (fantasyTeam, tradedTo) => {
       color = "rgba(135, 62, 132, 0.6)";
       break;
     case PAN:
-      // color = "#e9f59d";
-      color = "rgb(233, 245, 157)";
+      // color = "#eed7a1";
+      color = "rgb(238,215,161)";
       break;
     default:
       break;
