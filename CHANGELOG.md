@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Added
+
+#### [PR-70] - 2023-11-06
+
+- Trade future draft picks
+- Transfer draft pick asset
+- Add `tradedTo` to draft board
+
 ## [3.7.3] - 2023-10-28
 
 ### Added
