@@ -14,8 +14,8 @@ const COMMISSIONER_ACTION_BUTTONS = [
   },
   {
     title: "Trade Draft Picks",
-    path: "",
-    disabled: true,
+    path: ROUTES.CommissionerTradeFutureDraftPicks,
+    disabled: false,
   },
   {
     title: "Assign Startup Draft Slots",
