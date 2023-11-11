@@ -4,6 +4,7 @@ import {
   faTimes,
   faCaretSquareDown,
   faCaretSquareUp,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faBars, faTimes, faCaretSquareDown, faCaretSquareUp);
+library.add(faBars, faMinus, faTimes, faCaretSquareDown, faCaretSquareUp);

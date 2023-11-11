@@ -11,3 +11,10 @@ export const numberToOrdinal = (number) => {
       return "th";
   }
 };
+
+export const extractBetweenParentheses = (stringWithParentheses) => {
+  return stringWithParentheses.substring(
+    stringWithParentheses.indexOf("(") + 1,
+    stringWithParentheses.indexOf(")")
+  );
+};

@@ -46,6 +46,8 @@ import { CommissionerAssignStartupDraftSlots } from "screens/dynasty/commissione
 import { CommissionerInitializeSupplementalDraftPicks } from "screens/dynasty/commissioner/CommissionerInitializeSupplementalDraftPicks";
 import { CommissionerAssignSupplementalDraftSlots } from "screens/dynasty/commissioner/CommissionerAssignSupplementalDraftSlots";
 import { CommissionerTradeFutureDraftPicks } from "screens/dynasty/commissioner/CommissionerTradeFutureDraftPicks";
+import { TransactionsHistoryHome } from "screens/dynasty/transactions-history/TransactionsHistoryHome";
+import { TransactionsHistory } from "screens/dynasty/transactions-history/TransactionsHistory";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -212,6 +214,16 @@ export const App = () => {
                 <Route
                   path={ROUTES.TradeHistory}
                   element={<DynastyTradeHistory />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.TransactionsHistoryHome}
+                  element={<TransactionsHistoryHome />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.TransactionsHistory}
+                  element={<TransactionsHistory />}
                   exact
                 />
                 <Route
