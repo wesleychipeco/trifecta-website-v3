@@ -7,6 +7,7 @@ import {
   MOBILE_MAX_WIDTH,
   PRIMARY_ORANGE,
 } from "./global";
+import { FlexColumnCentered } from "./shared";
 
 export const TransactionsHistoryHomeContainer = styled.div`
   width: 90%;
@@ -18,6 +19,10 @@ export const TransactionsHistoryHomeRowContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 1rem 0 3rem 0;
+`;
+
+export const TransactionsHistoryOuterContainer = styled(FlexColumnCentered)`
+  width: 90%;
 `;
 
 export const HeaderText = styled.p`
@@ -35,7 +40,7 @@ export const PlayerTableHeaderCell = styled(StringTableHeaderCell)`
 `;
 
 export const IconContainer = styled.div`
-  background-color: ${(props) => (props.isDrop ? "red" : "#3174ad")};
+  background-color: ${(props) => (props.isDrop ? "red" : "green")};
   border-radius: 100%;
   margin-right: 0.5rem;
   padding: 0.25rem 0.24rem 0.25rem 0.24rem;
@@ -48,7 +53,7 @@ export const IconContainer = styled.div`
 
 export const InputContainer = styled.div`
   display: flex;
-  width: 75%;
+  width: 90%;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
@@ -139,4 +144,25 @@ export const TextInput = styled.input`
     width: 7.5rem;
     margin: 0;
   }
+`;
+
+export const TooltipContainer = styled.div`
+  &:hover .tooltip-text {
+    visibility: visible;
+  }
+`;
+
+export const TooltipText = styled.span`
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  color: white;
+  font-size: 0.85rem;
+  background-color: #192733;
+  border-radius: 0.5rem;
+  top: 0;
+  left: 5rem;
+  max-width: 16rem;
+
+  padding: 0.25rem;
 `;

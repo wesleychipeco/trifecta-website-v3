@@ -40,6 +40,7 @@ export const retrieveTransactions = async (leagueId, gmNamesIdsMappings) => {
 
   const rawData = data?.data?.responses?.[0]?.data ?? {};
   const rawTableRows = rawData?.table?.rows ?? [];
+  console.log("rawTableRows", rawTableRows);
   return formatTransactions(rawTableRows, gmNamesIdsMappings);
 };
 
@@ -86,6 +87,9 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
       ? 0
       : parseFloat(eachRow.cells?.[1]?.content);
     const isSuccessful = eachRow.executed;
+    const isSuccessfulReason = formatFailedTransactionMessage(
+      eachRow.result?.toolTip
+    );
     const period = eachRow.cells?.[5]?.content;
     const dateString = eachRow.cells?.[4]?.content;
     const transactionType = eachRow.transactionType;
@@ -101,6 +105,7 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
       addedPlayerPosAndTeam,
       bidOffer,
       isSuccessful,
+      isSuccessfulReason,
       period,
       dateString,
       date: newDate,
@@ -115,7 +120,7 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
       cleanedUpTransactions.push(transactionObject);
     }
   }
-  console.log("cleaned up", cleanedUpTransactions);
+  // console.log("cleaned up", cleanedUpTransactions);
 
   const executedTransactions = cleanedUpTransactions.filter(
     (eachTransaction) => eachTransaction.isSuccessful
@@ -123,21 +128,10 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
   const notExecutedTransactions = cleanedUpTransactions.filter(
     (eachTransaction) => !eachTransaction.isSuccessful
   );
-  // console.log("executedTransactions", executedTransactions);
-
-  // sort executed transations by 1) date, 2) transactionType === Claim, 3) bidOffer
-  const sortedExecuted = orderBy(
-    executedTransactions,
-    ["date", "transactionType", "bidOffer"],
-    ["desc", "asc", "desc"]
-  );
-
-  console.log("sortexec", sortedExecuted);
-  console.log("not", notExecutedTransactions);
 
   // loop through each executed transaction and see if there are any nonExecuted transactions for that addedPlayerName and make list of FAAB tiebreakers
-  for (let j = 0; j < sortedExecuted.length; j++) {
-    const transaction = sortedExecuted[j];
+  for (let j = 0; j < executedTransactions.length; j++) {
+    const transaction = executedTransactions[j];
     const addedPlayerAndDateInQuestion = `${transaction.addedPlayerName}_${transaction.dateString}`;
 
     for (let k = 0; k < notExecutedTransactions.length; k++) {
@@ -145,12 +139,9 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
       const playerAndDateToCheck = `${failedTransaction.addedPlayerName}_${failedTransaction.dateString}`;
 
       if (addedPlayerAndDateInQuestion === playerAndDateToCheck) {
-        // console.log("SAME!!!", addedPlayerAndDateInQuestion);
-        // console.log("BEFORE", transaction);
-        // console.log("failed one", failedTransaction);
-        // console.log("=====================================================");
         const listOfFaabTiebreakers = transaction.faabTiebreakers;
         const { gm, bidOffer } = failedTransaction;
+
         // if the array already exists in transaction, add to it
         if (listOfFaabTiebreakers && Array.isArray(listOfFaabTiebreakers)) {
           transaction.faabTiebreakers.push({
@@ -180,6 +171,51 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
     }
   }
 
-  console.log("ENRICHED EXECUTED", sortedExecuted);
+  const allTransactions = [...executedTransactions, ...notExecutedTransactions];
+  // sort executed transations by 1) date,, 2) isSuccessful = true, 3) transactionType === Claim, 4) bidOffer
+  const sortedExecuted = orderBy(
+    allTransactions,
+    ["date", "isSuccessful", "transactionType", "bidOffer"],
+    ["desc", "desc", "asc", "desc"]
+  );
+  // console.log("sortedEnrichedExecuted", sortedExecuted);
+
   return sortedExecuted;
+};
+
+const formatFailedTransactionMessage = (tooltipText) => {
+  if (!tooltipText) {
+    return "";
+  }
+
+  if (tooltipText.includes("Click")) {
+    return "Roster limit would be exceeeded.";
+  } else if (
+    tooltipText.includes("tiebreaker") ||
+    tooltipText.includes("higher")
+  ) {
+    return removeBoldHtml(tooltipText);
+  } else if (tooltipText.includes("already")) {
+    const newText = removeBoldHtml(tooltipText);
+    return changeFormatOfPlayerName(newText);
+  } else if (tooltipText.includes("another")) {
+    return changeFormatOfPlayerName(tooltipText);
+  } else {
+    return "";
+  }
+};
+
+const removeBoldHtml = (stringWithBoldHtml) => {
+  return stringWithBoldHtml.replace("<b>", "").replace("</b>", "");
+};
+
+// for tooltip, fantrax gives player name as <b>last, first</b>. Change to first last.
+const changeFormatOfPlayerName = (fullString) => {
+  const name = fullString.substring(
+    fullString.indexOf("<b>") + 3,
+    fullString.indexOf("</b>")
+  );
+  const nameArray = name.split(", ");
+  const [last, first] = nameArray;
+  return fullString.replace(`<b>${last}, ${first}</b>`, `${first} ${last}`);
 };

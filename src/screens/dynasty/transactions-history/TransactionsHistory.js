@@ -44,7 +44,6 @@ export const TransactionsHistory = () => {
           const gmNamesArray = gmData.map(
             (gm) => `${gm.name} (${gm.abbreviation})`
           );
-          console.log("gmdata", gmNamesArray);
           setGmsArray(gmNamesArray);
 
           // retrieve transactions
@@ -70,6 +69,16 @@ export const TransactionsHistory = () => {
       {
         Header: "Transaction Type",
         accessor: "transactionType",
+        tableHeaderCell: T.NumbersTableHeaderCell,
+      },
+      {
+        Header: "Successful?",
+        accessor: "isSuccessful",
+        tableHeaderCell: T.NumbersTableHeaderCell,
+      },
+      {
+        Header: "Is Successful Reason",
+        accessor: "isSuccessfulReason",
         tableHeaderCell: T.NumbersTableHeaderCell,
       },
       {
@@ -108,7 +117,7 @@ export const TransactionsHistory = () => {
         columns={transactionsColumns}
         data={transactions}
         sortBy={[{ id: "date", desc: false }]}
-        hiddenColumns={["transactionType"]}
+        hiddenColumns={["transactionType", "isSuccessfulReason"]}
         gmsArray={gmsArray}
       />
     </T.FlexColumnCenterContainer>

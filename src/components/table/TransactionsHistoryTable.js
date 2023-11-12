@@ -1,18 +1,21 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import { useMediaQuery } from "react-responsive";
 import Select from "react-select";
+import Toggle from "react-toggle";
 
 import * as T from "styles/Table.styles";
 import * as S from "styles/TransactionsHistory.styles";
 import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import "./ToggleStyles.css"; // for ES6 modules
 import { extractBetweenParentheses } from "utils/strings";
 
 const GM_INPUT = "gm";
 const PLAYER_INPUT = "player";
+const IS_SUCCESSFUL_INPUT = "isSuccessful";
 
 export const TransactionsHistoryTable = ({
   columns,
@@ -31,6 +34,7 @@ export const TransactionsHistoryTable = ({
 
   const [gmQuery, setGmQuery] = useState("");
   const [playerQuery, setPlayerQuery] = useState("");
+  const [isSuccessfulQuery, setIsSuccessfulQuery] = useState("true");
 
   const handleFilterInputChange = (e) => {
     const { value, id } = e.currentTarget;
@@ -44,6 +48,16 @@ export const TransactionsHistoryTable = ({
     setGmQuery(filterValue);
   };
 
+  const handleIsSuccessfulChange = (e) => {
+    if (e.target.checked) {
+      setIsSuccessfulQuery("");
+      setGlobalFilter({ value: "", type: IS_SUCCESSFUL_INPUT });
+    } else {
+      setIsSuccessfulQuery("true");
+      setGlobalFilter({ value: "true", type: IS_SUCCESSFUL_INPUT });
+    }
+  };
+
   const globalFilterFunction = useCallback(
     (rows, _id, _query) => {
       return rows.filter(
@@ -53,10 +67,14 @@ export const TransactionsHistoryTable = ({
             .toString()
             .toLowerCase()
             .replace(".", "") // remove periods (ex: T.J. Warren)
-            .includes(playerQuery)
+            .includes(playerQuery) &&
+          row.values["isSuccessful"]
+            .toString()
+            .toLowerCase()
+            .includes(isSuccessfulQuery)
       );
     },
-    [gmQuery, playerQuery]
+    [gmQuery, playerQuery, isSuccessfulQuery, data]
   );
 
   const gmOptions = useMemo(() => {
@@ -90,6 +108,12 @@ export const TransactionsHistoryTable = ({
     setGlobalFilter,
   } = tableInstance;
 
+  useEffect(() => {
+    // first time render
+    setIsSuccessfulQuery("true");
+    setGlobalFilter({ value: "true", type: IS_SUCCESSFUL_INPUT });
+  }, [data]);
+
   // Check if styled components are passed in as props, otherwise, use Table default
   const TableComponent = table ?? T.Table;
   const TableHeadComponent = tableHead ?? T.TableHead;
@@ -121,7 +145,7 @@ export const TransactionsHistoryTable = ({
   };
 
   return (
-    <G.FlexColumnCentered>
+    <S.TransactionsHistoryOuterContainer>
       <S.InputContainer>
         <Select
           placeholder="Select GM"
@@ -137,6 +161,24 @@ export const TransactionsHistoryTable = ({
           placeholder="Search By Player"
           onChange={handleFilterInputChange}
         />
+        <G.FlexRow>
+          <Toggle icons={false} onChange={handleIsSuccessfulChange} />
+          <G.HorizontalSpacer factor={1} />
+          <G.FlexColumn style={{ alignItems: "flex-start" }}>
+            Include Unsuccessful Transactions
+            <br />
+            <G.FlexRow>
+              Hover <G.HorizontalSpacer factor={1} />
+              <FontAwesomeIcon
+                icon="fa-times-circle"
+                size={isMobile ? "sm" : "xl"}
+                color="red"
+              />{" "}
+              <G.HorizontalSpacer factor={1} />
+              for Reason
+            </G.FlexRow>
+          </G.FlexColumn>
+        </G.FlexRow>
       </S.InputContainer>
       <T.ScrollTable>
         <TableComponent style={{ width: "100%" }} {...getTableProps()}>
@@ -183,6 +225,41 @@ export const TransactionsHistoryTable = ({
                     return (
                       <TableBodyCellComponent {...cell.getCellProps()}>
                         {cell.render((c) => {
+                          // handle undefined and null values
+                          if (c.value === undefined || c.value === null) {
+                            return null;
+                          }
+
+                          // isSuccessful
+                          if (typeof c.value === "boolean") {
+                            if (c.value) {
+                              return (
+                                <G.FlexColumnCentered>
+                                  <FontAwesomeIcon
+                                    icon="fa-check-circle"
+                                    size={isMobile ? "sm" : "xl"}
+                                    color="green"
+                                  />
+                                </G.FlexColumnCentered>
+                              );
+                            }
+                            // if not successful
+                            return (
+                              <G.FlexColumnCentered>
+                                <S.TooltipContainer className="hover-text">
+                                  <FontAwesomeIcon
+                                    icon="fa-times-circle"
+                                    size={isMobile ? "sm" : "xl"}
+                                    color="red"
+                                  />
+                                  <S.TooltipText className="tooltip-text">
+                                    {c?.row?.values?.isSuccessfulReason}
+                                  </S.TooltipText>
+                                </S.TooltipContainer>
+                              </G.FlexColumnCentered>
+                            );
+                          }
+
                           // faabTiebreakers
                           if (Array.isArray(c.value) && c.value.length > 0) {
                             return c.value.map((each, i) => {
@@ -206,28 +283,32 @@ export const TransactionsHistoryTable = ({
                             return <p>{`$${c.value}`}</p>;
                           }
                           // added & dropped players
-                          if (c.value.includes("#")) {
-                            const [added, dropped] = c.value.split("#");
-                            return (
-                              <>
-                                <AddedPlayerComponent addedPlayer={added} />
-                                <br />
-                                <DroppedPlayerComponent
-                                  droppedPlayer={dropped}
-                                />
-                              </>
-                            );
-                          }
-                          // just singular added or dropped player
-                          else if (c.column.Header === "Player(s)") {
-                            if (c.row.values.transactionType === "Claim") {
+                          if (typeof c.value === "string") {
+                            if (c.value.includes("#")) {
+                              const [added, dropped] = c.value.split("#");
                               return (
-                                <AddedPlayerComponent addedPlayer={c.value} />
+                                <>
+                                  <AddedPlayerComponent addedPlayer={added} />
+                                  <br />
+                                  <DroppedPlayerComponent
+                                    droppedPlayer={dropped}
+                                  />
+                                </>
                               );
                             }
-                            return (
-                              <DroppedPlayerComponent droppedPlayer={c.value} />
-                            );
+                            // just singular added or dropped player
+                            else if (c.column.Header === "Player(s)") {
+                              if (c.row.values.transactionType === "Claim") {
+                                return (
+                                  <AddedPlayerComponent addedPlayer={c.value} />
+                                );
+                              }
+                              return (
+                                <DroppedPlayerComponent
+                                  droppedPlayer={c.value}
+                                />
+                              );
+                            }
                           }
                           return c.value;
                         })}
@@ -240,6 +321,6 @@ export const TransactionsHistoryTable = ({
           </TableBodyComponent>
         </TableComponent>
       </T.ScrollTable>
-    </G.FlexColumnCentered>
+    </S.TransactionsHistoryOuterContainer>
   );
 };
