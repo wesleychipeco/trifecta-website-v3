@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.8.0] - 2023-11-12
+
+### Added
+
+#### [PR-71] - 2023-11-12
+
+- Transactions History! Better than Fantrax
+
 ### Added
 
 #### [PR-70] - 2023-11-06
