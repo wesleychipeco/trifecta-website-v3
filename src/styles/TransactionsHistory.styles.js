@@ -22,7 +22,7 @@ export const TransactionsHistoryHomeRowContainer = styled.div`
 `;
 
 export const TransactionsHistoryOuterContainer = styled(FlexColumnCentered)`
-  width: 90%;
+  width: 80%;
 `;
 
 export const HeaderText = styled.p`
