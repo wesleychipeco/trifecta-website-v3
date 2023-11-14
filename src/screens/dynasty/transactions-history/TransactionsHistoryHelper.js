@@ -40,7 +40,7 @@ export const retrieveTransactions = async (leagueId, gmNamesIdsMappings) => {
 
   const rawData = data?.data?.responses?.[0]?.data ?? {};
   const rawTableRows = rawData?.table?.rows ?? [];
-  console.log("rawTableRows", rawTableRows);
+  // console.log("rawTableRows", rawTableRows);
   return formatTransactions(rawTableRows, gmNamesIdsMappings);
 };
 

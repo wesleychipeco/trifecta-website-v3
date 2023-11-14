@@ -161,8 +161,8 @@ export const TooltipText = styled.span`
   background-color: #192733;
   border-radius: 0.5rem;
   top: 0;
-  left: 5rem;
-  max-width: 16rem;
+  left: 8rem;
+  max-width: 12rem;
 
-  padding: 0.25rem;
+  padding: 0.35rem;
 `;

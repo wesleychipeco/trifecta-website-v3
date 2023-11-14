@@ -168,7 +168,8 @@ export const TransactionsHistoryTable = ({
             Include Unsuccessful Transactions
             <br />
             <G.FlexRow>
-              Hover <G.HorizontalSpacer factor={1} />
+              Hover Over
+              <G.HorizontalSpacer factor={1} />
               <FontAwesomeIcon
                 icon="fa-times-circle"
                 size={isMobile ? "sm" : "xl"}

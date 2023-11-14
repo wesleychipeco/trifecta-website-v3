@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
-import { capitalize, upperCase } from "lodash";
+import { capitalize } from "lodash";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Select, { components } from "react-select";
-import { useAuth0 } from "@auth0/auth0-react";
+import { isSameDay } from "date-fns";
 import { retrieveTransactions } from "./TransactionsHistoryHelper";
 import * as S from "styles/TransactionsHistory.styles";
 import * as T from "styles/StandardScreen.styles";
@@ -23,35 +21,71 @@ export const TransactionsHistory = () => {
   useEffect(() => {
     const loadData = async () => {
       if (isReady && dynastyCurrentVariables !== null) {
-        const { leagueIdMappings } = dynastyCurrentVariables;
         const sportYear = `${sport}${year}`;
-        const leagueId = leagueIdMappings[sportYear];
-        if (leagueId) {
-          // get teamIds to gms mappings
-          const gmNamesIdsCollection = await returnMongoCollection(
-            "gmNamesIds",
-            era
-          );
-          const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
-          const mappings = gmNamesIds?.[0]?.mappings ?? {};
+        const transactionsHistoryCollection = await returnMongoCollection(
+          "transactionsHistory",
+          era
+        );
+        const data = await transactionsHistoryCollection.find({ sportYear });
+        const object = data?.[0] ?? {};
+        const { lastScraped: lastScrapedString, transactions } = object;
+        if (
+          (lastScrapedString !== null || lastScrapedString !== undefined) &&
+          isSameDay(new Date(), new Date(lastScrapedString))
+        ) {
+          // just display if lastScrapedString is same as today
+          setTransactions(transactions);
+        } else {
+          // otherwise scrape logic
+          const { leagueIdMappings } = dynastyCurrentVariables;
+          const leagueId = leagueIdMappings[sportYear];
+          if (leagueId) {
+            // get teamIds to gms mappings
+            const gmNamesIdsCollection = await returnMongoCollection(
+              "gmNamesIds",
+              era
+            );
+            const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
+            const mappings = gmNamesIds?.[0]?.mappings ?? {};
 
-          // get list of gm abbreviations
-          const gmCollection = await returnMongoCollection("gms", era);
-          const gmData = await gmCollection.find(
-            {},
-            { projection: { abbreviation: 1, name: 1 } }
-          );
-          const gmNamesArray = gmData.map(
-            (gm) => `${gm.name} (${gm.abbreviation})`
-          );
-          setGmsArray(gmNamesArray);
+            // get list of gm abbreviations
+            const gmCollection = await returnMongoCollection("gms", era);
+            const gmData = await gmCollection.find(
+              {},
+              { projection: { abbreviation: 1, name: 1 } }
+            );
+            const gmNamesArray = gmData.map(
+              (gm) => `${gm.name} (${gm.abbreviation})`
+            );
+            setGmsArray(gmNamesArray);
 
-          // retrieve transactions
-          const allTransactions = await retrieveTransactions(
-            leagueId,
-            mappings
-          );
-          setTransactions(allTransactions);
+            // retrieve transactions
+            const allTransactions = await retrieveTransactions(
+              leagueId,
+              mappings
+            );
+            setTransactions(allTransactions);
+
+            const { modifiedCount } =
+              await transactionsHistoryCollection.updateOne(
+                { sportYear },
+                {
+                  $set: {
+                    transactions: allTransactions,
+                    lastScraped: new Date().toISOString(),
+                  },
+                },
+                {
+                  upsert: true,
+                }
+              );
+
+            if (modifiedCount !== 1) {
+              console.warn("Transactions not saved to MongoDB!!!");
+            }
+          } else {
+            console.error("No leagueId to get transactions from Fantrax!!!");
+          }
         }
       }
     };
@@ -111,8 +145,6 @@ export const TransactionsHistory = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>{`${year} ${capitalize(sport)} Transactions History`}</T.Title>
-      {/* Dropdown to filter by GM */}
-      {/* Dropdown to filter by Add, Drop, or All (transactionType) */}
       <TransactionsHistoryTable
         columns={transactionsColumns}
         data={transactions}
