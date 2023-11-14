@@ -17,7 +17,7 @@ export const OpenNavbar = () => {
   const version = useMemo(() => {
     const { version } = require("../../../package.json");
     return version;
-  });
+  }, []);
 
   // trifecta season variables
   const seasonVariables = useSelector(

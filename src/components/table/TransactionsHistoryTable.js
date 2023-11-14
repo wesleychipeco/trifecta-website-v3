@@ -74,7 +74,7 @@ export const TransactionsHistoryTable = ({
             .includes(isSuccessfulQuery)
       );
     },
-    [gmQuery, playerQuery, isSuccessfulQuery, data]
+    [gmQuery, playerQuery, isSuccessfulQuery]
   );
 
   const gmOptions = useMemo(() => {
@@ -112,7 +112,7 @@ export const TransactionsHistoryTable = ({
     // first time render
     setIsSuccessfulQuery("true");
     setGlobalFilter({ value: "true", type: IS_SUCCESSFUL_INPUT });
-  }, [data]);
+  }, [data, setGlobalFilter]);
 
   // Check if styled components are passed in as props, otherwise, use Table default
   const TableComponent = table ?? T.Table;

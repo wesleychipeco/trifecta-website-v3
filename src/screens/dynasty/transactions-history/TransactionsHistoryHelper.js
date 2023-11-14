@@ -26,7 +26,6 @@ export const retrieveTransactions = async (leagueId, gmNamesIdsMappings) => {
       refUrl: `https://www.fantrax.com/fantasy/league/${leagueId}/transactions/history;view=CLAIM_DROP;executedOnly=false`,
       at: 0,
       dt: 0,
-      at: null,
       tz: "America/Los_Angeles",
       v: "109.0.1",
     },

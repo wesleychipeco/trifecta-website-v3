@@ -91,7 +91,7 @@ export const TransactionsHistory = () => {
     };
 
     loadData();
-  }, [isReady, dynastyCurrentVariables]);
+  }, [isReady, dynastyCurrentVariables, era, sport, year]);
 
   const transactionsColumns = useMemo(() => {
     return [
