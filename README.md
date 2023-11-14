@@ -62,7 +62,7 @@ teamId
 - On local machine on merged main branch, at root level `yarn build`
 - SSH into AWS instance using key file on local machine
 - On EC2 instance, create new folder with today's date `mkdir build-9-30` or `mkdir proxy-server-9-30`
-- On local machine, `scp` the local "build/proxy-server" folder to newly created "build/proxy-server" folder on AWS instance
+- On local machine, `scp` the local `index.js` and `package.json` files from the "build/proxy-server" folder to newly created "build/proxy-server" folder on AWS instance
 - On EC2 instance, attach to "react" or "proxy" screen
 - Kill process
 - For new UI build, re-serve new build `serve -s build-9-30/`
