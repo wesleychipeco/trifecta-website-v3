@@ -88,6 +88,7 @@ export const HeaderRow = styled(ColumnWidthRow)`
 `;
 
 export const GridPickContainer = styled(ColumnWidth)`
+  outline: 1px solid;
   flex-direction: row;
   background-color: ${(props) => determineBackgroundColor(props)};
 `;
