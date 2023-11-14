@@ -4,6 +4,9 @@ const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
 
+const LEAGUE_ID = "LeagueId";
+const URL_STRING = "https://www.fantrax.com/fxpa/req?leagueId=";
+
 const corsOrigin = process.env.REACT_APP_IS_LOCAL
   ? "*"
   : "https://www.trifectafantasyleague.com";
@@ -23,8 +26,8 @@ app.get("/", (req, res) => {
 
 app.post("/standings", (req, res) => {
   // use leagueId passed via header
-  const leagueId = req.header("LeagueId");
-  const backendUrl = `https://www.fantrax.com/fxpa/req?leagueId=${leagueId}`;
+  const leagueId = req.header(LEAGUE_ID);
+  const backendUrl = `${URL_STRING}${leagueId}`;
 
   // return the data without modification
   axios.post(backendUrl, req.body).then((response) => {
@@ -34,8 +37,19 @@ app.post("/standings", (req, res) => {
 
 app.post("/rosters", (req, res) => {
   // use leagueId passed via header
-  const leagueId = req.header("LeagueId");
-  const backendUrl = `https://www.fantrax.com/fxpa/req?leagueId=${leagueId}`;
+  const leagueId = req.header(LEAGUE_ID);
+  const backendUrl = `${URL_STRING}${leagueId}`;
+
+  // return the data without modification
+  axios.post(backendUrl, req.body).then((response) => {
+    res.send(response.data);
+  });
+});
+
+app.post("/transactions", (req, res) => {
+  // use leagueId passed via header
+  const leagueId = req.header(LEAGUE_ID);
+  const backendUrl = `${URL_STRING}${leagueId}`;
 
   // return the data without modification
   axios.post(backendUrl, req.body).then((response) => {

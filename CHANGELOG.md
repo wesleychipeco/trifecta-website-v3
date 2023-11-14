@@ -1,5 +1,14 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.8.0] - 2023-11-13
+
+### Added
+
+#### [PR-71] - 2023-11-13
+
+- Transactions History! Better than Fantrax
+- Implement saving to MongoDB and don't scrape when applicable
+
 ### Added
 
 #### [PR-70] - 2023-11-06

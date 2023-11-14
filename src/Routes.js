@@ -4,6 +4,7 @@ export const STATIC_ROUTES = {
   DynastyHome: "/dynasty",
   DynastyEra: ":era",
   TradeHistory: "trade-history",
+  TransactionsHistoryHome: "transactions-history",
   HallOfFame: "hall-of-fame",
   BasketballHallOfFame: "hall-of-fame/basketball",
   BaseballHallOfFame: "hall-of-fame/baseball",
@@ -39,6 +40,7 @@ export const ROUTES = {
   OwnerMatchups: "owner-matchups/:teamNumber/:year",
   TradeAssetDashboard: "trade-asset-dashboard/:gmAbbreviation",
   DraftBoard: "draft/:sport/:year",
+  TransactionsHistory: "transactions-history/:sport/:year",
 };
 
 export const BASE_ROUTES = {
