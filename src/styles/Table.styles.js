@@ -55,7 +55,8 @@ export const TableHeaderCell = styled.th`
 
     &:first-child {
       left: 0;
-      position: sticky;
+      position: ${(props) =>
+        props.doNotStickFirstColumn ? "static" : "sticky"};
       background-color: ${PRIMARY_ORANGE};
       border-top-left-radius: 0rem;
       border-bottom-left-radius: 0rem;
@@ -121,10 +122,13 @@ export const TableBodyCell = styled.td`
 
     &:first-child {
       left: 0;
-      position: sticky;
+      position: ${(props) =>
+        props.doNotStickFirstColumn ? "static" : "sticky"};
       background-color: ${BACKGROUND_COLOR};
       box-shadow: ${(props) => {
-        const box = "inset 0rem 0rem 0.05rem 0.14rem";
+        const box = props.doNotStickFirstColumn
+          ? "inset 0.15rem 0rem 0rem 0rem"
+          : "inset 0rem 0rem 0.05rem 0.14rem";
         let color = "rgba(0, 0, 0, 0.9)";
         if (props.top3Styling) {
           if (props.top3Array?.[0] === props.index) {

@@ -60,9 +60,9 @@ export const InputContainer = styled.div`
 
   @media ${MOBILE_MAX_WIDTH} {
     width: 100%;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
   }
 `;
 
@@ -139,9 +139,9 @@ export const TextInput = styled.input`
   }
 
   @media ${MOBILE_MAX_WIDTH} {
-    font-size: 0.75rem;
+    font-size: 1rem;
     text-align: center;
-    width: 7.5rem;
+    width: 75%;
     margin: 0;
   }
 `;

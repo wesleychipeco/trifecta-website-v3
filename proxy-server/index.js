@@ -7,9 +7,7 @@ const bodyParser = require("body-parser");
 const LEAGUE_ID = "LeagueId";
 const URL_STRING = "https://www.fantrax.com/fxpa/req?leagueId=";
 
-const corsOrigin = process.env.REACT_APP_IS_LOCAL
-  ? "*"
-  : "https://www.trifectafantasyleague.com";
+const corsOrigin = "*";
 
 app.use(
   cors({

@@ -155,12 +155,14 @@ export const TransactionsHistoryTable = ({
           styles={S.TransactionsHistoryDropdownCustomStyles}
           isSearchable={false}
         />
+        {isMobile && <G.VerticalSpacer factor={2} />}
         <S.TextInput
           id={PLAYER_INPUT}
           type="text"
           placeholder="Search By Player"
           onChange={handleFilterInputChange}
         />
+        {isMobile && <G.VerticalSpacer factor={2} />}
         <G.FlexRow>
           <Toggle icons={false} onChange={handleIsSuccessfulChange} />
           <G.HorizontalSpacer factor={1} />
@@ -172,7 +174,7 @@ export const TransactionsHistoryTable = ({
               <G.HorizontalSpacer factor={1} />
               <FontAwesomeIcon
                 icon="fa-times-circle"
-                size={isMobile ? "sm" : "xl"}
+                size={isMobile ? "lg" : "xl"}
                 color="red"
               />{" "}
               <G.HorizontalSpacer factor={1} />
@@ -195,6 +197,7 @@ export const TransactionsHistoryTable = ({
                         {...column.getHeaderProps(
                           column.getSortByToggleProps({ title: undefined })
                         )}
+                        doNotStickFirstColumn
                       >
                         <G.FlexRow>
                           <S.HeaderText>{column.render("Header")}</S.HeaderText>
@@ -224,7 +227,10 @@ export const TransactionsHistoryTable = ({
                 <TableBodyRowComponent {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <TableBodyCellComponent {...cell.getCellProps()}>
+                      <TableBodyCellComponent
+                        {...cell.getCellProps()}
+                        doNotStickFirstColumn
+                      >
                         {cell.render((c) => {
                           // handle undefined and null values
                           if (c.value === undefined || c.value === null) {
@@ -238,7 +244,7 @@ export const TransactionsHistoryTable = ({
                                 <G.FlexColumnCentered>
                                   <FontAwesomeIcon
                                     icon="fa-check-circle"
-                                    size={isMobile ? "sm" : "xl"}
+                                    size={isMobile ? "lg" : "xl"}
                                     color="green"
                                   />
                                 </G.FlexColumnCentered>
@@ -250,7 +256,7 @@ export const TransactionsHistoryTable = ({
                                 <S.TooltipContainer className="hover-text">
                                   <FontAwesomeIcon
                                     icon="fa-times-circle"
-                                    size={isMobile ? "sm" : "xl"}
+                                    size={isMobile ? "lg" : "xl"}
                                     color="red"
                                   />
                                   <S.TooltipText className="tooltip-text">

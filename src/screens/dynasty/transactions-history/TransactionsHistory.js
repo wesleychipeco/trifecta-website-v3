@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { returnMongoCollection } from "database-management";
 import { capitalize } from "lodash";
 import { useParams } from "react-router-dom";
@@ -34,6 +34,7 @@ export const TransactionsHistory = () => {
           isSameDay(new Date(), new Date(lastScrapedString))
         ) {
           // just display if lastScrapedString is same as today
+          getAndSetGmsArray();
           setTransactions(transactions);
         } else {
           // otherwise scrape logic
@@ -48,16 +49,7 @@ export const TransactionsHistory = () => {
             const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
             const mappings = gmNamesIds?.[0]?.mappings ?? {};
 
-            // get list of gm abbreviations
-            const gmCollection = await returnMongoCollection("gms", era);
-            const gmData = await gmCollection.find(
-              {},
-              { projection: { abbreviation: 1, name: 1 } }
-            );
-            const gmNamesArray = gmData.map(
-              (gm) => `${gm.name} (${gm.abbreviation})`
-            );
-            setGmsArray(gmNamesArray);
+            getAndSetGmsArray();
 
             // retrieve transactions
             const allTransactions = await retrieveTransactions(
@@ -92,6 +84,17 @@ export const TransactionsHistory = () => {
 
     loadData();
   }, [isReady, dynastyCurrentVariables, era, sport, year]);
+
+  const getAndSetGmsArray = useCallback(async () => {
+    // get list of gm abbreviations
+    const gmCollection = await returnMongoCollection("gms", era);
+    const gmData = await gmCollection.find(
+      {},
+      { projection: { abbreviation: 1, name: 1 } }
+    );
+    const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
+    setGmsArray(gmNamesArray);
+  }, [setGmsArray]);
 
   const transactionsColumns = useMemo(() => {
     return [
