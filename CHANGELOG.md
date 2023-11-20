@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Updated
+
+#### [PR-72] - 2023-11-19
+
+- Fix some mobile styling on Trade History and Transactions History
+
 ## [3.8.0] - 2023-11-13
 
 ### Added

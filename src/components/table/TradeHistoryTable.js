@@ -113,6 +113,7 @@ export const TradeHistoryTable = ({
                         {...column.getHeaderProps(
                           column.getSortByToggleProps({ title: undefined })
                         )}
+                        doNotStickFirstColumn
                       >
                         <G.FlexRow>
                           <S.HeaderText>{column.render("Header")}</S.HeaderText>
@@ -142,7 +143,10 @@ export const TradeHistoryTable = ({
                 <TableBodyRowComponent {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <TableBodyCellComponent {...cell.getCellProps()}>
+                      <TableBodyCellComponent
+                        {...cell.getCellProps()}
+                        doNotStickFirstColumn
+                      >
                         {cell.render((c) => {
                           if (Array.isArray(c.value)) {
                             return c.value.map((each) => (
