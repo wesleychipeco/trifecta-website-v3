@@ -48,6 +48,7 @@ import { CommissionerAssignSupplementalDraftSlots } from "screens/dynasty/commis
 import { CommissionerTradeFutureDraftPicks } from "screens/dynasty/commissioner/CommissionerTradeFutureDraftPicks";
 import { TransactionsHistoryHome } from "screens/dynasty/transactions-history/TransactionsHistoryHome";
 import { TransactionsHistory } from "screens/dynasty/transactions-history/TransactionsHistory";
+import { NotFound } from "screens/NotFound";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -278,6 +279,7 @@ export const App = () => {
                 />
               </Route>
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </S.Body>
       </T.FlexRow>
