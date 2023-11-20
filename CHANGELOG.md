@@ -2,6 +2,12 @@
 
 ## [3.8.1] - 2023-11-19
 
+### Updated
+
+#### [PR-75] - 2023-11-19
+
+- Hotfix for draft results display bug
+
 ### Added
 
 #### [PR-74] - 2023-11-19

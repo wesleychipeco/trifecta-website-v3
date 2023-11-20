@@ -43,7 +43,7 @@ export const DraftBoard = () => {
           firstPickGM = fantasyTeam;
         }
 
-        if (round === startingRound + 1) {
+        if (Number(round) === startingRound + 1) {
           if (startingRound === 1) {
             setDraftResultsHeader(arrayOfPicks);
           }
