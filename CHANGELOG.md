@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Added
+
+#### [PR-74] - 2023-11-19
+
+- Not Found page
+
 ### Updated
 
 #### [PR-73] - 2023-11-19

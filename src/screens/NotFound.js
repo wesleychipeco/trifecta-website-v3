@@ -20,6 +20,9 @@ export const NotFound = () => {
         alt="trifecta-banner"
       />
       <S.TextContainer>
+        <S.ErrorTextCentered style={{ textDecoration: "underline" }}>
+          PAGE NOT FOUND
+        </S.ErrorTextCentered>
         <S.ErrorTextCentered>Interception! Steal! Error!</S.ErrorTextCentered>
         <G.VerticalSpacer factor={verticalFactor} />
         <S.Subtext>

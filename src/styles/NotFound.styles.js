@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import {
-  HEADER_FONT_FAMILY,
-  MOBILE_MAX_WIDTH,
-  MOBILE_TITLE_FONT_SIZE,
-  PRIMARY_ORANGE,
-  TITLE_FONT_SIZE,
-} from "./global";
+import { HEADER_FONT_FAMILY, MOBILE_MAX_WIDTH, PRIMARY_ORANGE } from "./global";
 import { FlexColumnCenterContainer } from "./StandardScreen.styles";
 
 export const HorizontalBanner = styled.img`
