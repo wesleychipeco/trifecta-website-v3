@@ -1,4 +1,3 @@
-import * as S from "styles/StandardScreen.styles";
 import * as T from "styles/OwnerScreen.styles";
 
 export const TotalMatchupsColumns = [

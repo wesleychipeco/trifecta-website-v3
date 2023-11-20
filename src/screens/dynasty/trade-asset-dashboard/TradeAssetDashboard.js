@@ -104,7 +104,15 @@ export const TradeAssetDashboard = () => {
     if (isReady) {
       loadData();
     }
-  }, [isReady, user]);
+  }, [
+    isReady,
+    user,
+    era,
+    gmAbbreviation,
+    inSeasonLeagues,
+    isAuthenticated,
+    leagueIdMappings,
+  ]);
 
   // options for select dropdown
   const options = useMemo(

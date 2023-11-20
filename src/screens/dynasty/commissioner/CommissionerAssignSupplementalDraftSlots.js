@@ -45,6 +45,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
       setGmsArray(gmNamesArray);
 
       const initialDraftSlotAssignments = {};
+      // eslint-disable-next-line array-callback-return
       gmData.map((gm) => {
         initialDraftSlotAssignments[gm?.abbreviation] = 0;
       });
@@ -118,7 +119,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
 
       setDraftSlotAssignments(copyDraftSlotAssignments);
     },
-    [options, draftSlotAssignments]
+    [draftSlotAssignments, getAbbreviation]
   );
 
   // check for save button enable/disable
@@ -139,88 +140,94 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
     }
   }, [draftSlotAssignments, selectedSport, selectedYear]);
 
-  const saveToDraftsDB = useCallback(async (era, sport, year, grid) => {
-    const draftsCollection = await returnMongoCollection("drafts", era);
-    const sportYear = `${sport}-${year}`;
+  const saveToDraftsDB = useCallback(
+    async (era, sport, year, grid) => {
+      const draftsCollection = await returnMongoCollection("drafts", era);
+      const sportYear = `${sport}-${year}`;
 
-    // delete record before re-adding with "grid" key instead of "picks"
-    (await draftsCollection).deleteOne({ type: sportYear });
-    const draftObject = {
-      type: sportYear,
-      grid,
-      createdAt: new Date().toISOString(),
-    };
+      // delete record before re-adding with "grid" key instead of "picks"
+      (await draftsCollection).deleteOne({ type: sportYear });
+      const draftObject = {
+        type: sportYear,
+        grid,
+        createdAt: new Date().toISOString(),
+      };
 
-    (await draftsCollection).insertOne(draftObject);
-    timeoutSaveMessage("Successfully saved grid to drafts collection");
-  }, []);
+      (await draftsCollection).insertOne(draftObject);
+      timeoutSaveMessage("Successfully saved grid to drafts collection");
+    },
+    [timeoutSaveMessage]
+  );
 
-  const modifyAndSaveGmAssets = useCallback(async (era, sport, year, grid) => {
-    const gmsCollection = await returnMongoCollection("gms", era);
-    const gms = await gmsCollection.find({});
+  const modifyAndSaveGmAssets = useCallback(
+    async (era, sport, year, grid) => {
+      const gmsCollection = await returnMongoCollection("gms", era);
+      const gms = await gmsCollection.find({});
 
-    let modifiedCountTotal = 0;
-    // Loop through each team's assets to find the sport and year's supplemental draft picks
-    for (let i = 0; i < gms.length; i++) {
-      const eachGm = gms[i];
-      const gmAbbreviation = eachGm.abbreviation;
-      const gmSportDraftPicks = eachGm["assets"][sport]["draftPicks"];
+      let modifiedCountTotal = 0;
+      // Loop through each team's assets to find the sport and year's supplemental draft picks
+      for (let i = 0; i < gms.length; i++) {
+        const eachGm = gms[i];
+        const gmAbbreviation = eachGm.abbreviation;
+        const gmSportDraftPicks = eachGm["assets"][sport]["draftPicks"];
 
-      const modifiedGmSportDraftPicks = gmSportDraftPicks.map(
-        (eachPickOfGm) => {
-          const isCorrectYear = eachPickOfGm.substr(0, 4) === `${year}`;
+        const modifiedGmSportDraftPicks = gmSportDraftPicks.map(
+          (eachPickOfGm) => {
+            const isCorrectYear = eachPickOfGm.substr(0, 4) === `${year}`;
 
-          if (isCorrectYear) {
-            const isTradedPick = eachPickOfGm.includes("via");
-            const roundNumber = eachPickOfGm.substr(5, 1);
-            const arrayIndexNumber = roundNumber - 1;
-            const roundOfPicks = grid[arrayIndexNumber];
+            if (isCorrectYear) {
+              const isTradedPick = eachPickOfGm.includes("via");
+              const roundNumber = eachPickOfGm.substr(5, 1);
+              const arrayIndexNumber = roundNumber - 1;
+              const roundOfPicks = grid[arrayIndexNumber];
 
-            // loop through each pick in the appropriate round to find the correct overallPick number from grid
-            let overallPickNumber;
-            for (let j = 0; j < roundOfPicks.length; j++) {
-              const eachPickInGrid = roundOfPicks[j];
-              const teamToMatch = isTradedPick
-                ? eachPickOfGm.substr(eachPickOfGm.indexOf("via") + 4) // use team acquired pick from, to pick from grid
-                : gmAbbreviation; // else use own placement in grid
+              // loop through each pick in the appropriate round to find the correct overallPick number from grid
+              let overallPickNumber;
+              for (let j = 0; j < roundOfPicks.length; j++) {
+                const eachPickInGrid = roundOfPicks[j];
+                const teamToMatch = isTradedPick
+                  ? eachPickOfGm.substr(eachPickOfGm.indexOf("via") + 4) // use team acquired pick from, to pick from grid
+                  : gmAbbreviation; // else use own placement in grid
 
-              if (eachPickInGrid.fantasyTeam === teamToMatch) {
-                overallPickNumber = eachPickInGrid.overallPick;
-                break;
-              }
-            } // end of for lopp through round of the grid
-            return `${eachPickOfGm} (${overallPickNumber})`;
-          }
+                if (eachPickInGrid.fantasyTeam === teamToMatch) {
+                  overallPickNumber = eachPickInGrid.overallPick;
+                  break;
+                }
+              } // end of for lopp through round of the grid
+              return `${eachPickOfGm} (${overallPickNumber})`;
+            }
 
-          // if not appropriate year, just return back original draft pick asset text
-          return eachPickOfGm;
-        } // end of if (isCorrectYear)
-      ); // end of map
+            // if not appropriate year, just return back original draft pick asset text
+            return eachPickOfGm;
+          } // end of if (isCorrectYear)
+        ); // end of map
 
-      console.log(
-        `final list for ${gmAbbreviation}: ${modifiedGmSportDraftPicks}`
-      );
+        console.log(
+          `final list for ${gmAbbreviation}: ${modifiedGmSportDraftPicks}`
+        );
 
-      const keyString = `assets.${sport}.draftPicks`;
-      const { modifiedCount } = await gmsCollection.updateOne(
-        { abbreviation: gmAbbreviation },
-        { $set: { [keyString]: modifiedGmSportDraftPicks } }
-      );
-      modifiedCountTotal += modifiedCount;
-    } // end of for loop through gms
+        const keyString = `assets.${sport}.draftPicks`;
+        const { modifiedCount } = await gmsCollection.updateOne(
+          { abbreviation: gmAbbreviation },
+          { $set: { [keyString]: modifiedGmSportDraftPicks } }
+        );
+        modifiedCountTotal += modifiedCount;
+      } // end of for loop through gms
 
-    if (modifiedCountTotal === NUMBER_OF_TEAMS) {
-      timeoutSaveMessage(
-        "Successfully saved updated draft assets to all GM records"
-      );
-    }
-  }, []);
+      if (modifiedCountTotal === NUMBER_OF_TEAMS) {
+        timeoutSaveMessage(
+          "Successfully saved updated draft assets to all GM records"
+        );
+      }
+    },
+    [timeoutSaveMessage]
+  );
 
   const saveDraftSlots = useCallback(async () => {
     // check for duplicates
     const draftSlotsArray = Object.values(draftSlotAssignments);
     const uniqueArray = uniq(draftSlotsArray);
-    if (uniqueArray.length != NUMBER_OF_TEAMS) {
+    if (uniqueArray.length !== NUMBER_OF_TEAMS) {
       timeoutSaveMessage("Warning!!! Not all draft slot values are unique");
       return;
     }
@@ -236,7 +243,15 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
 
     await saveToDraftsDB(era, selectedSport, selectedYear, grid);
     await modifyAndSaveGmAssets(era, selectedSport, selectedYear, grid);
-  }, [era, draftSlotAssignments, selectedSport, selectedYear]);
+  }, [
+    era,
+    draftSlotAssignments,
+    selectedSport,
+    selectedYear,
+    modifyAndSaveGmAssets,
+    saveToDraftsDB,
+    timeoutSaveMessage,
+  ]);
 
   return (
     <T.FlexColumnCenterContainer>

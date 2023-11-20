@@ -27,25 +27,22 @@ export const DraftsHome = () => {
     };
 
     loadData();
-  }, [isReady]);
+  }, [isReady, era]);
 
-  const buttonTextFunction = useCallback(
-    (draftSportYear) => {
-      const draftSportYearArray = draftSportYear.split("-");
-      const [sport, year] = draftSportYearArray;
-      const title =
-        year === "startup"
-          ? `${capitalize(sport)} ${capitalize(year)}`
-          : `${year} ${capitalize(sport)} Supplemental`;
+  const buttonTextFunction = useCallback((draftSportYear) => {
+    const draftSportYearArray = draftSportYear.split("-");
+    const [sport, year] = draftSportYearArray;
+    const title =
+      year === "startup"
+        ? `${capitalize(sport)} ${capitalize(year)}`
+        : `${year} ${capitalize(sport)} Supplemental`;
 
-      return {
-        title,
-        sport,
-        year,
-      };
-    },
-    [isReady]
-  );
+    return {
+      title,
+      sport,
+      year,
+    };
+  }, []);
 
   return (
     <T.FlexColumnCenterContainer>

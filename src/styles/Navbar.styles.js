@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  BACKGROUND_COLOR,
   FONT_COLOR,
   HEADER_FONT_FAMILY,
   MOBILE_MAX_WIDTH,

@@ -44,9 +44,8 @@ export const HallOfFame = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isMobile]);
 
-  console.log("isMobile", isMobile);
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>Trifecta Fantasy League Hall of Fame</S.Title>

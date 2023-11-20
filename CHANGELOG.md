@@ -2,6 +2,12 @@
 
 ### Updated
 
+#### [PR-73] - 2023-11-19
+
+- Fix all React lint warnings
+
+### Updated
+
 #### [PR-72] - 2023-11-19
 
 - Fix some mobile styling on Trade History and Transactions History

@@ -40,6 +40,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
       setGmsArray(gmNamesArray);
 
       const initialDraftSlotAssignments = {};
+      // eslint-disable-next-line array-callback-return
       gmData.map((gm) => {
         initialDraftSlotAssignments[gm?.abbreviation] = 0;
       });
@@ -95,7 +96,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
 
       setDraftSlotAssignments(copyDraftSlotAssignments);
     },
-    [options, draftSlotAssignments]
+    [draftSlotAssignments, getAbbreviation]
   );
 
   // check for save button enable/disable
@@ -112,31 +113,34 @@ export const CommissionerAssignStartupDraftSlots = () => {
     }
   }, [draftSlotAssignments, selectedSport]);
 
-  const saveToDB = async (era, sport, year, grid) => {
-    const draftsCollection = returnMongoCollection("drafts", era);
-    const draftObject = {
-      type: `${sport}-${year}`,
-      grid,
-      createdAt: new Date().toISOString(),
-    };
+  const saveToDB = useCallback(
+    async (era, sport, year, grid) => {
+      const draftsCollection = returnMongoCollection("drafts", era);
+      const draftObject = {
+        type: `${sport}-${year}`,
+        grid,
+        createdAt: new Date().toISOString(),
+      };
 
-    (await draftsCollection).insertOne(draftObject);
-    timeoutSaveMessage("Successfully saved grid to drafts collection");
-  };
+      (await draftsCollection).insertOne(draftObject);
+      timeoutSaveMessage("Successfully saved grid to drafts collection");
+    },
+    [timeoutSaveMessage]
+  );
 
   const saveDraftSlots = useCallback(async () => {
     // check for duplicates
     const draftSlotsArray = Object.values(draftSlotAssignments);
     console.log("draft slots array", draftSlotsArray);
     const uniqueArray = uniq(draftSlotsArray);
-    if (uniqueArray.length != NUMBER_OF_TEAMS) {
+    if (uniqueArray.length !== NUMBER_OF_TEAMS) {
       timeoutSaveMessage("Warning!!! Not all draft slot values are unique");
       return;
     }
 
     const grid = assignStartupDraftSlots(selectedSport, draftSlotAssignments);
     await saveToDB(era, selectedSport, "startup", grid);
-  }, [era, draftSlotAssignments, selectedSport]);
+  }, [era, draftSlotAssignments, selectedSport, saveToDB, timeoutSaveMessage]);
 
   return (
     <T.FlexColumnCenterContainer>

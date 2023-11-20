@@ -106,7 +106,7 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
     }
 
     // save to drafts collection in DB the raw list (and figure out how to display non-grid)
-  }, [startingYear, era]);
+  }, [startingYear, era, gmsData, timeoutSaveMessage]);
 
   const saveInitialSupplementalDraftPicksPerDraft = useCallback(async () => {
     const numberYear = Number(startingYear);
@@ -175,7 +175,7 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
       "Initial supplemental draft picks saved successfully to drafts collection!"
     );
     // save to drafts collection in DB the raw list (and figure out how to display non-grid)
-  }, [startingYear, era]);
+  }, [startingYear, era, gmsData, timeoutSaveMessage]);
 
   return (
     <T.FlexColumnCenterContainer>

@@ -17,7 +17,7 @@ export const SignInBanner = () => {
       action: "login",
       label: "user login",
     });
-  }, []);
+  }, [loginWithRedirect]);
 
   const logoutOnClick = useCallback(() => {
     logout({ returnTo: window.location.origin });
@@ -26,7 +26,7 @@ export const SignInBanner = () => {
       action: "logout",
       label: "user logout",
     });
-  }, [window.location]);
+  }, [logout]);
 
   if (location.pathname.startsWith("/dynasty")) {
     return (

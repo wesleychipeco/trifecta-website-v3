@@ -18,6 +18,73 @@ export const DraftBoard = () => {
   const [draftResultsPicks, setDraftResultsPicks] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
+  const createGrid = useCallback(
+    (arrayOfArrays) => {
+      const arrayOfRounds = [];
+      let firstPickGM = "";
+
+      let startingRound = 1;
+      let arrayOfPicks = [];
+      for (let i = 1; i < arrayOfArrays.length - 1; i++) {
+        // Headers: Player ID, Round, Pick, Ov Pick, Pos, Player, Team, Fantasy Team
+        const [
+          ,
+          round,
+          pick,
+          overallPick,
+          position,
+          player,
+          team,
+          fantasyTeam,
+        ] = arrayOfArrays[i];
+
+        // set first GM to know when to reverse
+        if (i === 1) {
+          firstPickGM = fantasyTeam;
+        }
+
+        if (round === startingRound + 1) {
+          if (startingRound === 1) {
+            setDraftResultsHeader(arrayOfPicks);
+          }
+
+          // need to test non-startup (non reversal) supplemental drafts
+          const toAdd =
+            arrayOfPicks[0]?.fantasyTeam === firstPickGM && year === "startup"
+              ? arrayOfPicks
+              : arrayOfPicks.reverse();
+
+          arrayOfRounds.push(toAdd);
+          startingRound += 1;
+          arrayOfPicks = [];
+        }
+
+        const pickObject = {
+          fantasyTeam,
+          round,
+          pick,
+          overallPick,
+          player,
+          position,
+          team,
+        };
+
+        arrayOfPicks.push(pickObject);
+      }
+
+      // after ending final loop, add last arrayOfPicks to arrayOfRounds
+      const toAdd =
+        arrayOfPicks[0]?.fantasyTeam === firstPickGM
+          ? arrayOfPicks
+          : arrayOfPicks.reverse();
+      arrayOfRounds.push(toAdd);
+
+      setDraftResultsGrid(arrayOfRounds);
+      // console.log("GRID!!!!!!!!!!", arrayOfRounds);
+    },
+    [year]
+  );
+
   useEffect(() => {
     const checkForCompletedOrFuture = async () => {
       const draftsCollection = await returnMongoCollection("drafts", era);
@@ -43,7 +110,7 @@ export const DraftBoard = () => {
       parse(DraftResultsCSV, {
         download: true,
         complete: (contents) => {
-          if (contents.errors.length == 0) {
+          if (contents.errors.length === 0) {
             createGrid(contents.data);
           }
         },
@@ -70,63 +137,7 @@ export const DraftBoard = () => {
     if (isReady) {
       checkForCompletedOrFuture();
     }
-  }, [isReady, era, sport, year]);
-
-  const createGrid = useCallback((arrayOfArrays) => {
-    const arrayOfRounds = [];
-    let firstPickGM = "";
-
-    let startingRound = 1;
-    let arrayOfPicks = [];
-    for (let i = 1; i < arrayOfArrays.length - 1; i++) {
-      // Headers: Player ID, Round, Pick, Ov Pick, Pos, Player, Team, Fantasy Team
-      const [_, round, pick, overallPick, position, player, team, fantasyTeam] =
-        arrayOfArrays[i];
-
-      // set first GM to know when to reverse
-      if (i == 1) {
-        firstPickGM = fantasyTeam;
-      }
-
-      if (round == startingRound + 1) {
-        if (startingRound === 1) {
-          setDraftResultsHeader(arrayOfPicks);
-        }
-
-        // need to test non-startup (non reversal) supplemental drafts
-        const toAdd =
-          arrayOfPicks[0]?.fantasyTeam === firstPickGM && year === "startup"
-            ? arrayOfPicks
-            : arrayOfPicks.reverse();
-
-        arrayOfRounds.push(toAdd);
-        startingRound += 1;
-        arrayOfPicks = [];
-      }
-
-      const pickObject = {
-        fantasyTeam,
-        round,
-        pick,
-        overallPick,
-        player,
-        position,
-        team,
-      };
-
-      arrayOfPicks.push(pickObject);
-    }
-
-    // after ending final loop, add last arrayOfPicks to arrayOfRounds
-    const toAdd =
-      arrayOfPicks[0]?.fantasyTeam === firstPickGM
-        ? arrayOfPicks
-        : arrayOfPicks.reverse();
-    arrayOfRounds.push(toAdd);
-
-    setDraftResultsGrid(arrayOfRounds);
-    // console.log("GRID!!!!!!!!!!", arrayOfRounds);
-  }, []);
+  }, [isReady, era, sport, year, createGrid]);
 
   const conditionalTitleText = useMemo(() => {
     return isCompleted ? "Results" : "Board";
