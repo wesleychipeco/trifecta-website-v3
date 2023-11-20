@@ -4,7 +4,6 @@ import { FlexColumnCenterContainer } from "./StandardScreen.styles";
 
 export const HorizontalBanner = styled.img`
   width: 75%;
-  height: auto;
   margin-top: -3rem;
 
   @media ${MOBILE_MAX_WIDTH} {
@@ -36,7 +35,6 @@ export const ErrorTextCentered = styled(Subtext)`
   font-size: 4rem;
   font-weight: 800;
   color: red;
-  margin-top: -4rem;
 
   @media ${MOBILE_MAX_WIDTH} {
     font-size: 1.75rem;

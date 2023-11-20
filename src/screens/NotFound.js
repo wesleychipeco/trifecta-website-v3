@@ -20,6 +20,7 @@ export const NotFound = () => {
         alt="trifecta-banner"
       />
       <S.TextContainer>
+        <G.VerticalSpacer factor={isMobile ? 0 : -8} />
         <S.ErrorTextCentered style={{ textDecoration: "underline" }}>
           PAGE NOT FOUND
         </S.ErrorTextCentered>
@@ -30,7 +31,7 @@ export const NotFound = () => {
           ended up here. To return home, use the menu in the upper left hand
           corner.
         </S.Subtext>
-        <G.VerticalSpacer factor={verticalFactor} />
+        <G.VerticalSpacer factor={verticalFactor / 2} />
         <S.Subtext>
           But...while you're here, since you like going to random URLs on
           websites, here are links to random Sports Reference pages
