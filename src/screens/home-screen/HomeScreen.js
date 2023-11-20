@@ -37,7 +37,7 @@ export const HomeScreen = () => {
         navigate(`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`);
       }, 4000);
     }
-  }, []);
+  }, [isMobile, location.pathname, navigate]);
 
   return (
     <S.HomeContainer>

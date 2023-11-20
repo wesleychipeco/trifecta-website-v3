@@ -20,7 +20,7 @@ import {
 import { Table } from "components/table/Table";
 import { returnMongoCollection } from "database-management";
 import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
-import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
+import { BASE_ROUTES } from "Routes";
 
 export const TrifectaStandings = () => {
   const { year } = useParams();
@@ -154,7 +154,18 @@ export const TrifectaStandings = () => {
       ///////////// only 1 function gets run inside useEffect /////////////
       check();
     }
-  }, [isReady, ownerNamesMapping, year]);
+  }, [
+    isReady,
+    ownerNamesMapping,
+    year,
+    currentYear,
+    isBaseballInSeason,
+    isBaseballStarted,
+    isBasketballInSeason,
+    isBasketballStarted,
+    isFootballInSeason,
+    isFootballStarted,
+  ]);
 
   const TrifectaStandingsColumns = isYear1BeforeYear2(year, "2019")
     ? TrifectaColumnsPre2019

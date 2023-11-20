@@ -7,6 +7,7 @@ export const EraBanner = () => {
   const { era } = useParams();
   return null;
 
+  // eslint-disable-next-line no-unreachable
   return (
     <S.EraBannerContainer>
       <T.FlexColumnCentered>

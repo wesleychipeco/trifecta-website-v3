@@ -28,7 +28,7 @@ export const TradeAssetHome = () => {
     };
 
     loadData();
-  }, [isReady]);
+  }, [isReady, era]);
 
   return (
     <T.FlexColumnCenterContainer>

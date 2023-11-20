@@ -41,7 +41,7 @@ export const DynastyHome = () => {
       };
       display();
     }
-  }, [isReady]);
+  }, [isReady, era]);
 
   useEffect(() => {
     const load = async () => {
@@ -78,7 +78,7 @@ export const DynastyHome = () => {
     };
 
     load();
-  }, []);
+  }, [era]);
 
   return (
     <S.ScreenContainer>

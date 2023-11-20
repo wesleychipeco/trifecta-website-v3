@@ -102,6 +102,7 @@ export const assignRotoPoints = (rotoScrape, rotoCategoriesArray) => {
     );
   }
 
+  // eslint-disable-next-line array-callback-return
   rotoStats.map((eachTeam) => {
     const rotoPointsKeys = Object.keys(eachTeam).filter((key) =>
       key.includes("Points")

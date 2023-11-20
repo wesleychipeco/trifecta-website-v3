@@ -14,7 +14,7 @@ import {
   MobileMatchupsDropdownCustomStyles,
 } from "styles/Dropdown.styles";
 import { SPORTS_ARRAY } from "./AssignDraftSlotsHelper";
-import { capitalize, flatten, keys, lowerCase, round, sortBy } from "lodash";
+import { capitalize, flatten, lowerCase, sortBy } from "lodash";
 
 export const CommissionerTradeFutureDraftPicks = () => {
   const { era } = useParams();
@@ -59,7 +59,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
       gmSelectArray.push(gmObj);
     }
     return gmSelectArray;
-  }, [isReady, gmsObject]);
+  }, [gmsObject]);
 
   useEffect(() => {
     setIsSaveButtonEnabled(
@@ -99,12 +99,9 @@ export const CommissionerTradeFutureDraftPicks = () => {
     setReceivingGm(e.value);
   }, []);
 
-  const handleSelectedDraftPick = useCallback(
-    (e) => {
-      setSelectedDraftPick(e.value);
-    },
-    [givingGm]
-  );
+  const handleSelectedDraftPick = useCallback((e) => {
+    setSelectedDraftPick(e.value);
+  }, []);
 
   const saveTrade = useCallback(async () => {
     console.log(

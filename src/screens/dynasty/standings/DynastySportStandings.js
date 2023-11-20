@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import isSameDay from "date-fns/isSameDay";
-import { capitalize, sortBy } from "lodash";
+import { capitalize } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
@@ -19,7 +19,7 @@ const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
-  const { currentYear, inSeasonLeagues, leagueIdMappings } = useSelector(
+  const { inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
 
@@ -119,7 +119,7 @@ export const DynastySportStandings = ({ sport }) => {
 
       check();
     }
-  }, [isReady, sport, year]);
+  }, [isReady, sport, year, era, inSeasonLeagues, leagueIdMappings]);
 
   const divisionRecordSorter = useCallback((rowA, rowB) => {
     const divRecordA = rowA?.values?.divisionRecord ?? "";
@@ -157,7 +157,7 @@ export const DynastySportStandings = ({ sport }) => {
     return !inSeasonLeagues.includes(sportYear)
       ? insertIntoArray(DynastyStandingsColumnsRaw, 4, PlayoffColumns)
       : DynastyStandingsColumnsRaw;
-  }, [isReady, sport, year]);
+  }, [isReady, sport, year, inSeasonLeagues]);
 
   const BasketballBaseballDivisionColumns = useMemo(
     () => [
@@ -205,7 +205,7 @@ export const DynastySportStandings = ({ sport }) => {
         sortDescFirst: true,
       },
     ],
-    []
+    [divisionRecordSorter]
   );
 
   const FootballDivisionColumns = useMemo(
@@ -266,7 +266,7 @@ export const DynastySportStandings = ({ sport }) => {
         sortDescFirst: true,
       },
     ],
-    []
+    [divisionRecordSorter]
   );
 
   const divisionStandingsColumns = useMemo(() => {

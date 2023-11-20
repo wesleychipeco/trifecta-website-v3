@@ -18,6 +18,17 @@ export const TransactionsHistory = () => {
   const [transactions, setTransactions] = useState([]);
   const [gmsArray, setGmsArray] = useState([]);
 
+  const getAndSetGmsArray = useCallback(async () => {
+    // get list of gm abbreviations
+    const gmCollection = await returnMongoCollection("gms", era);
+    const gmData = await gmCollection.find(
+      {},
+      { projection: { abbreviation: 1, name: 1 } }
+    );
+    const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
+    setGmsArray(gmNamesArray);
+  }, [setGmsArray, era]);
+
   useEffect(() => {
     const loadData = async () => {
       if (isReady && dynastyCurrentVariables !== null) {
@@ -83,18 +94,7 @@ export const TransactionsHistory = () => {
     };
 
     loadData();
-  }, [isReady, dynastyCurrentVariables, era, sport, year]);
-
-  const getAndSetGmsArray = useCallback(async () => {
-    // get list of gm abbreviations
-    const gmCollection = await returnMongoCollection("gms", era);
-    const gmData = await gmCollection.find(
-      {},
-      { projection: { abbreviation: 1, name: 1 } }
-    );
-    const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
-    setGmsArray(gmNamesArray);
-  }, [setGmsArray]);
+  }, [isReady, dynastyCurrentVariables, era, sport, year, getAndSetGmsArray]);
 
   const transactionsColumns = useMemo(() => {
     return [

@@ -14,6 +14,7 @@ import { sportYearToSportAndYear } from "utils/years";
 export const DynastyStandings = () => {
   const { era } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
+  // eslint-disable-next-line no-unused-vars
   const { currentYear, inSeasonLeagues, leagueIdMappings } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
@@ -31,7 +32,7 @@ export const DynastyStandings = () => {
 
       display();
     }
-  }, [isReady]);
+  }, [isReady, era]);
 
   const DynastyColumns = useMemo(() => {
     const sampleColumns = Object.keys(dynastyStandings?.[0] ?? {});
@@ -47,6 +48,7 @@ export const DynastyStandings = () => {
             sortDescFirst: true,
           };
         }
+        return {};
       });
 
       // remove undefined

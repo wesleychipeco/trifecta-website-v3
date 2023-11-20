@@ -8,7 +8,6 @@ import {
   PRIMARY_ORANGE,
   TITLE_FONT_SIZE,
 } from "./global";
-import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
 
 export const TradeAssetHomeContainer = styled.div`
   width: 90%;
