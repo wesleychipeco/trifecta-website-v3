@@ -39,8 +39,19 @@ export const FlexColumnCenterContainer = styled.div`
   justify-content: center;
 
   @media ${MOBILE_MAX_WIDTH} {
-    width: calc(100% - ${MOBILE_NAVBAR_BODY_PADDING});
     padding-right: ${MOBILE_NAVBAR_BODY_PADDING};
+    padding-left: 0.1rem;
+    overflow: scroll;
+    width: max-content;
+  }
+`;
+
+export const TitleContainer = styled.div`
+  @media ${MOBILE_MAX_WIDTH} {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 

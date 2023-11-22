@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Updated
+
+#### [PR-76] - 2023-11-21
+
+- Mobile styling fixes for transactions history & draft boards
+
+### Added
+
 ## [3.8.1] - 2023-11-19
 
 ### Updated
