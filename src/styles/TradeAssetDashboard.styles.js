@@ -18,7 +18,45 @@ export const TradeAssetHomeRowContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0 3rem 0;
+  margin: 1.5rem 0 1.5rem 0;
+`;
+
+export const TradeAssetHomeAvailableAssetsTitle = styled.h2`
+  font-size: 2.25rem;
+  font-weight: 700;
+  text-align: center;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1.5rem;
+    font-weight: 600;
+    align-self: center;
+  }
+`;
+
+export const TradeAssetHomeAvailableOuter = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+`;
+
+export const TradeAssetHomeAvailableRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+`;
+
+export const TradeAssetHomeAvailableText = styled.p`
+  font-size: 1.15rem;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: ${(props) => (props.isMobile ? "45%" : "25%")};
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1rem;
+  }
 `;
 
 export const FlexColumnCenterContainer = styled.div`
