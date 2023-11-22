@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Added
+
+#### [PR-77] - 2023-11-21
+
+- Display all available assets on trade asset home screen
+
 ### Updated
 
 #### [PR-76] - 2023-11-21

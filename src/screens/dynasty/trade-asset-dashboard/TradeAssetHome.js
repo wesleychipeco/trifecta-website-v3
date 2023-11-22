@@ -23,7 +23,7 @@ export const TradeAssetHome = () => {
     const loadData = async () => {
       const gmCollection = await returnMongoCollection("gms", era);
       const gmData = await gmCollection.find({ test: { $ne: true } });
-      console.log("gmdata", gmData);
+
       // for gm buttons
       const pickedGmData = gmData.map((gm) => ({
         name: gm.name,
@@ -54,7 +54,6 @@ export const TradeAssetHome = () => {
 
     loadData();
   }, [isReady, era]);
-  console.log("SSSSS", availableForTrade);
 
   return (
     <T.FlexColumnCenterContainer>
