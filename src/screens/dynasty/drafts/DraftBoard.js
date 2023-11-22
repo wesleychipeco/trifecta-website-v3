@@ -145,9 +145,11 @@ export const DraftBoard = () => {
 
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`${capitalize(sport)} ${capitalize(
-        year
-      )} Draft ${conditionalTitleText}`}</S.Title>
+      <S.TitleContainer>
+        <S.Title>{`${capitalize(sport)} ${capitalize(
+          year
+        )} Draft ${conditionalTitleText}`}</S.Title>
+      </S.TitleContainer>
       <S.FlexColumnContainer>
         <T.VerticalSpacer factor={4} />
         <S.FlexRowContainer>
