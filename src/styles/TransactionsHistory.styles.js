@@ -23,6 +23,10 @@ export const TransactionsHistoryHomeRowContainer = styled.div`
 
 export const TransactionsHistoryOuterContainer = styled(FlexColumnCentered)`
   width: 80%;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    width: 100%;
+  }
 `;
 
 export const HeaderText = styled.p`
@@ -59,7 +63,6 @@ export const InputContainer = styled.div`
   margin-bottom: 1rem;
 
   @media ${MOBILE_MAX_WIDTH} {
-    width: 100%;
     flex-direction: column;
     justify-content: space-evenly;
     margin-bottom: 0.5rem;
