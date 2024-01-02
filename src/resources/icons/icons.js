@@ -9,6 +9,7 @@ import {
   faMinus,
   faPlus,
   faCircleXmark,
+  faReply,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -20,5 +21,6 @@ library.add(
   faCaretSquareDown,
   faCaretSquareUp,
   faPlus,
-  faCircleXmark
+  faCircleXmark,
+  faReply
 );

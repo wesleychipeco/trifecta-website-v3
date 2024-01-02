@@ -8,7 +8,7 @@ import {
   TITLE_FONT_SIZE,
 } from "./global";
 
-const CONTENT_WIDTH = "75%";
+const CONTENT_WIDTH = "95%";
 const BOX_SHADOW = "0 0 0.1rem 0.3rem rgba(0, 0, 0, 0.9)";
 
 export const FlexColumnCenterContainer = styled.div`
@@ -52,9 +52,7 @@ export const ChampionsContainer = styled.div`
 `;
 
 export const ChampionsTextContainer = styled.div`
-  position: absolute;
-  left: 8rem;
-  padding-top: 6.8rem;
+  align-self: center;
 
   @media ${MOBILE_MAX_WIDTH} {
     position: static;
@@ -93,14 +91,12 @@ export const ChampionsText = styled.p`
 export const HallOfFameContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   width: ${CONTENT_WIDTH};
   min-width: 50%;
   border-radius: 1rem;
   box-shadow: ${BOX_SHADOW};
   padding: 1rem;
   margin-bottom: 3rem;
-  flex-wrap: wrap;
 
   @media ${MOBILE_MAX_WIDTH} {
     flex-direction: column;
@@ -109,8 +105,33 @@ export const HallOfFameContainer = styled.div`
   }
 `;
 
-export const ButtonsContainer = styled.div`
+export const BySportHallOfFameContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: ${CONTENT_WIDTH};
+  min-width: 50%;
+  border-radius: 1rem;
+  box-shadow: ${BOX_SHADOW};
+  padding: 1rem;
+  margin-bottom: 3rem;
+  justify-content: space-between;
+
   @media ${MOBILE_MAX_WIDTH} {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0.5rem 0.25rem 0.25rem 0.25rem;
+    align-self: center;
+  }
+`;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    flex-direction: column;
     width: 75%;
     align-self: center;
     margin-bottom: 0.5rem;
@@ -118,9 +139,8 @@ export const ButtonsContainer = styled.div`
 `;
 
 export const HallOfFameLabelTextContainer = styled.div`
-  position: absolute;
-  left: 8rem;
-  padding-top: 0.75rem;
+  align-self: center;
+  min-width: 10rem;
 
   @media ${MOBILE_MAX_WIDTH} {
     position: static;
@@ -191,12 +211,12 @@ export const OwnerProfilesContainer = styled.div`
 `;
 
 export const OwnerProfilesLabelTextContainer = styled.div`
-  position: absolute;
-  left: 8rem;
-  padding-top: 4rem;
+  align-self: flex-start;
+  top: 5rem;
 
   @media ${MOBILE_MAX_WIDTH} {
     position: static;
+    align-self: center;
     text-align: center;
     padding-top: 0.5rem;
   }
