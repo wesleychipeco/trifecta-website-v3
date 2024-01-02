@@ -153,6 +153,7 @@ export const Link = styled(NavLink)`
   font-family: ${HEADER_FONT_FAMILY};
   color: ${FONT_COLOR};
   margin-bottom: ${NAVBAR_VERTICAL_SPACING};
+  align-items: center;
 
   &.active {
     font-weight: 700;

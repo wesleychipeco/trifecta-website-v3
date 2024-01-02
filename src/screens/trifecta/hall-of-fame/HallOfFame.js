@@ -52,9 +52,10 @@ export const HallOfFame = () => {
       <S.ChampionsContainer>
         <S.ChampionsTextContainer>
           <S.LabelText>Trifecta</S.LabelText>
-          {!isMobile && <br />}
+          <T.VerticalSpacer factor={1} />
           <S.LabelText>Champions</S.LabelText>
         </S.ChampionsTextContainer>
+        <T.HorizontalSpacer factor={4} />
         {pastChampions.map((pastChamionColumn, i) => {
           return (
             <S.ChampionsColumn key={i}>
@@ -71,42 +72,47 @@ export const HallOfFame = () => {
         })}
       </S.ChampionsContainer>
       <S.HallOfFameContainer>
-        <S.HallOfFameLabelTextContainer>
-          <S.LabelText>By Year</S.LabelText>
-        </S.HallOfFameLabelTextContainer>
-        <S.StandingsColumnContainer>
-          {sortedYearsArray.map((row, i) => {
-            return (
-              <S.StandingsRowContainer key={i}>
-                {row.map((year) => {
-                  return <StandingsDropdown key={year} year={year} />;
-                })}
-              </S.StandingsRowContainer>
-            );
-          })}
-        </S.StandingsColumnContainer>
-      </S.HallOfFameContainer>
-      <S.HallOfFameContainer>
-        <S.HallOfFameLabelTextContainer>
-          <S.LabelText>By Sport</S.LabelText>
-        </S.HallOfFameLabelTextContainer>
         <S.ButtonsContainer>
+          <S.HallOfFameLabelTextContainer>
+            <S.LabelText>By Year</S.LabelText>
+          </S.HallOfFameLabelTextContainer>
+          <S.StandingsColumnContainer>
+            {sortedYearsArray.map((row, i) => {
+              return (
+                <S.StandingsRowContainer key={i}>
+                  {row.map((year) => {
+                    return <StandingsDropdown key={year} year={year} />;
+                  })}
+                </S.StandingsRowContainer>
+              );
+            })}
+          </S.StandingsColumnContainer>
+        </S.ButtonsContainer>
+      </S.HallOfFameContainer>
+      <S.BySportHallOfFameContainer>
+        <S.ButtonsContainer>
+          <S.HallOfFameLabelTextContainer>
+            <S.LabelText>By Sport</S.LabelText>
+          </S.HallOfFameLabelTextContainer>
+          {!isMobile && <T.HorizontalSpacer factor={6} />}
           <Button
             title={"Basketball Hall of Fame"}
             navTo={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.BasketballHallOfFame}`}
           />
           {isMobile && <T.VerticalSpacer factor={3} />}
+          {!isMobile && <T.HorizontalSpacer factor={4} />}
           <Button
             title={"Baseball Hall of Fame"}
             navTo={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.BaseballHallOfFame}`}
           />
           {isMobile && <T.VerticalSpacer factor={3} />}
+          {!isMobile && <T.HorizontalSpacer factor={4} />}
           <Button
             title={"Football Hall of Fame"}
             navTo={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.FootballHallOfFame}`}
           />
         </S.ButtonsContainer>
-      </S.HallOfFameContainer>
+      </S.BySportHallOfFameContainer>
       <S.OwnerProfilesContainer>
         <S.OwnerProfilesLabelTextContainer>
           <S.LabelText>By Owner</S.LabelText>

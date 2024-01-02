@@ -4,12 +4,14 @@ import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
 import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
+import * as T from "styles/shared";
 import { closeNavbar } from "store/navbarSlice";
 import { ERA_1 } from "Constants";
 
 import TrifectaLogoHorizontalBlack from "resources/images/ShadedHorizontalLogo.png";
 import { sportYearToSportAndYear } from "utils/years";
 import { useAuth0 } from "@auth0/auth0-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const OpenNavbar = () => {
   // redux state to manage seasonVariables
@@ -126,7 +128,13 @@ export const OpenNavbar = () => {
           >
             League Constitution
           </S.LinkStyle>
-          <S.Link to={`${STATIC_ROUTES.TrifectaHome}`}>OG Trifecta</S.Link>
+          <S.Link
+            to={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`}
+          >
+            <FontAwesomeIcon icon="fa-reply" size="md" />
+            <T.HorizontalSpacer factor={1} />
+            OG Trifecta
+          </S.Link>
           {isCommissioner && (
             <S.Link
               to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.CommissionerHome}`}
@@ -155,7 +163,7 @@ export const OpenNavbar = () => {
           }!`}</S.WelcomeText>
           <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
         </S.SecondRowDiv>
-        <S.CurrentStandings onClick={expandFunction}>
+        {/* <S.CurrentStandings onClick={expandFunction}>
           Current Standings
         </S.CurrentStandings>
         {isStandingsExpanded && (
@@ -194,16 +202,16 @@ export const OpenNavbar = () => {
           >
             {`${Number(currentYear) + 1} Basketball Standings`}
           </S.IndentedLink>
-        )}
-        <S.Link
-          to={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.TradeHistory}`}
-        >
-          Trade History
-        </S.Link>
+        )} */}
         <S.Link
           to={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`}
         >
           Hall of Fame
+        </S.Link>
+        <S.Link
+          to={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.TradeHistory}`}
+        >
+          Trade History
         </S.Link>
         <S.LinkStyle
           href="https://docs.google.com/document/d/e/2PACX-1vSXW_8gKkyCY1qz-2rWsUML5H3I38Hnz-K6aKvJjQoAqaqeVBnV_-mWTYxrobup6ALxPoDnKu4kbbwm/pub"
@@ -211,7 +219,11 @@ export const OpenNavbar = () => {
         >
           League Manual
         </S.LinkStyle>
-        <S.Link to={`/`}>3x5 Dynasty</S.Link>
+        <S.Link to={`/`}>
+          <FontAwesomeIcon icon="fa-reply" size="md" />
+          <T.HorizontalSpacer factor={1} />
+          3x5 Dynasty
+        </S.Link>
         <S.VersionNumber>{`v${version}`}</S.VersionNumber>
       </S.LinkContainer>
     </S.OpenNavbarContainer>
