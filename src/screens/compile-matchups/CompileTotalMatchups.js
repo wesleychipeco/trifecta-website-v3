@@ -10,8 +10,8 @@ import { calculateWinPer } from "utils/winPer";
 const SPORTS_ARRAY = ["basketball", "baseball", "football"];
 
 export const CompileTotalMatchups = () => {
-  let { currentYear } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables
+  const { currentYear } = useSelector(
+    (state) => state?.currentVariables?.seasonVariables?.trifecta
   );
 
   const [allTimeTeams, setAllTimeTeams] = useState([]);

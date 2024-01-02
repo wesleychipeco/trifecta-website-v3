@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.8.3] - 2024-01-02
+
+### Updated
+
+#### [PR-78] - 2024-01-02
+
+- Finalize completed OG Trifecta league and site
+
 ## [3.8.2] - 2023-11-24
 
 ### Added
