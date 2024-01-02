@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { capitalize } from "lodash";
-import { BASE_ROUTES, STATIC_ROUTES } from "Routes";
+import { STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import * as T from "styles/shared";
 import { closeNavbar } from "store/navbarSlice";
@@ -20,18 +20,6 @@ export const OpenNavbar = () => {
     const { version } = require("../../../package.json");
     return version;
   }, []);
-
-  // trifecta season variables
-  const seasonVariables = useSelector(
-    (state) => state.currentVariables.seasonVariables.trifecta
-  );
-  const {
-    currentYear,
-    isBasketballStarted,
-    isBaseballStarted,
-    isFootballStarted,
-    basketballAhead,
-  } = seasonVariables;
 
   // dynasty season variables
   const { inSeasonLeagues } = useSelector(
@@ -163,46 +151,6 @@ export const OpenNavbar = () => {
           }!`}</S.WelcomeText>
           <S.CloseIcon icon="times" onClick={() => dispatch(closeNavbar())} />
         </S.SecondRowDiv>
-        {/* <S.CurrentStandings onClick={expandFunction}>
-          Current Standings
-        </S.CurrentStandings>
-        {isStandingsExpanded && (
-          <S.IndentedLink
-            to={`${STATIC_ROUTES.TrifectaHome}/${BASE_ROUTES.TrifectaStandings}/${currentYear}`}
-          >
-            {`${currentYear} Trifecta Standings`}
-          </S.IndentedLink>
-        )}
-        {isStandingsExpanded && isBasketballStarted && (
-          <S.IndentedLink
-            to={`${STATIC_ROUTES.TrifectaHome}/${BASE_ROUTES.BasketballStandings}/${currentYear}`}
-          >
-            {`${currentYear} Basketball Standings`}
-          </S.IndentedLink>
-        )}
-        {isStandingsExpanded && isBaseballStarted && (
-          <S.IndentedLink
-            to={`${STATIC_ROUTES.TrifectaHome}/${BASE_ROUTES.BaseballStandings}/${currentYear}`}
-          >
-            {`${currentYear} Baseball Standings`}
-          </S.IndentedLink>
-        )}
-        {isStandingsExpanded && isFootballStarted && (
-          <S.IndentedLink
-            to={`${STATIC_ROUTES.TrifectaHome}/${BASE_ROUTES.FootballStandings}/${currentYear}`}
-          >
-            {`${currentYear} Football Standings`}
-          </S.IndentedLink>
-        )}
-        {isStandingsExpanded && basketballAhead && (
-          <S.IndentedLink
-            to={`${STATIC_ROUTES.TrifectaHome}/${
-              BASE_ROUTES.BasketballStandings
-            }/${Number(currentYear) + 1}`}
-          >
-            {`${Number(currentYear) + 1} Basketball Standings`}
-          </S.IndentedLink>
-        )} */}
         <S.Link
           to={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`}
         >
