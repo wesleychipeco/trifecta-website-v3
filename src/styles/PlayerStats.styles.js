@@ -1,13 +1,5 @@
 import styled from "styled-components";
-import { TableHeaderCell, TableBodyCell } from "styles/Table.styles";
-import {
-  FONT_FAMILY,
-  MOBILE_MAX_WIDTH,
-  MOBILE_TITLE_FONT_SIZE,
-  PRIMARY_ORANGE,
-  TITLE_FONT_SIZE,
-} from "styles/global";
-import { MOBILE_NAVBAR_BODY_PADDING } from "App.styles";
+import { FONT_FAMILY, MOBILE_MAX_WIDTH, PRIMARY_ORANGE } from "styles/global";
 
 export const TableContainer = styled.div`
   display: flex;
@@ -18,13 +10,15 @@ export const TableContainer = styled.div`
 
 export const InputContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
 
   @media ${MOBILE_MAX_WIDTH} {
-    width: 100%;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
-    margin-bottom: 0.25rem;
+    align-items: center;
+    width: 100%;
   }
 `;
 
@@ -44,8 +38,8 @@ export const TextInput = styled.input`
   @media ${MOBILE_MAX_WIDTH} {
     font-size: 0.75rem;
     text-align: center;
-    width: 7.5rem;
-    margin: 0;
+    margin-right: 0rem;
+    margin-bottom: 0.5rem;
   }
 `;
 

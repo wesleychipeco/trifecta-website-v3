@@ -2,27 +2,39 @@ import { returnMongoCollection } from "database-management";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button } from "components/button/Button";
-import { Table } from "components/table/Table";
-
+import { useMediaQuery } from "react-responsive";
 import { capitalize } from "lodash";
-import { STATIC_ROUTES } from "Routes";
-import { splitIntoArraysOfLengthX } from "utils/arrays";
 import * as S from "styles/StandardScreen.styles";
 import * as G from "styles/shared";
+import { MOBILE_MAX_WIDTH } from "styles/global";
+
 import { playerStatsScraper } from "./PlayerStatsHelper";
 import { ERA_1 } from "Constants";
 import { BasketballStatsColumns } from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
 
 export const SportPlayerStats = () => {
+  const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const { era, sport } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const [playerStats, setPlayerStats] = useState([]);
+  const [gmsArray, setGmsArray] = useState([]);
+
+  const getAndSetGmsArray = useCallback(async () => {
+    // get list of gm abbreviations
+    const gmCollection = await returnMongoCollection("gms", era);
+    const gmData = await gmCollection.find(
+      {},
+      { projection: { abbreviation: 1, name: 1 } }
+    );
+    const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
+    setGmsArray(gmNamesArray);
+  }, [setGmsArray, era]);
 
   useEffect(() => {
     if (isReady) {
       const scrape = async () => {
+        getAndSetGmsArray();
         const globalVariablesCollection = await returnMongoCollection(
           "globalVariables"
         );
@@ -62,8 +74,7 @@ export const SportPlayerStats = () => {
     }
   }, [isReady, era]);
 
-  console.log("table", playerStats);
-
+  // console.log("table", playerStats);
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${capitalize(sport)} Player Stats`}</S.Title>
@@ -72,11 +83,12 @@ export const SportPlayerStats = () => {
           <S.TableCaption>
             All stats are only recorded while in a starting lineup
           </S.TableCaption>
-          <G.VerticalSpacer factor={4} />
+          <G.VerticalSpacer factor={isMobile ? 0 : 4} />
           <PlayerStatsTable
             columns={BasketballStatsColumns}
             data={playerStats}
-            sortBy={[{ id: "points", desc: true }]}
+            sortBy={[{ id: "gamesPlayed", desc: true }]}
+            gmsArray={gmsArray}
           />
         </S.SingleTableContainer>
       </S.TablesContainer>

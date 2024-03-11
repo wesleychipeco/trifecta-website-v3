@@ -1,13 +1,29 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
+import Select from "react-select";
+
 import * as S from "styles/PlayerStats.styles";
 import * as T from "styles/Table.styles";
 import * as G from "styles/shared";
+import * as X from "styles/TransactionsHistory.styles";
+import { extractBetweenParentheses } from "utils/strings";
+import Toggle from "react-toggle";
 
 const PLAYER_INPUT = "player";
 const GM_INPUT = "gm";
 const POSITION_INPUT = "position";
 const YEAR_INPUT = "year";
+
+const EXCLUDED_PER_GAME_HEADERS = [
+  "Player",
+  "Position",
+  "Year",
+  "GM",
+  "Age",
+  "Games Played",
+  "FG%",
+  "FT%",
+];
 
 export const PlayerStatsTable = ({
   columns,
@@ -19,11 +35,22 @@ export const PlayerStatsTable = ({
   tableBodyRow = null,
   tableBodyCell = null,
   sortBy = [],
+  gmsArray = [],
 }) => {
+  const gmOptions = useMemo(() => {
+    const onlyGmsArray = gmsArray.map((gm) => ({
+      value: extractBetweenParentheses(gm),
+      label: gm,
+    }));
+    onlyGmsArray.unshift({ value: "", label: "All GMs" });
+    return onlyGmsArray;
+  }, [gmsArray]);
+
   const [playerQuery, setPlayerQuery] = useState("");
   const [gmQuery, setGmQuery] = useState("");
   const [positionQuery, setPositionQuery] = useState("");
   const [yearQuery, setYearQuery] = useState("");
+  const [perGameQuery, setPerGameQuery] = useState("");
 
   const globalFilterFunction = useCallback(
     (rows, _id, _query) => {
@@ -68,12 +95,24 @@ export const PlayerStatsTable = ({
     const setValue = value.toLowerCase();
     if (id === PLAYER_INPUT) {
       setPlayerQuery(setValue);
-    } else if (id === GM_INPUT) {
-      setGmQuery(setValue);
     } else if (id === YEAR_INPUT) {
       setYearQuery(setValue);
     } else {
       setPositionQuery(setValue);
+    }
+  };
+
+  const handleGmChange = (selectedOption) => {
+    const filterValue = selectedOption?.value ?? "";
+    setGlobalFilter({ value: filterValue, type: GM_INPUT });
+    setGmQuery(filterValue.toLowerCase());
+  };
+
+  const handlePerGameChange = (e) => {
+    if (e.target.checked) {
+      setPerGameQuery("true");
+    } else {
+      setPerGameQuery("");
     }
   };
 
@@ -88,6 +127,12 @@ export const PlayerStatsTable = ({
   return (
     <S.TableContainer>
       <S.InputContainer>
+        <G.FlexRow>
+          <p>Per Game Toggle</p>
+          <G.HorizontalSpacer factor={1} />
+          <Toggle icons={false} onChange={handlePerGameChange} />
+        </G.FlexRow>
+        <G.HorizontalSpacer factor={4} />
         <S.TextInput
           id={PLAYER_INPUT}
           type="text"
@@ -106,11 +151,13 @@ export const PlayerStatsTable = ({
           placeholder="Search by Year"
           onChange={handleFilterInputChange}
         />
-        <S.TextInput
-          id={GM_INPUT}
-          type="text"
-          placeholder="Search by GM"
-          onChange={handleFilterInputChange}
+        <Select
+          placeholder="Select GM"
+          defaultValue={gmQuery}
+          onChange={handleGmChange}
+          options={gmOptions}
+          styles={X.TransactionsHistoryDropdownCustomStyles}
+          isSearchable={false}
         />
       </S.InputContainer>
       <T.ScrollTable>
@@ -132,8 +179,8 @@ export const PlayerStatsTable = ({
                         <G.FlexRow>
                           <S.HeaderText>{column.render("Header")}</S.HeaderText>
                           <T.TableHeaderSortSpan>
-                            {columns.isSorted ? (
-                              columns.isSortedDesc ? (
+                            {column.isSorted ? (
+                              column.isSortedDesc ? (
                                 <T.SortIcon icon="caret-square-down" />
                               ) : (
                                 <T.SortIcon icon="caret-square-up" />
@@ -162,8 +209,24 @@ export const PlayerStatsTable = ({
                         doNotStickFirstColumn
                       >
                         {cell.render((c) => {
-                          // console.log("cccccccc", c);
-                          return c.value;
+                          if (
+                            EXCLUDED_PER_GAME_HEADERS.includes(
+                              c.column.Header
+                            ) ||
+                            perGameQuery === ""
+                          ) {
+                            if (
+                              c.column.Header === "FG%" ||
+                              c.column.Header === "FT%"
+                            ) {
+                              return c.value.toFixed(3);
+                            }
+                            return c.value;
+                          } else {
+                            return (c.value / c.row.values.gamesPlayed).toFixed(
+                              1
+                            );
+                          }
                         })}
                       </TableBodyCellComponent>
                     );
