@@ -3,7 +3,8 @@ import { capitalize } from "lodash";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { parse } from "papaparse";
-import DraftResultsCSV from "resources/data/draft-results-basketball-startup.csv";
+import BasketballStartup from "resources/data/draft-results-basketball-startup.csv";
+import BaseballStartup from "resources/data/draft-results-baseball-startup.csv";
 import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
@@ -107,7 +108,18 @@ export const DraftBoard = () => {
     };
 
     const loadCompletedDraft = () => {
-      parse(DraftResultsCSV, {
+      let csvToUse;
+      if (sport === "basketball") {
+        if (year === "startup") {
+          csvToUse = BasketballStartup;
+        }
+      } else if (sport === "baseball") {
+        if (year === "startup") {
+          csvToUse = BaseballStartup;
+        }
+      }
+
+      parse(csvToUse, {
         download: true,
         complete: (contents) => {
           if (contents.errors.length === 0) {

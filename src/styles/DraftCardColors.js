@@ -14,8 +14,9 @@ const BASEBALL_SECOND_BASE = "rgba(251, 146, 60, 0.84)";
 const BASEBALL_THIRD_BASE = "rgba(244, 105, 125, 0.5)";
 const BASEBALL_SHORTSTOP = "rgba(192, 132, 252, 0.84)";
 const BASEBALL_OUTFIELD = "rgba(89, 171, 252, 0.84)";
-const BASEBALL_STARTING_PITCHER = "rgb(251, 189, 35)";
-const BASEBALL_RELIEF_PITCHER = "rgba(251, 189, 35, 0.66)";
+const BASEBALL_STARTING_PITCHER = "rgb(255, 209, 220)";
+const BASEBALL_RELIEF_PITCHER = "rgb(251, 189, 35)";
+const BASEBALL_UTILITY = "rgba(244, 105, 125, 0.84)";
 
 // Football
 const FOOTBALL_QUARTERBACK = "rgba(251, 146, 60, 0.66)";
@@ -180,6 +181,9 @@ const colorPositionMatcher = (sport, position) => {
           break;
         case "RP":
           color = BASEBALL_RELIEF_PITCHER;
+          break;
+        case "UT":
+          color = BASEBALL_UTILITY;
           break;
         default:
           color = "";
