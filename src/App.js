@@ -49,6 +49,7 @@ import { CommissionerTradeFutureDraftPicks } from "screens/dynasty/commissioner/
 import { TransactionsHistoryHome } from "screens/dynasty/transactions-history/TransactionsHistoryHome";
 import { TransactionsHistory } from "screens/dynasty/transactions-history/TransactionsHistory";
 import { NotFound } from "screens/NotFound";
+import { SportPlayerStats } from "screens/dynasty/player-stats/SportPlayerStats";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -275,6 +276,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.CommissionerTradeFutureDraftPicks}
                   element={<CommissionerTradeFutureDraftPicks />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.PlayerStats}
+                  element={<SportPlayerStats />}
                   exact
                 />
               </Route>

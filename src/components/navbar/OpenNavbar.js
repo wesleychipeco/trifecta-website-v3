@@ -29,6 +29,7 @@ export const OpenNavbar = () => {
   // local state
   const [currentPath, setCurrentPath] = useState("");
   const [isStandingsExpanded, toggleStandingsExpansion] = useState(false);
+  const [isStatsExpanded, toggleStatsExpansion] = useState(false);
   const [isCommissioner, setIsCommissioner] = useState(false);
   const location = useLocation();
   const { isAuthenticated, user } = useAuth0();
@@ -52,9 +53,13 @@ export const OpenNavbar = () => {
     }
   }, [currentPath, isAuthenticated, user]);
 
-  const expandFunction = useCallback(() => {
+  const expandStandingsFunction = useCallback(() => {
     toggleStandingsExpansion(!isStandingsExpanded);
   }, [toggleStandingsExpansion, isStandingsExpanded]);
+
+  const expandStatsFunction = useCallback(() => {
+    toggleStatsExpansion(!isStatsExpanded);
+  }, [toggleStatsExpansion, isStatsExpanded]);
 
   // dynasty navbar
   if (location.pathname.startsWith("/dynasty")) {
@@ -77,7 +82,7 @@ export const OpenNavbar = () => {
           >
             3x5 Dynasty Standings
           </S.Link>
-          <S.CurrentStandings onClick={expandFunction}>
+          <S.CurrentStandings onClick={expandStandingsFunction}>
             Current Standings
           </S.CurrentStandings>
           {isStandingsExpanded &&
@@ -95,6 +100,20 @@ export const OpenNavbar = () => {
           >
             Trade Assets Home
           </S.Link>
+          <S.CurrentStandings onClick={expandStatsFunction}>
+            Player Stats
+          </S.CurrentStandings>
+          {isStatsExpanded &&
+            ["basketball"].map((sport) => {
+              return (
+                <S.IndentedLink
+                  key={sport}
+                  to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/player-stats/${sport}`}
+                >
+                  {`${capitalize(sport)} Stats`}
+                </S.IndentedLink>
+              );
+            })}
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.DraftsHome}`}
           >

@@ -41,6 +41,7 @@ export const ROUTES = {
   TradeAssetDashboard: "trade-asset-dashboard/:gmAbbreviation",
   DraftBoard: "draft/:sport/:year",
   TransactionsHistory: "transactions-history/:sport/:year",
+  PlayerStats: "player-stats/:sport",
 };
 
 export const BASE_ROUTES = {
