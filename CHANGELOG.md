@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### Added
+
+#### [PR-79] - 2024-03-14
+
+- Add preliminary (single season) basketball stats
+
 ## [3.8.3] - 2024-01-02
 
 ### Updated
