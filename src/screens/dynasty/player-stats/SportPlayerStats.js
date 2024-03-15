@@ -34,6 +34,7 @@ export const SportPlayerStats = () => {
   useEffect(() => {
     if (isReady) {
       const check = async () => {
+        await getAndSetGmsArray();
         const statsCollection = await returnMongoCollection("playerStats", era);
         const data = await statsCollection.find({ sport });
         const object = data?.[0] ?? {};
@@ -54,7 +55,6 @@ export const SportPlayerStats = () => {
       };
 
       const scrape = async () => {
-        getAndSetGmsArray();
         const globalVariablesCollection = await returnMongoCollection(
           "globalVariables"
         );
@@ -121,6 +121,7 @@ export const SportPlayerStats = () => {
     }
   }, [isReady, era]);
 
+  // TODO - make "BasketballStatsColumns" and sortBy "gamesPlayed" conditional by sport
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${capitalize(sport)} Player Stats`}</S.Title>
