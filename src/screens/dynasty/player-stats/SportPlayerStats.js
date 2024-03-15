@@ -9,9 +9,9 @@ import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 
 import { playerStatsScraper } from "./PlayerStatsHelper";
-import { ERA_1 } from "Constants";
 import { BasketballStatsColumns } from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
+import { isSameDay } from "date-fns";
 
 export const SportPlayerStats = () => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
@@ -33,6 +33,26 @@ export const SportPlayerStats = () => {
 
   useEffect(() => {
     if (isReady) {
+      const check = async () => {
+        const statsCollection = await returnMongoCollection("playerStats", era);
+        const data = await statsCollection.find({ sport });
+        const object = data?.[0] ?? {};
+        const { lastScraped: lastScrapedString, playerStats } = object;
+
+        if (!lastScrapedString) {
+          scrape();
+        } else {
+          const alreadyScraped = isSameDay(
+            new Date(),
+            new Date(lastScrapedString)
+          );
+
+          if (alreadyScraped) {
+            setPlayerStats(playerStats);
+          }
+        }
+      };
+
       const scrape = async () => {
         getAndSetGmsArray();
         const globalVariablesCollection = await returnMongoCollection(
@@ -40,7 +60,7 @@ export const SportPlayerStats = () => {
         );
         const gmNamesIdsCollection = await returnMongoCollection(
           "gmNamesIds",
-          ERA_1
+          era
         );
         const globalVariables = await globalVariablesCollection.find({});
         const dynastyGlobalVariables = globalVariables?.[0]?.dynasty;
@@ -68,13 +88,39 @@ export const SportPlayerStats = () => {
           );
 
           setPlayerStats(playerStats);
+
+          console.log("Delete, then save to mongodb");
+          const statsCollection = await returnMongoCollection(
+            "playerStats",
+            era
+          );
+          await statsCollection.deleteOne({ sport });
+          await statsCollection.insertOne({
+            sport,
+            lastScraped: new Date().toISOString(),
+            playerStats,
+          });
+
+          // TODO - multiple years of stats
+          // When GET, retrieve previous stats in DB add remove current year, then add in freshly scraped
+          // Toggle to sum all unique player-GM combos (need new function)
+          // https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript
+          /*
+          const data = [
+            { group: 'A', name: 'SD' }, 
+            { group: 'B', name: 'FI' }, 
+            { group: 'A', name: 'MM' },
+            { group: 'B', name: 'CO'}
+          ];
+          const unique = [...new Set(data.map(item => item.group))]; // [ 'A', 'B']
+          */
         }
       };
-      scrape();
+
+      check();
     }
   }, [isReady, era]);
 
-  // console.log("table", playerStats);
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${capitalize(sport)} Player Stats`}</S.Title>
