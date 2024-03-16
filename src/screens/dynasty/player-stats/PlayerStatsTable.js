@@ -342,12 +342,6 @@ export const PlayerStatsTable = ({
                             ) ||
                             perGameQuery === ""
                           ) {
-                            if (
-                              c.column.Header === "FG%" ||
-                              c.column.Header === "FT%"
-                            ) {
-                              return c.value.toFixed(3);
-                            }
                             return c.value;
                           } else {
                             return (c.value / c.row.values.gamesPlayed).toFixed(

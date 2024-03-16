@@ -52,8 +52,10 @@ teamId
 
 ##### When a trade occurs
 
+- In Commissioner Actions, `Enter Trade History` so the trade appears on the Trade History
+- If future draft picks are involved, `Trade Draft Picks` to update future Draft Boards and Trade Asset Dashboards
 - Manually execute all available aspects of the trade
-- Add a new record to the `tradeHistory` collection
+- Ping involved GMs to let them know the trade has been processed and if there are any illegal rosters/lineups as a result, that the GM has to fix it before next lineup lock
 
 ### Website Updates
 
