@@ -1,5 +1,5 @@
 import { returnMongoCollection } from "database-management";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -9,7 +9,7 @@ import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 
 import { playerStatsScraper } from "./PlayerStatsHelper";
-import { BasketballStatsColumns } from "./StatsColumns";
+import { BasketballStatsColumns, BaseballStatsColumns } from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
 import { isSameDay } from "date-fns";
 
@@ -30,6 +30,18 @@ export const SportPlayerStats = () => {
     const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
     setGmsArray(gmNamesArray);
   }, [setGmsArray, era]);
+
+  const statsColumns = useMemo(() => {
+    switch (sport) {
+      case "basketball":
+        return BasketballStatsColumns;
+      case "baseball":
+        return BaseballStatsColumns;
+      case "football":
+      default:
+        return BasketballStatsColumns;
+    }
+  }, [isReady, era, sport]);
 
   useEffect(() => {
     if (isReady) {
@@ -121,6 +133,7 @@ export const SportPlayerStats = () => {
     }
   }, [isReady, era]);
 
+  // console.log("ps", playerStats);
   // TODO - make "BasketballStatsColumns" and sortBy "gamesPlayed" conditional by sport
   return (
     <S.FlexColumnCenterContainer>
@@ -132,10 +145,12 @@ export const SportPlayerStats = () => {
           </S.TableCaption>
           <G.VerticalSpacer factor={isMobile ? 0 : 4} />
           <PlayerStatsTable
-            columns={BasketballStatsColumns}
+            sport={sport}
+            columns={statsColumns}
             data={playerStats}
             sortBy={[{ id: "gamesPlayed", desc: true }]}
             gmsArray={gmsArray}
+            isMobile={isMobile}
           />
         </S.SingleTableContainer>
       </S.TablesContainer>
