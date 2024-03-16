@@ -272,12 +272,12 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
         <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
-        <S.TextInput
+        {/* <S.TextInput
           id={YEAR_INPUT}
           type="text"
           placeholder="Search by Year"
           onChange={handleFilterInputChange}
-        />
+        /> */}
         <Select
           placeholder="Select GM"
           defaultValue={gmQuery}

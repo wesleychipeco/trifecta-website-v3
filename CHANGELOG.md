@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.9.0] - 2024-03-16
+
+### Added
+
+#### [PR-80] - 2024-03-15
+
+- Add single season baseball stats
+
 ### Added
 
 #### [PR-79] - 2024-03-14
