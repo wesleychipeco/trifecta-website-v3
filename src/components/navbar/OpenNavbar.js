@@ -104,7 +104,7 @@ export const OpenNavbar = () => {
             Player Stats
           </S.CurrentStandings>
           {isStatsExpanded &&
-            ["basketball"].map((sport) => {
+            ["basketball", "baseball"].map((sport) => {
               return (
                 <S.IndentedLink
                   key={sport}
@@ -138,7 +138,7 @@ export const OpenNavbar = () => {
           <S.Link
             to={`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`}
           >
-            <FontAwesomeIcon icon="fa-reply" size="md" />
+            <FontAwesomeIcon icon="fa-reply" size="sm" />
             <T.HorizontalSpacer factor={1} />
             OG Trifecta
           </S.Link>
@@ -187,7 +187,7 @@ export const OpenNavbar = () => {
           League Manual
         </S.LinkStyle>
         <S.Link to={`/`}>
-          <FontAwesomeIcon icon="fa-reply" size="md" />
+          <FontAwesomeIcon icon="fa-reply" size="sm" />
           <T.HorizontalSpacer factor={1} />
           3x5 Dynasty
         </S.Link>
