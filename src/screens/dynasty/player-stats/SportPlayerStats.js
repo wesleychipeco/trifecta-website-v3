@@ -62,6 +62,8 @@ export const SportPlayerStats = () => {
 
           if (alreadyScraped) {
             setPlayerStats(playerStats);
+          } else {
+            scrape();
           }
         }
       };
@@ -131,7 +133,7 @@ export const SportPlayerStats = () => {
 
       check();
     }
-  }, [isReady, era]);
+  }, [isReady, era, sport]);
 
   // console.log("ps", playerStats);
   // TODO - make "BasketballStatsColumns" and sortBy "gamesPlayed" conditional by sport
