@@ -32,7 +32,7 @@ export const HomeScreen = () => {
       setTimeout(() => {
         navigate(`${STATIC_ROUTES.DynastyHome}/${ERA_1}`);
       }, 4000);
-    } else if (isMobile) {
+    } else {
       setTimeout(() => {
         navigate(`${STATIC_ROUTES.TrifectaHome}/${STATIC_ROUTES.HallOfFame}`);
       }, 4000);
