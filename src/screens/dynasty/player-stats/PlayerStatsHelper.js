@@ -148,9 +148,7 @@ const compileBaseballStats = (row, gmName, year) => {
   ) {
     // pitcher
     const [
-      ageObject, // ADP // % Drafted // Games Started // IP
-      ,
-      ,
+      ageObject, // Games Started // IP
       ,
       ,
       qualityStartObject,
@@ -202,9 +200,7 @@ const compileBaseballStats = (row, gmName, year) => {
   } else {
     // hitter
     const [
-      ageObject, // ADP // % Drafted // AB // H
-      ,
-      ,
+      ageObject, // AB // H
       ,
       ,
       runsObject,

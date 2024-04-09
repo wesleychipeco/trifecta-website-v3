@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useGlobalFilter, useSortBy, useTable } from "react-table";
 import Select from "react-select";
+import { TailSpin } from "react-loader-spinner";
 
 import * as S from "styles/PlayerStats.styles";
 import * as T from "styles/Table.styles";
@@ -109,6 +110,7 @@ export const PlayerStatsTable = ({
   sortBy = [],
   gmsArray = [],
   isMobile = false,
+  isLoading = false,
 }) => {
   const gmOptions = useMemo(() => {
     const onlyGmsArray = gmsArray.map((gm) => ({
@@ -325,6 +327,26 @@ export const PlayerStatsTable = ({
             })}
           </TableHeadComponent>
           <TableBodyComponent {...getTableBodyProps()}>
+            {isLoading && (
+              <tr>
+                <td>
+                  <TailSpin
+                    visible={true}
+                    height="80"
+                    width="80"
+                    color="black"
+                    ariaLabel="tail-spin-loading"
+                    radius="1"
+                    wrapperStyle={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                    }}
+                    wrapperClass=""
+                  />
+                </td>
+              </tr>
+            )}
             {rows.map((row, i) => {
               prepareRow(row);
               return (

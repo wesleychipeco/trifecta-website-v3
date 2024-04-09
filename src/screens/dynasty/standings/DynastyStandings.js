@@ -48,7 +48,7 @@ export const DynastyStandings = () => {
             sortDescFirst: true,
           };
         }
-        return {};
+        return undefined;
       });
 
       // remove undefined

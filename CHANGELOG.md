@@ -1,5 +1,17 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.9.1] - 2024-04-08
+
+### Added
+
+#### [PR-81] - 2024-04-08
+
+- OG trifecta redirect fix
+- Fix baseball stats scraper
+- Enable just display player stats for non-in-season sports
+- Add spinner for player stats table
+- Fix 3x5 dynasty points page
+
 ## [3.9.0] - 2024-03-16
 
 ### Added
