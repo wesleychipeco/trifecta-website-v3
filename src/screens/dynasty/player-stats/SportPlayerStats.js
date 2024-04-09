@@ -17,8 +17,12 @@ export const SportPlayerStats = () => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const { era, sport } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
+  const { inSeasonLeagues, leagueIdMappings } = useSelector(
+    (state) => state?.currentVariables?.seasonVariables?.dynasty
+  );
   const [playerStats, setPlayerStats] = useState([]);
   const [gmsArray, setGmsArray] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getAndSetGmsArray = useCallback(async () => {
     // get list of gm abbreviations
@@ -51,8 +55,12 @@ export const SportPlayerStats = () => {
         const data = await statsCollection.find({ sport });
         const object = data?.[0] ?? {};
         const { lastScraped: lastScrapedString, playerStats } = object;
+        const inSeasonThisSportLeagues = inSeasonLeagues.filter((season) =>
+          season.includes(sport)
+        );
+        const isThisSportInSeason = inSeasonThisSportLeagues.length > 0;
 
-        if (!lastScrapedString) {
+        if (!lastScrapedString && isThisSportInSeason) {
           scrape();
         } else {
           const alreadyScraped = isSameDay(
@@ -60,8 +68,9 @@ export const SportPlayerStats = () => {
             new Date(lastScrapedString)
           );
 
-          if (alreadyScraped) {
+          if (alreadyScraped || !isThisSportInSeason) {
             setPlayerStats(playerStats);
+            setIsLoading(false);
           } else {
             scrape();
           }
@@ -69,18 +78,12 @@ export const SportPlayerStats = () => {
       };
 
       const scrape = async () => {
-        const globalVariablesCollection = await returnMongoCollection(
-          "globalVariables"
-        );
         const gmNamesIdsCollection = await returnMongoCollection(
           "gmNamesIds",
           era
         );
-        const globalVariables = await globalVariablesCollection.find({});
-        const dynastyGlobalVariables = globalVariables?.[0]?.dynasty;
 
         // get leagueId of inSeasonLeagues
-        const { inSeasonLeagues, leagueIdMappings } = dynastyGlobalVariables;
         const inSeasonLeaguesBySelectedSport = inSeasonLeagues.filter(
           (season) => season.includes(sport)
         );
@@ -100,8 +103,10 @@ export const SportPlayerStats = () => {
             allTeamIdsMappings,
             year
           );
+          // console.log("player stats", playerStats);
 
           setPlayerStats(playerStats);
+          setIsLoading(false);
 
           console.log("Delete, then save to mongodb");
           const statsCollection = await returnMongoCollection(
@@ -153,6 +158,7 @@ export const SportPlayerStats = () => {
             sortBy={[{ id: "gamesPlayed", desc: true }]}
             gmsArray={gmsArray}
             isMobile={isMobile}
+            isLoading={isLoading}
           />
         </S.SingleTableContainer>
       </S.TablesContainer>
