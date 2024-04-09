@@ -55,7 +55,7 @@ export const Dynasty3x5GmColumn = {
 };
 
 export const Dynasty3x5DynastyPointsColumn = {
-  Header: "Dynasty Points",
+  Header: "Total Dynasty Points",
   accessor: "totalDynastyPoints",
   tableHeaderCell: S.NumbersTableHeaderCell,
   sortDescFirst: true,
