@@ -9,7 +9,7 @@ export const rosterScraper = async (leagueId, teamId) => {
   const url =
     process.env.REACT_APP_IS_LOCAL === "true"
       ? `http://localhost:5000/rosters`
-      : `https://www.trifectafantasyleague.com:444/rosters`;
+      : `https://www.trifectafantasyleague.com:443/rosters`;
 
   const data = await axios.post(
     url,

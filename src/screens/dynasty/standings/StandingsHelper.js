@@ -4,7 +4,7 @@ export const standingsScraper = async (leagueId) => {
   const url =
     process.env.REACT_APP_IS_LOCAL === "true"
       ? `http://localhost:5000/standings`
-      : `https://www.trifectafantasyleague.com:444/standings`;
+      : `https://www.trifectafantasyleague.com:443/standings`;
 
   const data = await axios.post(
     url,

@@ -7,7 +7,7 @@ export const retrieveTransactions = async (leagueId, gmNamesIdsMappings) => {
   const url =
     process.env.REACT_APP_IS_LOCAL === "true"
       ? `http://localhost:5000/transactions`
-      : `https://www.trifectafantasyleague.com:444/transactions`;
+      : `https://www.trifectafantasyleague.com:443/transactions`;
 
   const data = await axios.post(
     url,

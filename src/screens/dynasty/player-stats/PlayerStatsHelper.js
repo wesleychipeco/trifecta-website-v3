@@ -11,7 +11,7 @@ export const playerStatsScraper = async (
   const url =
     process.env.REACT_APP_IS_LOCAL === "true"
       ? `http://localhost:5000/player-stats`
-      : `https://www.trifectafantasyleague.com:444/player-stats`;
+      : `https://www.trifectafantasyleague.com:443/player-stats`;
 
   const allTeamIds = Object.keys(allTeamIdsMappings);
   const finalPlayerStatsArray = [];
