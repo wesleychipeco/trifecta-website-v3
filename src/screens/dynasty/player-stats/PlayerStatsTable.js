@@ -97,6 +97,29 @@ const BASEBALL_POSITIONS = [
   },
 ];
 
+const FOOTBALL_POSITIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "QB",
+    label: "QB",
+  },
+  {
+    value: "RB",
+    label: "RB",
+  },
+  {
+    value: "WR",
+    label: "WR",
+  },
+  {
+    value: "TE",
+    label: "TE",
+  },
+];
+
 export const PlayerStatsTable = ({
   sport,
   columns,
@@ -128,6 +151,7 @@ export const PlayerStatsTable = ({
       case "baseball":
         return BASEBALL_POSITIONS;
       case "football":
+        return FOOTBALL_POSITIONS;
       default:
         return BASKETBALL_POSITIONS;
     }

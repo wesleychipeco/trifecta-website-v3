@@ -190,7 +190,7 @@ export const BottomLink = styled(Link)`
   bottom: 0;
 `;
 
-export const CurrentStandings = styled.p`
+export const Standings = styled.p`
   margin: 0;
   padding: 0;
   font-size: 1.75rem;

@@ -22,13 +22,16 @@ export const OpenNavbar = () => {
   }, []);
 
   // dynasty season variables
-  const { inSeasonLeagues } = useSelector(
+  const { inSeasonLeagues, completedLeagues } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
 
   // local state
   const [currentPath, setCurrentPath] = useState("");
-  const [isStandingsExpanded, toggleStandingsExpansion] = useState(false);
+  const [isActiveStandingsExpanded, toggleActiveStandingsExpansion] =
+    useState(false);
+  const [isPastStandingsExpanded, togglePastStandingsExpansion] =
+    useState(false);
   const [isStatsExpanded, toggleStatsExpansion] = useState(false);
   const [isCommissioner, setIsCommissioner] = useState(false);
   const location = useLocation();
@@ -53,9 +56,13 @@ export const OpenNavbar = () => {
     }
   }, [currentPath, isAuthenticated, user]);
 
-  const expandStandingsFunction = useCallback(() => {
-    toggleStandingsExpansion(!isStandingsExpanded);
-  }, [toggleStandingsExpansion, isStandingsExpanded]);
+  const expandActiveStandingsFunction = useCallback(() => {
+    toggleActiveStandingsExpansion(!isActiveStandingsExpanded);
+  }, [toggleActiveStandingsExpansion, isActiveStandingsExpanded]);
+
+  const expandPastStandingsFunction = useCallback(() => {
+    togglePastStandingsExpansion(!isPastStandingsExpanded);
+  }, [togglePastStandingsExpansion, isPastStandingsExpanded]);
 
   const expandStatsFunction = useCallback(() => {
     toggleStatsExpansion(!isStatsExpanded);
@@ -82,10 +89,10 @@ export const OpenNavbar = () => {
           >
             3x5 Dynasty Standings
           </S.Link>
-          <S.CurrentStandings onClick={expandStandingsFunction}>
-            Current Standings
-          </S.CurrentStandings>
-          {isStandingsExpanded &&
+          <S.Standings onClick={expandActiveStandingsFunction}>
+            Active Sport Standings
+          </S.Standings>
+          {isActiveStandingsExpanded &&
             inSeasonLeagues.map((inSeasonLeague) => {
               const { sport, year } = sportYearToSportAndYear(inSeasonLeague);
               return (
@@ -95,16 +102,27 @@ export const OpenNavbar = () => {
                 >{`${year} ${capitalize(sport)} Standings`}</S.IndentedLink>
               );
             })}
+          <S.Standings onClick={expandPastStandingsFunction}>
+            Past Sport Standings
+          </S.Standings>
+          {isPastStandingsExpanded &&
+            completedLeagues.map((completedLeague) => {
+              const { sport, year } = sportYearToSportAndYear(completedLeague);
+              return (
+                <S.IndentedLink
+                  key={completedLeague}
+                  to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/${sport}/${year}`}
+                >{`${year} ${capitalize(sport)} Standings`}</S.IndentedLink>
+              );
+            })}
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeAssetHome}`}
           >
             Trade Assets Home
           </S.Link>
-          <S.CurrentStandings onClick={expandStatsFunction}>
-            Player Stats
-          </S.CurrentStandings>
+          <S.Standings onClick={expandStatsFunction}>Player Stats</S.Standings>
           {isStatsExpanded &&
-            ["basketball", "baseball"].map((sport) => {
+            ["basketball", "baseball", "football"].map((sport) => {
               return (
                 <S.IndentedLink
                   key={sport}

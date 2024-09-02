@@ -89,8 +89,8 @@ const formatTransactions = (tableRows, gmNamesIdsMappings) => {
     const isSuccessfulReason = formatFailedTransactionMessage(
       eachRow.result?.toolTip
     );
-    const period = eachRow.cells?.[5]?.content;
-    const dateString = eachRow.cells?.[4]?.content;
+    const period = eachRow.cells?.[5]?.content ?? eachRow.cells?.[3]?.content; // football has fewer elements in array
+    const dateString = eachRow.cells?.[4]?.content ?? eachRow.cells[2]?.content; // football has fewer elements in array
     const transactionType = eachRow.transactionType;
     const newDate = add(
       parse(dateString, "EEE MMM d, yyyy, h:mma", new Date()),

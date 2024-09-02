@@ -9,7 +9,11 @@ import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 
 import { playerStatsScraper } from "./PlayerStatsHelper";
-import { BasketballStatsColumns, BaseballStatsColumns } from "./StatsColumns";
+import {
+  BasketballStatsColumns,
+  BaseballStatsColumns,
+  FootballStatsColumns,
+} from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
 import { isSameDay } from "date-fns";
 
@@ -42,10 +46,17 @@ export const SportPlayerStats = () => {
       case "baseball":
         return BaseballStatsColumns;
       case "football":
+        return FootballStatsColumns;
       default:
         return BasketballStatsColumns;
     }
   }, [isReady, era, sport]);
+
+  const sortByArray = useMemo(() => {
+    return sport === "football"
+      ? [{ id: "fantasyPoints", desc: true }]
+      : [{ id: "gamesPlayed", desc: true }];
+  }, [isReady, sport]);
 
   useEffect(() => {
     if (isReady) {
@@ -155,7 +166,7 @@ export const SportPlayerStats = () => {
             sport={sport}
             columns={statsColumns}
             data={playerStats}
-            sortBy={[{ id: "gamesPlayed", desc: true }]}
+            sortBy={sortByArray}
             gmsArray={gmsArray}
             isMobile={isMobile}
             isLoading={isLoading}
