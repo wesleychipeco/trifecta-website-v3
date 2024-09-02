@@ -1,5 +1,24 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.10.0] - 2024-09-02
+
+### Added
+
+### [PR-84] - 2024-09-02
+
+- Football startup draft results
+
+### [PR-83] - 2024-09-02
+
+- Added past standings to navbar
+- Added Week/Period number to transactions history table
+- Fixed pitcher stats bug
+- Added football stats
+
+### [PR-82] - 2024-06-16
+
+- Fix redirect to proxy server via HTTPS port 443
+
 ## [3.9.1] - 2024-04-08
 
 ### Added
