@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { parse } from "papaparse";
 import BasketballStartup from "resources/data/draft-results-basketball-startup.csv";
 import BaseballStartup from "resources/data/draft-results-baseball-startup.csv";
+import FootballStartup from "resources/data/draft-results-football-startup.csv";
 import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
@@ -116,6 +117,10 @@ export const DraftBoard = () => {
       } else if (sport === "baseball") {
         if (year === "startup") {
           csvToUse = BaseballStartup;
+        }
+      } else if (sport === "football") {
+        if (year === "startup") {
+          csvToUse = FootballStartup;
         }
       }
 
