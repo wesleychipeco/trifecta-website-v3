@@ -38,6 +38,12 @@ export const TransactionsHistory = () => {
           era
         );
         const data = await transactionsHistoryCollection.find({ sportYear });
+        if (data.length === 0) {
+          console.error(
+            "Need to create transactions history document in mongodb"
+          );
+          return; // to prevent white screen crash if document doesn't exist
+        }
         const object = data?.[0] ?? {};
         const { lastScraped: lastScrapedString, transactions } = object;
         if (
@@ -102,6 +108,11 @@ export const TransactionsHistory = () => {
         Header: "Date",
         accessor: "date",
         tableHeaderCell: T.StringTableHeaderCell,
+      },
+      {
+        Header: sport === "football" ? "Week" : "Period",
+        accessor: "period",
+        tableHeaderCell: T.NumbersTableHeaderCell,
       },
       {
         Header: "Transaction Type",

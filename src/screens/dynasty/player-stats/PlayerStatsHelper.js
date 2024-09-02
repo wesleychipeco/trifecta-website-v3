@@ -148,17 +148,14 @@ const compileBaseballStats = (row, gmName, year) => {
   ) {
     // pitcher
     const [
-      ageObject, // Games Started // IP
+      ageObject, // IP
       ,
-      ,
+      winsObject,
       qualityStartObject,
-      winsObject, // HA // BBA
-      ,
-      ,
       ksObject,
-      savesHoldsObject,
       eraObject,
-      whipObject, // H // AB // R // RBI // HR // SO // OBP // SB
+      whipObject,
+      savesHoldsObject, // H // AB // R // RBI // HR // SO // OBP
       ,
       ,
       ,
