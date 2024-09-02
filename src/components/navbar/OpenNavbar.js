@@ -122,7 +122,7 @@ export const OpenNavbar = () => {
           </S.Link>
           <S.Standings onClick={expandStatsFunction}>Player Stats</S.Standings>
           {isStatsExpanded &&
-            ["basketball", "baseball"].map((sport) => {
+            ["basketball", "baseball", "football"].map((sport) => {
               return (
                 <S.IndentedLink
                   key={sport}

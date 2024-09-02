@@ -76,6 +76,8 @@ export const playerStatsScraper = async (
           return compileBasketballStats(eachRow, gmName, year);
         case "baseball":
           return compileBaseballStats(eachRow, gmName, year);
+        case "football":
+          return compileFootballStats(eachRow, gmName, year);
         default:
           return {};
       }
@@ -237,4 +239,75 @@ const compileBaseballStats = (row, gmName, year) => {
       whip: "--",
     };
   }
+};
+
+const compileFootballStats = (row, gmName, year) => {
+  const { scorer, cells } = row;
+  const { name, posShortNames, teamShortName } = scorer;
+  const positionsList = posShortNames.split(",");
+
+  const [
+    ageObject, // opponent
+    ,
+    fantasyPointsObject, // bye // %drafted // ADP
+    ,
+    ,
+    ,
+    passingYardsObject,
+    passingTDsObject,
+    interceptionsObject,
+    passing2PAObject,
+    sacksObject,
+    rushingYardsObject,
+    rushingTDsObject,
+    rushing2PAObject,
+    rushing1DObject,
+    receptionsObject,
+    receivingYardsObject,
+    receivingTDsObject,
+    receiving2PAObject,
+    receiving1DObject, // targets
+    ,
+    fumblesLostObject,
+    fumbleRecoveryTDsObject,
+    returnTDsObject,
+    passing1DObject,
+  ] = cells;
+
+  const passing2PA = parseInt(passing2PAObject.content);
+  const rushing2PA = parseInt(rushing2PAObject.content);
+  const receiving2PA = parseInt(receiving2PAObject.content);
+  const fumbleRecoveryTDs = parseInt(fumbleRecoveryTDsObject.content);
+  const returnTDs = parseInt(returnTDsObject.content);
+
+  return {
+    gmName,
+    year,
+    name,
+    position: positionsList.join(","),
+    teamName: teamShortName,
+    gm: gmName,
+    age: parseInt(ageObject.content),
+    fantasyPoints: parseFloat(fantasyPointsObject.conent).toFixed(2),
+    passingYards: parseInt(passingYardsObject.content),
+    passingTDs: parseInt(passingTDsObject.content),
+    interceptions: parseInt(interceptionsObject.content),
+    sacks: parseInt(sacksObject.content),
+    passing1D: parseInt(passing1DObject.content),
+    passing2PA,
+    rushingYards: parseInt(rushingYardsObject.content),
+    rushingTDs: parseInt(rushingTDsObject.content),
+    rushing1D: parseInt(rushing1DObject.content),
+    rushing2PA,
+    receptions: parseInt(receptionsObject.content),
+    receivingYards: parseInt(receivingYardsObject.content),
+    receivingTDs: parseInt(receivingTDsObject.content),
+    receiving1D: parseInt(receiving1DObject.content),
+    receiving2PA,
+    fumblesLost: parseInt(fumblesLostObject.content),
+    fumbleRecoveryTDs,
+    returnTDs,
+    total2PA: passing2PA + rushing2PA + receiving2PA,
+    miscTDs: fumbleRecoveryTDs + returnTDs,
+  };
 };

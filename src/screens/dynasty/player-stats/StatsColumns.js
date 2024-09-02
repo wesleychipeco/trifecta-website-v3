@@ -205,3 +205,130 @@ export const BaseballStatsColumns = [
     sortDescFirst: true,
   },
 ];
+
+export const FootballStatsColumns = [
+  {
+    Header: "Player",
+    accessor: "name",
+    tableHeaderCell: S.StringTableHeaderCell,
+  },
+  {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.StringTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "Year",
+    accessor: "year",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "GM",
+    accessor: "gmName",
+    tableHeaderCell: S.StringTableHeaderCell,
+  },
+  {
+    Header: "Age",
+    accessor: "age",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Fantasy Points",
+    accessor: "fantasyPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Pass YD",
+    accessor: "passingYards",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Pass TD",
+    accessor: "passingTDs",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Pass 1D",
+    accessor: "passing1D",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "INT",
+    accessor: "interceptions",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "SK",
+    accessor: "sacks",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "FL",
+    accessor: "fumblesLost",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Rush YD",
+    accessor: "rushingYards",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Rush TD",
+    accessor: "rushingTDs",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Rush 1D",
+    accessor: "rushing1D",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "REC",
+    accessor: "receptions",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Rec YD",
+    accessor: "receivingYards",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Rec TD",
+    accessor: "receivingTDs",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Rec 1D",
+    accessor: "receiving1D",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "TOT 2PA",
+    accessor: "total2PA",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "MISC TDs",
+    accessor: "miscTDs",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+];
