@@ -171,10 +171,19 @@ export const CommissionerTradeFutureDraftPicks = () => {
       const eachRow = draftToUse[i];
       for (let j = 0; j < eachRow.length; j++) {
         const eachPick = eachRow[j];
-        if (
-          givingGm === eachPick.fantasyTeam &&
-          roundAndPick === eachPick.pick
-        ) {
+        const startParentheses = roundAndPick.indexOf("(") + 1;
+        const endParentheses = roundAndPick.indexOf(")");
+        const overallPick = roundAndPick.substring(
+          startParentheses,
+          endParentheses
+        );
+
+        // different pick matching logic depending if set grid or not
+        const isCorrectPick = isGrid
+          ? overallPick == eachPick.overallPick.toString()
+          : roundAndPick == eachPick.pick;
+
+        if (givingGm === eachPick.fantasyTeam && isCorrectPick) {
           eachPick["tradedTo"] = receivingGm;
         }
       }

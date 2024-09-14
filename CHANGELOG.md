@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.10.1] - 2024-09-14
+
+### Changed
+
+### [PR-85] - 2024-09-14
+
+- Fix trading already set grid draft picks
+
 ## [3.10.0] - 2024-09-02
 
 ### Added
