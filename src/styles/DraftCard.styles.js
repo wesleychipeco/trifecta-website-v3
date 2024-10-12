@@ -8,6 +8,14 @@ export const PaddingContainer = styled.div`
   width: 98%;
 `;
 
+export const PaddingContainer2 = styled.div`
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 0.1rem 0.1rem 0.1rem;
+  width: 98%;
+`;
+
 export const DraftPickNumberText = styled.p`
   font-size: 0.85rem;
   margin: 0;

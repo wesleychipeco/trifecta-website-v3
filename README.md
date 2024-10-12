@@ -57,6 +57,14 @@ teamId
 - Manually execute all available aspects of the trade
 - Ping involved GMs to let them know the trade has been processed and if there are any illegal rosters/lineups as a result, that the GM has to fix it before next lineup lock
 
+##### Adding draft results
+
+- From Fantrax, download .csv of the draft results
+- Remove all quotation marks from the .csv
+- Replace all full team names with GM abbreviations (ie Wesley Chipeco -> CHIP)
+- If a pick was traded, at the end of the row, add a comma and the GM who traded away the pick. (The receiving GM is already represented by)
+- Add the .csv to the "resources/data" directory with filename `draft-results-<sport>-<year>.csv`
+
 ### Website Updates
 
 See: https://tinyurl.com/trifectawebdoc

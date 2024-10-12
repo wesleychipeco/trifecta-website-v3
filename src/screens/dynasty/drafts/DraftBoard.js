@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { capitalize } from "lodash";
+import { capitalize, cloneDeep } from "lodash";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { parse } from "papaparse";
 import BasketballStartup from "resources/data/draft-results-basketball-startup.csv";
 import BaseballStartup from "resources/data/draft-results-baseball-startup.csv";
 import FootballStartup from "resources/data/draft-results-football-startup.csv";
+import Basketball2025 from "resources/data/draft-results-basketball-2025.csv";
 import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
@@ -37,7 +38,10 @@ export const DraftBoard = () => {
           position,
           player,
           team,
-          fantasyTeam,
+          fantasyTeam, // date pt1 // date pt2
+          ,
+          ,
+          tradedFrom,
         ] = arrayOfArrays[i];
 
         // set first GM to know when to reverse
@@ -47,12 +51,18 @@ export const DraftBoard = () => {
 
         if (Number(round) === startingRound + 1) {
           if (startingRound === 1) {
-            setDraftResultsHeader(arrayOfPicks);
+            const copyArrayOfPicks = cloneDeep(arrayOfPicks);
+            const headerArrayOfPicks = copyArrayOfPicks.map((headerPick) => {
+              if (headerPick.tradedFrom) {
+                headerPick.fantasyTeam = headerPick.tradedFrom;
+              }
+              return headerPick;
+            });
+            setDraftResultsHeader(headerArrayOfPicks);
           }
 
-          // need to test non-startup (non reversal) supplemental drafts
           const toAdd =
-            arrayOfPicks[0]?.fantasyTeam === firstPickGM && year === "startup"
+            arrayOfPicks[0]?.fantasyTeam === firstPickGM
               ? arrayOfPicks
               : arrayOfPicks.reverse();
 
@@ -69,6 +79,7 @@ export const DraftBoard = () => {
           player,
           position,
           team,
+          tradedFrom,
         };
 
         arrayOfPicks.push(pickObject);
@@ -113,6 +124,8 @@ export const DraftBoard = () => {
       if (sport === "basketball") {
         if (year === "startup") {
           csvToUse = BasketballStartup;
+        } else if (year === "2025") {
+          csvToUse = Basketball2025;
         }
       } else if (sport === "baseball") {
         if (year === "startup") {
@@ -170,10 +183,10 @@ export const DraftBoard = () => {
       <S.FlexColumnContainer>
         <T.VerticalSpacer factor={4} />
         <S.FlexRowContainer>
-          {draftResultsHeader.map((headerObject) => {
+          {draftResultsHeader.map((headerObject, index) => {
             return (
               <S.HeaderRow
-                key={headerObject.fantasyTeam}
+                key={`${headerObject.fantasyTeam}-${index}`}
                 fantasyTeam={headerObject.fantasyTeam}
                 tradedTo={false}
               >
