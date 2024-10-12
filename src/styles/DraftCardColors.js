@@ -48,7 +48,7 @@ export const determineBackgroundColor = ({
   sport,
   position,
   fantasyTeam,
-  tradedTo,
+  tradedTo = false,
 }) => {
   if (sport && position) {
     return colorPositionMatcher(sport, position);

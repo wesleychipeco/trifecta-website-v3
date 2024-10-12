@@ -1,5 +1,13 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+## [3.10.2] - 2024-10-12
+
+### Changed
+
+### [PR-86] - 2024-10-12
+
+- Handle traded supplemental draft picks in draft grid display
+
 ## [3.10.1] - 2024-09-14
 
 ### Changed

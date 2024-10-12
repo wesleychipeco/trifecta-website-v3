@@ -10,6 +10,7 @@ import {
   faPlus,
   faCircleXmark,
   faReply,
+  faHandshake,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -22,5 +23,6 @@ library.add(
   faCaretSquareUp,
   faPlus,
   faCircleXmark,
-  faReply
+  faReply,
+  faHandshake
 );
