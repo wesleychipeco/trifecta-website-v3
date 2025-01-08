@@ -70,7 +70,7 @@ export const BasketballStandings = () => {
           await collection.deleteMany({ year });
           await collection.insertOne({
             year,
-            lastScraped: new Date().toISOString(),
+            lastScraped: new Date().toLocaleString(),
             trifectaStandings,
             h2hStandings,
             rotoStandings,

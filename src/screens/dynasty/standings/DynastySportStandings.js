@@ -6,13 +6,16 @@ import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
 import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
-import { DynastyStandingsColumnsRaw } from "./StandingsColumns";
+import {
+  DynastyStandingsColumnsRaw,
+  PlayoffColumns,
+  FootballPointsColumns,
+} from "./StandingsColumns";
 import { assignRankPoints } from "utils/standings";
 import { ERA_1, HIGH_TO_LOW, NUMBER_OF_TEAMS } from "Constants";
 import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
 import { addKeyValueToEachObjectInArray, insertIntoArray } from "utils/arrays";
-import { PlayoffColumns } from "./StandingsColumns";
 
 const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
@@ -75,7 +78,7 @@ export const DynastySportStandings = ({ sport }) => {
         await collection.deleteMany({ year });
         await collection.insertOne({
           year,
-          lastScraped: new Date().toISOString(),
+          lastScraped: new Date().toLocaleString(),
           dynastyStandings,
           divisionStandings,
         });
@@ -154,9 +157,13 @@ export const DynastySportStandings = ({ sport }) => {
       return [];
     }
     const sportYear = `${sport}${year}`;
+    const dynastyStandingsColumns =
+      sport === "football"
+        ? insertIntoArray(DynastyStandingsColumnsRaw, 3, FootballPointsColumns)
+        : DynastyStandingsColumnsRaw;
     return !inSeasonLeagues.includes(sportYear)
-      ? insertIntoArray(DynastyStandingsColumnsRaw, 4, PlayoffColumns)
-      : DynastyStandingsColumnsRaw;
+      ? insertIntoArray(dynastyStandingsColumns, 4, PlayoffColumns)
+      : dynastyStandingsColumns;
   }, [isReady, sport, year, inSeasonLeagues]);
 
   const BasketballBaseballDivisionColumns = useMemo(

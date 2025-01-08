@@ -55,8 +55,12 @@ export const formatScrapedStandings = (standings, namesIdsObject, sport) => {
         division: divisionName,
       };
       if (sport === "football") {
-        divStandingsObj["pointsFor"] = eachTeam.cells[7].content;
-        divStandingsObj["pointsAgainst"] = eachTeam.cells[8].content;
+        divStandingsObj["pointsFor"] = parseFloat(
+          eachTeam.cells[6].content.replace(",", "")
+        ).toFixed(2);
+        divStandingsObj["pointsAgainst"] = parseFloat(
+          eachTeam.cells[7].content.replace(",", "")
+        ).toFixed(2);
       }
       eachDivisionStandings.push(divStandingsObj);
     }

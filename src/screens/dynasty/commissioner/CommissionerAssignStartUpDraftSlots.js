@@ -119,7 +119,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
       const draftObject = {
         type: `${sport}-${year}`,
         grid,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().toLocaleString(),
       };
 
       (await draftsCollection).insertOne(draftObject);

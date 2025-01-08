@@ -127,7 +127,7 @@ export const SportPlayerStats = () => {
           await statsCollection.deleteOne({ sport });
           await statsCollection.insertOne({
             sport,
-            lastScraped: new Date().toISOString(),
+            lastScraped: new Date().toLocaleString(),
             playerStats,
           });
 

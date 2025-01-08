@@ -81,7 +81,7 @@ export const TransactionsHistory = () => {
                 {
                   $set: {
                     transactions: allTransactions,
-                    lastScraped: new Date().toISOString(),
+                    lastScraped: new Date().toLocaleString(),
                   },
                 },
                 {

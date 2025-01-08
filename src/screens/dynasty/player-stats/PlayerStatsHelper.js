@@ -31,6 +31,7 @@ export const playerStatsScraper = async (
               statsType: "3",
               scoringCategoryType: "5",
               teamId: teamId,
+              timeframeTypeCode: "YEAR_TO_DATE",
             },
           },
         ],
@@ -50,6 +51,7 @@ export const playerStatsScraper = async (
       }
     );
 
+    console.log("data", data);
     const filteredPlayerStats =
       data.data.responses[0].data.tables[0].rows.filter((eachRow) => {
         const playerName = eachRow?.scorer?.name ?? "";
@@ -77,6 +79,7 @@ export const playerStatsScraper = async (
         case "baseball":
           return compileBaseballStats(eachRow, gmName, year);
         case "football":
+          console.log("each row", eachRow);
           return compileFootballStats(eachRow, gmName, year);
         default:
           return {};
@@ -249,9 +252,7 @@ const compileFootballStats = (row, gmName, year) => {
   const [
     ageObject, // opponent
     ,
-    fantasyPointsObject, // bye // %drafted // ADP
-    ,
-    ,
+    fantasyPointsObject, // bye
     ,
     passingYardsObject,
     passingTDsObject,
@@ -273,6 +274,8 @@ const compileFootballStats = (row, gmName, year) => {
     returnTDsObject,
     passing1DObject,
   ] = cells;
+  console.log("------------------------------------------");
+  console.log("cells", cells);
 
   const passing2PA = parseInt(passing2PAObject.content);
   const rushing2PA = parseInt(rushing2PAObject.content);
@@ -280,6 +283,7 @@ const compileFootballStats = (row, gmName, year) => {
   const fumbleRecoveryTDs = parseInt(fumbleRecoveryTDsObject.content);
   const returnTDs = parseInt(returnTDsObject.content);
 
+  console.log("fantasyPointsObject", fantasyPointsObject);
   return {
     gmName,
     year,
@@ -288,7 +292,7 @@ const compileFootballStats = (row, gmName, year) => {
     teamName: teamShortName,
     gm: gmName,
     age: parseInt(ageObject.content),
-    fantasyPoints: parseFloat(fantasyPointsObject.conent).toFixed(2),
+    fantasyPoints: parseFloat(fantasyPointsObject.content).toFixed(2),
     passingYards: parseInt(passingYardsObject.content),
     passingTDs: parseInt(passingTDsObject.content),
     interceptions: parseInt(interceptionsObject.content),
