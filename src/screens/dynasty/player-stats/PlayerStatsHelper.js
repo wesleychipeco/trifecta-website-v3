@@ -79,7 +79,6 @@ export const playerStatsScraper = async (
         case "baseball":
           return compileBaseballStats(eachRow, gmName, year);
         case "football":
-          console.log("each row", eachRow);
           return compileFootballStats(eachRow, gmName, year);
         default:
           return {};
@@ -87,6 +86,7 @@ export const playerStatsScraper = async (
     });
 
     const playerStats = trimmedPlayerStats.filter((player) => player != null);
+    console.log("Player stats: ", playerStats);
     finalPlayerStatsArray.push(playerStats);
   }
 
@@ -252,7 +252,8 @@ const compileFootballStats = (row, gmName, year) => {
   const [
     ageObject, // opponent
     ,
-    fantasyPointsObject, // bye
+    fantasyPointsObject, // fantasyPointsPerGame // bye
+    ,
     ,
     passingYardsObject,
     passingTDsObject,
@@ -274,16 +275,16 @@ const compileFootballStats = (row, gmName, year) => {
     returnTDsObject,
     passing1DObject,
   ] = cells;
-  console.log("------------------------------------------");
-  console.log("cells", cells);
 
+  const passingYdsString = passingYardsObject.content;
+  const rushingYdsString = rushingYardsObject.content;
+  const recievingYdsString = receivingYardsObject.content;
   const passing2PA = parseInt(passing2PAObject.content);
   const rushing2PA = parseInt(rushing2PAObject.content);
   const receiving2PA = parseInt(receiving2PAObject.content);
   const fumbleRecoveryTDs = parseInt(fumbleRecoveryTDsObject.content);
   const returnTDs = parseInt(returnTDsObject.content);
 
-  console.log("fantasyPointsObject", fantasyPointsObject);
   return {
     gmName,
     year,
@@ -293,18 +294,18 @@ const compileFootballStats = (row, gmName, year) => {
     gm: gmName,
     age: parseInt(ageObject.content),
     fantasyPoints: parseFloat(fantasyPointsObject.content).toFixed(2),
-    passingYards: parseInt(passingYardsObject.content),
+    passingYards: parseInt(passingYdsString.replace(",", "")),
     passingTDs: parseInt(passingTDsObject.content),
     interceptions: parseInt(interceptionsObject.content),
     sacks: parseInt(sacksObject.content),
     passing1D: parseInt(passing1DObject.content),
     passing2PA,
-    rushingYards: parseInt(rushingYardsObject.content),
+    rushingYards: parseInt(rushingYdsString.replace(",", "")),
     rushingTDs: parseInt(rushingTDsObject.content),
     rushing1D: parseInt(rushing1DObject.content),
     rushing2PA,
     receptions: parseInt(receptionsObject.content),
-    receivingYards: parseInt(receivingYardsObject.content),
+    receivingYards: parseInt(recievingYdsString.replace(",", "")),
     receivingTDs: parseInt(receivingTDsObject.content),
     receiving1D: parseInt(receiving1DObject.content),
     receiving2PA,
