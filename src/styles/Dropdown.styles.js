@@ -227,6 +227,67 @@ export const TradeBlockDropdownCustomStyles = {
   }),
 };
 
+export const GMDropdownCustomStyles = {
+  // each option in dropdown
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: PRIMARY_ORANGE,
+    color: FONT_COLOR,
+    fontWeight: state.isSelected ? 800 : "normal",
+    margin: 0,
+    "&:hover": {
+      opacity: 0.8,
+    },
+    fontSize: "1.25rem",
+    width: "15rem",
+  }),
+  // overall
+  control: (provided) => ({
+    ...provided,
+    backgroundColor: PRIMARY_ORANGE,
+    borderRadius: "0.5rem",
+    border: 0,
+    borderColor: BACKGROUND_COLOR,
+    color: FONT_COLOR,
+    boxShadow: "none",
+    "&:hover": {
+      opacity: 0.8,
+    },
+    width: "16rem",
+  }),
+  // placeholder value
+  placeholder: (provided) => ({
+    ...provided,
+    color: FONT_COLOR,
+    fontFamily: FONT_FAMILY,
+  }),
+  // arrow icon
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: FONT_COLOR,
+    "&:hover": {
+      color: FONT_COLOR,
+    },
+  }),
+  // remove line separator
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    display: "none",
+  }),
+  // displayed value
+  singleValue: (provided) => ({
+    ...provided,
+    fontSize: "1.25rem",
+    color: FONT_COLOR,
+  }),
+  // remove white on list options
+  menuList: (provided) => ({
+    ...provided,
+    paddingTop: 0,
+    paddingBottom: 0,
+  }),
+};
+
 //////////////////////////////////////////////////
 const MOBILE_FONT_SIZE = "1rem";
 const MOBILE_WIDTH = "6rem";

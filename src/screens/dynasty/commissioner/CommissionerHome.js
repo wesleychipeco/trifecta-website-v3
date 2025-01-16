@@ -33,14 +33,9 @@ const COMMISSIONER_ACTION_BUTTONS = [
     disabled: true,
   },
   {
-    title: "End Sport Regular Season",
-    path: ROUTES.CommissionerEndSportRegularSeason,
-    disabled: true,
-  },
-  {
     title: "Complete Sport with Playoffs",
     path: ROUTES.CommissionerCompleteSport,
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Initialize Supplemental Draft Picks",

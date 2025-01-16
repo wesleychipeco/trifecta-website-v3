@@ -159,10 +159,12 @@ export const DynastySportStandings = ({ sport }) => {
     const sportYear = `${sport}${year}`;
     const dynastyStandingsColumns =
       sport === "football"
-        ? insertIntoArray(DynastyStandingsColumnsRaw, 3, FootballPointsColumns)
+        ? insertIntoArray(DynastyStandingsColumnsRaw, 4, FootballPointsColumns)
         : DynastyStandingsColumnsRaw;
+
+    const playoffsIndex = sport === "football" ? 6 : 4;
     return !inSeasonLeagues.includes(sportYear)
-      ? insertIntoArray(dynastyStandingsColumns, 4, PlayoffColumns)
+      ? insertIntoArray(dynastyStandingsColumns, playoffsIndex, PlayoffColumns)
       : dynastyStandingsColumns;
   }, [isReady, sport, year, inSeasonLeagues]);
 

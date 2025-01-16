@@ -23,7 +23,6 @@ export const STATIC_ROUTES = {
   CommissionerAssignSupplementalDraftSlots:
     "commissioner-assign-supplemental-draft-slots",
   CommissionerStartNewSport: "commissioner-start-new-sport",
-  CommissionerEndSportRegularSeason: "commissioner-end-sport-regular-season",
   CommissionerCompleteSport: "commissioner-complete-sport",
   CommissionerInitializeSupplementalDraftPicks:
     "commissioner-initialize-supplemental-draft-picks",
