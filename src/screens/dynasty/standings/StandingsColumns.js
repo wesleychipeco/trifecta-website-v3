@@ -60,3 +60,18 @@ export const Dynasty3x5DynastyPointsColumn = {
   tableHeaderCell: S.NumbersTableHeaderCell,
   sortDescFirst: true,
 };
+
+export const FootballPointsColumns = [
+  {
+    Header: "Points For",
+    accessor: "pointsFor",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Points Against",
+    accessor: "pointsAgainst",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+];

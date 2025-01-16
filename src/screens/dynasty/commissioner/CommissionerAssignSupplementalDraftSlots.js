@@ -150,7 +150,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
       const draftObject = {
         type: sportYear,
         grid,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().toLocaleString(),
       };
 
       (await draftsCollection).insertOne(draftObject);

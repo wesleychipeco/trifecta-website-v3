@@ -166,7 +166,7 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         await draftsCollection.insertOne({
           type: sportYear,
           picks: eachSportYearGmPicksGrid,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date().toLocaleString(),
         });
       }
     }
