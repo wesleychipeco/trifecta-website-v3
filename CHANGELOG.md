@@ -1,5 +1,16 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-88] - 2025-01-16
+
+- Fix football stats scrape
+
+### [PR-87] - 2025-01-16
+
+- Miscellaneous changes
+- Complete sport with playoff points and globalVariables commissioner actions
+- Fix scrape and display of Football Points For and Points Against in standings
+- Now use local time instead of UTC to determine last scraped day
+
 ## [3.10.2] - 2024-10-12
 
 ### Changed
