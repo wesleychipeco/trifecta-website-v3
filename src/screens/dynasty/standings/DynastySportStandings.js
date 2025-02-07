@@ -1,28 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import isSameDay from "date-fns/isSameDay";
 import { capitalize } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import { Table } from "components/table/Table";
-import { standingsScraper, formatScrapedStandings } from "./StandingsHelper";
 import {
   DynastyStandingsColumnsRaw,
   PlayoffColumns,
   FootballPointsColumns,
 } from "./StandingsColumns";
-import { assignRankPoints } from "utils/standings";
-import { ERA_1, HIGH_TO_LOW, NUMBER_OF_TEAMS } from "Constants";
 import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
-import { addKeyValueToEachObjectInArray, insertIntoArray } from "utils/arrays";
+import { insertIntoArray } from "utils/arrays";
 
 const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
 export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
-  const { inSeasonLeagues, leagueIdMappings } = useSelector(
+  const { inSeasonLeagues } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
 
@@ -36,55 +32,7 @@ export const DynastySportStandings = ({ sport }) => {
 
   useEffect(() => {
     if (isReady) {
-      const sportYear = `${sport}${year}`;
-      const display = async (dynastyStandings, divisionStandings) => {
-        setDynastyStandings(dynastyStandings);
-        setDivisionStandings(divisionStandings);
-      };
-
-      const scrape = async (collection) => {
-        const leagueId = leagueIdMappings[sportYear];
-        const gmNamesIdsCollection = await returnMongoCollection(
-          "gmNamesIds",
-          ERA_1
-        );
-        const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
-        const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};
-        const tableStandings = await standingsScraper(leagueId);
-        const divisionStandings = formatScrapedStandings(
-          tableStandings,
-          gmNamesIdsMapping,
-          sport
-        );
-        const dynastyStandingsNoPlayoffs = assignRankPoints(
-          Object.values(divisionStandings).flat(1),
-          "winPer",
-          HIGH_TO_LOW,
-          "totalDynastyPoints",
-          NUMBER_OF_TEAMS,
-          1
-        );
-
-        const dynastyStandings = addKeyValueToEachObjectInArray(
-          dynastyStandingsNoPlayoffs,
-          { dynastyPoints: "totalDynastyPoints" },
-          { playoffPoints: 0 }
-        );
-
-        display(dynastyStandings, divisionStandings);
-
-        // delete, then save to mongodb
-        console.log("Delete, then save to mongodb");
-        await collection.deleteMany({ year });
-        await collection.insertOne({
-          year,
-          lastScraped: new Date().toLocaleString(),
-          dynastyStandings,
-          divisionStandings,
-        });
-      };
-
-      const check = async () => {
+      const display = async () => {
         const collection = await returnMongoCollection(
           `${sport}Standings`,
           era
@@ -97,32 +45,14 @@ export const DynastySportStandings = ({ sport }) => {
           divisionStandings,
         } = object;
 
-        // ADD logic if sport+year is NOT in "inSeasonLeagues", then just display and return out
-        if (!inSeasonLeagues.includes(sportYear)) {
-          display(dynastyStandings, divisionStandings);
-          return;
-        }
-
-        // if no last scraped string, always scrape
-        if (!lastScrapedString) {
-          scrape(collection);
-        } else {
-          // if alreadyd scraped today, just display
-          const alreadyScraped = isSameDay(
-            new Date(),
-            new Date(lastScrapedString)
-          );
-          if (alreadyScraped) {
-            display(dynastyStandings, divisionStandings);
-          } else {
-            scrape(collection);
-          }
-        }
+        console.log("Last scraped (UTC Time): ", lastScrapedString);
+        setDynastyStandings(dynastyStandings);
+        setDivisionStandings(divisionStandings);
       };
 
-      check();
+      display();
     }
-  }, [isReady, sport, year, era, inSeasonLeagues, leagueIdMappings]);
+  }, [isReady, sport, year, era]);
 
   const divisionRecordSorter = useCallback((rowA, rowB) => {
     const divRecordA = rowA?.values?.divisionRecord ?? "";
