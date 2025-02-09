@@ -15,6 +15,13 @@ import {
 } from "./standings/StandingsHelpers.js";
 import { assignRankPoints } from "./utils/StandingsUtils.js";
 import { addKeyValueToEachObjectInArray } from "./utils/ArraysUtils.js";
+import {
+  addDefaultDraftPicks,
+  formatPlayers,
+  retrieveFaab,
+  scrapeRosters,
+} from "./rosters/RostersHelper.js";
+import { sportYearToSportAndYear } from "./utils/YearsUtils.js";
 
 const app = express();
 const LEAGUE_ID = "LeagueId";
@@ -39,9 +46,8 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
   const { sport, year } = req.params;
   const sportYear = `${sport}${year}`;
 
-  // retrieve leagueId from global variables initialized on startup
-  const { leagueIdMappings } = app.locals.dynastyGlobalVariables;
-  const leagueId = leagueIdMappings[sportYear];
+  // retrieve leagueId
+  const leagueId = leagueIdFromSportYear(sportYear);
 
   // retrieve gm names to ids mappings from MongoDB
   const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds");
@@ -85,7 +91,7 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
     divisionStandings,
   });
 
-  // return dynasty and division standings back to react client-side
+  // return dynasty and division standings
   res.send({
     dynastyStandings,
     divisionStandings,
@@ -102,6 +108,64 @@ app.post("/standings", (req, res) => {
   axios.post(backendUrl, req.body).then((response) => {
     res.send(response.data);
   });
+});
+
+// update rosters for trade asset dashboard
+app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
+  // retrieve gm abbreviation from path params
+  const { gmAbbreviation } = req.params;
+
+  // retrieve gm data
+  const gmCollection = await returnMongoCollection("gms");
+  const gmData = await gmCollection.find({ abbreviation: gmAbbreviation });
+  const gmObject = gmData?.[0] ?? {};
+
+  // retrieve currentRosterLeagues from initialized global variables
+  const { currentRosterLeagues } = app.locals.dynastyGlobalVariables;
+
+  const allAssets = {};
+  // loop through season with updated rosters to scrape
+  for (let i = 0; i < currentRosterLeagues.length; i++) {
+    const sportYear = currentRosterLeagues[i];
+    const { sport } = sportYearToSportAndYear(sportYear);
+
+    // retrieve leagueId
+    const leagueId = leagueIdFromSportYear(sportYear);
+    // retrieve teamId
+    const teamId = gmObject.mappings[sportYear];
+
+    // scrape and format roster and faab from Fantrax
+    const rawData = await scrapeRosters(leagueId, teamId);
+    const formattedPlayers = formatPlayers(rawData);
+    const faab = retrieveFaab(rawData);
+    allAssets[sport] = {
+      players: formattedPlayers,
+      faab,
+    };
+
+    // copy and paste over existing draft picks
+    let draftPicks = gmData?.[0]?.assets?.[sport]?.draftPicks ?? "need";
+    if (draftPicks === "need") {
+      draftPicks = addDefaultDraftPicks(sport);
+    }
+    allAssets[sport]["draftPicks"] = draftPicks;
+    allAssets[sport]["lastUpdated"] = new Date().toISOString();
+  }
+  // console.log("allAssets!", allAssets);
+
+  // update MongoDB
+  const { modifiedCount } = await gmCollection.updateOne(
+    { abbreviation: gmAbbreviation },
+    { $set: { assets: allAssets } }
+  );
+  if (modifiedCount < 1) {
+    console.error("Did NOT successfully update assets!");
+  } else {
+    console.log(`Updated ${gmAbbreviation}'s assets successfully`);
+  }
+
+  // return allAssets
+  res.send(allAssets);
 });
 
 app.post("/rosters", (req, res) => {
@@ -144,6 +208,12 @@ const initializeGlobalVariables = async () => {
   const object = data[0];
   const { trifecta: trifectaObject, dynasty: dynastyObject } = object;
   app.locals.dynastyGlobalVariables = dynastyObject;
+};
+
+// retrieve leagueId from sport, year combo from initialized global variables
+const leagueIdFromSportYear = (sportYear) => {
+  const { leagueIdMappings } = app.locals.dynastyGlobalVariables;
+  return leagueIdMappings[sportYear];
 };
 
 initializeGlobalVariables().then(() => {

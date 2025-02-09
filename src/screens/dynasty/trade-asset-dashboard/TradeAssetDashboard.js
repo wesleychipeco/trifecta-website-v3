@@ -9,7 +9,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useMediaQuery } from "react-responsive";
 import ReactGA from "react-ga4";
 
-import { retrieveAssets } from "./TradeAssetHelper";
 import * as S from "styles/TradeAssetDashboard.styles";
 import * as T from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
@@ -67,41 +66,29 @@ export const TradeAssetDashboard = () => {
 
   // load data on page ready
   useEffect(() => {
-    const loadData = async () => {
+    const display = async () => {
       const gmCollection = await returnMongoCollection("gms", era);
       const gmData = await gmCollection.find({ abbreviation: gmAbbreviation });
-      const name = gmData?.[0]?.name ?? "";
+      const gm = gmData?.[0];
+      const name = gm?.name ?? "";
       setGmName(name);
 
       if (isAuthenticated) {
-        const emails = gmData?.[0]?.emails ?? [];
+        const emails = gm?.emails ?? [];
         setHasEditAccess(emails.includes(user.email));
       }
 
-      const tradeBlockData = gmData?.[0]?.tradeBlock ?? {};
+      const tradeBlockData = gm?.tradeBlock ?? {};
       console.log("tradeBlockData", tradeBlockData);
       setTradeBlock(tradeBlockData);
 
-      const allAssets = await retrieveAssets(
-        gmData,
-        inSeasonLeagues,
-        leagueIdMappings
-      );
-      console.log("allassets", allAssets);
-
-      const { modifiedCount } = await gmCollection.updateOne(
-        { abbreviation: gmAbbreviation },
-        { $set: { assets: allAssets } }
-      );
-      if (modifiedCount < 1) {
-        console.log("Did NOT successfully update assets!");
-      }
-
-      setAssets(allAssets);
+      const assets = gm?.assets ?? {};
+      console.log("allAssets", assets);
+      setAssets(assets);
     };
 
     if (isReady) {
-      loadData();
+      display();
     }
   }, [
     isReady,
@@ -188,7 +175,7 @@ export const TradeAssetDashboard = () => {
       label: "save trade block",
     });
     const gmCollection = await returnMongoCollection("gms", era);
-    console.log("FINAL TRADE BLOCK", tradeBlock);
+    // console.log("FINAL TRADE BLOCK", tradeBlock);
 
     const { modifiedCount } = await gmCollection.updateOne(
       { abbreviation: gmAbbreviation },
@@ -208,7 +195,7 @@ export const TradeAssetDashboard = () => {
         gmAbbreviation
       )})`}</S.Title>
       <S.OuterTradeBlockContainer>
-        <S.Subtitle>Trade Block</S.Subtitle>
+        <S.Subtitle>TRADE BLOCK</S.Subtitle>
         <S.SaveMessageText>{saveMessage}</S.SaveMessageText>
         {hasEditAccess && (
           <S.SaveButton
@@ -265,6 +252,9 @@ export const TradeAssetDashboard = () => {
           })}
         </S.InnerTradeBlockContainer>
       </S.OuterTradeBlockContainer>
+      <S.OuterTradeBlockContainer>
+        <S.Subtitle>AVAILABLE ASSETS</S.Subtitle>
+      </S.OuterTradeBlockContainer>
       <S.AllAssetsContainer>
         {Object.keys(assets).map((sport) => {
           const rosters = assets[sport];
@@ -272,6 +262,9 @@ export const TradeAssetDashboard = () => {
             <S.SportContainer key={sport}>
               <S.SectionTitle>{capitalize(sport)}</S.SectionTitle>
               <S.FaabText>{`FAAB remaining: ${rosters.faab}`}</S.FaabText>
+              {sport === "baseball" && (
+                <S.FaabText>* denotes Minor League eligible player</S.FaabText>
+              )}
               <S.FlexRow>
                 <S.PlayersContainer>
                   {rosters.players.map((player) => {

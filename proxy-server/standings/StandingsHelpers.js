@@ -1,9 +1,8 @@
 import axios from "axios";
-
-const URL_STRING = "https://www.fantrax.com/fxpa/req?leagueId=";
+import { FANTRAX_URL_STRING } from "../NewConstants.js";
 
 export const scrapeStandings = async (leagueId) => {
-  const backendUrl = `${URL_STRING}${leagueId}`;
+  const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
   const body = {
     msgs: [{ method: "getStandings", data: { view: "ALL" } }],
     ng2: true,

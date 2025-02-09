@@ -7,6 +7,9 @@ export const ERA_1 = "era1";
 
 export const NUMBER_OF_TEAMS = 16;
 export const STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS = 2025;
+export const BASKETBALL_DRAFT_PICK_NUMBER = 4;
+export const BASEBALL_DRAFT_PICK_NUMBER = 7;
+export const FOOTBALL_DRAFT_PICK_NUMBER = 5;
 
 export const ALPHABET = [
   "A",
@@ -26,3 +29,5 @@ export const ALPHABET = [
   "O",
   "P",
 ];
+
+export const FANTRAX_URL_STRING = "https://www.fantrax.com/fxpa/req?leagueId=";
