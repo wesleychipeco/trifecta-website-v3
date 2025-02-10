@@ -21,8 +21,12 @@ export const TransactionsHistoryHome = () => {
 
   useEffect(() => {
     if (isReady && dynastyCurrentVariables !== null) {
-      const { leagueIdMappings } = dynastyCurrentVariables;
-      const sportYears = Object.keys(leagueIdMappings).map((sportYearKey) => {
+      const { completedLeagues, inSeasonLeagues } = dynastyCurrentVariables;
+      const transactionsAvailableLeagues = [
+        ...completedLeagues,
+        ...inSeasonLeagues,
+      ];
+      const sportYears = transactionsAvailableLeagues.map((sportYearKey) => {
         const { sport, year } = sportYearToSportAndYear(sportYearKey);
         return {
           sport,
