@@ -22,6 +22,10 @@ import {
   scrapeRosters,
 } from "./rosters/RostersHelper.js";
 import { sportYearToSportAndYear } from "./utils/YearsUtils.js";
+import {
+  formatTransactions,
+  scrapeTransactions,
+} from "./transactions/TransactionsHelpers.js";
 
 const app = express();
 const LEAGUE_ID = "LeagueId";
@@ -168,6 +172,7 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   res.send(allAssets);
 });
 
+// scrape rosters from Fantrax
 app.post("/rosters", (req, res) => {
   // use leagueId passed via header
   const leagueId = req.header(LEAGUE_ID);
@@ -179,6 +184,67 @@ app.post("/rosters", (req, res) => {
   });
 });
 
+// update transactions history
+app.get("/api/transactions/:sport/:year", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport, year } = req.params;
+  const sportYear = `${sport}${year}`;
+
+  // retrieve leagueId
+  const leagueId = leagueIdFromSportYear(sportYear);
+
+  // retrieve gm names to ids mappings from MongoDB
+  const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds");
+  const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
+  const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};
+
+  // scrape and format transactions history
+  const apiResponse = await scrapeTransactions(leagueId);
+  const tableRows = apiResponse?.data?.responses?.[0]?.data?.table?.rows ?? [];
+  const formattedTransactions = formatTransactions(
+    tableRows,
+    gmNamesIdsMapping
+  );
+  // console.log("formattedTransactions", formattedTransactions);
+
+  // update MongoDB
+  const transactionsHistoryCollection = await returnMongoCollection(
+    "transactionsHistory"
+  );
+  const currentSportYearData = await transactionsHistoryCollection.find({
+    sportYear,
+  });
+  if (currentSportYearData.length === 0) {
+    console.log(`No ${year} ${sport} MongoDB document. Creating...`);
+    await transactionsHistoryCollection.insertOne({
+      sportYear,
+      transactions: [],
+      lastScraped: "",
+    });
+  }
+
+  const { modifiedCount } = await transactionsHistoryCollection.updateOne(
+    { sportYear },
+    {
+      $set: {
+        transactions: formattedTransactions,
+        lastScraped: new Date().toISOString(),
+      },
+    },
+    {
+      upsert: true,
+    }
+  );
+  if (modifiedCount < 1) {
+    console.error("Did NOT successfully update transactions history!");
+  } else {
+    console.log(`Updated ${year} ${sport}'s transactions successfully`);
+  }
+
+  res.send(formattedTransactions);
+});
+
+// scrape transactions history from Fantrax
 app.post("/transactions", (req, res) => {
   // use leagueId passed via header
   const leagueId = req.header(LEAGUE_ID);

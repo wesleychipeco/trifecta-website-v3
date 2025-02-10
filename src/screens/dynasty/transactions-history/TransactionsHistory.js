@@ -3,8 +3,6 @@ import { returnMongoCollection } from "database-management";
 import { capitalize } from "lodash";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isSameDay } from "date-fns";
-import { retrieveTransactions } from "./TransactionsHistoryHelper";
 import * as S from "styles/TransactionsHistory.styles";
 import * as T from "styles/StandardScreen.styles";
 import { TransactionsHistoryTable } from "components/table/TransactionsHistoryTable";
@@ -12,9 +10,6 @@ import { TransactionsHistoryTable } from "components/table/TransactionsHistoryTa
 export const TransactionsHistory = () => {
   const { era, sport, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
-  const dynastyCurrentVariables = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.dynasty
-  );
   const [transactions, setTransactions] = useState([]);
   const [gmsArray, setGmsArray] = useState([]);
 
@@ -30,77 +25,24 @@ export const TransactionsHistory = () => {
   }, [setGmsArray, era]);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (isReady && dynastyCurrentVariables !== null) {
+    const display = async () => {
+      if (isReady) {
         const sportYear = `${sport}${year}`;
         const transactionsHistoryCollection = await returnMongoCollection(
           "transactionsHistory",
           era
         );
         const data = await transactionsHistoryCollection.find({ sportYear });
-        if (data.length === 0) {
-          console.error(
-            "Need to create transactions history document in mongodb"
-          );
-          return; // to prevent white screen crash if document doesn't exist
-        }
         const object = data?.[0] ?? {};
         const { lastScraped: lastScrapedString, transactions } = object;
-        if (
-          (lastScrapedString !== null || lastScrapedString !== undefined) &&
-          isSameDay(new Date(), new Date(lastScrapedString))
-        ) {
-          // just display if lastScrapedString is same as today
-          getAndSetGmsArray();
-          setTransactions(transactions);
-        } else {
-          // otherwise scrape logic
-          const { leagueIdMappings } = dynastyCurrentVariables;
-          const leagueId = leagueIdMappings[sportYear];
-          if (leagueId) {
-            // get teamIds to gms mappings
-            const gmNamesIdsCollection = await returnMongoCollection(
-              "gmNamesIds",
-              era
-            );
-            const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
-            const mappings = gmNamesIds?.[0]?.mappings ?? {};
-
-            getAndSetGmsArray();
-
-            // retrieve transactions
-            const allTransactions = await retrieveTransactions(
-              leagueId,
-              mappings
-            );
-            setTransactions(allTransactions);
-
-            const { modifiedCount } =
-              await transactionsHistoryCollection.updateOne(
-                { sportYear },
-                {
-                  $set: {
-                    transactions: allTransactions,
-                    lastScraped: new Date().toLocaleString(),
-                  },
-                },
-                {
-                  upsert: true,
-                }
-              );
-
-            if (modifiedCount !== 1) {
-              console.warn("Transactions not saved to MongoDB!!!");
-            }
-          } else {
-            console.error("No leagueId to get transactions from Fantrax!!!");
-          }
-        }
+        console.log("Last scraped (UTC): ", lastScrapedString);
+        getAndSetGmsArray();
+        setTransactions(transactions);
       }
     };
 
-    loadData();
-  }, [isReady, dynastyCurrentVariables, era, sport, year, getAndSetGmsArray]);
+    display();
+  }, [isReady, era, sport, year, getAndSetGmsArray]);
 
   const transactionsColumns = useMemo(() => {
     return [
@@ -154,7 +96,7 @@ export const TransactionsHistory = () => {
         disableSortBy: true,
       },
     ];
-  }, []);
+  }, [sport]);
 
   return (
     <T.FlexColumnCenterContainer>
