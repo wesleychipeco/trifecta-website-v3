@@ -215,7 +215,7 @@ export const FootballStatsColumns = [
   {
     Header: "Position",
     accessor: "position",
-    tableHeaderCell: S.StringTableHeaderCell,
+    tableHeaderCell: S.NumbersTableHeaderCell,
     disableSortBy: true,
   },
   {
@@ -238,6 +238,12 @@ export const FootballStatsColumns = [
   {
     Header: "Fantasy Points",
     accessor: "fantasyPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Games Played",
+    accessor: "gamesPlayed",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },

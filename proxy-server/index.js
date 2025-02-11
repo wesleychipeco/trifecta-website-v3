@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 import bodyParser from "body-parser";
+import flatten from "lodash/flatten.js";
 import { returnMongoCollection } from "./utils/Database.js";
 import {
   GLOBAL_VARIABLES,
@@ -26,6 +27,14 @@ import {
   formatTransactions,
   scrapeTransactions,
 } from "./transactions/TransactionsHelpers.js";
+import {
+  compileBaseballStats,
+  compileBasketballStats,
+  compileFootballStats,
+  filterPlayers,
+  scrapePlayerStats,
+} from "./player-stats/PlayerStatsHelper.js";
+import { extractBetweenParentheses } from "./utils/StringsUtils.js";
 
 const app = express();
 const LEAGUE_ID = "LeagueId";
@@ -254,6 +263,66 @@ app.post("/transactions", (req, res) => {
   axios.post(backendUrl, req.body).then((response) => {
     res.send(response.data);
   });
+});
+
+// update player stats
+app.get("/api/player-stats/:sport/:year", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport, year } = req.params;
+  const sportYear = `${sport}${year}`;
+
+  // retrieve leagueId
+  const leagueId = leagueIdFromSportYear(sportYear);
+
+  // retrieve all teamIds
+  const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds");
+  const allTeamIdsData = await gmNamesIdsCollection.find({ leagueId });
+  const allTeamIdsMappings = allTeamIdsData?.[0]?.mappings ?? [];
+  const allTeamIds = Object.keys(allTeamIdsMappings);
+
+  const allTeamAllPlayerStats = [];
+  for (let i = 0; i < allTeamIds.length; i++) {
+    const teamId = allTeamIds[i];
+    const fullGmName = allTeamIdsMappings[teamId];
+    const gmName = extractBetweenParentheses(fullGmName);
+    // console.log("teamId", teamId, "gmName", gmName);
+
+    // retrieve player stats from Fantrax
+    const apiResponse = await scrapePlayerStats(leagueId, teamId);
+
+    // format stats depending on the sport
+    const filteredPlayerStats = filterPlayers(apiResponse, sport);
+    const rawPlayerStats = filteredPlayerStats.map((eachRow) => {
+      switch (sport) {
+        case "basketball":
+          return compileBasketballStats(eachRow, gmName, year);
+        case "baseball":
+          return compileBaseballStats(eachRow, gmName, year);
+        case "football":
+          return compileFootballStats(eachRow, gmName, year);
+        default:
+          return [];
+      }
+    });
+    const trimmedPlayerStats = rawPlayerStats.filter(
+      (player) => player != null
+    );
+    allTeamAllPlayerStats.push(trimmedPlayerStats);
+  }
+  // console.log("allTeamAllPlayerStats", allTeamAllPlayerStats);
+  const playerStats = flatten(allTeamAllPlayerStats);
+
+  // Update record in MongoDB
+  const statsCollection = await returnMongoCollection("playerStats");
+  await statsCollection.deleteOne({ sport, year });
+  await statsCollection.insertOne({
+    sport,
+    year,
+    lastScraped: new Date().toLocaleString(),
+    playerStats,
+  });
+
+  res.send(allTeamAllPlayerStats);
 });
 
 app.post("/player-stats", (req, res) => {

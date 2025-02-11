@@ -1,5 +1,10 @@
 import styled from "styled-components";
 import { FONT_FAMILY, MOBILE_MAX_WIDTH, PRIMARY_ORANGE } from "styles/global";
+import { TablesContainer as TC } from "./StandardScreen.styles";
+
+export const TablesContainer = styled(TC)`
+  width: 103%;
+`;
 
 export const TableContainer = styled.div`
   display: flex;

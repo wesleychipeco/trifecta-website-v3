@@ -134,6 +134,7 @@ export const PlayerStatsTable = ({
   gmsArray = [],
   isMobile = false,
   isLoading = false,
+  yearsArray = [],
 }) => {
   const gmOptions = useMemo(() => {
     const onlyGmsArray = gmsArray.map((gm) => ({
@@ -155,6 +156,20 @@ export const PlayerStatsTable = ({
       default:
         return BASKETBALL_POSITIONS;
     }
+  }, [sport]);
+
+  const yearsOptions = useMemo(() => {
+    const yearsArrayOptions = yearsArray.map((year) => ({
+      value: year,
+      label: year,
+    }));
+    return yearsArrayOptions;
+  }, [yearsArray]);
+
+  const footballStatsWidthScrollStyle = useMemo(() => {
+    return sport === "football"
+      ? { overflow: "auto", width: "100%", paddingLeft: "5px" }
+      : {};
   }, [sport]);
 
   const [playerQuery, setPlayerQuery] = useState("");
@@ -214,9 +229,13 @@ export const PlayerStatsTable = ({
     const setValue = value.toLowerCase();
     if (id === PLAYER_INPUT) {
       setPlayerQuery(setValue);
-    } else if (id === YEAR_INPUT) {
-      setYearQuery(setValue);
     }
+  };
+
+  const handleYearsChange = (selectedOption) => {
+    const filterValue = selectedOption?.value ?? "";
+    setGlobalFilter({ value: filterValue, type: YEAR_INPUT });
+    setYearQuery(filterValue.toLowerCase());
   };
 
   const handleGmChange = (selectedOption) => {
@@ -256,6 +275,12 @@ export const PlayerStatsTable = ({
   return (
     <S.TableContainer>
       <S.InputContainer>
+        <S.TextInput
+          id={PLAYER_INPUT}
+          type="text"
+          placeholder="Search by Player"
+          onChange={handleFilterInputChange}
+        />
         {sport === "basketball" && (
           <>
             <G.FlexRow>
@@ -263,15 +288,9 @@ export const PlayerStatsTable = ({
               <G.HorizontalSpacer factor={1} />
               <Toggle icons={false} onChange={handlePerGameChange} />
             </G.FlexRow>
-            <G.HorizontalSpacer factor={4} />
+            <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
           </>
         )}
-        <S.TextInput
-          id={PLAYER_INPUT}
-          type="text"
-          placeholder="Search by Player"
-          onChange={handleFilterInputChange}
-        />
         {sport === "baseball" && (
           <>
             <Select
@@ -290,6 +309,15 @@ export const PlayerStatsTable = ({
           </>
         )}
         <Select
+          placeholder="All"
+          defaultValue={yearQuery}
+          onChange={handleYearsChange}
+          options={yearsOptions}
+          styles={X.TransactionsHistoryDropdownCustomStyles}
+          isSearchable={false}
+        />
+        <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
+        <Select
           placeholder="Select Position"
           defaultValue={positionQuery}
           onChange={handlePositionChange}
@@ -298,12 +326,6 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
         <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
-        {/* <S.TextInput
-          id={YEAR_INPUT}
-          type="text"
-          placeholder="Search by Year"
-          onChange={handleFilterInputChange}
-        /> */}
         <Select
           placeholder="Select GM"
           defaultValue={gmQuery}
@@ -313,8 +335,8 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
       </S.InputContainer>
-      <T.ScrollTable>
-        <TableComponent style={{ width: "100%" }} {...getTableProps()}>
+      <T.ScrollTable style={footballStatsWidthScrollStyle}>
+        <TableComponent {...getTableProps()}>
           <TableHeadComponent>
             {headerGroups.map((headerGroup) => {
               return (
