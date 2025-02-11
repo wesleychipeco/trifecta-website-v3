@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import axios from "axios";
 import bodyParser from "body-parser";
 import flatten from "lodash/flatten.js";
 import { returnMongoCollection } from "./utils/Database.js";
@@ -37,7 +36,6 @@ import {
 import { extractBetweenParentheses } from "./utils/StringsUtils.js";
 
 const app = express();
-const LEAGUE_ID = "LeagueId";
 const corsOrigin = "*";
 
 app.use(
@@ -95,7 +93,7 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
 
   // delete, then save to mongodb
   const sportCollection = await returnMongoCollection(`${sport}Standings`);
-  console.log("Delete, then save to mongodb");
+  // console.log("Delete, then save to mongodb");
   sportCollection.deleteMany({ year });
   await sportCollection.insertOne({
     year,
@@ -103,23 +101,12 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
     dynastyStandings,
     divisionStandings,
   });
+  console.log(`Updated ${year} ${sport}'s standings successfully`);
 
   // return dynasty and division standings
   res.send({
     dynastyStandings,
     divisionStandings,
-  });
-});
-
-// scrape standings from Fantrax
-app.post("/standings", (req, res) => {
-  // use leagueId passed via header
-  const leagueId = req.header(LEAGUE_ID);
-  const backendUrl = `${URL_STRING}${leagueId}`;
-
-  // return the data without modification
-  axios.post(backendUrl, req.body).then((response) => {
-    res.send(response.data);
   });
 });
 
@@ -179,18 +166,6 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
 
   // return allAssets
   res.send(allAssets);
-});
-
-// scrape rosters from Fantrax
-app.post("/rosters", (req, res) => {
-  // use leagueId passed via header
-  const leagueId = req.header(LEAGUE_ID);
-  const backendUrl = `${URL_STRING}${leagueId}`;
-
-  // return the data without modification
-  axios.post(backendUrl, req.body).then((response) => {
-    res.send(response.data);
-  });
 });
 
 // update transactions history
@@ -253,18 +228,6 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
   res.send(formattedTransactions);
 });
 
-// scrape transactions history from Fantrax
-app.post("/transactions", (req, res) => {
-  // use leagueId passed via header
-  const leagueId = req.header(LEAGUE_ID);
-  const backendUrl = `${URL_STRING}${leagueId}`;
-
-  // return the data without modification
-  axios.post(backendUrl, req.body).then((response) => {
-    res.send(response.data);
-  });
-});
-
 // update player stats
 app.get("/api/player-stats/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
@@ -321,19 +284,9 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
     lastScraped: new Date().toLocaleString(),
     playerStats,
   });
+  console.log(`Updated ${year} ${sport}'s player stats`);
 
   res.send(allTeamAllPlayerStats);
-});
-
-app.post("/player-stats", (req, res) => {
-  // use leagueId passed via header
-  const leagueId = req.header(LEAGUE_ID);
-  const backendUrl = `${URL_STRING}${leagueId}`;
-
-  // return the data without modification
-  axios.post(backendUrl, req.body).then((response) => {
-    res.send(response.data);
-  });
 });
 
 // initialize global variables from MongoDB for backend use
@@ -352,7 +305,6 @@ const leagueIdFromSportYear = (sportYear) => {
 };
 
 initializeGlobalVariables().then(() => {
-  // console text when app is running
   app.listen(port, "0.0.0.0", () => {
     console.log(`Server listening at http://localhost:${port}`);
   });
