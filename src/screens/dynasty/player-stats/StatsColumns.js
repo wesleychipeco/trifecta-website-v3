@@ -169,6 +169,12 @@ export const BaseballStatsColumns = [
     sortDescFirst: true,
   },
   {
+    Header: "IP",
+    accessor: "ip",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
     Header: "QS",
     accessor: "qualityStarts",
     tableHeaderCell: S.NumbersTableHeaderCell,

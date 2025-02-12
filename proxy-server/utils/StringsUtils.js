@@ -18,3 +18,7 @@ export const extractBetweenParentheses = (stringWithParentheses) => {
     stringWithParentheses.indexOf(")")
   );
 };
+
+export const stringToFloatWithRounding = (value, numberOfDecimals) => {
+  return parseFloat(parseFloat(value).toFixed(numberOfDecimals));
+};

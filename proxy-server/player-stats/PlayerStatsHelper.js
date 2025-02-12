@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FANTRAX_URL_STRING } from "../NewConstants.js";
+import { stringToFloatWithRounding } from "../utils/StringsUtils.js";
 
 export const scrapePlayerStats = async (leagueId, teamId) => {
   const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
@@ -113,8 +114,8 @@ export const compileBaseballStats = (row, gmName, year) => {
   ) {
     // pitcher
     const [
-      ageObject, // IP
-      ,
+      ageObject,
+      inningsPitchedObject,
       winsObject,
       qualityStartObject,
       ksObject,
@@ -136,6 +137,14 @@ export const compileBaseballStats = (row, gmName, year) => {
       return null;
     }
 
+    // reverse engineer earned runs and walks + hits from IP, ERA, and WHIP
+    const ipString = inningsPitchedConverter(inningsPitchedObject.content);
+    const ip = stringToFloatWithRounding(ipString, 3);
+    const era = stringToFloatWithRounding(eraObject.content, 2);
+    const whip = stringToFloatWithRounding(whipObject.content, 3);
+    const earnedRuns = Math.round((era * ip) / 9);
+    const walksPlusHits = Math.round(ip * whip);
+
     return {
       gmName,
       year,
@@ -146,25 +155,30 @@ export const compileBaseballStats = (row, gmName, year) => {
       gm: gmName,
       age: parseInt(ageObject.content),
       gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
+      plateAppearances: "--",
       runs: "--",
       homeRuns: "--",
       rbi: "--",
       strikeouts: "--",
       stolenBases: "--",
       obp: "--",
+      ip: stringToFloatWithRounding(inningsPitchedObject.content, 1),
+      ipNumber: ip,
       qualityStarts: parseInt(qualityStartObject.content.replace(",", "")),
       wins: parseInt(winsObject.content.replace(",", "")),
       ks: parseInt(ksObject.content.replace(",", "")),
       savesHolds: parseInt(savesHoldsObject.content.replace(",", "")),
-      era: parseFloat(eraObject.content).toFixed(2),
-      whip: parseFloat(whipObject.content).toFixed(2),
+      era,
+      whip,
+      earnedRuns,
+      walksPlusHits,
     };
   } else {
     // hitter
     const [
-      ageObject, // AB // H
-      ,
-      ,
+      ageObject,
+      atBatsObject,
+      hitsObject,
       runsObject,
       homeRunsObject,
       rbiObject,
@@ -178,6 +192,13 @@ export const compileBaseballStats = (row, gmName, year) => {
       return null;
     }
 
+    // reverse engineer plate appearances by inferring walks from hits, at bats and obp
+    const hits = parseInt(hitsObject.content.replace(",", ""));
+    const atBats = parseInt(atBatsObject.content.replace(",", ""));
+    const obp = stringToFloatWithRounding(obpObject.content, 3);
+    const walks = Math.round((hits - obp * atBats) / (obp - 1));
+    const plateAppearances = walks + atBats;
+
     return {
       gmName,
       year,
@@ -188,18 +209,23 @@ export const compileBaseballStats = (row, gmName, year) => {
       gm: gmName,
       age: parseInt(ageObject.content),
       gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
+      plateAppearances,
       runs: parseInt(runsObject.content.replace(",", "")),
       homeRuns: parseInt(homeRunsObject.content.replace(",", "")),
       rbi: parseInt(rbiObject.content.replace(",", "")),
       strikeouts: parseInt(strikeoutsObject.content.replace(",", "")),
       stolenBases: parseInt(stolenBasesObject.content.replace(",", "")),
-      obp: parseFloat(obpObject.content).toFixed(3),
+      obp,
+      ip: "--",
+      ipNumber: "--",
       qualityStarts: "--",
       wins: "--",
       ks: "--",
       savesHolds: "--",
       era: "--",
       whip: "--",
+      earnedRuns: "--",
+      walksPlusHits: "--",
     };
   }
 };
@@ -254,7 +280,7 @@ export const compileFootballStats = (row, gmName, year) => {
     teamName: teamShortName,
     gm: gmName,
     age: parseInt(ageObject.content),
-    fantasyPoints: parseFloat(fantasyPointsObject.content).toFixed(2),
+    fantasyPoints: stringToFloatWithRounding(fantasyPointsObject.content, 1),
     passingYards: parseInt(passingYdsString.replace(",", "")),
     passingTDs: parseInt(passingTDsObject.content),
     interceptions: parseInt(interceptionsObject.content),
@@ -277,4 +303,8 @@ export const compileFootballStats = (row, gmName, year) => {
     miscTDs: fumbleRecoveryTDs + returnTDs,
     gamesPlayed: parseInt(gamesPlayedObject.content),
   };
+};
+
+const inningsPitchedConverter = (inningsPitchedString) => {
+  return inningsPitchedString.replace(".1", ".333").replace(".2", ".667");
 };
