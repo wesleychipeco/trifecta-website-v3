@@ -49,12 +49,6 @@ export const SportPlayerStats = () => {
     }
   }, [sport]);
 
-  const sortByArray = useMemo(() => {
-    return sport === "football"
-      ? [{ id: "fantasyPoints", desc: true }]
-      : [{ id: "gamesPlayed", desc: true }];
-  }, [sport]);
-
   useEffect(() => {
     if (isReady) {
       const display = async () => {
@@ -64,7 +58,7 @@ export const SportPlayerStats = () => {
         const data = await statsCollection.find({ sport });
 
         const allStats = [];
-        const allYears = [];
+        const allYears = ["all"];
         for (let i = 0; i < data.length; i++) {
           const eachYearObject = data[i];
           const { year, playerStats } = eachYearObject;
@@ -83,7 +77,6 @@ export const SportPlayerStats = () => {
   }, [isReady, era, sport, getAndSetGmsArray]);
 
   // console.log("ps", playerStats);
-  // TODO - make "BasketballStatsColumns" and sortBy "gamesPlayed" conditional by sport
   return (
     <S.FlexColumnCenterContainer>
       <S.Title>{`${capitalize(sport)} Player Stats`}</S.Title>
@@ -97,7 +90,6 @@ export const SportPlayerStats = () => {
             sport={sport}
             columns={statsColumns}
             data={playerStats}
-            sortBy={sortByArray}
             gmsArray={gmsArray}
             isMobile={isMobile}
             isLoading={isLoading}

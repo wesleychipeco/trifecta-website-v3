@@ -7,10 +7,9 @@ export const BasketballStatsColumns = [
     tableHeaderCell: S.StringTableHeaderCell,
   },
   {
-    Header: "Position",
-    accessor: "position",
+    Header: "GM",
+    accessor: "gmName",
     tableHeaderCell: S.NumbersTableHeaderCell,
-    disableSortBy: true,
   },
   {
     Header: "Year",
@@ -19,15 +18,22 @@ export const BasketballStatsColumns = [
     sortDescFirst: true,
   },
   {
-    Header: "GM",
-    accessor: "gmName",
-    tableHeaderCell: S.NumbersTableHeaderCell,
-  },
-  {
     Header: "Age",
     accessor: "age",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
+  },
+  {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "isTotalRecord",
+    accessor: "isTotalRecord",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
   },
   {
     Header: "Games Played",
@@ -98,10 +104,9 @@ export const BaseballStatsColumns = [
     tableHeaderCell: S.StringTableHeaderCell,
   },
   {
-    Header: "Position",
-    accessor: "position",
+    Header: "GM",
+    accessor: "gmName",
     tableHeaderCell: S.NumbersTableHeaderCell,
-    disableSortBy: true,
   },
   {
     Header: "Type",
@@ -116,15 +121,22 @@ export const BaseballStatsColumns = [
     sortDescFirst: true,
   },
   {
-    Header: "GM",
-    accessor: "gmName",
-    tableHeaderCell: S.NumbersTableHeaderCell,
-  },
-  {
     Header: "Age",
     accessor: "age",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
+  },
+  {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "isTotalRecord",
+    accessor: "isTotalRecord",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
   },
   {
     Header: "Games Played",
@@ -219,10 +231,9 @@ export const FootballStatsColumns = [
     tableHeaderCell: S.StringTableHeaderCell,
   },
   {
-    Header: "Position",
-    accessor: "position",
-    tableHeaderCell: S.NumbersTableHeaderCell,
-    disableSortBy: true,
+    Header: "GM",
+    accessor: "gmName",
+    tableHeaderCell: S.StringTableHeaderCell,
   },
   {
     Header: "Year",
@@ -231,15 +242,22 @@ export const FootballStatsColumns = [
     disableSortBy: true,
   },
   {
-    Header: "GM",
-    accessor: "gmName",
-    tableHeaderCell: S.StringTableHeaderCell,
-  },
-  {
     Header: "Age",
     accessor: "age",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
+  },
+  {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "isTotalRecord",
+    accessor: "isTotalRecord",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
   },
   {
     Header: "Fantasy Points",

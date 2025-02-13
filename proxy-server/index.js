@@ -32,6 +32,7 @@ import {
   compileFootballStats,
   filterPlayers,
   scrapePlayerStats,
+  totalPlayerStatsOverAllYears,
 } from "./player-stats/PlayerStatsHelper.js";
 import { extractBetweenParentheses } from "./utils/StringsUtils.js";
 
@@ -51,7 +52,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// update sport standings
+// update sport standings for a sport and year
 app.get("/api/standings/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
@@ -110,7 +111,7 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
   });
 });
 
-// update rosters for trade asset dashboard
+// update rosters for trade asset dashboard for a specific GM
 app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   // retrieve gm abbreviation from path params
   const { gmAbbreviation } = req.params;
@@ -168,7 +169,7 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   res.send(allAssets);
 });
 
-// update transactions history
+// update transactions history for a sport and year
 app.get("/api/transactions/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
@@ -228,7 +229,7 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
   res.send(formattedTransactions);
 });
 
-// update player stats
+// update player stats per sport and year
 app.get("/api/player-stats/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
@@ -287,6 +288,45 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
   console.log(`Updated ${year} ${sport}'s player stats`);
 
   res.send(allTeamAllPlayerStats);
+});
+
+// update aggregated player stats for a sport
+app.get("/api/total-player-stats/:sport", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport } = req.params;
+
+  // fetch all records per sport in MongoDB
+  const statsCollection = await returnMongoCollection("playerStats");
+  const allPlayerStatsData = await statsCollection.find({ sport });
+  const allPlayerStatsWithoutTotal = allPlayerStatsData.filter(
+    (eachRecord) => eachRecord.year !== "total"
+  );
+
+  // create flattened stats array for each player with each fantasy team, each season
+  const allPlayerStats = [];
+  for (let i = 0; i < allPlayerStatsWithoutTotal.length; i++) {
+    const eachYearObject = allPlayerStatsWithoutTotal[i];
+    const { playerStats } = eachYearObject;
+    allPlayerStats.push(playerStats);
+  }
+  const flattenAllPlayerStats = flatten(allPlayerStats);
+
+  // create unique total stats record for each player+fantasy team combination
+  const totalPlayerStatsArray = totalPlayerStatsOverAllYears(
+    sport,
+    flattenAllPlayerStats
+  );
+
+  // Update record in MongoDB
+  await statsCollection.deleteOne({ sport, year: "total" });
+  await statsCollection.insertOne({
+    sport,
+    year: "total",
+    lastScraped: new Date().toLocaleString(),
+    playerStats: totalPlayerStatsArray,
+  });
+
+  res.send(totalPlayerStatsArray);
 });
 
 // initialize global variables from MongoDB for backend use

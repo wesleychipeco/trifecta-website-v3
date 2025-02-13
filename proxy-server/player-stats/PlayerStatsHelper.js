@@ -87,7 +87,6 @@ export const compileBasketballStats = (row, gmName, year) => {
     name,
     position: primaryPositionsList.join(","),
     teamName: teamShortName,
-    gm: gmName,
     age: parseInt(ageObject.content),
     gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
     fgPer: parseFloat(fgPerObject.content).toFixed(3),
@@ -152,7 +151,6 @@ export const compileBaseballStats = (row, gmName, year) => {
       position: posShortNames,
       teamName: teamShortName,
       type: "pitcher",
-      gm: gmName,
       age: parseInt(ageObject.content),
       gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
       plateAppearances: "--",
@@ -206,7 +204,6 @@ export const compileBaseballStats = (row, gmName, year) => {
       position: posShortNames,
       teamName: teamShortName,
       type: "hitter",
-      gm: gmName,
       age: parseInt(ageObject.content),
       gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
       plateAppearances,
@@ -278,7 +275,6 @@ export const compileFootballStats = (row, gmName, year) => {
     name,
     position: positionsList.join(","),
     teamName: teamShortName,
-    gm: gmName,
     age: parseInt(ageObject.content),
     fantasyPoints: stringToFloatWithRounding(fantasyPointsObject.content, 1),
     passingYards: parseInt(passingYdsString.replace(",", "")),
@@ -308,3 +304,228 @@ export const compileFootballStats = (row, gmName, year) => {
 const inningsPitchedConverter = (inningsPitchedString) => {
   return inningsPitchedString.replace(".1", ".333").replace(".2", ".667");
 };
+
+export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
+  const allPlayersTotalStatsObject = {};
+  // loop through each player and create their total stats object
+  for (let i = 0; i < allYearsStats.length; i++) {
+    let newPlayer = {};
+    const player = allYearsStats[i];
+    const { name, gmName } = player;
+
+    // create unique key by which totals will be aggregated
+    const uniqueKey = `${name}|${gmName}`;
+    const playerAlreadyExists = Object.keys(
+      allPlayersTotalStatsObject
+    ).includes(uniqueKey);
+    if (playerAlreadyExists) {
+      const existingPlayer = allPlayersTotalStatsObject[uniqueKey];
+      switch (sport) {
+        case "basketball":
+          newPlayer = totalExistingBasketballPlayerStats(
+            existingPlayer,
+            player
+          );
+          break;
+        // case "baseball":
+        //   newPlayer =
+        //     totalExistingBaseballPlayerStats(existingPlayer, player);
+        //     break;
+        // case "football":
+        //   newPlayer =
+        //     totalExistingFootballPlayerStats(existingPlayer, player);
+        //     break;
+        default:
+          return;
+      }
+    } else {
+      switch (sport) {
+        case "basketball":
+          newPlayer = totalNewBasketballPlayerStats(player);
+          break;
+        // case "baseball":
+        //   newPlayer = totalNewBaseballPlayerStats(player);
+        //   break;
+        // case "football":
+        //   newPlayer = totalFootballPlayerStats(player);
+        //   break;
+        default:
+          return;
+      }
+    }
+
+    allPlayersTotalStatsObject[uniqueKey] = newPlayer;
+  }
+
+  // loop to clean up array fields and convert into array for upload to MongoDB
+  const allPlayerStatsArray = [];
+  for (const [, uniquePlayer] of Object.entries(allPlayersTotalStatsObject)) {
+    // yearsArray -> year (ex: 2024-2025)
+    const uniqueYearsArray = [...new Set(uniquePlayer.yearsArray)];
+    uniqueYearsArray.sort();
+    const year =
+      uniqueYearsArray.length === 1
+        ? uniqueYearsArray[0]
+        : `${uniqueYearsArray[0]}-${
+            uniqueYearsArray[uniqueYearsArray.length - 1]
+          }`;
+
+    // agesArray -> age (ex: 30-31)
+    const uniqueAgesArray = [...new Set(uniquePlayer.agesArray)];
+    uniqueAgesArray.sort();
+    const age =
+      uniqueAgesArray.length === 1
+        ? uniqueAgesArray[0]
+        : `${uniqueAgesArray[0]}-${
+            uniqueAgesArray[uniqueAgesArray.length - 1]
+          }`;
+
+    // positions, comma separated
+    const uniquePositionsArray = [...new Set(uniquePlayer.positionsArray)];
+    const position = uniquePositionsArray.join(",");
+
+    // teamnames, slash separated
+    const uniqueTeamNamesArray = [...new Set(uniquePlayer.teamNamesArray)];
+    const teamName = uniqueTeamNamesArray.join("/");
+
+    delete uniquePlayer["yearsArray"];
+    delete uniquePlayer["agesArray"];
+    delete uniquePlayer["positionsArray"];
+    delete uniquePlayer["teamNamesArray"];
+
+    uniquePlayer["year"] = year;
+    uniquePlayer["age"] = age;
+    uniquePlayer["position"] = position;
+    uniquePlayer["teamName"] = teamName;
+    uniquePlayer["isTotalRecord"] = true;
+
+    allPlayerStatsArray.push(uniquePlayer);
+  }
+
+  return allPlayerStatsArray;
+};
+
+const totalNewBasketballPlayerStats = (playerObject) => {
+  const {
+    name,
+    gmName,
+    year,
+    age,
+    position,
+    gamesPlayed,
+    points,
+    rebounds,
+    assists,
+    threepm,
+    steals,
+    blocks,
+    turnovers,
+    teamName,
+  } = playerObject;
+
+  return {
+    name,
+    gmName,
+    yearsArray: [year],
+    agesArray: [age],
+    positionsArray: position.split(","),
+    gamesPlayed,
+    points,
+    rebounds,
+    assists,
+    fgPer: "--",
+    ftPer: "--",
+    threepm,
+    steals,
+    blocks,
+    turnovers,
+    teamNamesArray: teamName.split("/"),
+  };
+};
+
+const totalExistingBasketballPlayerStats = (
+  previousTotalPlayerObject,
+  playerObject
+) => {
+  const {
+    name: previousName,
+    gmName: previousGmName,
+    yearsArray,
+    agesArray,
+    positionsArray,
+    gamesPlayed: previousGamesPlayed,
+    points: previousPoints,
+    rebounds: previousRebounds,
+    assists: previousAssists,
+    fgPer,
+    ftPer,
+    threepm: previousThreepm,
+    steals: previousSteals,
+    blocks: previousBlocks,
+    turnovers: previousTurnovers,
+    teamNamesArray,
+  } = previousTotalPlayerObject;
+
+  const {
+    name,
+    gmName,
+    year,
+    age,
+    position,
+    gamesPlayed,
+    points,
+    rebounds,
+    assists,
+    threepm,
+    steals,
+    blocks,
+    turnovers,
+    teamName,
+  } = playerObject;
+
+  // sanity check
+  if (previousName !== name || previousGmName !== gmName) {
+    console.error("Error! Mismatched players!!!!");
+    console.log("Name: ", name, " / GM: ", gmName);
+    console.log(
+      "Previous Name: ",
+      previousName,
+      " / Previous GM: ",
+      previousGmName
+    );
+  }
+
+  yearsArray.push(year);
+  agesArray.push(age);
+  const newPositionsArray = [...positionsArray, ...position.split(",")];
+  const newGamesPlayed = previousGamesPlayed + gamesPlayed;
+  const newPoints = previousPoints + points;
+  const newRebounds = previousRebounds + rebounds;
+  const newAssists = previousAssists + assists;
+  const newThreepm = previousThreepm + threepm;
+  const newSteals = previousSteals + steals;
+  const newBlocks = previousBlocks + blocks;
+  const newTurnovers = previousTurnovers + turnovers;
+  const newTeamNamesArray = [...teamNamesArray, ...teamName.split("/")];
+
+  return {
+    name,
+    gmName,
+    yearsArray,
+    agesArray,
+    positionsArray: newPositionsArray,
+    gamesPlayed: newGamesPlayed,
+    points: newPoints,
+    rebounds: newRebounds,
+    assists: newAssists,
+    fgPer,
+    ftPer,
+    threepm: newThreepm,
+    steals: newSteals,
+    blocks: newBlocks,
+    turnovers: newTurnovers,
+    teamNamesArray: newTeamNamesArray,
+  };
+};
+
+// todo Baseball and Football compilations
