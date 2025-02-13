@@ -383,13 +383,9 @@ export const PlayerStatsTable = ({
         />
       </S.InputContainer>
       {totalQuery && (
-        <div>
-          {/* <G.VerticalSpacer factor={1} /> */}
-          <S.TotalsCaption>
-            FG% and FT% totals across seasons are not available.
-          </S.TotalsCaption>
-          {/* <G.VerticalSpacer factor={1} /> */}
-        </div>
+        <S.TotalsCaption>
+          FG% and FT% totals across seasons are not available.
+        </S.TotalsCaption>
       )}
 
       <T.ScrollTable style={footballStatsWidthScrollStyle}>
