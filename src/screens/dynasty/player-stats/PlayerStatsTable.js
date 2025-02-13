@@ -382,6 +382,16 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
       </S.InputContainer>
+      {totalQuery && (
+        <div>
+          {/* <G.VerticalSpacer factor={1} /> */}
+          <S.TotalsCaption>
+            FG% and FT% totals across seasons are not available.
+          </S.TotalsCaption>
+          {/* <G.VerticalSpacer factor={1} /> */}
+        </div>
+      )}
+
       <T.ScrollTable style={footballStatsWidthScrollStyle}>
         <TableComponent {...getTableProps()}>
           <TableHeadComponent>

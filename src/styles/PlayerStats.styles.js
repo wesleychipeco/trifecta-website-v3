@@ -52,3 +52,9 @@ export const HeaderText = styled.p`
   margin: 0;
   padding: 0;
 `;
+
+export const TotalsCaption = styled.p`
+  font-size: 1.25rem;
+  padding: 0;
+  margin: 0;
+`;
