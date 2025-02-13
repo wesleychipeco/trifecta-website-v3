@@ -382,7 +382,7 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
       </S.InputContainer>
-      {totalQuery && (
+      {totalQuery && sport === "basketball" && (
         <S.TotalsCaption>
           FG% and FT% totals across seasons are not available.
         </S.TotalsCaption>

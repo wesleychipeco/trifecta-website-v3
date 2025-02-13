@@ -137,7 +137,9 @@ export const compileBaseballStats = (row, gmName, year) => {
     }
 
     // reverse engineer earned runs and walks + hits from IP, ERA, and WHIP
-    const ipString = inningsPitchedConverter(inningsPitchedObject.content);
+    const ipString = inningsPitchedToNumberConverter(
+      inningsPitchedObject.content
+    );
     const ip = stringToFloatWithRounding(ipString, 3);
     const era = stringToFloatWithRounding(eraObject.content, 2);
     const whip = stringToFloatWithRounding(whipObject.content, 3);
@@ -154,6 +156,7 @@ export const compileBaseballStats = (row, gmName, year) => {
       age: parseInt(ageObject.content),
       gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
       plateAppearances: "--",
+      timesOnBase: "--",
       runs: "--",
       homeRuns: "--",
       rbi: "--",
@@ -190,12 +193,13 @@ export const compileBaseballStats = (row, gmName, year) => {
       return null;
     }
 
-    // reverse engineer plate appearances by inferring walks from hits, at bats and obp
+    // reverse engineer plate appearances and times on base by inferring walks from hits, at bats and obp
     const hits = parseInt(hitsObject.content.replace(",", ""));
     const atBats = parseInt(atBatsObject.content.replace(",", ""));
     const obp = stringToFloatWithRounding(obpObject.content, 3);
     const walks = Math.round((hits - obp * atBats) / (obp - 1));
     const plateAppearances = walks + atBats;
+    const timesOnBase = hits + walks;
 
     return {
       gmName,
@@ -207,6 +211,7 @@ export const compileBaseballStats = (row, gmName, year) => {
       age: parseInt(ageObject.content),
       gamesPlayed: parseInt(gamesPlayedObject.content.replace(",", "")),
       plateAppearances,
+      timesOnBase,
       runs: parseInt(runsObject.content.replace(",", "")),
       homeRuns: parseInt(homeRunsObject.content.replace(",", "")),
       rbi: parseInt(rbiObject.content.replace(",", "")),
@@ -301,8 +306,12 @@ export const compileFootballStats = (row, gmName, year) => {
   };
 };
 
-const inningsPitchedConverter = (inningsPitchedString) => {
+const inningsPitchedToNumberConverter = (inningsPitchedString) => {
   return inningsPitchedString.replace(".1", ".333").replace(".2", ".667");
+};
+
+const inningsPitchedToDisplayStringConverter = (inningsPitchedString) => {
+  return inningsPitchedString.replace(".333", ".1").replace(".667", ".2");
 };
 
 export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
@@ -327,10 +336,9 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
             player
           );
           break;
-        // case "baseball":
-        //   newPlayer =
-        //     totalExistingBaseballPlayerStats(existingPlayer, player);
-        //     break;
+        case "baseball":
+          newPlayer = totalExistingBaseballPlayerStats(existingPlayer, player);
+          break;
         // case "football":
         //   newPlayer =
         //     totalExistingFootballPlayerStats(existingPlayer, player);
@@ -343,9 +351,9 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
         case "basketball":
           newPlayer = totalNewBasketballPlayerStats(player);
           break;
-        // case "baseball":
-        //   newPlayer = totalNewBaseballPlayerStats(player);
-        //   break;
+        case "baseball":
+          newPlayer = totalNewBaseballPlayerStats(player);
+          break;
         // case "football":
         //   newPlayer = totalFootballPlayerStats(player);
         //   break;
@@ -529,3 +537,178 @@ const totalExistingBasketballPlayerStats = (
 };
 
 // todo Baseball and Football compilations
+const totalNewBaseballPlayerStats = (playerObject) => {
+  const { year, age, position, teamName } = playerObject;
+
+  playerObject["yearsArray"] = [year];
+  delete playerObject["year"];
+  playerObject["agesArray"] = [age];
+  delete playerObject["age"];
+  playerObject["positionsArray"] = position.split(",");
+  delete playerObject["position"];
+  playerObject["teamNamesArray"] = teamName.split("/");
+  delete playerObject["teamName"];
+
+  return playerObject;
+};
+
+const totalExistingBaseballPlayerStats = (
+  previousTotalPlayerObject,
+  playerObject
+) => {
+  const {
+    name: previousName,
+    gmName: previousGmName,
+    yearsArray,
+    agesArray,
+    positionsArray,
+    gamesPlayed: previousGamesPlayed,
+    plateAppearances: previousPlateAppearances,
+    timesOnBase: previousTimesOnBase,
+    runs: previousRuns,
+    homeRuns: previousHomeRuns,
+    rbi: previousRbi,
+    strikeouts: previousStrikeouts,
+    stolenBases: previousStolenBases,
+    // obp: previousObp,
+    // ip: previousIp,
+    ipNumber: previousIpNumber,
+    qualityStarts: previousQualityStarts,
+    wins: previousWins,
+    ks: previousKs,
+    savesHolds: previousSavesHolds,
+    // era: previousEra,
+    // whip: previousWhip,
+    earnedRuns: previousEarnedRuns,
+    walksPlusHits: previousWalksPlusHits,
+    teamNamesArray,
+  } = previousTotalPlayerObject;
+
+  let {
+    name,
+    gmName,
+    year,
+    age,
+    position,
+    gamesPlayed,
+    plateAppearances,
+    timesOnBase,
+    runs,
+    homeRuns,
+    rbi,
+    strikeouts,
+    stolenBases,
+    obp,
+    ip,
+    ipNumber,
+    qualityStarts,
+    wins,
+    ks,
+    savesHolds,
+    era,
+    whip,
+    earnedRuns,
+    walksPlusHits,
+    teamName,
+  } = playerObject;
+
+  // sanity check
+  if (previousName !== name || previousGmName !== gmName) {
+    console.error("Error! Mismatched players!!!!");
+    console.log("Name: ", name, " / GM: ", gmName);
+    console.log(
+      "Previous Name: ",
+      previousName,
+      " / Previous GM: ",
+      previousGmName
+    );
+  }
+
+  yearsArray.push(year);
+  agesArray.push(age);
+  const newPositionsArray = [...positionsArray, ...position.split(",")];
+  const newTeamNamesArray = [...teamNamesArray, ...teamName.split("/")];
+  const newGamesPlayed = previousGamesPlayed + gamesPlayed;
+
+  // hitting stats
+  if (isStatNotBlank(plateAppearances)) {
+    plateAppearances += previousPlateAppearances;
+  }
+  if (isStatNotBlank(timesOnBase)) {
+    timesOnBase += previousTimesOnBase;
+  }
+  if (isStatNotBlank(plateAppearances) && isStatNotBlank(timesOnBase)) {
+    obp = stringToFloatWithRounding(timesOnBase / plateAppearances, 3);
+  }
+  if (isStatNotBlank(runs)) {
+    runs += previousRuns;
+  }
+  if (isStatNotBlank(homeRuns)) {
+    homeRuns += previousHomeRuns;
+  }
+  if (isStatNotBlank(rbi)) {
+    rbi += previousRbi;
+  }
+  if (isStatNotBlank(strikeouts)) {
+    strikeouts += previousStrikeouts;
+  }
+  if (isStatNotBlank(stolenBases)) {
+    stolenBases += previousStolenBases;
+  }
+
+  // pitching stats
+  if (isStatNotBlank(ipNumber)) {
+    ipNumber += previousIpNumber;
+    ip = inningsPitchedToDisplayStringConverter(ipNumber);
+  }
+  if (isStatNotBlank(qualityStarts)) {
+    qualityStarts += previousQualityStarts;
+  }
+  if (isStatNotBlank(wins)) {
+    wins += previousWins;
+  }
+  if (isStatNotBlank(ks)) {
+    ks += previousKs;
+  }
+  if (isStatNotBlank(savesHolds)) {
+    savesHolds += previousSavesHolds;
+  }
+  if (isStatNotBlank(earnedRuns)) {
+    earnedRuns += previousEarnedRuns;
+    era = stringToFloatWithRounding((earnedRuns / ipNumber) * 9, 2);
+  }
+  if (isStatNotBlank(walksPlusHits)) {
+    walksPlusHits += previousWalksPlusHits;
+    whip = stringToFloatWithRounding(walksPlusHits / ipNumber, 3);
+  }
+
+  return {
+    name,
+    gmName,
+    yearsArray,
+    agesArray,
+    positionsArray: newPositionsArray,
+    gamesPlayed: newGamesPlayed,
+    plateAppearances,
+    timesOnBase,
+    runs,
+    homeRuns,
+    rbi,
+    strikeouts,
+    stolenBases,
+    obp,
+    ip,
+    ipNumber,
+    qualityStarts,
+    wins,
+    ks,
+    savesHolds,
+    era,
+    whip,
+    earnedRuns,
+    walksPlusHits,
+    teamNamesArray: newTeamNamesArray,
+  };
+};
+
+const isStatNotBlank = (stat) => stat !== "--";
