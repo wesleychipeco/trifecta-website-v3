@@ -9,6 +9,11 @@ import * as G from "styles/shared";
 import * as X from "styles/TransactionsHistory.styles";
 import { extractBetweenParentheses } from "utils/strings";
 import Toggle from "react-toggle";
+import {
+  BASEBALL_POSITIONS_OPTIONS,
+  BASKETBALL_POSITIONS_OPTIONS,
+  FOOTBALL_POSITIONS_OPTIONS,
+} from "./StatsColumns";
 
 const PLAYER_INPUT = "player";
 const GM_INPUT = "gm";
@@ -26,99 +31,6 @@ const EXCLUDED_PER_GAME_HEADERS = [
   "Games Played",
   "FG%",
   "FT%",
-];
-
-const BASKETBALL_POSITIONS = [
-  {
-    value: "",
-    label: "All",
-  },
-  {
-    value: "PG",
-    label: "PG",
-  },
-  {
-    value: "SG",
-    label: "SG",
-  },
-  {
-    value: "SF",
-    label: "SF",
-  },
-  {
-    value: "PF",
-    label: "PF",
-  },
-  {
-    value: "C",
-    label: "C",
-  },
-];
-
-const BASEBALL_POSITIONS = [
-  {
-    value: "",
-    label: "All",
-  },
-  {
-    value: "C",
-    label: "C",
-  },
-  {
-    value: "1B",
-    label: "1B",
-  },
-  {
-    value: "2B",
-    label: "2B",
-  },
-  {
-    value: "3B",
-    label: "3B",
-  },
-  {
-    value: "SS",
-    label: "SS",
-  },
-  {
-    value: "OF",
-    label: "OF",
-  },
-  {
-    value: "UT",
-    label: "UT",
-  },
-  {
-    value: "SP",
-    label: "SP",
-  },
-  {
-    value: "RP",
-    label: "RP",
-  },
-];
-
-const FOOTBALL_POSITIONS = [
-  {
-    value: "",
-    label: "All",
-  },
-  {
-    value: "QB",
-    label: "QB",
-  },
-  {
-    value: "RB",
-    label: "RB",
-  },
-  {
-    value: "WR",
-    label: "WR",
-  },
-  {
-    value: "TE",
-    label: "TE",
-  },
 ];
 
 export const PlayerStatsTable = ({
@@ -148,13 +60,13 @@ export const PlayerStatsTable = ({
   const positionsOptions = useMemo(() => {
     switch (sport) {
       case "basketball":
-        return BASKETBALL_POSITIONS;
+        return BASKETBALL_POSITIONS_OPTIONS;
       case "baseball":
-        return BASEBALL_POSITIONS;
+        return BASEBALL_POSITIONS_OPTIONS;
       case "football":
-        return FOOTBALL_POSITIONS;
+        return FOOTBALL_POSITIONS_OPTIONS;
       default:
-        return BASKETBALL_POSITIONS;
+        return BASKETBALL_POSITIONS_OPTIONS;
     }
   }, [sport]);
 

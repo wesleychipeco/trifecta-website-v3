@@ -362,3 +362,96 @@ export const FootballStatsColumns = [
     sortDescFirst: true,
   },
 ];
+
+export const BASKETBALL_POSITIONS_OPTIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "PG",
+    label: "PG",
+  },
+  {
+    value: "SG",
+    label: "SG",
+  },
+  {
+    value: "SF",
+    label: "SF",
+  },
+  {
+    value: "PF",
+    label: "PF",
+  },
+  {
+    value: "C",
+    label: "C",
+  },
+];
+
+export const BASEBALL_POSITIONS_OPTIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "C",
+    label: "C",
+  },
+  {
+    value: "1B",
+    label: "1B",
+  },
+  {
+    value: "2B",
+    label: "2B",
+  },
+  {
+    value: "3B",
+    label: "3B",
+  },
+  {
+    value: "SS",
+    label: "SS",
+  },
+  {
+    value: "OF",
+    label: "OF",
+  },
+  {
+    value: "UT",
+    label: "UT",
+  },
+  {
+    value: "SP",
+    label: "SP",
+  },
+  {
+    value: "RP",
+    label: "RP",
+  },
+];
+
+export const FOOTBALL_POSITIONS_OPTIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "QB",
+    label: "QB",
+  },
+  {
+    value: "RB",
+    label: "RB",
+  },
+  {
+    value: "WR",
+    label: "WR",
+  },
+  {
+    value: "TE",
+    label: "TE",
+  },
+];
