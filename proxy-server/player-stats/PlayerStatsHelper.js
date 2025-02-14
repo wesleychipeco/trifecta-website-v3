@@ -281,6 +281,7 @@ export const compileFootballStats = (row, gmName, year) => {
     position: positionsList.join(","),
     teamName: teamShortName,
     age: parseInt(ageObject.content),
+    gamesPlayed: parseInt(gamesPlayedObject.content),
     fantasyPoints: stringToFloatWithRounding(fantasyPointsObject.content, 1),
     passingYards: parseInt(passingYdsString.replace(",", "")),
     passingTDs: parseInt(passingTDsObject.content),
@@ -302,7 +303,6 @@ export const compileFootballStats = (row, gmName, year) => {
     returnTDs,
     total2PA: passing2PA + rushing2PA + receiving2PA,
     miscTDs: fumbleRecoveryTDs + returnTDs,
-    gamesPlayed: parseInt(gamesPlayedObject.content),
   };
 };
 
@@ -339,10 +339,9 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
         case "baseball":
           newPlayer = totalExistingBaseballPlayerStats(existingPlayer, player);
           break;
-        // case "football":
-        //   newPlayer =
-        //     totalExistingFootballPlayerStats(existingPlayer, player);
-        //     break;
+        case "football":
+          newPlayer = totalExistingFootballPlayerStats(existingPlayer, player);
+          break;
         default:
           return;
       }
@@ -352,11 +351,11 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
           newPlayer = totalNewBasketballPlayerStats(player);
           break;
         case "baseball":
-          newPlayer = totalNewBaseballPlayerStats(player);
+          newPlayer = totalNewBaseballOrFootballPlayerStats(player);
           break;
-        // case "football":
-        //   newPlayer = totalFootballPlayerStats(player);
-        //   break;
+        case "football":
+          newPlayer = totalNewBaseballOrFootballPlayerStats(player);
+          break;
         default:
           return;
       }
@@ -474,7 +473,7 @@ const totalExistingBasketballPlayerStats = (
     teamNamesArray,
   } = previousTotalPlayerObject;
 
-  const {
+  let {
     name,
     gmName,
     year,
@@ -506,14 +505,14 @@ const totalExistingBasketballPlayerStats = (
   yearsArray.push(year);
   agesArray.push(age);
   const newPositionsArray = [...positionsArray, ...position.split(",")];
-  const newGamesPlayed = previousGamesPlayed + gamesPlayed;
-  const newPoints = previousPoints + points;
-  const newRebounds = previousRebounds + rebounds;
-  const newAssists = previousAssists + assists;
-  const newThreepm = previousThreepm + threepm;
-  const newSteals = previousSteals + steals;
-  const newBlocks = previousBlocks + blocks;
-  const newTurnovers = previousTurnovers + turnovers;
+  gamesPlayed += previousGamesPlayed;
+  points += previousPoints;
+  rebounds += previousRebounds;
+  assists += previousAssists;
+  threepm += previousThreepm;
+  steals += previousSteals;
+  blocks += previousBlocks;
+  turnovers += previousTurnovers;
   const newTeamNamesArray = [...teamNamesArray, ...teamName.split("/")];
 
   return {
@@ -522,22 +521,21 @@ const totalExistingBasketballPlayerStats = (
     yearsArray,
     agesArray,
     positionsArray: newPositionsArray,
-    gamesPlayed: newGamesPlayed,
-    points: newPoints,
-    rebounds: newRebounds,
-    assists: newAssists,
+    gamesPlayed,
+    points,
+    rebounds,
+    assists,
     fgPer,
     ftPer,
-    threepm: newThreepm,
-    steals: newSteals,
-    blocks: newBlocks,
-    turnovers: newTurnovers,
+    threepm,
+    steals,
+    blocks,
+    turnovers,
     teamNamesArray: newTeamNamesArray,
   };
 };
 
-// todo Baseball and Football compilations
-const totalNewBaseballPlayerStats = (playerObject) => {
+const totalNewBaseballOrFootballPlayerStats = (playerObject) => {
   const { year, age, position, teamName } = playerObject;
 
   playerObject["yearsArray"] = [year];
@@ -712,3 +710,139 @@ const totalExistingBaseballPlayerStats = (
 };
 
 const isStatNotBlank = (stat) => stat !== "--";
+
+const totalExistingFootballPlayerStats = (
+  previousTotalPlayerObject,
+  playerObject
+) => {
+  const {
+    name: previousName,
+    gmName: previousGmName,
+    yearsArray,
+    agesArray,
+    positionsArray,
+    gamesPlayed: previousGamesPlayed,
+    fantasyPointsPoints: previousFantasyPoints,
+    passingYards: previousPassingYards,
+    passingTDs: previousPassingTDs,
+    interceptions: previousInterceptions,
+    sacks: previousSacks,
+    passing1D: previousPassing1D,
+    passing2PA: previousPassing2PA,
+    rushingYards: previousRushingYards,
+    rushingTDs: previousRushingTDs,
+    rushing1D: previousRushing1D,
+    rushing2PA: previousRushing2PA,
+    receptions: previousReceptions,
+    receivingYards: previousReceivingYards,
+    receivingTDs: previousReceivingTDs,
+    receiving1D: previousReceiving1D,
+    receiving2PA: previousReceiving2PA,
+    fumblesLost: previousFumblesLost,
+    fumbleRecoveryTDs: previousFumbleRecoveryTDs,
+    returnTDs: previousReturnTDs,
+    // total2PA: previousTotal2PA,
+    // miscTDs: previousMiscTDs,
+    teamNamesArray,
+  } = previousTotalPlayerObject;
+
+  let {
+    name,
+    gmName,
+    year,
+    age,
+    position,
+    gamesPlayed,
+    fantasyPoints,
+    passingYards,
+    passingTDs,
+    interceptions,
+    sacks,
+    passing1D,
+    passing2PA,
+    rushingYards,
+    rushingTDs,
+    rushing1D,
+    receptions,
+    receivingYards,
+    receivingTDs,
+    receiving1D,
+    receiving2PA,
+    fumblesLost,
+    fumbleRecoveryTDs,
+    returnTDs,
+    // total2PA,
+    // miscTDS,
+  } = playerObject;
+
+  // sanity check
+  if (previousName !== name || previousGmName !== gmName) {
+    console.error("Error! Mismatched players!!!!");
+    console.log("Name: ", name, " / GM: ", gmName);
+    console.log(
+      "Previous Name: ",
+      previousName,
+      " / Previous GM: ",
+      previousGmName
+    );
+  }
+
+  yearsArray.push(year);
+  agesArray.push(age);
+  const newPositionsArray = [...positionsArray, ...position.split(",")];
+  const newTeamNamesArray = [...teamNamesArray, ...teamName.split("/")];
+
+  gamesPlayed += previousGamesPlayed;
+  fantasyPoints += previousFantasyPoints;
+  passingYards += previousPassingYards;
+  passingTDs += previousPassingTDs;
+  interceptions += previousInterceptions;
+  sacks += previousSacks;
+  passing1D += previousPassing1D;
+  passing2PA += previousPassing2PA;
+  rushingYards += previousRushingYards;
+  rushingTDs += previousRushingTDs;
+  rushing1D += previousRushing1D;
+  rushing2PA += previousRushing2PA;
+  receptions += previousReceptions;
+  receivingYards += previousReceivingYards;
+  receivingTDs += previousReceivingTDs;
+  receiving1D += previousReceiving1D;
+  receiving2PA += previousReceiving2PA;
+  fumblesLost += previousFumblesLost;
+  fumbleRecoveryTDs += previousFumbleRecoveryTDs;
+  returnTDs += previousReturnTDs;
+  total2PA = passing2PA + rushing2PA + receiving2PA;
+  miscTDs = fumbleRecoveryTDs + returnTDs;
+
+  return {
+    name,
+    gmName,
+    yearsArray,
+    agesArray,
+    positionsArray: newPositionsArray,
+    gamesPlayed,
+    fantasyPoints,
+    passingYards,
+    passingTDs,
+    interceptions,
+    sacks,
+    passing1D,
+    passing2PA,
+    rushingYards,
+    rushingTDs,
+    rushing1D,
+    rushing2PA,
+    receptions,
+    receivingYards,
+    receivingTDs,
+    receiving1D,
+    receiving2PA,
+    fumblesLost,
+    fumbleRecoveryTDs,
+    returnTDs,
+    total2PA,
+    miscTDs,
+    teamNamesArray: newTeamNamesArray,
+  };
+};
