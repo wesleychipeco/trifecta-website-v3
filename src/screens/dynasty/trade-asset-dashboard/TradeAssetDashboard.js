@@ -79,12 +79,16 @@ export const TradeAssetDashboard = () => {
       }
 
       const tradeBlockData = gm?.tradeBlock ?? {};
-      console.log("tradeBlockData", tradeBlockData);
+      // console.log("tradeBlockData", tradeBlockData);
       setTradeBlock(tradeBlockData);
 
       const assets = gm?.assets ?? {};
-      console.log("allAssets", assets);
+      // console.log("allAssets", assets);
       setAssets(assets);
+
+      const lastScrapedDate =
+        assets?.basketball?.lastUpdated ?? assets?.baseball?.lastUpdated;
+      console.log("Last scraped (Local Time): ", lastScrapedDate);
     };
 
     if (isReady) {

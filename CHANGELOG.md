@@ -1,5 +1,22 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.0.0] - 2025-02-15
+
+- Include changes to Google doc about httpd server updates for new endpoints
+
+### Changed
+
+## [PR-90] - 2025-02-14
+
+- Refresh site data via API requests to backend server on cron job schedules
+
+### Added & Changed
+
+### [PR-89] - 2025-02-14
+
+- Covnert proxy server into a backend API server that does the scraping, updating, formatting, and calculating of Fantrax data for 3x5 Trifecta use. Covers: sport standings, rosters (Trade Asset Dashboard), transaction history and player stats (individual seasons and totals)
+- Move all the existing scraping logic for these pages from react frontend to backend server
+
 ### [PR-88] - 2025-01-16
 
 - Fix football stats scrape
