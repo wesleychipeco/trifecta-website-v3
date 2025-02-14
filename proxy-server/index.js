@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import flatten from "lodash/flatten.js";
+import axios from "axios";
+import cron from "node-cron";
 import { returnMongoCollection } from "./utils/Database.js";
 import {
   GLOBAL_VARIABLES,
@@ -46,6 +48,7 @@ app.use(
 );
 app.use(bodyParser.json());
 const port = 5000;
+const localhostUrl = `http://localhost:${port}`;
 
 // basic string route to prevent Glitch error
 app.get("/", (req, res) => {
@@ -93,16 +96,19 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
   );
 
   // delete, then save to mongodb
+  const updateDate = new Date().toLocaleString();
   const sportCollection = await returnMongoCollection(`${sport}Standings`);
   // console.log("Delete, then save to mongodb");
-  sportCollection.deleteMany({ year });
+  await sportCollection.deleteMany({ year });
   await sportCollection.insertOne({
     year,
-    lastScraped: new Date().toISOString(),
+    lastScraped: updateDate,
     dynastyStandings,
     divisionStandings,
   });
-  console.log(`Updated ${year} ${sport}'s standings successfully`);
+  console.log(
+    `Updated ${year} ${sport}'s standings successfully at ${updateDate}`
+  );
 
   // return dynasty and division standings
   res.send({
@@ -124,6 +130,7 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   // retrieve currentRosterLeagues from initialized global variables
   const { currentRosterLeagues } = app.locals.dynastyGlobalVariables;
 
+  const updateDate = new Date().toLocaleString();
   const allAssets = {};
   // loop through season with updated rosters to scrape
   for (let i = 0; i < currentRosterLeagues.length; i++) {
@@ -150,7 +157,7 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
       draftPicks = addDefaultDraftPicks(sport);
     }
     allAssets[sport]["draftPicks"] = draftPicks;
-    allAssets[sport]["lastUpdated"] = new Date().toISOString();
+    allAssets[sport]["lastUpdated"] = updateDate;
   }
   // console.log("allAssets!", allAssets);
 
@@ -162,7 +169,9 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   if (modifiedCount < 1) {
     console.error("Did NOT successfully update assets!");
   } else {
-    console.log(`Updated ${gmAbbreviation}'s assets successfully`);
+    console.log(
+      `Updated ${gmAbbreviation}'s assets successfully at ${updateDate}`
+    );
   }
 
   // return allAssets
@@ -208,12 +217,13 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
     });
   }
 
+  const updateDate = new Date().toLocaleString();
   const { modifiedCount } = await transactionsHistoryCollection.updateOne(
     { sportYear },
     {
       $set: {
         transactions: formattedTransactions,
-        lastScraped: new Date().toISOString(),
+        lastScraped: updateDate,
       },
     },
     {
@@ -223,7 +233,9 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
   if (modifiedCount < 1) {
     console.error("Did NOT successfully update transactions history!");
   } else {
-    console.log(`Updated ${year} ${sport}'s transactions successfully`);
+    console.log(
+      `Updated ${year} ${sport}'s transactions successfully at ${updateDate}`
+    );
   }
 
   res.send(formattedTransactions);
@@ -277,15 +289,16 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
   const playerStats = flatten(allTeamAllPlayerStats);
 
   // Update record in MongoDB
+  const updateDate = new Date().toLocaleString();
   const statsCollection = await returnMongoCollection("playerStats");
   await statsCollection.deleteOne({ sport, year });
   await statsCollection.insertOne({
     sport,
     year,
-    lastScraped: new Date().toLocaleString(),
+    lastScraped: updateDate,
     playerStats,
   });
-  console.log(`Updated ${year} ${sport}'s player stats`);
+  console.log(`Updated ${year} ${sport}'s player stats at ${updateDate}`);
 
   res.send(allTeamAllPlayerStats);
 });
@@ -318,13 +331,15 @@ app.get("/api/total-player-stats/:sport", async (req, res) => {
   );
 
   // Update record in MongoDB
+  const updateDate = new Date().toLocaleString();
   await statsCollection.deleteOne({ sport, year: "total" });
   await statsCollection.insertOne({
     sport,
     year: "total",
-    lastScraped: new Date().toLocaleString(),
+    lastScraped: updateDate,
     playerStats: totalPlayerStatsArray,
   });
+  console.log(`Updated total player stats for ${sport} at ${updateDate}`);
 
   res.send(totalPlayerStatsArray);
 });
@@ -346,6 +361,147 @@ const leagueIdFromSportYear = (sportYear) => {
 
 initializeGlobalVariables().then(() => {
   app.listen(port, "0.0.0.0", () => {
-    console.log(`Server listening at http://localhost:${port}`);
+    console.log(`Server listening at ${localhostUrl}`);
+
+    // start cron jobs
+    console.log("Starting cron jobs for data refresh...");
+    sportStandingsRefreshCronJob();
+    rostersRefreshCronJob();
+    transactionsRefreshCronJob();
+    playerStatsRefreshCronJob();
+    totalPlayerStatsRefreshCronJob();
   });
 });
+
+const sportStandingsRefreshCronJob = () => {
+  const SPORT_STANDINGS_REFRESH_CRON_SCHEDULE = "0 1 * * *"; // 1am every day
+
+  // refresh all in season sport standings
+  cron.schedule(SPORT_STANDINGS_REFRESH_CRON_SCHEDULE, async () => {
+    const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
+    const cronUpdateDate = new Date().toLocaleString();
+    for (let i = 0; i < inSeasonLeagues.length; i++) {
+      const sportYear = inSeasonLeagues[i];
+      const { sport, year } = sportYearToSportAndYear(sportYear);
+      const cronUrl = `${localhostUrl}/api/standings/${sport}/${year}`;
+      const response = await axios.get(cronUrl);
+      if (response.status === 200) {
+        console.log(
+          `Successful cron job standings refresh for ${year} ${sport} at ${cronUpdateDate}`
+        );
+      } else {
+        console.error(
+          `FAILED cron job standings refresh for ${year} ${sport} at ${cronUpdateDate}`
+        );
+      }
+    }
+
+    console.log("============================================================");
+  });
+};
+
+const rostersRefreshCronJob = () => {
+  const ROSTERS_REFRESH_CRON_SCHEDULE = "15 1 * * *"; // 1:15am every day
+
+  cron.schedule(ROSTERS_REFRESH_CRON_SCHEDULE, async () => {
+    const gmsCollection = await returnMongoCollection("gms");
+    const gmsData = await gmsCollection.find({});
+    const gmsAbbreviationArray = gmsData.map((gm) => gm?.abbreviation ?? "");
+    const cronUpdateDate = new Date().toLocaleString();
+    for (let i = 0; i < gmsAbbreviationArray.length; i++) {
+      const gmAbbreviation = gmsAbbreviationArray[i];
+      const cronUrl = `${localhostUrl}/api/rosters/${gmAbbreviation}`;
+      const response = await axios.get(cronUrl);
+      if (response.status === 200) {
+        console.log(
+          `Successful cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
+        );
+      } else {
+        console.error(
+          `FAILED cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
+        );
+      }
+      console.log("------------------------------");
+    }
+
+    console.log("============================================================");
+  });
+};
+
+const transactionsRefreshCronJob = () => {
+  const TRANSACTIONS_REFRESH__CRON_SCHEDULE = "10 8 * * *"; // 8:10am every day (to allow for 8am transactions execution)
+
+  cron.schedule(TRANSACTIONS_REFRESH__CRON_SCHEDULE, async () => {
+    const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
+    const cronUpdateDate = new Date().toLocaleString();
+    for (let i = 0; i < inSeasonLeagues.length; i++) {
+      const sportYear = inSeasonLeagues[i];
+      const { sport, year } = sportYearToSportAndYear(sportYear);
+      const cronUrl = `${localhostUrl}/api/transactions/${sport}/${year}`;
+      const response = await axios.get(cronUrl);
+      if (response.status === 200) {
+        console.log(
+          `Successful cron job transactions refresh for ${year} ${sport} at ${cronUpdateDate}`
+        );
+      } else {
+        console.error(
+          `FAILED cron job transactions refresh for ${year} ${sport} at ${cronUpdateDate}`
+        );
+      }
+    }
+
+    console.log("============================================================");
+  });
+};
+
+const playerStatsRefreshCronJob = () => {
+  const PLAYER_STATS_REFRESH__CRON_SCHEDULE = "5 1 * * *"; // 1:05am every day
+
+  cron.schedule(PLAYER_STATS_REFRESH__CRON_SCHEDULE, async () => {
+    const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
+    const cronUpdateDate = new Date().toLocaleString();
+    for (let i = 0; i < inSeasonLeagues.length; i++) {
+      const sportYear = inSeasonLeagues[i];
+      const { sport, year } = sportYearToSportAndYear(sportYear);
+      const cronUrl = `${localhostUrl}/api/player-stats/${sport}/${year}`;
+      const response = await axios.get(cronUrl);
+      if (response.status === 200) {
+        console.log(
+          `Successful cron job player stats refresh for ${year} ${sport} at ${cronUpdateDate}`
+        );
+      } else {
+        console.error(
+          `FAILED cron job player stats refresh for ${year} ${sport} at ${cronUpdateDate}`
+        );
+      }
+    }
+
+    console.log("============================================================");
+  });
+};
+
+const totalPlayerStatsRefreshCronJob = () => {
+  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "10 1 * * *"; // 1:10am every day
+
+  cron.schedule(TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE, async () => {
+    const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
+    const cronUpdateDate = new Date().toLocaleString();
+    for (let i = 0; i < inSeasonLeagues.length; i++) {
+      const sportYear = inSeasonLeagues[i];
+      const { sport } = sportYearToSportAndYear(sportYear);
+      const cronUrl = `${localhostUrl}/api/total-player-stats/${sport}`;
+      const response = await axios.get(cronUrl);
+      if (response.status === 200) {
+        console.log(
+          `Successful cron job total player stats refresh for ${sport} at ${cronUpdateDate}`
+        );
+      } else {
+        console.error(
+          `FAILED cron job total player stats refresh for ${sport} at ${cronUpdateDate}`
+        );
+      }
+    }
+
+    console.log("============================================================");
+  });
+};

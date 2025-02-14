@@ -54,6 +54,7 @@ export const SportPlayerStats = () => {
       const display = async () => {
         await getAndSetGmsArray();
 
+        let lastScrapedDate = "";
         const statsCollection = await returnMongoCollection("playerStats", era);
         const data = await statsCollection.find({ sport });
 
@@ -61,15 +62,17 @@ export const SportPlayerStats = () => {
         const allYears = ["all"];
         for (let i = 0; i < data.length; i++) {
           const eachYearObject = data[i];
-          const { year, playerStats } = eachYearObject;
+          const { year, playerStats, lastScraped } = eachYearObject;
           allYears.push(year);
           allStats.push(playerStats);
+          lastScrapedDate = lastScraped;
         }
         const flattenAllStats = flatten(allStats);
 
         setYearsArray(allYears);
         setPlayerStats(flattenAllStats);
         setIsLoading(false);
+        console.log("Last scraped (Local Time): ", lastScrapedDate);
       };
 
       display();
