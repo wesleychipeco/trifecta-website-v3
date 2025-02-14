@@ -9,12 +9,18 @@ import * as G from "styles/shared";
 import * as X from "styles/TransactionsHistory.styles";
 import { extractBetweenParentheses } from "utils/strings";
 import Toggle from "react-toggle";
+import {
+  BASEBALL_POSITIONS_OPTIONS,
+  BASKETBALL_POSITIONS_OPTIONS,
+  FOOTBALL_POSITIONS_OPTIONS,
+} from "./StatsColumns";
 
 const PLAYER_INPUT = "player";
 const GM_INPUT = "gm";
 const POSITION_INPUT = "position";
 const YEAR_INPUT = "year";
 const BASEBALL_TYPE_INPUT = "type";
+const DISPLAY_TOTAL_STATS_INITIALLY = true; // true = display total stats initially on page load
 
 const EXCLUDED_PER_GAME_HEADERS = [
   "Player",
@@ -27,99 +33,6 @@ const EXCLUDED_PER_GAME_HEADERS = [
   "FT%",
 ];
 
-const BASKETBALL_POSITIONS = [
-  {
-    value: "",
-    label: "All",
-  },
-  {
-    value: "PG",
-    label: "PG",
-  },
-  {
-    value: "SG",
-    label: "SG",
-  },
-  {
-    value: "SF",
-    label: "SF",
-  },
-  {
-    value: "PF",
-    label: "PF",
-  },
-  {
-    value: "C",
-    label: "C",
-  },
-];
-
-const BASEBALL_POSITIONS = [
-  {
-    value: "",
-    label: "All",
-  },
-  {
-    value: "C",
-    label: "C",
-  },
-  {
-    value: "1B",
-    label: "1B",
-  },
-  {
-    value: "2B",
-    label: "2B",
-  },
-  {
-    value: "3B",
-    label: "3B",
-  },
-  {
-    value: "SS",
-    label: "SS",
-  },
-  {
-    value: "OF",
-    label: "OF",
-  },
-  {
-    value: "UT",
-    label: "UT",
-  },
-  {
-    value: "SP",
-    label: "SP",
-  },
-  {
-    value: "RP",
-    label: "RP",
-  },
-];
-
-const FOOTBALL_POSITIONS = [
-  {
-    value: "",
-    label: "All",
-  },
-  {
-    value: "QB",
-    label: "QB",
-  },
-  {
-    value: "RB",
-    label: "RB",
-  },
-  {
-    value: "WR",
-    label: "WR",
-  },
-  {
-    value: "TE",
-    label: "TE",
-  },
-];
-
 export const PlayerStatsTable = ({
   sport,
   columns,
@@ -130,10 +43,10 @@ export const PlayerStatsTable = ({
   tableHeadRow = null,
   tableBodyRow = null,
   tableBodyCell = null,
-  sortBy = [],
   gmsArray = [],
   isMobile = false,
   isLoading = false,
+  yearsArray = [],
 }) => {
   const gmOptions = useMemo(() => {
     const onlyGmsArray = gmsArray.map((gm) => ({
@@ -147,14 +60,44 @@ export const PlayerStatsTable = ({
   const positionsOptions = useMemo(() => {
     switch (sport) {
       case "basketball":
-        return BASKETBALL_POSITIONS;
+        return BASKETBALL_POSITIONS_OPTIONS;
       case "baseball":
-        return BASEBALL_POSITIONS;
+        return BASEBALL_POSITIONS_OPTIONS;
       case "football":
-        return FOOTBALL_POSITIONS;
+        return FOOTBALL_POSITIONS_OPTIONS;
       default:
-        return BASKETBALL_POSITIONS;
+        return BASKETBALL_POSITIONS_OPTIONS;
     }
+  }, [sport]);
+
+  const yearsOptions = useMemo(() => {
+    const yearsArrayOptions = yearsArray.map((year) => {
+      let label = year;
+      if (year === "all") {
+        label = "All Individual Seasons";
+      } else if (year === "total") {
+        label = "All Seasons Totaled";
+      }
+      return {
+        value: year,
+        label,
+      };
+    });
+    return yearsArrayOptions;
+  }, [yearsArray]);
+
+  const hitterPitcherOptions = useMemo(() => {
+    return [
+      { value: "", label: "All" },
+      { value: "hitter", label: "Hitter" },
+      { value: "pitcher", label: "Pitcher" },
+    ];
+  }, []);
+
+  const footballStatsWidthScrollStyle = useMemo(() => {
+    return sport === "football"
+      ? { overflow: "auto", width: "100%", paddingLeft: "5px" }
+      : {};
   }, [sport]);
 
   const [playerQuery, setPlayerQuery] = useState("");
@@ -163,6 +106,22 @@ export const PlayerStatsTable = ({
   const [yearQuery, setYearQuery] = useState("");
   const [perGameQuery, setPerGameQuery] = useState("");
   const [baseballTypeQuery, setBaseballTypeQuery] = useState("");
+  const [totalQuery, setTotalQuery] = useState(DISPLAY_TOTAL_STATS_INITIALLY);
+
+  const initialSortByArray = useMemo(() => {
+    return sport === "football"
+      ? [{ id: "fantasyPoints", desc: true }]
+      : [{ id: "gamesPlayed", desc: true }];
+  }, [sport]);
+
+  const initialFilterArray = useMemo(() => {
+    return [
+      {
+        id: "isTotalRecord",
+        value: DISPLAY_TOTAL_STATS_INITIALLY,
+      },
+    ];
+  }, []);
 
   const globalFilterFunction = useCallback(
     (rows, _id, _query) => {
@@ -172,16 +131,25 @@ export const PlayerStatsTable = ({
         const position = row.values?.position ?? "";
         const year = row.values?.year ?? "";
         const type = row.values?.type ?? "";
+        const total = row.values?.isTotalRecord ?? false;
         return (
           name.toLowerCase().includes(playerQuery) &&
           gmName.toLowerCase().includes(gmQuery) &&
           position.toLowerCase().includes(positionQuery) &&
           year.toLowerCase().includes(yearQuery) &&
-          type.toLowerCase().includes(baseballTypeQuery)
+          type.toLowerCase().includes(baseballTypeQuery) &&
+          total === totalQuery
         );
       });
     },
-    [playerQuery, gmQuery, positionQuery, yearQuery, baseballTypeQuery]
+    [
+      playerQuery,
+      gmQuery,
+      positionQuery,
+      yearQuery,
+      baseballTypeQuery,
+      totalQuery,
+    ]
   );
 
   const tableInstance = useTable(
@@ -189,8 +157,9 @@ export const PlayerStatsTable = ({
       columns,
       data,
       initialState: {
-        sortBy,
-        hiddenColumns: ["type"],
+        sortBy: initialSortByArray,
+        hiddenColumns: ["type", "isTotalRecord"],
+        globalFilter: initialFilterArray,
       },
       globalFilter: globalFilterFunction,
     },
@@ -214,9 +183,22 @@ export const PlayerStatsTable = ({
     const setValue = value.toLowerCase();
     if (id === PLAYER_INPUT) {
       setPlayerQuery(setValue);
-    } else if (id === YEAR_INPUT) {
-      setYearQuery(setValue);
     }
+  };
+
+  const handleYearsChange = (selectedOption) => {
+    const filterValue = selectedOption?.value ?? "";
+    if (filterValue === "all") {
+      setYearQuery("");
+      setTotalQuery(false);
+    } else if (filterValue === "total") {
+      setYearQuery("");
+      setTotalQuery(true);
+    } else {
+      setYearQuery(filterValue.toLowerCase());
+      setTotalQuery(false);
+    }
+    setGlobalFilter({ value: filterValue, type: YEAR_INPUT });
   };
 
   const handleGmChange = (selectedOption) => {
@@ -256,6 +238,12 @@ export const PlayerStatsTable = ({
   return (
     <S.TableContainer>
       <S.InputContainer>
+        <S.TextInput
+          id={PLAYER_INPUT}
+          type="text"
+          placeholder="Search by Player"
+          onChange={handleFilterInputChange}
+        />
         {sport === "basketball" && (
           <>
             <G.FlexRow>
@@ -263,32 +251,31 @@ export const PlayerStatsTable = ({
               <G.HorizontalSpacer factor={1} />
               <Toggle icons={false} onChange={handlePerGameChange} />
             </G.FlexRow>
-            <G.HorizontalSpacer factor={4} />
+            <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
           </>
         )}
-        <S.TextInput
-          id={PLAYER_INPUT}
-          type="text"
-          placeholder="Search by Player"
-          onChange={handleFilterInputChange}
-        />
         {sport === "baseball" && (
           <>
             <Select
               placeholder="Hitter/Pitcher"
               defaultValue={baseballTypeQuery}
               onChange={handleBaseballTypeChange}
-              options={[
-                { value: "", label: "All" },
-                { value: "hitter", label: "Hitter" },
-                { value: "pitcher", label: "Pitcher" },
-              ]}
+              options={hitterPitcherOptions}
               styles={X.TransactionsHistoryDropdownCustomStyles}
               isSearchable={false}
             />
             <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
           </>
         )}
+        <Select
+          placeholder="All Seasons Totaled" // change if DISPLAY_TOTAL_STATS_INITIALLY changes
+          defaultValue={yearQuery}
+          onChange={handleYearsChange}
+          options={yearsOptions}
+          styles={X.TransactionsHistoryDropdownCustomStyles}
+          isSearchable={false}
+        />
+        <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
         <Select
           placeholder="Select Position"
           defaultValue={positionQuery}
@@ -298,12 +285,6 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
         <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
-        {/* <S.TextInput
-          id={YEAR_INPUT}
-          type="text"
-          placeholder="Search by Year"
-          onChange={handleFilterInputChange}
-        /> */}
         <Select
           placeholder="Select GM"
           defaultValue={gmQuery}
@@ -313,8 +294,14 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
       </S.InputContainer>
-      <T.ScrollTable>
-        <TableComponent style={{ width: "100%" }} {...getTableProps()}>
+      {totalQuery && sport === "basketball" && (
+        <S.TotalsCaption>
+          FG% and FT% totals across seasons are not available.
+        </S.TotalsCaption>
+      )}
+
+      <T.ScrollTable style={footballStatsWidthScrollStyle}>
+        <TableComponent {...getTableProps()}>
           <TableHeadComponent>
             {headerGroups.map((headerGroup) => {
               return (

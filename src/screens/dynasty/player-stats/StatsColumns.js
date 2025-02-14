@@ -7,10 +7,9 @@ export const BasketballStatsColumns = [
     tableHeaderCell: S.StringTableHeaderCell,
   },
   {
-    Header: "Position",
-    accessor: "position",
+    Header: "GM",
+    accessor: "gmName",
     tableHeaderCell: S.NumbersTableHeaderCell,
-    disableSortBy: true,
   },
   {
     Header: "Year",
@@ -19,15 +18,22 @@ export const BasketballStatsColumns = [
     sortDescFirst: true,
   },
   {
-    Header: "GM",
-    accessor: "gmName",
-    tableHeaderCell: S.NumbersTableHeaderCell,
-  },
-  {
     Header: "Age",
     accessor: "age",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
+  },
+  {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "isTotalRecord",
+    accessor: "isTotalRecord",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
   },
   {
     Header: "Games Played",
@@ -98,10 +104,9 @@ export const BaseballStatsColumns = [
     tableHeaderCell: S.StringTableHeaderCell,
   },
   {
-    Header: "Position",
-    accessor: "position",
+    Header: "GM",
+    accessor: "gmName",
     tableHeaderCell: S.NumbersTableHeaderCell,
-    disableSortBy: true,
   },
   {
     Header: "Type",
@@ -116,15 +121,22 @@ export const BaseballStatsColumns = [
     sortDescFirst: true,
   },
   {
-    Header: "GM",
-    accessor: "gmName",
-    tableHeaderCell: S.NumbersTableHeaderCell,
-  },
-  {
     Header: "Age",
     accessor: "age",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
+  },
+  {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "isTotalRecord",
+    accessor: "isTotalRecord",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
   },
   {
     Header: "Games Played",
@@ -165,6 +177,12 @@ export const BaseballStatsColumns = [
   {
     Header: "OBP",
     accessor: "obp",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "IP",
+    accessor: "ip",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
@@ -213,10 +231,9 @@ export const FootballStatsColumns = [
     tableHeaderCell: S.StringTableHeaderCell,
   },
   {
-    Header: "Position",
-    accessor: "position",
+    Header: "GM",
+    accessor: "gmName",
     tableHeaderCell: S.StringTableHeaderCell,
-    disableSortBy: true,
   },
   {
     Header: "Year",
@@ -225,19 +242,32 @@ export const FootballStatsColumns = [
     disableSortBy: true,
   },
   {
-    Header: "GM",
-    accessor: "gmName",
-    tableHeaderCell: S.StringTableHeaderCell,
-  },
-  {
     Header: "Age",
     accessor: "age",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
   {
+    Header: "Position",
+    accessor: "position",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
+    Header: "isTotalRecord",
+    accessor: "isTotalRecord",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    disableSortBy: true,
+  },
+  {
     Header: "Fantasy Points",
     accessor: "fantasyPoints",
+    tableHeaderCell: S.NumbersTableHeaderCell,
+    sortDescFirst: true,
+  },
+  {
+    Header: "Games Played",
+    accessor: "gamesPlayed",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
   },
@@ -330,5 +360,98 @@ export const FootballStatsColumns = [
     accessor: "miscTDs",
     tableHeaderCell: S.NumbersTableHeaderCell,
     sortDescFirst: true,
+  },
+];
+
+export const BASKETBALL_POSITIONS_OPTIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "PG",
+    label: "PG",
+  },
+  {
+    value: "SG",
+    label: "SG",
+  },
+  {
+    value: "SF",
+    label: "SF",
+  },
+  {
+    value: "PF",
+    label: "PF",
+  },
+  {
+    value: "C",
+    label: "C",
+  },
+];
+
+export const BASEBALL_POSITIONS_OPTIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "C",
+    label: "C",
+  },
+  {
+    value: "1B",
+    label: "1B",
+  },
+  {
+    value: "2B",
+    label: "2B",
+  },
+  {
+    value: "3B",
+    label: "3B",
+  },
+  {
+    value: "SS",
+    label: "SS",
+  },
+  {
+    value: "OF",
+    label: "OF",
+  },
+  {
+    value: "UT",
+    label: "UT",
+  },
+  {
+    value: "SP",
+    label: "SP",
+  },
+  {
+    value: "RP",
+    label: "RP",
+  },
+];
+
+export const FOOTBALL_POSITIONS_OPTIONS = [
+  {
+    value: "",
+    label: "All",
+  },
+  {
+    value: "QB",
+    label: "QB",
+  },
+  {
+    value: "RB",
+    label: "RB",
+  },
+  {
+    value: "WR",
+    label: "WR",
+  },
+  {
+    value: "TE",
+    label: "TE",
   },
 ];

@@ -1,34 +1,28 @@
 import axios from "axios";
+import { FANTRAX_URL_STRING } from "../APIConstants.js";
 
-export const standingsScraper = async (leagueId) => {
-  const url =
-    process.env.REACT_APP_IS_LOCAL === "true"
-      ? `http://localhost:5000/standings`
-      : `https://www.trifectafantasyleague.com:443/standings`;
+export const scrapeStandings = async (leagueId) => {
+  const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
+  const body = {
+    msgs: [{ method: "getStandings", data: { view: "ALL" } }],
+    ng2: true,
+    href: `https://www.fantrax.com/fantasy/league/${leagueId}/standings;view=ALL`,
+    dt: 0,
+    at: 0,
+    av: null,
+    tz: "America/Los_Angeles",
+    v: "73.0.0",
+  };
 
-  const data = await axios.post(
-    url,
-    {
-      msgs: [{ method: "getStandings", data: { view: "ALL" } }],
-      ng2: true,
-      href: `https://www.fantrax.com/fantasy/league/${leagueId}/standings;view=ALL`,
-      dt: 0,
-      at: 0,
-      av: null,
-      tz: "America/Los_Angeles",
-      v: "73.0.0",
-    },
-    {
-      headers: {
-        Accept: "application/json",
-        LeagueId: leagueId,
-      },
-    }
-  );
-  const tableStandings = data.data.responses[0].data.tableList.filter(
-    (row) => row.caption === "Standings"
-  );
-  return tableStandings;
+  return axios.post(backendUrl, body);
+};
+
+export const filterForStandings = async (tableList) => {
+  return await tableList.reduce(async (prevPromise, v) => {
+    let newArray = await prevPromise;
+    if (v.caption === "Standings") newArray.push(v);
+    return newArray;
+  }, Promise.resolve([]));
 };
 
 export const formatScrapedStandings = (standings, namesIdsObject, sport) => {

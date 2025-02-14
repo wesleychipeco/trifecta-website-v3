@@ -1,49 +1,35 @@
 import axios from "axios";
 import { add, parse } from "date-fns";
-import { orderBy } from "lodash";
-import { extractBetweenParentheses } from "utils/strings";
+import orderBy from "lodash/orderBy.js";
 
-export const retrieveTransactions = async (leagueId, gmNamesIdsMappings) => {
-  const url =
-    process.env.REACT_APP_IS_LOCAL === "true"
-      ? `http://localhost:5000/transactions`
-      : `https://www.trifectafantasyleague.com:443/transactions`;
+import { FANTRAX_URL_STRING } from "../APIConstants.js";
+import { extractBetweenParentheses } from "../utils/StringsUtils.js";
 
-  const data = await axios.post(
-    url,
-    {
-      msgs: [
-        {
-          method: "getTransactionDetailsHistory",
-          data: {
-            leagueId,
-            executedOnly: false,
-            maxResultsPerPage: "999",
-            view: "CLAIM_DROP",
-          },
+export const scrapeTransactions = async (leagueId) => {
+  const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
+  const body = {
+    msgs: [
+      {
+        method: "getTransactionDetailsHistory",
+        data: {
+          leagueId,
+          executedOnly: false,
+          maxResultsPerPage: "999",
+          view: "CLAIM_DROP",
         },
-      ],
-      refUrl: `https://www.fantrax.com/fantasy/league/${leagueId}/transactions/history;view=CLAIM_DROP;executedOnly=false`,
-      at: 0,
-      dt: 0,
-      tz: "America/Los_Angeles",
-      v: "109.0.1",
-    },
-    {
-      headers: {
-        Accept: "application/json",
-        LeagueId: leagueId,
       },
-    }
-  );
+    ],
+    refUrl: `https://www.fantrax.com/fantasy/league/${leagueId}/transactions/history;view=CLAIM_DROP;executedOnly=false`,
+    at: 0,
+    dt: 0,
+    tz: "America/Los_Angeles",
+    v: "109.0.1",
+  };
 
-  const rawData = data?.data?.responses?.[0]?.data ?? {};
-  const rawTableRows = rawData?.table?.rows ?? [];
-  // console.log("rawTableRows", rawTableRows);
-  return formatTransactions(rawTableRows, gmNamesIdsMappings);
+  return axios.post(backendUrl, body);
 };
 
-const formatTransactions = (tableRows, gmNamesIdsMappings) => {
+export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
   const cleanedUpTransactions = [];
   let shouldSkip = false;
   let transactionObjectHoldover = {};

@@ -25,11 +25,16 @@ Fantrax Data
 
 - Set all divisions
 - Change all Head-to-Head matchups for the reguar season
-- Complete all offseason trades
-- Update carryover FAAB
 - Figure out when dynasty playoffs start, and set a phone reminder to set consolation bracket matchups
 
-leagueId
+##### When dynasty playoffs start
+
+- On Fantrax, set consolation bracket matchups each week
+
+##### When a dynasty season ends
+
+- Renew the Fantrax league and complete the record the following variables
+  leagueId
 
 - Using inspect on Fantrax website, find the `leagueId`
 - Add the `sportYear` with the `leagueId` to the `leagueIdMappings` object
@@ -41,14 +46,14 @@ teamId
 - Add a new record to the `gmNamesIds` collection with `leagueId`, `sportYear`, and `mappings` using `leagueId` and `teamIds`
 - In each GM's record in the "gm" collection, add a key-value pair of `sportYear` to `teamId`
 
-##### When dynasty playoffs start
+- Update carryover FAAB
+- Update the "currentRosterLeagues" variable with new sport + year for updated rosters
 
-- On Fantrax, set consolation bracket matchups
-
-##### When a dynasty season ends
-
-- Remove the `sportYear` from the `globalVariables.globalVariables.dynasty.inSeasonLeagues` array
-- Add playoff points to season sport standings
+- Payout the winners of the sport
+- Conduct the lottery for the next season's supplementary draft
+- In Commissioner Actions, select "Complete Sport with Playoffs" and assign Playoff Points for playoff winners
+  ~~- Remove the `sportYear` from the `globalVariables.globalVariables.dynasty.inSeasonLeagues` array~~
+  ~~- Add playoff points to season sport standings~~
 
 ##### When a trade occurs
 
