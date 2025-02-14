@@ -7,7 +7,7 @@ import {
   GLOBAL_VARIABLES,
   HIGH_TO_LOW,
   NUMBER_OF_TEAMS,
-} from "./NewConstants.js";
+} from "./APIConstants.js";
 import {
   filterForStandings,
   formatScrapedStandings,

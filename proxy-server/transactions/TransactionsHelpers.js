@@ -2,7 +2,7 @@ import axios from "axios";
 import { add, parse } from "date-fns";
 import orderBy from "lodash/orderBy.js";
 
-import { FANTRAX_URL_STRING } from "../NewConstants.js";
+import { FANTRAX_URL_STRING } from "../APIConstants.js";
 import { extractBetweenParentheses } from "../utils/StringsUtils.js";
 
 export const scrapeTransactions = async (leagueId) => {

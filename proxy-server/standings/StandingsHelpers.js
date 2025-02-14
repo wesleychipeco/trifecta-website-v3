@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FANTRAX_URL_STRING } from "../NewConstants.js";
+import { FANTRAX_URL_STRING } from "../APIConstants.js";
 
 export const scrapeStandings = async (leagueId) => {
   const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;

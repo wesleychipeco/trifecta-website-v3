@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FANTRAX_URL_STRING } from "../NewConstants.js";
+import { FANTRAX_URL_STRING } from "../APIConstants.js";
 import { stringToFloatWithRounding } from "../utils/StringsUtils.js";
 
 export const scrapePlayerStats = async (leagueId, teamId) => {

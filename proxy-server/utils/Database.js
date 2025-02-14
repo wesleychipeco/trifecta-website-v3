@@ -1,4 +1,4 @@
-import { ERA_0, ERA_1, GLOBAL_VARIABLES } from "../NewConstants.js";
+import { ERA_0, ERA_1, GLOBAL_VARIABLES } from "../APIConstants.js";
 import * as Realm from "realm-web";
 
 const REALM_APP_ID = "trifectafantasyleague-xqqjr";

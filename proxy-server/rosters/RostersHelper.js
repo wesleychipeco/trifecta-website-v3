@@ -4,7 +4,7 @@ import {
   BASKETBALL_DRAFT_PICK_NUMBER,
   FANTRAX_URL_STRING,
   FOOTBALL_DRAFT_PICK_NUMBER,
-} from "../NewConstants.js";
+} from "../APIConstants.js";
 import flatten from "lodash/flatten.js";
 
 export const scrapeRosters = async (leagueId, teamId) => {
