@@ -6,8 +6,7 @@ import { useSelector } from "react-redux";
 import * as S from "styles/CompileMatchups.styles";
 import * as T from "styles/StandardScreen.styles";
 import { calculateWinPer } from "utils/winPer";
-
-const SPORTS_ARRAY = ["basketball", "baseball", "football"];
+import { SPORTS_ARRAY } from "Constants";
 
 export const CompileTotalMatchups = () => {
   const { currentYear } = useSelector(

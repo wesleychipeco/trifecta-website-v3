@@ -6,7 +6,7 @@ import { STATIC_ROUTES } from "Routes";
 import * as S from "styles/Navbar.styles";
 import * as T from "styles/shared";
 import { closeNavbar } from "store/navbarSlice";
-import { ERA_1 } from "Constants";
+import { ERA_1, SPORTS_ARRAY } from "Constants";
 
 import TrifectaLogoHorizontalBlack from "resources/images/ShadedHorizontalLogo.png";
 import { sportYearToSportAndYear } from "utils/years";
@@ -122,7 +122,7 @@ export const OpenNavbar = () => {
           </S.Link>
           <S.Standings onClick={expandStatsFunction}>Player Stats</S.Standings>
           {isStatsExpanded &&
-            ["basketball", "baseball", "football"].map((sport) => {
+            SPORTS_ARRAY.map((sport) => {
               return (
                 <S.IndentedLink
                   key={sport}

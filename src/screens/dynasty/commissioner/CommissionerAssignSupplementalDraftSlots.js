@@ -18,6 +18,7 @@ import { assignSupplementalDraftSlots } from "./AssignDraftSlotsHelper";
 import {
   ALPHABET,
   NUMBER_OF_TEAMS,
+  SPORTS_ARRAY,
   STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS,
 } from "Constants";
 
@@ -80,7 +81,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
   }, []);
 
   const sportsOptions = useMemo(() => {
-    return ["basketball", "baseball", "football"].map((sport) => {
+    return SPORTS_ARRAY.map((sport) => {
       return {
         value: sport,
         label: capitalize(sport),

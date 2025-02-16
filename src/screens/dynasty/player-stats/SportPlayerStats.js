@@ -15,6 +15,7 @@ import {
   FootballStatsColumns,
 } from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
 
 export const SportPlayerStats = () => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
@@ -38,11 +39,11 @@ export const SportPlayerStats = () => {
 
   const statsColumns = useMemo(() => {
     switch (sport) {
-      case "basketball":
+      case BASKETBALL:
         return BasketballStatsColumns;
-      case "baseball":
+      case BASEBALL:
         return BaseballStatsColumns;
-      case "football":
+      case FOOTBALL:
         return FootballStatsColumns;
       default:
         return BasketballStatsColumns;

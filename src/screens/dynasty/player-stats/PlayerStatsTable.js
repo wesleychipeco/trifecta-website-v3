@@ -14,6 +14,7 @@ import {
   BASKETBALL_POSITIONS_OPTIONS,
   FOOTBALL_POSITIONS_OPTIONS,
 } from "./StatsColumns";
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
 
 const PLAYER_INPUT = "player";
 const GM_INPUT = "gm";
@@ -59,11 +60,11 @@ export const PlayerStatsTable = ({
 
   const positionsOptions = useMemo(() => {
     switch (sport) {
-      case "basketball":
+      case BASKETBALL:
         return BASKETBALL_POSITIONS_OPTIONS;
-      case "baseball":
+      case BASEBALL:
         return BASEBALL_POSITIONS_OPTIONS;
-      case "football":
+      case FOOTBALL:
         return FOOTBALL_POSITIONS_OPTIONS;
       default:
         return BASKETBALL_POSITIONS_OPTIONS;
@@ -95,7 +96,7 @@ export const PlayerStatsTable = ({
   }, []);
 
   const footballStatsWidthScrollStyle = useMemo(() => {
-    return sport === "football"
+    return sport === FOOTBALL
       ? { overflow: "auto", width: "100%", paddingLeft: "5px" }
       : {};
   }, [sport]);
@@ -109,7 +110,7 @@ export const PlayerStatsTable = ({
   const [totalQuery, setTotalQuery] = useState(DISPLAY_TOTAL_STATS_INITIALLY);
 
   const initialSortByArray = useMemo(() => {
-    return sport === "football"
+    return sport === FOOTBALL
       ? [{ id: "fantasyPoints", desc: true }]
       : [{ id: "gamesPlayed", desc: true }];
   }, [sport]);
@@ -244,7 +245,7 @@ export const PlayerStatsTable = ({
           placeholder="Search by Player"
           onChange={handleFilterInputChange}
         />
-        {sport === "basketball" && (
+        {sport === BASKETBALL && (
           <>
             <G.FlexRow>
               <p>Per Game Toggle</p>
@@ -254,7 +255,7 @@ export const PlayerStatsTable = ({
             <G.HorizontalSpacer factor={isMobile ? 0 : 8} />
           </>
         )}
-        {sport === "baseball" && (
+        {sport === BASEBALL && (
           <>
             <Select
               placeholder="Hitter/Pitcher"
@@ -294,7 +295,7 @@ export const PlayerStatsTable = ({
           isSearchable={false}
         />
       </S.InputContainer>
-      {totalQuery && sport === "basketball" && (
+      {totalQuery && sport === BASKETBALL && (
         <S.TotalsCaption>
           FG% and FT% totals across seasons are not available.
         </S.TotalsCaption>

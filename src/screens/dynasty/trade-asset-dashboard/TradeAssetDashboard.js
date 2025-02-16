@@ -12,6 +12,7 @@ import ReactGA from "react-ga4";
 import * as S from "styles/TradeAssetDashboard.styles";
 import * as T from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import { BASEBALL } from "Constants";
 
 const ALL_TRADE_BLOCK_SECTIONS = [
   {
@@ -266,7 +267,7 @@ export const TradeAssetDashboard = () => {
             <S.SportContainer key={sport}>
               <S.SectionTitle>{capitalize(sport)}</S.SectionTitle>
               <S.FaabText>{`FAAB remaining: ${rosters.faab}`}</S.FaabText>
-              {sport === "baseball" && (
+              {sport === BASEBALL && (
                 <S.FaabText>* denotes Minor League eligible player</S.FaabText>
               )}
               <S.FlexRow>

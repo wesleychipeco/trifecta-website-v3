@@ -3,6 +3,7 @@ import format from "date-fns/format";
 import max from "date-fns/max";
 import { returnMongoCollection } from "database-management";
 import { SeasonStatus } from "utils/years";
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
 
 export const calculateTrifectaStandings = async (
   year,
@@ -22,7 +23,7 @@ export const calculateTrifectaStandings = async (
 
   if (basketballSeasonStatus !== SeasonStatus.NOT_STARTED) {
     const { standings: basketballStandings, lastScraped } =
-      await retrieveSportStandings(year, "basketball");
+      await retrieveSportStandings(year, BASKETBALL);
     basketballLastScraped = lastScraped;
     trifectaStandingsArray.push(basketballStandings);
   } else {
@@ -31,7 +32,7 @@ export const calculateTrifectaStandings = async (
 
   if (baseballSeasonStatus !== SeasonStatus.NOT_STARTED) {
     const { standings: baseballStandings, lastScraped } =
-      await retrieveSportStandings(year, "baseball");
+      await retrieveSportStandings(year, BASEBALL);
     baseballLastScraped = lastScraped;
     trifectaStandingsArray.push(baseballStandings);
   } else {
@@ -40,7 +41,7 @@ export const calculateTrifectaStandings = async (
 
   if (footballSeasonStatus !== SeasonStatus.NOT_STARTED) {
     const { standings: footballStandings, lastScraped } =
-      await retrieveSportStandings(year, "football");
+      await retrieveSportStandings(year, FOOTBALL);
     footballLastScraped = lastScraped;
     trifectaStandingsArray.push(footballStandings);
   } else {

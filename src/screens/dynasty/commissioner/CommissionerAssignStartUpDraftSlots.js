@@ -15,7 +15,7 @@ import {
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
 import { assignStartupDraftSlots } from "./AssignDraftSlotsHelper";
-import { ALPHABET, NUMBER_OF_TEAMS } from "Constants";
+import { ALPHABET, NUMBER_OF_TEAMS, SPORTS_ARRAY } from "Constants";
 
 export const CommissionerAssignStartupDraftSlots = () => {
   const { era } = useParams();
@@ -75,7 +75,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
   }, []);
 
   const sportsOptions = useMemo(() => {
-    return ["basketball", "baseball", "football"].map((sport) => {
+    return SPORTS_ARRAY.map((sport) => {
       return {
         value: sport,
         label: capitalize(sport),

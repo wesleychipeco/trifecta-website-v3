@@ -10,9 +10,13 @@ import {
   BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
   FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS,
 } from "./AssignDraftSlotsHelper";
-import { NUMBER_OF_TEAMS } from "Constants";
-
-const SPORTS_ARRAY = ["basketball", "baseball", "football"];
+import {
+  BASEBALL,
+  BASKETBALL,
+  FOOTBALL,
+  NUMBER_OF_TEAMS,
+  SPORTS_ARRAY,
+} from "Constants";
 
 export const CommissionerInitializeSupplementalDraftPicks = () => {
   const { era } = useParams();
@@ -63,13 +67,13 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
 
         let draftPicks;
         switch (sport) {
-          case "basketball":
+          case BASKETBALL:
             draftPicks = BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
             break;
-          case "baseball":
+          case BASEBALL:
             draftPicks = BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
             break;
-          case "football":
+          case FOOTBALL:
             draftPicks = FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
             break;
           default:
@@ -123,13 +127,13 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
 
       let draftPicks;
       switch (sport) {
-        case "basketball":
+        case BASKETBALL:
           draftPicks = BASKETBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
           break;
-        case "baseball":
+        case BASEBALL:
           draftPicks = BASEBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
           break;
-        case "football":
+        case FOOTBALL:
           draftPicks = FOOTBALL_SUPPLEMENTAL_DRAFT_ROUNDS;
           break;
         default:

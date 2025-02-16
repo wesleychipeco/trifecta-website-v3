@@ -1,8 +1,11 @@
 import axios from "axios";
 import {
+  BASEBALL,
   BASEBALL_DRAFT_PICK_NUMBER,
+  BASKETBALL,
   BASKETBALL_DRAFT_PICK_NUMBER,
   FANTRAX_URL_STRING,
+  FOOTBALL,
   FOOTBALL_DRAFT_PICK_NUMBER,
 } from "../APIConstants.js";
 import flatten from "lodash/flatten.js";
@@ -62,13 +65,13 @@ export const retrieveFaab = (rawData) => {
 export const addDefaultDraftPicks = (sport) => {
   let draftPicks;
   switch (sport) {
-    case "basketball":
+    case BASKETBALL:
       draftPicks = BASKETBALL_DRAFT_PICK_NUMBER;
       break;
-    case "baseball":
+    case BASEBALL:
       draftPicks = BASEBALL_DRAFT_PICK_NUMBER;
       break;
-    case "football":
+    case FOOTBALL:
       draftPicks = FOOTBALL_DRAFT_PICK_NUMBER;
       break;
     default:
