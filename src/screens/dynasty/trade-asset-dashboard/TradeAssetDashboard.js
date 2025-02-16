@@ -89,7 +89,9 @@ export const TradeAssetDashboard = () => {
 
       const lastScrapedDate =
         assets?.basketball?.lastUpdated ?? assets?.baseball?.lastUpdated;
-      console.log("Last scraped (Local Time): ", lastScrapedDate);
+      console.log(
+        `${gmAbbreviation} Trade Asset Dashboard last scraped (Local Time): ${lastScrapedDate}`
+      );
     };
 
     if (isReady) {

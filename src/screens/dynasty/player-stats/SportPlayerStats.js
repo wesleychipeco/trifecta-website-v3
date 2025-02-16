@@ -73,7 +73,9 @@ export const SportPlayerStats = () => {
         setYearsArray(allYears);
         setPlayerStats(flattenAllStats);
         setIsLoading(false);
-        console.log("Last scraped (Local Time): ", lastScrapedDate);
+        console.log(
+          `${sport} Player Stats last scraped (Local time): ${lastScrapedDate}`
+        );
       };
 
       display();

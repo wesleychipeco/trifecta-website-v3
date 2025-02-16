@@ -36,7 +36,9 @@ export const TransactionsHistory = () => {
         const data = await transactionsHistoryCollection.find({ sportYear });
         const object = data?.[0] ?? {};
         const { lastScraped: lastScrapedString, transactions } = object;
-        console.log("Last scraped (Local): ", lastScrapedString);
+        console.log(
+          `${year} ${sport} Transactions last scraped (Local): ${lastScrapedString}`
+        );
         getAndSetGmsArray();
         setTransactions(transactions);
       }

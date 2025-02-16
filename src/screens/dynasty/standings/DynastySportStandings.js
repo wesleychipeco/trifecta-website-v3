@@ -46,7 +46,9 @@ export const DynastySportStandings = ({ sport }) => {
           divisionStandings,
         } = object;
 
-        console.log("Last scraped (Local Time): ", lastScrapedString);
+        console.log(
+          `${year} ${sport} Standings last scraped (Local time): ${lastScrapedString}`
+        );
         setDynastyStandings(dynastyStandings);
         setDivisionStandings(divisionStandings);
       };
