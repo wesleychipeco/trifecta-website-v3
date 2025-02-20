@@ -2,31 +2,33 @@ import axios from "axios";
 import { FANTRAX_URL_STRING } from "../APIConstants.js";
 import { stringToFloatWithRounding } from "../utils/StringsUtils.js";
 
-export const scrapePlayerStats = async (leagueId, teamId) => {
-  const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
-  const body = {
-    msgs: [
-      {
-        method: "getTeamRosterInfo",
-        data: {
-          leagueId: leagueId,
-          statsType: "3",
-          scoringCategoryType: "5",
-          teamId: teamId,
-          timeframeTypeCode: "YEAR_TO_DATE",
+export const scrapePlayerStats = async (limiter, leagueId, teamId) => {
+  return limiter.schedule(() => {
+    const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
+    const body = {
+      msgs: [
+        {
+          method: "getTeamRosterInfo",
+          data: {
+            leagueId: leagueId,
+            statsType: "3",
+            scoringCategoryType: "5",
+            teamId: teamId,
+            timeframeTypeCode: "YEAR_TO_DATE",
+          },
         },
-      },
-    ],
-    ng2: true,
-    refUrl: `https://www.fantrax.com/fantasy/league/${leagueId}/team/roster;statsType=3;scoringCategoryType=5?pendingTransactions=false`,
-    dt: 0,
-    at: "3.0",
-    av: null,
-    tz: "America/Los_Angeles",
-    v: "73.0.0",
-  };
+      ],
+      ng2: true,
+      refUrl: `https://www.fantrax.com/fantasy/league/${leagueId}/team/roster;statsType=3;scoringCategoryType=5?pendingTransactions=false`,
+      dt: 0,
+      at: "3.0",
+      av: null,
+      tz: "America/Los_Angeles",
+      v: "73.0.0",
+    };
 
-  return axios.post(backendUrl, body);
+    return axios.post(backendUrl, body);
+  });
 };
 
 export const filterPlayers = (apiData, sport) => {
