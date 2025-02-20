@@ -40,6 +40,7 @@ import {
   totalPlayerStatsOverAllYears,
 } from "./player-stats/PlayerStatsHelper.js";
 import { extractBetweenParentheses } from "./utils/StringsUtils.js";
+import Bottleneck from "bottleneck";
 
 const app = express();
 const corsOrigin = "*";
@@ -259,15 +260,18 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
   const allTeamIdsMappings = allTeamIdsData?.[0]?.mappings ?? [];
   const allTeamIds = Object.keys(allTeamIdsMappings);
 
-  const allTeamAllPlayerStats = [];
-  for (let i = 0; i < allTeamIds.length; i++) {
-    const teamId = allTeamIds[i];
+  // apply throttling to api requests to Fantrax
+  const limiter = new Bottleneck({
+    maxConcurrent: 1,
+    minTime: 3500, // how many milliseconds between each request
+  });
+
+  // place all team all player stats into promises to account for throttling
+  const allTeamAllPlayerStatsPromises = allTeamIds.map(async (teamId) => {
     const fullGmName = allTeamIdsMappings[teamId];
     const gmName = extractBetweenParentheses(fullGmName);
     // console.log("teamId", teamId, "gmName", gmName);
-
-    // retrieve player stats from Fantrax
-    const apiResponse = await scrapePlayerStats(leagueId, teamId);
+    const apiResponse = await scrapePlayerStats(limiter, leagueId, teamId);
 
     // format stats depending on the sport
     const filteredPlayerStats = filterPlayers(apiResponse, sport);
@@ -283,12 +287,16 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
           return [];
       }
     });
-    const trimmedPlayerStats = rawPlayerStats.filter(
-      (player) => player != null
-    );
-    allTeamAllPlayerStats.push(trimmedPlayerStats);
-  }
+
+    return rawPlayerStats.filter((player) => player != null);
+  });
+
+  // resolve promises
+  const allTeamAllPlayerStats = await Promise.all(
+    allTeamAllPlayerStatsPromises
+  );
   // console.log("allTeamAllPlayerStats", allTeamAllPlayerStats);
+
   const playerStats = flatten(allTeamAllPlayerStats);
 
   // Update record in MongoDB
@@ -303,7 +311,7 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
   });
   console.log(`Updated ${year} ${sport}'s player stats at ${updateDate}`);
 
-  res.send(allTeamAllPlayerStats);
+  res.send(playerStats);
 });
 
 // update aggregated player stats for a sport
@@ -404,28 +412,35 @@ const sportStandingsRefreshCronJob = () => {
 };
 
 const rostersRefreshCronJob = () => {
-  const ROSTERS_REFRESH_CRON_SCHEDULE = "15 1 * * *"; // 1:15am every day
+  const ROSTERS_REFRESH_CRON_SCHEDULE = "47 9 * * *"; // 1:15am every day
+  // apply throttling to api requests to Fantrax
+  const limiter = new Bottleneck({
+    maxConcurrent: 1,
+    minTime: 7000, // how many milliseconds between each request
+  });
 
   cron.schedule(ROSTERS_REFRESH_CRON_SCHEDULE, async () => {
     const gmsCollection = await returnMongoCollection("gms");
     const gmsData = await gmsCollection.find({});
     const gmsAbbreviationArray = gmsData.map((gm) => gm?.abbreviation ?? "");
-    const cronUpdateDate = new Date().toLocaleString();
-    for (let i = 0; i < gmsAbbreviationArray.length; i++) {
-      const gmAbbreviation = gmsAbbreviationArray[i];
+
+    gmsAbbreviationArray.map((gmAbbreviation) => {
+      const cronUpdateDate = new Date().toLocaleString();
       const cronUrl = `${localhostUrl}/api/rosters/${gmAbbreviation}`;
-      const response = await axios.get(cronUrl);
-      if (response.status === 200) {
-        console.log(
-          `Successful cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
-        );
-      } else {
-        console.error(
-          `FAILED cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
-        );
-      }
-      console.log("------------------------------");
-    }
+      limiter.schedule(async () => {
+        const response = await axios.get(cronUrl);
+        if (response.status === 200) {
+          console.log(
+            `Successful cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
+          );
+        } else {
+          console.error(
+            `FAILED cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
+          );
+        }
+        console.log("------------------------------");
+      });
+    });
 
     console.log("============================================================");
   });

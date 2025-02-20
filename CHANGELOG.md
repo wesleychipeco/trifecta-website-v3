@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-91] - 2025-02-20
+
+- Throttle API requests to Fantrax for /rosters and /player-stats scraping
+
 ### [4.0.0] - 2025-02-15
 
 - Include changes to Google doc about httpd server updates for new endpoints
