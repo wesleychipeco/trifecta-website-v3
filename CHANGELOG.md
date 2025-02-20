@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-92] - 2025-02-20
+
+- Constants for sport name strings
+- Update last scrape string console log
+- New commissioner action: remove completed draft picks from GM's assets
+
 ### [PR-91] - 2025-02-20
 
 - Throttle API requests to Fantrax for /rosters and /player-stats scraping
