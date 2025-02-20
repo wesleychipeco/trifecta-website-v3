@@ -18,8 +18,13 @@ const COMMISSIONER_ACTION_BUTTONS = [
     disabled: false,
   },
   {
-    title: "Assign Startup Draft Slots",
-    path: ROUTES.CommissionerAssignStartupDraftSlots,
+    title: "Start New Sport with New IDs",
+    path: ROUTES.CommissionerStartNewSport,
+    disabled: true,
+  },
+  {
+    title: "Complete Sport with Playoffs",
+    path: ROUTES.CommissionerCompleteSport,
     disabled: false,
   },
   {
@@ -28,13 +33,13 @@ const COMMISSIONER_ACTION_BUTTONS = [
     disabled: false,
   },
   {
-    title: "Start New Sport",
-    path: ROUTES.CommissionerStartNewSport,
-    disabled: true,
+    title: "Remove Completed Draft Picks",
+    path: ROUTES.CommissionerRemoveCompletedDraftPicks,
+    disabled: false,
   },
   {
-    title: "Complete Sport with Playoffs",
-    path: ROUTES.CommissionerCompleteSport,
+    title: "Assign Startup Draft Slots",
+    path: ROUTES.CommissionerAssignStartupDraftSlots,
     disabled: false,
   },
   {

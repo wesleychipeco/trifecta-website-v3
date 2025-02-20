@@ -27,6 +27,8 @@ export const STATIC_ROUTES = {
   CommissionerInitializeSupplementalDraftPicks:
     "commissioner-initialize-supplemental-draft-picks",
   CommissionerTradeFutureDraftPicks: "commissioner-trade-future-draft-picks",
+  CommissionerRemoveCompletedDraftPicks:
+    "commissioner-remove-completed-draft-picks",
 };
 
 export const ROUTES = {
