@@ -13,7 +13,7 @@ import {
   MatchupsDropdownCustomStyles,
   MobileMatchupsDropdownCustomStyles,
 } from "styles/Dropdown.styles";
-import { SPORTS_ARRAY } from "./AssignDraftSlotsHelper";
+import { SPORTS_ARRAY } from "Constants";
 import { capitalize, flatten, lowerCase, sortBy } from "lodash";
 
 export const CommissionerTradeFutureDraftPicks = () => {

@@ -7,8 +7,7 @@ import { useSelector } from "react-redux";
 import * as S from "styles/CompileMatchups.styles";
 import * as T from "styles/StandardScreen.styles";
 import { calculateWinPer } from "utils/winPer";
-
-const SPORTS_ARRAY = ["basketball", "baseball", "football"];
+import { BASEBALL, BASKETBALL, FOOTBALL, SPORTS_ARRAY } from "Constants";
 
 export const CompileMatchups = () => {
   const { currentYear } = useSelector(
@@ -90,11 +89,11 @@ export const CompileMatchups = () => {
   const determineSport = (urlArrayIndex) => {
     switch (urlArrayIndex) {
       case 0:
-        return "basketball";
+        return BASKETBALL;
       case 1:
-        return "baseball";
+        return BASEBALL;
       case 2:
-        return "football";
+        return FOOTBALL;
       default:
         return "";
     }

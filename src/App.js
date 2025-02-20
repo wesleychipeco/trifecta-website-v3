@@ -30,7 +30,7 @@ import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
 import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
 import { CompileTotalMatchups } from "screens/compile-matchups/CompileTotalMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
-import { GLOBAL_VARIABLES } from "Constants";
+import { BASEBALL, BASKETBALL, FOOTBALL, GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/standings/DynastySportStandings";
 import { DynastyTradeHistory } from "screens/dynasty/trade-history/DynastyTradeHistory";
 import { EraBannerHOC } from "screens/dynasty/BannerHOC";
@@ -51,6 +51,7 @@ import { TransactionsHistory } from "screens/dynasty/transactions-history/Transa
 import { NotFound } from "screens/NotFound";
 import { SportPlayerStats } from "screens/dynasty/player-stats/SportPlayerStats";
 import { CommissionerCompleteSport } from "screens/dynasty/commissioner/CommissionerCompleteSport";
+import { CommissionerRemoveCompletedDraftPicks } from "screens/dynasty/commissioner/CommissionerRemoveCompletedDraftPicks";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -201,17 +202,17 @@ export const App = () => {
                 />
                 <Route
                   path={ROUTES.BasketballStandings}
-                  element={<DynastySportStandings sport="basketball" />}
+                  element={<DynastySportStandings sport={BASKETBALL} />}
                   exact
                 />
                 <Route
                   path={ROUTES.BaseballStandings}
-                  element={<DynastySportStandings sport="baseball" />}
+                  element={<DynastySportStandings sport={BASEBALL} />}
                   exact
                 />
                 <Route
                   path={ROUTES.FootballStandings}
-                  element={<DynastySportStandings sport="football" />}
+                  element={<DynastySportStandings sport={FOOTBALL} />}
                   exact
                 />
                 <Route
@@ -287,6 +288,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.PlayerStats}
                   element={<SportPlayerStats />}
+                  exact
+                />
+                <Route
+                  path={ROUTES.CommissionerRemoveCompletedDraftPicks}
+                  element={<CommissionerRemoveCompletedDraftPicks />}
                   exact
                 />
               </Route>

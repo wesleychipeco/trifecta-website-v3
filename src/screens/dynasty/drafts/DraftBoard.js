@@ -11,6 +11,7 @@ import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
 import { returnMongoCollection } from "database-management";
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
 
 export const DraftBoard = () => {
   const { era, sport, year } = useParams();
@@ -121,17 +122,17 @@ export const DraftBoard = () => {
 
     const loadCompletedDraft = () => {
       let csvToUse;
-      if (sport === "basketball") {
+      if (sport === BASKETBALL) {
         if (year === "startup") {
           csvToUse = BasketballStartup;
         } else if (year === "2025") {
           csvToUse = Basketball2025;
         }
-      } else if (sport === "baseball") {
+      } else if (sport === BASEBALL) {
         if (year === "startup") {
           csvToUse = BaseballStartup;
         }
-      } else if (sport === "football") {
+      } else if (sport === FOOTBALL) {
         if (year === "startup") {
           csvToUse = FootballStartup;
         }

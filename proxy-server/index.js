@@ -6,6 +6,9 @@ import axios from "axios";
 import cron from "node-cron";
 import { returnMongoCollection } from "./utils/Database.js";
 import {
+  BASEBALL,
+  BASKETBALL,
+  FOOTBALL,
   GLOBAL_VARIABLES,
   HIGH_TO_LOW,
   NUMBER_OF_TEAMS,
@@ -274,11 +277,11 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
     const filteredPlayerStats = filterPlayers(apiResponse, sport);
     const rawPlayerStats = filteredPlayerStats.map((eachRow) => {
       switch (sport) {
-        case "basketball":
+        case BASKETBALL:
           return compileBasketballStats(eachRow, gmName, year);
-        case "baseball":
+        case BASEBALL:
           return compileBaseballStats(eachRow, gmName, year);
-        case "football":
+        case FOOTBALL:
           return compileFootballStats(eachRow, gmName, year);
         default:
           return [];

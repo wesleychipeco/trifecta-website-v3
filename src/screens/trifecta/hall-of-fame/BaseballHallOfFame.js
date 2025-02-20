@@ -8,6 +8,7 @@ import {
   BestRotoColumns,
   PastChampionsColumns,
 } from "./columns";
+import { BASEBALL } from "Constants";
 
 const DEFAULT_STATE = {
   allTimeRecords: [],
@@ -22,7 +23,7 @@ export const BaseballHallOfFame = () => {
   useEffect(() => {
     const load = async () => {
       const collection = await returnMongoCollection("hallOfFame");
-      const data = await collection.find({ sport: "baseball" });
+      const data = await collection.find({ sport: BASEBALL });
       setHallOfFameData(data?.[0] ?? DEFAULT_STATE);
     };
 

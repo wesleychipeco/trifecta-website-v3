@@ -9,6 +9,7 @@ import {
   Football10WinH2HColumns,
   FootballHighestSingleWeekColumns,
 } from "./columns";
+import { FOOTBALL } from "Constants";
 
 const DEFAULT_STATE = {
   allTimeRecords: [],
@@ -23,7 +24,7 @@ export const FootballHallOfFame = () => {
   useEffect(() => {
     const load = async () => {
       const collection = await returnMongoCollection("hallOfFame");
-      const data = await collection.find({ sport: "football" });
+      const data = await collection.find({ sport: FOOTBALL });
       setHallOfFameData(data?.[0] ?? DEFAULT_STATE);
     };
 

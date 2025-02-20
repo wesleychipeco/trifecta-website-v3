@@ -230,3 +230,10 @@ export const TradeDraftPicksRowContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
 `;
+
+/////////////////// Remove Completed Draft Picks ////////////////
+export const DraftPickText = styled.p`
+  font-size: 1rem;
+  margin: 0.25rem 0 0.25rem 0;
+  padding: 0;
+`;

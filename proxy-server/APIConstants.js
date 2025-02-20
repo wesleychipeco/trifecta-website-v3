@@ -1,3 +1,7 @@
+export const BASKETBALL = "basketball";
+export const BASEBALL = "baseball";
+export const FOOTBALL = "football";
+
 export const HIGH_TO_LOW = "highToLow";
 export const LOW_TO_HIGH = "lowToHigh";
 

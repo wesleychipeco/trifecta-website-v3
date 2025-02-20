@@ -1,5 +1,10 @@
 import axios from "axios";
-import { FANTRAX_URL_STRING } from "../APIConstants.js";
+import {
+  BASEBALL,
+  BASKETBALL,
+  FANTRAX_URL_STRING,
+  FOOTBALL,
+} from "../APIConstants.js";
 import { stringToFloatWithRounding } from "../utils/StringsUtils.js";
 
 export const scrapePlayerStats = async (limiter, leagueId, teamId) => {
@@ -41,7 +46,7 @@ export const filterPlayers = (apiData, sport) => {
   });
 
   // for baseball, need to go to tables[1] to get pitchers
-  if (sport === "baseball") {
+  if (sport === BASEBALL) {
     const pitcherRows =
       apiData?.data?.responses?.[0]?.data?.tables?.[1]?.rows ?? [];
     const pitcherFilteredPlayerStats = pitcherRows.filter((eachRow) => {
@@ -332,16 +337,16 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
     if (playerAlreadyExists) {
       const existingPlayer = allPlayersTotalStatsObject[uniqueKey];
       switch (sport) {
-        case "basketball":
+        case BASKETBALL:
           newPlayer = totalExistingBasketballPlayerStats(
             existingPlayer,
             player
           );
           break;
-        case "baseball":
+        case BASEBALL:
           newPlayer = totalExistingBaseballPlayerStats(existingPlayer, player);
           break;
-        case "football":
+        case FOOTBALL:
           newPlayer = totalExistingFootballPlayerStats(existingPlayer, player);
           break;
         default:
@@ -349,13 +354,13 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
       }
     } else {
       switch (sport) {
-        case "basketball":
+        case BASKETBALL:
           newPlayer = totalNewBasketballPlayerStats(player);
           break;
-        case "baseball":
+        case BASEBALL:
           newPlayer = totalNewBaseballOrFootballPlayerStats(player);
           break;
-        case "football":
+        case FOOTBALL:
           newPlayer = totalNewBaseballOrFootballPlayerStats(player);
           break;
         default:

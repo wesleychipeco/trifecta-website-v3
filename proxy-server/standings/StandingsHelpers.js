@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FANTRAX_URL_STRING } from "../APIConstants.js";
+import { FANTRAX_URL_STRING, FOOTBALL } from "../APIConstants.js";
 
 export const scrapeStandings = async (leagueId) => {
   const backendUrl = `${FANTRAX_URL_STRING}${leagueId}`;
@@ -48,7 +48,7 @@ export const formatScrapedStandings = (standings, namesIdsObject, sport) => {
         divisionRecord: eachTeam.cells[4].content,
         division: divisionName,
       };
-      if (sport === "football") {
+      if (sport === FOOTBALL) {
         divStandingsObj["pointsFor"] = parseFloat(
           eachTeam.cells[6].content.replace(",", "")
         ).toFixed(2);

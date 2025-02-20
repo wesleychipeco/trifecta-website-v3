@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import * as S from "styles/TransactionsHistory.styles";
 import * as T from "styles/StandardScreen.styles";
 import { TransactionsHistoryTable } from "components/table/TransactionsHistoryTable";
+import { FOOTBALL } from "Constants";
 
 export const TransactionsHistory = () => {
   const { era, sport, year } = useParams();
@@ -35,7 +36,9 @@ export const TransactionsHistory = () => {
         const data = await transactionsHistoryCollection.find({ sportYear });
         const object = data?.[0] ?? {};
         const { lastScraped: lastScrapedString, transactions } = object;
-        console.log("Last scraped (Local): ", lastScrapedString);
+        console.log(
+          `${year} ${sport} Transactions last scraped (Local): ${lastScrapedString}`
+        );
         getAndSetGmsArray();
         setTransactions(transactions);
       }
@@ -52,7 +55,7 @@ export const TransactionsHistory = () => {
         tableHeaderCell: T.StringTableHeaderCell,
       },
       {
-        Header: sport === "football" ? "Week" : "Period",
+        Header: sport === FOOTBALL ? "Week" : "Period",
         accessor: "period",
         tableHeaderCell: T.NumbersTableHeaderCell,
       },

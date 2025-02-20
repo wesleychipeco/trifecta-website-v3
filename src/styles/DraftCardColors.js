@@ -1,5 +1,7 @@
 // Fantrax Colors
 
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
+
 // Basketball
 const BASKETBALL_CENTER = "rgba(54, 211, 153, 0.66)";
 const BASKETBALL_POWER_FORWARD = "rgba(192, 132, 252, 0.66)";
@@ -134,7 +136,7 @@ const colorGmMatcher = (fantasyTeam, tradedTo) => {
 const colorPositionMatcher = (sport, position) => {
   let color = "";
   switch (sport) {
-    case "basketball":
+    case BASKETBALL:
       switch (position) {
         case "C":
           color = BASKETBALL_CENTER;
@@ -156,7 +158,7 @@ const colorPositionMatcher = (sport, position) => {
           break;
       }
       break;
-    case "baseball": {
+    case BASEBALL: {
       switch (position) {
         case "C":
           color = BASEBALL_CATCHER;
@@ -191,7 +193,7 @@ const colorPositionMatcher = (sport, position) => {
       }
       break;
     }
-    case "football": {
+    case FOOTBALL: {
       switch (position) {
         case "QB":
           color = FOOTBALL_QUARTERBACK;

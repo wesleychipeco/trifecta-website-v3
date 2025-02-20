@@ -9,8 +9,9 @@ import {
   StandingsDropdownCustomStyles,
 } from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
 
-const SPORTS_ARRAY = ["trifecta", "basketball", "baseball", "football"];
+const SPORTS_ARRAY = ["trifecta", BASKETBALL, BASEBALL, FOOTBALL];
 
 export const StandingsDropdown = ({ year }) => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));

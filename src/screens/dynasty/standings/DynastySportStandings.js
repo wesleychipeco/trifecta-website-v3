@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
 import { insertIntoArray } from "utils/arrays";
+import { FOOTBALL } from "Constants";
 
 const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
@@ -45,7 +46,9 @@ export const DynastySportStandings = ({ sport }) => {
           divisionStandings,
         } = object;
 
-        console.log("Last scraped (Local Time): ", lastScrapedString);
+        console.log(
+          `${year} ${sport} Standings last scraped (Local time): ${lastScrapedString}`
+        );
         setDynastyStandings(dynastyStandings);
         setDivisionStandings(divisionStandings);
       };
@@ -88,11 +91,11 @@ export const DynastySportStandings = ({ sport }) => {
     }
     const sportYear = `${sport}${year}`;
     const dynastyStandingsColumns =
-      sport === "football"
+      sport === FOOTBALL
         ? insertIntoArray(DynastyStandingsColumnsRaw, 4, FootballPointsColumns)
         : DynastyStandingsColumnsRaw;
 
-    const playoffsIndex = sport === "football" ? 6 : 4;
+    const playoffsIndex = sport === FOOTBALL ? 6 : 4;
     return !inSeasonLeagues.includes(sportYear)
       ? insertIntoArray(dynastyStandingsColumns, playoffsIndex, PlayoffColumns)
       : dynastyStandingsColumns;
@@ -209,7 +212,7 @@ export const DynastySportStandings = ({ sport }) => {
   );
 
   const divisionStandingsColumns = useMemo(() => {
-    return sport === "football"
+    return sport === FOOTBALL
       ? FootballDivisionColumns
       : BasketballBaseballDivisionColumns;
   }, [sport, FootballDivisionColumns, BasketballBaseballDivisionColumns]);
