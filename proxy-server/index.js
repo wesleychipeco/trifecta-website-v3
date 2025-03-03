@@ -412,7 +412,7 @@ const sportStandingsRefreshCronJob = () => {
 };
 
 const rostersRefreshCronJob = () => {
-  const ROSTERS_REFRESH_CRON_SCHEDULE = "47 9 * * *"; // 1:15am every day
+  const ROSTERS_REFRESH_CRON_SCHEDULE = "15 1 * * *"; // 1:15am every day
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
