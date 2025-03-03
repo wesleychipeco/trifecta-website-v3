@@ -22,13 +22,13 @@ export const STATIC_ROUTES = {
     "commissioner-assign-startup-draft-slots",
   CommissionerAssignSupplementalDraftSlots:
     "commissioner-assign-supplemental-draft-slots",
-  CommissionerStartNewSport: "commissioner-start-new-sport",
   CommissionerCompleteSport: "commissioner-complete-sport",
   CommissionerInitializeSupplementalDraftPicks:
     "commissioner-initialize-supplemental-draft-picks",
   CommissionerTradeFutureDraftPicks: "commissioner-trade-future-draft-picks",
   CommissionerRemoveCompletedDraftPicks:
     "commissioner-remove-completed-draft-picks",
+  CommissionerAssignLeagueTeamIds: "commissioner-assign-league-team-ids",
 };
 
 export const ROUTES = {

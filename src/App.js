@@ -52,6 +52,7 @@ import { NotFound } from "screens/NotFound";
 import { SportPlayerStats } from "screens/dynasty/player-stats/SportPlayerStats";
 import { CommissionerCompleteSport } from "screens/dynasty/commissioner/CommissionerCompleteSport";
 import { CommissionerRemoveCompletedDraftPicks } from "screens/dynasty/commissioner/CommissionerRemoveCompletedDraftPicks";
+import { CommissionerAssignLeagueTeamIds } from "screens/dynasty/commissioner/CommissionerAssignLeagueTeamIds";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -293,6 +294,11 @@ export const App = () => {
                 <Route
                   path={ROUTES.CommissionerRemoveCompletedDraftPicks}
                   element={<CommissionerRemoveCompletedDraftPicks />}
+                  exact
+                />
+                <Route 
+                  path={ROUTES.CommissionerAssignLeagueTeamIds}
+                  element={<CommissionerAssignLeagueTeamIds />}
                   exact
                 />
               </Route>

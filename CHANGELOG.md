@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-93] - 2025-03-03
+
+- New commissioner action: add leagueId and teamIds for a new sport via UI instead of manually through DB
+
 ### [PR-92] - 2025-02-20
 
 - Constants for sport name strings

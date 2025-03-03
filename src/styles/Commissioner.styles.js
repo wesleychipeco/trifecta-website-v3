@@ -237,3 +237,29 @@ export const DraftPickText = styled.p`
   margin: 0.25rem 0 0.25rem 0;
   padding: 0;
 `;
+
+///////////////// Enter LeagueId and TeamIds //////////////////
+export const ManualIdsInput = styled.input`
+  height: 2rem;
+  font-size: 1.15rem;
+  font-family: ${FONT_FAMILY};
+  text-align: left;
+
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+  outline: none;
+  border: 3px solid black;
+
+  &:focus {
+    border: 3px solid ${PRIMARY_ORANGE};
+  }
+
+  @media ${MOBILE_MAX_WIDTH} {
+    padding: 0.25rem;
+    width: 16rem;
+    height: 1.25rem;
+    font-size: 1rem;
+    border: 2px solid black;
+    text-align: center;
+  }
+`;
