@@ -7,6 +7,7 @@ import BasketballStartup from "resources/data/draft-results-basketball-startup.c
 import BaseballStartup from "resources/data/draft-results-baseball-startup.csv";
 import FootballStartup from "resources/data/draft-results-football-startup.csv";
 import Basketball2025 from "resources/data/draft-results-basketball-2025.csv";
+import Baseball2025 from "resources/data/draft-results-baseball-2025.csv";
 import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
@@ -22,82 +23,79 @@ export const DraftBoard = () => {
   const [draftResultsPicks, setDraftResultsPicks] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const createGrid = useCallback(
-    (arrayOfArrays) => {
-      const arrayOfRounds = [];
-      let firstPickGM = "";
+  const createGrid = useCallback((arrayOfArrays, isStartup) => {
+    const arrayOfRounds = [];
+    let firstPickGM = "";
 
-      let startingRound = 1;
-      let arrayOfPicks = [];
-      for (let i = 1; i < arrayOfArrays.length - 1; i++) {
-        // Headers: Player ID, Round, Pick, Ov Pick, Pos, Player, Team, Fantasy Team
-        const [
-          ,
-          round,
-          pick,
-          overallPick,
-          position,
-          player,
-          team,
-          fantasyTeam, // date pt1 // date pt2
-          ,
-          ,
-          tradedFrom,
-        ] = arrayOfArrays[i];
+    let startingRound = 1;
+    let arrayOfPicks = [];
+    for (let i = 1; i < arrayOfArrays.length - 1; i++) {
+      // Headers: Player ID, Round, Pick, Ov Pick, Pos, Player, Team, Fantasy Team
+      const [
+        ,
+        round,
+        pick,
+        overallPick,
+        position,
+        player,
+        team,
+        fantasyTeam, // date pt1 // date pt2
+        ,
+        ,
+        tradedFrom,
+      ] = arrayOfArrays[i];
 
-        // set first GM to know when to reverse
-        if (i === 1) {
-          firstPickGM = fantasyTeam;
-        }
-
-        if (Number(round) === startingRound + 1) {
-          if (startingRound === 1) {
-            const copyArrayOfPicks = cloneDeep(arrayOfPicks);
-            const headerArrayOfPicks = copyArrayOfPicks.map((headerPick) => {
-              if (headerPick.tradedFrom) {
-                headerPick.fantasyTeam = headerPick.tradedFrom;
-              }
-              return headerPick;
-            });
-            setDraftResultsHeader(headerArrayOfPicks);
-          }
-
-          const toAdd =
-            arrayOfPicks[0]?.fantasyTeam === firstPickGM
-              ? arrayOfPicks
-              : arrayOfPicks.reverse();
-
-          arrayOfRounds.push(toAdd);
-          startingRound += 1;
-          arrayOfPicks = [];
-        }
-
-        const pickObject = {
-          fantasyTeam,
-          round,
-          pick,
-          overallPick,
-          player,
-          position,
-          team,
-          tradedFrom,
-        };
-
-        arrayOfPicks.push(pickObject);
+      // set first GM to know when to reverse
+      if (i === 1) {
+        firstPickGM = fantasyTeam;
       }
 
-      // after ending final loop, add last arrayOfPicks to arrayOfRounds
-      const toAdd =
-        arrayOfPicks[0]?.fantasyTeam === firstPickGM
-          ? arrayOfPicks
-          : arrayOfPicks.reverse();
-      arrayOfRounds.push(toAdd);
+      if (Number(round) === startingRound + 1) {
+        if (startingRound === 1) {
+          const copyArrayOfPicks = cloneDeep(arrayOfPicks);
+          const headerArrayOfPicks = copyArrayOfPicks.map((headerPick) => {
+            if (headerPick.tradedFrom) {
+              headerPick.fantasyTeam = headerPick.tradedFrom;
+            }
+            return headerPick;
+          });
+          setDraftResultsHeader(headerArrayOfPicks);
+        }
 
-      setDraftResultsGrid(arrayOfRounds);
-      // console.log("GRID!!!!!!!!!!", arrayOfRounds);
-    },
-    [year]
-  );
+        const toAdd =
+          arrayOfPicks[0]?.fantasyTeam === firstPickGM || !isStartup
+            ? arrayOfPicks
+            : arrayOfPicks.reverse();
+
+        arrayOfRounds.push(toAdd);
+        startingRound += 1;
+        arrayOfPicks = [];
+      }
+
+      const pickObject = {
+        fantasyTeam,
+        round,
+        pick,
+        overallPick,
+        player,
+        position,
+        team,
+        tradedFrom,
+      };
+
+      arrayOfPicks.push(pickObject);
+    }
+
+    // after ending final loop, add last arrayOfPicks to arrayOfRounds
+    const toAdd =
+      arrayOfPicks[0]?.fantasyTeam === firstPickGM
+        ? arrayOfPicks
+        : arrayOfPicks.reverse();
+    arrayOfRounds.push(toAdd);
+
+    setDraftResultsGrid(arrayOfRounds);
+    // console.log("GRID!!!!!!!!!!", arrayOfRounds);
+  }, []);
 
   useEffect(() => {
     const checkForCompletedOrFuture = async () => {
@@ -122,19 +120,25 @@ export const DraftBoard = () => {
 
     const loadCompletedDraft = () => {
       let csvToUse;
+      let isStartup = false;
       if (sport === BASKETBALL) {
         if (year === "startup") {
           csvToUse = BasketballStartup;
+          isStartup = true;
         } else if (year === "2025") {
           csvToUse = Basketball2025;
         }
       } else if (sport === BASEBALL) {
         if (year === "startup") {
           csvToUse = BaseballStartup;
+          isStartup = true;
+        } else if (year === "2025") {
+          csvToUse = Baseball2025;
         }
       } else if (sport === FOOTBALL) {
         if (year === "startup") {
           csvToUse = FootballStartup;
+          isStartup = true;
         }
       }
 
@@ -142,7 +146,7 @@ export const DraftBoard = () => {
         download: true,
         complete: (contents) => {
           if (contents.errors.length === 0) {
-            createGrid(contents.data);
+            createGrid(contents.data, isStartup);
           }
         },
       });

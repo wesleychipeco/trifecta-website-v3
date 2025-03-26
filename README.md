@@ -67,8 +67,9 @@ teamId
 - From Fantrax, download .csv of the draft results
 - Remove all quotation marks from the .csv
 - Replace all full team names with GM abbreviations (ie Wesley Chipeco -> CHIP)
-- If a pick was traded, at the end of the row, add a comma and the GM who traded away the pick. (The receiving GM is already represented by)
+- If a pick was traded, at the end of the row, add a comma and the GM who traded away the pick. (The receiving GM is already represented by csv)
 - Add the .csv to the "resources/data" directory with filename `draft-results-<sport>-<year>.csv`
+- In DraftBoard.js, add to conditional about which csv to use given sport and year "loadCompletedDraft"
 
 ### Website Updates
 
