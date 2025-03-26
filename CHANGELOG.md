@@ -2,6 +2,11 @@
 
 ### [4.0.0] - 2025-03-26
 
+### [PR-94] - 2025-03-26
+
+- Added Baseball 2025 Draft Results
+- Fixed bug where Supplemental Draft Result Boards were getting snaked
+
 ### [PR-93] - 2025-03-03
 
 - New commissioner action: add leagueId and teamIds for a new sport via UI instead of manually through DB
