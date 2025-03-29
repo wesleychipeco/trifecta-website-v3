@@ -317,7 +317,8 @@ const inningsPitchedToNumberConverter = (inningsPitchedString) => {
   return inningsPitchedString.replace(".1", ".333").replace(".2", ".667");
 };
 
-const inningsPitchedToDisplayStringConverter = (inningsPitchedString) => {
+const inningsPitchedToDisplayStringConverter = (inningsPitchedNumber) => {
+  const inningsPitchedString = inningsPitchedNumber.toString();
   return inningsPitchedString.replace(".333", ".1").replace(".667", ".2");
 };
 
