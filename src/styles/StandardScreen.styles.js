@@ -71,6 +71,10 @@ export const NumbersTableHeaderCell = styled(TableHeaderCell)`
   }
 `;
 
+export const NumberCenteredTableHeaderCell = styled(NumbersTableHeaderCell)`
+  text-align: center;
+`;
+
 export const TablesContainer = styled.div`
   display: flex;
   flex-direction: column;

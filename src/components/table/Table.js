@@ -16,6 +16,7 @@ export const Table = ({
   sortBy = [],
   top3Styling = false,
   scrollTableHeight = false,
+  hiddenColumns = [],
 }) => {
   const tableInstance = useTable(
     {
@@ -23,12 +24,19 @@ export const Table = ({
       data,
       initialState: {
         sortBy,
+        hiddenColumns,
       },
     },
     useSortBy
   );
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance;
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    setHiddenColumns,
+  } = tableInstance;
 
   // Check if styled components are passed in as props, otherwise, use Table default
   const TableComponent = table ?? S.Table;
@@ -39,6 +47,10 @@ export const Table = ({
   const TableBodyCellComponent = tableBodyCell ?? S.TableBodyCell;
 
   const [top3Array, setTop3Array] = useState([]);
+
+  useEffect(() => {
+    setHiddenColumns(hiddenColumns);
+  }, [hiddenColumns]);
 
   useEffect(() => {
     const sortedRows = tableInstance?.sortedRows ?? [];
