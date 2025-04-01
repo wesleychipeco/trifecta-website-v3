@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { capitalize } from "lodash";
 import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
+import * as G from "styles/shared";
 import { Table } from "components/table/Table";
 import {
   DynastyStandingsColumnsRaw,
@@ -30,6 +31,7 @@ export const DynastySportStandings = ({ sport }) => {
     East: [],
     West: [],
   });
+  const [lastScrapedDay, setLastScrapedDay] = useState("");
 
   useEffect(() => {
     if (isReady) {
@@ -51,6 +53,15 @@ export const DynastySportStandings = ({ sport }) => {
         );
         setDynastyStandings(dynastyStandings);
         setDivisionStandings(divisionStandings);
+
+        if (lastScrapedString) {
+          const lastScrapedIndex = lastScrapedString.indexOf(",");
+          const lastScrapedDay = lastScrapedString.substring(
+            0,
+            lastScrapedIndex
+          );
+          setLastScrapedDay(lastScrapedDay);
+        }
       };
 
       display();
@@ -228,15 +239,25 @@ export const DynastySportStandings = ({ sport }) => {
       <S.Title>{`${year} ${capitalize(sport)} Standings`}</S.Title>
       <S.TablesContainer>
         <S.SingleTableContainer>
-          <S.SingleTableContainer>
-            <S.TableTitle>Dynasty Standings</S.TableTitle>
-            <Table
-              columns={DynastyStandingsColumns}
-              data={dynastyStandings}
-              sortBy={[{ id: "totalDynastyPoints", desc: true }]}
-              top3Styling
-            />
-          </S.SingleTableContainer>
+          {lastScrapedDay && inSeasonLeagues.includes(`${sport}${year}`) && (
+            <>
+              <G.FlexRowStart>
+                <S.LastUpdatedTime style={{ fontWeight: 800 }}>
+                  Last Updated:{" "}
+                </S.LastUpdatedTime>
+                <G.HorizontalSpacer factor={1} />
+                <S.LastUpdatedTime>{lastScrapedDay}</S.LastUpdatedTime>
+              </G.FlexRowStart>
+              <G.VerticalSpacer factor={2} />
+            </>
+          )}
+          <S.TableTitle>Dynasty Standings</S.TableTitle>
+          <Table
+            columns={DynastyStandingsColumns}
+            data={dynastyStandings}
+            sortBy={[{ id: "totalDynastyPoints", desc: true }]}
+            top3Styling
+          />
         </S.SingleTableContainer>
         <S.TwoTablesContainer>
           {orderedDivisionStandings.map((division) => {

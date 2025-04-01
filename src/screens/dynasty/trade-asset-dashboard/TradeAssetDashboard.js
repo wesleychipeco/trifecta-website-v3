@@ -11,6 +11,8 @@ import ReactGA from "react-ga4";
 
 import * as S from "styles/TradeAssetDashboard.styles";
 import * as T from "styles/Dropdown.styles";
+import * as U from "styles/StandardScreen.styles";
+import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { BASEBALL } from "Constants";
 
@@ -64,6 +66,7 @@ export const TradeAssetDashboard = () => {
   );
   const { isAuthenticated, user } = useAuth0();
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
+  const [lastUpdatedDay, setLastUpdatedDay] = useState("");
 
   // load data on page ready
   useEffect(() => {
@@ -87,11 +90,17 @@ export const TradeAssetDashboard = () => {
       // console.log("allAssets", assets);
       setAssets(assets);
 
-      const lastScrapedDate =
+      const lastUpdatedDate =
         assets?.basketball?.lastUpdated ?? assets?.baseball?.lastUpdated;
       console.log(
-        `${gmAbbreviation} Trade Asset Dashboard last scraped (Local Time): ${lastScrapedDate}`
+        `${gmAbbreviation} Trade Asset Dashboard last scraped (Local Time): ${lastUpdatedDate}`
       );
+
+      if (lastUpdatedDate) {
+        const lastUpdatedIndex = lastUpdatedDate.indexOf(",");
+        const lastUpdatedDay = lastUpdatedDate.substring(0, lastUpdatedIndex);
+        setLastUpdatedDay(lastUpdatedDay);
+      }
     };
 
     if (isReady) {
@@ -198,9 +207,23 @@ export const TradeAssetDashboard = () => {
 
   return (
     <S.FlexColumnCenterContainer>
-      <S.Title>{`Trade Asset Dashboard for ${gmName} (${upperCase(
+      <S.Title
+        style={{ marginBottom: "0.5rem" }}
+      >{`Trade Asset Dashboard for ${gmName} (${upperCase(
         gmAbbreviation
       )})`}</S.Title>
+      {lastUpdatedDay && (
+        <>
+          <G.FlexRowCentered>
+            <U.LastUpdatedTime style={{ fontWeight: 800 }}>
+              Last Updated:{" "}
+            </U.LastUpdatedTime>
+            <G.HorizontalSpacer factor={1} />
+            <U.LastUpdatedTime>{lastUpdatedDay}</U.LastUpdatedTime>
+          </G.FlexRowCentered>
+          <G.VerticalSpacer factor={2} />
+        </>
+      )}
       <S.OuterTradeBlockContainer>
         <S.Subtitle>TRADE BLOCK</S.Subtitle>
         <S.SaveMessageText>{saveMessage}</S.SaveMessageText>

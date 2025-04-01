@@ -5,14 +5,19 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as S from "styles/TransactionsHistory.styles";
 import * as T from "styles/StandardScreen.styles";
+import * as G from "styles/shared";
 import { TransactionsHistoryTable } from "components/table/TransactionsHistoryTable";
 import { FOOTBALL } from "Constants";
 
 export const TransactionsHistory = () => {
   const { era, sport, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
+  const { inSeasonLeagues } = useSelector(
+    (state) => state?.currentVariables?.seasonVariables?.dynasty
+  );
   const [transactions, setTransactions] = useState([]);
   const [gmsArray, setGmsArray] = useState([]);
+  const [lastScrapedDay, setLastScrapedDay] = useState("");
 
   const getAndSetGmsArray = useCallback(async () => {
     // get list of gm abbreviations
@@ -41,6 +46,15 @@ export const TransactionsHistory = () => {
         );
         getAndSetGmsArray();
         setTransactions(transactions);
+
+        if (lastScrapedString) {
+          const lastScrapedIndex = lastScrapedString.indexOf(",");
+          const lastScrapedDay = lastScrapedString.substring(
+            0,
+            lastScrapedIndex
+          );
+          setLastScrapedDay(lastScrapedDay);
+        }
       }
     };
 
@@ -104,6 +118,18 @@ export const TransactionsHistory = () => {
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>{`${year} ${capitalize(sport)} Transactions History`}</T.Title>
+      {lastScrapedDay && inSeasonLeagues.includes(`${sport}${year}`) && (
+        <>
+          <G.FlexRowStart>
+            <T.LastUpdatedTime style={{ fontWeight: 800 }}>
+              Last Updated:{" "}
+            </T.LastUpdatedTime>
+            <G.HorizontalSpacer factor={1} />
+            <T.LastUpdatedTime>{lastScrapedDay}</T.LastUpdatedTime>
+          </G.FlexRowStart>
+          <G.VerticalSpacer factor={2} />
+        </>
+      )}
       <TransactionsHistoryTable
         columns={transactionsColumns}
         data={transactions}

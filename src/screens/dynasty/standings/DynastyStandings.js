@@ -114,15 +114,17 @@ export const DynastyStandings = () => {
       <S.TablesContainer>
         <S.SingleTableContainer>
           {lastUpdatedDate && (
-            <G.FlexRowStart>
-              <S.TableCaption style={{ fontWeight: 800 }}>
-                Last Updated:{" "}
-              </S.TableCaption>
-              <G.HorizontalSpacer factor={1} />
-              <S.TableCaption>{lastUpdatedDate}</S.TableCaption>
-            </G.FlexRowStart>
+            <>
+              <G.FlexRowStart>
+                <S.LastUpdatedTime style={{ fontWeight: 800 }}>
+                  Last Updated:{" "}
+                </S.LastUpdatedTime>
+                <G.HorizontalSpacer factor={1} />
+                <S.LastUpdatedTime>{lastUpdatedDate}</S.LastUpdatedTime>
+              </G.FlexRowStart>
+              <G.VerticalSpacer factor={2} />
+            </>
           )}
-          <G.VerticalSpacer factor={2} />
           <G.FlexRowCentered>
             <S.TableCaption>Hide In-Progress Sports</S.TableCaption>
             <G.HorizontalSpacer factor={1} />
