@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-96] - 2025-04-02
+
+- Live dynasty standings. Refreshed and displayed daily after sports standings are updated
+
 ### [PR-95] - 2025-03-29
 
 - Bugfix. Total player baseball stats adding IP & convert to string
