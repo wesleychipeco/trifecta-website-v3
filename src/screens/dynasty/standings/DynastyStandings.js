@@ -40,7 +40,10 @@ export const DynastyStandings = () => {
     if (isReady) {
       const display = async () => {
         const collection = await returnMongoCollection("dynastyStandings", era);
-        const data = await collection.find({});
+        const rawData = await collection.find({});
+        const data = rawData.filter(
+          (doc) => doc.type !== "test" && doc.type !== "backup"
+        );
         const standings = data?.[0]?.standings ?? [];
         const lastUpdated = data?.[0]?.lastUpdated ?? "";
         const lastUpdatedIndex = lastUpdated.indexOf(",");

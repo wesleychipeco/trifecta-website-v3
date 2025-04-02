@@ -10,6 +10,7 @@ import * as S from "styles/DynastyHomeScreen.styles";
 import { Table } from "components/table/Table";
 import {
   Dynasty3x5DynastyPointsColumn,
+  Dynasty3x5DynastyPointsInProgressColumn,
   Dynasty3x5GmColumn,
 } from "./standings/StandingsColumns";
 import { MOBILE_MAX_WIDTH } from "styles/global";
@@ -24,7 +25,11 @@ export const DynastyHome = () => {
   const [announcements, setAnnouncements] = useState([]);
 
   const DynastyStandingsColumns = useMemo(
-    () => [Dynasty3x5GmColumn, Dynasty3x5DynastyPointsColumn],
+    () => [
+      Dynasty3x5GmColumn,
+      Dynasty3x5DynastyPointsColumn,
+      Dynasty3x5DynastyPointsInProgressColumn,
+    ],
     []
   );
 
@@ -35,7 +40,7 @@ export const DynastyHome = () => {
         const data = await collection.find({});
         const standings = data?.[0]?.standings ?? [];
         const dynastyPointsOnlyStandings = standings.map((team) =>
-          pick(team, ["gm", "totalDynastyPoints"])
+          pick(team, ["gm", "totalDynastyPoints", "totalDynastyPointsInSeason"])
         );
         setDynastyStandings(dynastyPointsOnlyStandings);
       };
@@ -88,7 +93,7 @@ export const DynastyHome = () => {
           <Table
             columns={DynastyStandingsColumns}
             data={dynastyStandings}
-            sortBy={[{ id: "totalDynastyPoints", desc: true }]}
+            sortBy={[{ id: "totalDynastyPointsInSeason", desc: true }]}
             top3Styling
             scrollTableHeight={isMobile && "28rem"}
           />
