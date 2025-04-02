@@ -12,6 +12,7 @@ import {
   GLOBAL_VARIABLES,
   HIGH_TO_LOW,
   NUMBER_OF_TEAMS,
+  SPORTS_ARRAY,
 } from "./APIConstants.js";
 import {
   filterForStandings,
@@ -119,6 +120,108 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
     dynastyStandings,
     divisionStandings,
   });
+});
+
+// update dynasty standings
+app.get("/api/dynasty-standings", async (req, res) => {
+  const allGms = {};
+  // loop through each sport
+  for (let i = 0; i < SPORTS_ARRAY.length; i++) {
+    const sport = SPORTS_ARRAY[i];
+    const collectionName = `${sport}Standings`;
+    const standingsCollection = await returnMongoCollection(collectionName);
+    const standingsAllYears = await standingsCollection.find({});
+    // filter out any test records
+    const standingsAllYearsNoTest = standingsAllYears.filter(
+      (record) =>
+        !record.year.includes("backup") && !record.year.includes("test")
+    );
+
+    // loop through each year of sport
+    for (let j = 0; j < standingsAllYearsNoTest.length; j++) {
+      const record = standingsAllYearsNoTest[j];
+      const { year, dynastyStandings } = record;
+      const sportYear = `${sport}${year}`;
+
+      // loop through each GM of year of sport
+      for (let k = 0; k < dynastyStandings.length; k++) {
+        const dynastyRecord = dynastyStandings[k];
+
+        const { gm, totalDynastyPoints } = dynastyRecord;
+        const currentGmObj = allGms[gm];
+        if (!currentGmObj) {
+          allGms[gm] = { [sportYear]: totalDynastyPoints };
+        } else {
+          allGms[gm] = { ...currentGmObj, [sportYear]: totalDynastyPoints };
+        }
+      }
+    }
+  }
+
+  const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
+
+  const dyanstyStandingsArray = [];
+  // loop through each GM to sum points and re-arrange sports in correct order
+  for (const eachGm in allGms) {
+    const gmObj = allGms[eachGm];
+
+    const sportYearArray = [];
+    for (const sportYear in gmObj) {
+      sportYearArray.push(sportYear);
+    }
+
+    // sort available sportYears by chronological order
+    sportYearArray.sort((a, b) => {
+      const { sport: sportA, year: yearA } = sportYearToSportAndYear(a);
+      const { sport: sportB, year: yearB } = sportYearToSportAndYear(b);
+
+      // prioritize year, then sport order
+      if (yearA < yearB) {
+        return -1;
+      } else if (yearA > yearB) {
+        return 1;
+      } else {
+        return SPORTS_ARRAY.indexOf(sportA) - SPORTS_ARRAY.indexOf(sportB);
+      }
+    });
+
+    const newGmObj = {};
+    newGmObj["gm"] = eachGm;
+    let totalDyanstyPoints = 0;
+    let totalDynastyPointsInSeason = 0;
+    for (const sortedSportYear of sportYearArray) {
+      const points = gmObj[sortedSportYear];
+      newGmObj[sortedSportYear] = points;
+
+      totalDynastyPointsInSeason += points;
+      // only add to non-InSeason point total if no in-season
+      if (!inSeasonLeagues.includes(sortedSportYear)) {
+        totalDyanstyPoints += points;
+      }
+    }
+
+    newGmObj["totalDynastyPoints"] = totalDyanstyPoints;
+    newGmObj["totalDynastyPointsInSeason"] = totalDynastyPointsInSeason;
+
+    dyanstyStandingsArray.push(newGmObj);
+  }
+
+  // delete, then save to mongodb
+  const updateDate = new Date().toLocaleString();
+  const sportCollection = await returnMongoCollection("dynastyStandings");
+  // console.log("Delete, then save to mongodb");
+  await sportCollection.deleteMany({ type: "dynastyStandings" });
+  await sportCollection.insertOne({
+    lastUpdated: updateDate,
+    standings: dyanstyStandingsArray,
+    type: "dynastyStandings",
+  });
+  console.log(
+    `Updated Dynasty Standings standings successfully at ${updateDate}`
+  );
+
+  // return dynasty and division standings
+  res.send(dyanstyStandingsArray);
 });
 
 // update rosters for trade asset dashboard for a specific GM
@@ -377,10 +480,11 @@ initializeGlobalVariables().then(() => {
     // start cron jobs
     console.log("Starting cron jobs for data refresh...");
     sportStandingsRefreshCronJob();
-    rostersRefreshCronJob();
-    transactionsRefreshCronJob();
+    dyanstyStandingsRefreshCronJob();
     playerStatsRefreshCronJob();
     totalPlayerStatsRefreshCronJob();
+    rostersRefreshCronJob();
+    transactionsRefreshCronJob();
   });
 });
 
@@ -411,8 +515,26 @@ const sportStandingsRefreshCronJob = () => {
   });
 };
 
+const dyanstyStandingsRefreshCronJob = () => {
+  const DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE = "5 1 * * *"; // 1:05am every day
+  cron.schedule(DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE, async () => {
+    const cronUpdateDate = new Date().toLocaleString();
+    const cronUrl = `${localhostUrl}/api/dynasty-standings`;
+    const response = await axios.get(cronUrl);
+    if (response.status === 200) {
+      console.log(
+        `Successful cron job dynasty standings refresh at ${cronUpdateDate}`
+      );
+    } else {
+      console.error(
+        `FAILED cron job dynasty standings refresh at ${cronUpdateDate}`
+      );
+    }
+  });
+};
+
 const rostersRefreshCronJob = () => {
-  const ROSTERS_REFRESH_CRON_SCHEDULE = "15 1 * * *"; // 1:15am every day
+  const ROSTERS_REFRESH_CRON_SCHEDULE = "30 1 * * *"; // 1:30am every day
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
@@ -473,7 +595,7 @@ const transactionsRefreshCronJob = () => {
 };
 
 const playerStatsRefreshCronJob = () => {
-  const PLAYER_STATS_REFRESH__CRON_SCHEDULE = "5 1 * * *"; // 1:05am every day
+  const PLAYER_STATS_REFRESH__CRON_SCHEDULE = "15 1 * * *"; // 1:15am every day
 
   cron.schedule(PLAYER_STATS_REFRESH__CRON_SCHEDULE, async () => {
     const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
@@ -499,7 +621,7 @@ const playerStatsRefreshCronJob = () => {
 };
 
 const totalPlayerStatsRefreshCronJob = () => {
-  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "10 1 * * *"; // 1:10am every day
+  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "20 1 * * *"; // 1:20am every day
 
   cron.schedule(TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE, async () => {
     const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
