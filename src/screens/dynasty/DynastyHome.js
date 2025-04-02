@@ -7,6 +7,8 @@ import { format } from "date-fns";
 import { pick } from "lodash";
 import { LeagueCalendar } from "components/calendar/Calendar";
 import * as S from "styles/DynastyHomeScreen.styles";
+import * as T from "styles/StandardScreen.styles";
+import * as G from "styles/shared";
 import { Table } from "components/table/Table";
 import {
   Dynasty3x5DynastyPointsColumn,
@@ -23,6 +25,7 @@ export const DynastyHome = () => {
   const [dynastyStandings, setDynastyStandings] = useState([]);
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
+  const [lastUpdatedDay, setLastUpdatedDay] = useState("");
 
   const DynastyStandingsColumns = useMemo(
     () => [
@@ -37,12 +40,19 @@ export const DynastyHome = () => {
     if (isReady) {
       const display = async () => {
         const collection = await returnMongoCollection("dynastyStandings", era);
-        const data = await collection.find({});
+        const rawData = await collection.find({});
+        const data = rawData.filter(
+          (doc) => doc.type !== "test" && doc.type !== "backup"
+        );
         const standings = data?.[0]?.standings ?? [];
+        const lastUpdated = data?.[0]?.lastUpdated ?? "";
+        const lastUpdatedIndex = lastUpdated.indexOf(",");
+        const lastUpdatedDay = lastUpdated.substring(0, lastUpdatedIndex);
         const dynastyPointsOnlyStandings = standings.map((team) =>
           pick(team, ["gm", "totalDynastyPoints", "totalDynastyPointsInSeason"])
         );
         setDynastyStandings(dynastyPointsOnlyStandings);
+        setLastUpdatedDay(lastUpdatedDay);
       };
       display();
     }
@@ -90,6 +100,17 @@ export const DynastyHome = () => {
       {dynastyStandings.length > 0 && (
         <S.StandingsContainer>
           <S.StandingsTitle>Dynasty Standings</S.StandingsTitle>
+          {lastUpdatedDay && (
+            <>
+              <G.FlexRowCentered>
+                <T.LastUpdatedTime style={{ fontWeight: 800 }}>
+                  Last Updated:{" "}
+                </T.LastUpdatedTime>
+                <G.HorizontalSpacer factor={1} />
+                <T.LastUpdatedTime>{lastUpdatedDay}</T.LastUpdatedTime>
+              </G.FlexRowCentered>
+            </>
+          )}
           <Table
             columns={DynastyStandingsColumns}
             data={dynastyStandings}
