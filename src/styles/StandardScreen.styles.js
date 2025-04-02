@@ -30,6 +30,7 @@ export const Title = styled.h1`
 
 export const TableTitle = styled.h2`
   margin: 0;
+  font-size: 1.7rem;
 
   @media ${MOBILE_MAX_WIDTH} {
     font-size: 1.25rem;
@@ -40,7 +41,19 @@ export const TableTitle = styled.h2`
 `;
 
 export const TableCaption = styled.p`
-  font-size: 1.45rem;
+  font-size: 1.35rem;
+  margin: 0.25rem 0 0 0;
+
+  @media ${MOBILE_MAX_WIDTH} {
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+    align-self: center;
+  }
+`;
+
+export const LastUpdatedTime = styled.p`
+  font-size: 1.35rem;
   margin: 0.25rem 0 0 0;
 
   @media ${MOBILE_MAX_WIDTH} {
@@ -69,6 +82,10 @@ export const NumbersTableHeaderCell = styled(TableHeaderCell)`
     width: 4rem;
     padding: 0.5rem;
   }
+`;
+
+export const NumberCenteredTableHeaderCell = styled(NumbersTableHeaderCell)`
+  text-align: center;
 `;
 
 export const TablesContainer = styled.div`

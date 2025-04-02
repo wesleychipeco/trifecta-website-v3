@@ -25,6 +25,7 @@ export const SportPlayerStats = () => {
   const [gmsArray, setGmsArray] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [yearsArray, setYearsArray] = useState([]);
+  const [lastScrapedDay, setLastScrapedDay] = useState("");
 
   const getAndSetGmsArray = useCallback(async () => {
     // get list of gm abbreviations
@@ -76,6 +77,11 @@ export const SportPlayerStats = () => {
         console.log(
           `${sport} Player Stats last scraped (Local time): ${lastScrapedDate}`
         );
+        if (lastScrapedDate) {
+          const lastScrapedIndex = lastScrapedDate.indexOf(",");
+          const lastScrapedDay = lastScrapedDate.substring(0, lastScrapedIndex);
+          setLastScrapedDay(lastScrapedDay);
+        }
       };
 
       display();
@@ -88,9 +94,21 @@ export const SportPlayerStats = () => {
       <S.Title>{`${capitalize(sport)} Player Stats`}</S.Title>
       <T.TablesContainer>
         <S.SingleTableContainer>
-          <S.TableCaption>
-            All stats are only recorded while in a starting fantasy lineup
-          </S.TableCaption>
+          <G.FlexRowStart>
+            <S.TableCaption>
+              All stats are only recorded while in a starting fantasy lineup.
+            </S.TableCaption>
+            {lastScrapedDay && (
+              <>
+                <G.HorizontalSpacer factor={1} />
+                <S.LastUpdatedTime style={{ fontWeight: 800 }}>
+                  Last Updated:{" "}
+                </S.LastUpdatedTime>
+                <G.HorizontalSpacer factor={1} />
+                <S.LastUpdatedTime>{lastScrapedDay}</S.LastUpdatedTime>
+              </>
+            )}
+          </G.FlexRowStart>
           <G.VerticalSpacer factor={isMobile ? 0 : 4} />
           <PlayerStatsTable
             sport={sport}
