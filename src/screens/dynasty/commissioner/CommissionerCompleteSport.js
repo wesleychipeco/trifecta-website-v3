@@ -66,7 +66,7 @@ export const CommissionerCompleteSport = () => {
         label: capitalize(league),
       };
     });
-  }, [isReady]);
+  }, [inSeasonLeagues]);
 
   const handleLeagueChange = useCallback((event) => {
     setSelectedLeague(event?.value);
@@ -87,6 +87,13 @@ export const CommissionerCompleteSport = () => {
       label: gm,
     }));
   }, [gmsArray]);
+
+  const timeoutSaveMessage = useCallback((message) => {
+    setSaveMessageText(message);
+    setTimeout(() => {
+      setSaveMessageText("");
+    }, 3000);
+  }, []);
 
   const savePlayoffPoints = useCallback(async () => {
     const globalVariablesCollection = await returnMongoCollection(
@@ -146,7 +153,7 @@ export const CommissionerCompleteSport = () => {
     standingsCollection.insertOne(standingsCopy);
 
     timeoutSaveMessage("Successfully completed sport and saved collections");
-  }, [selectedLeague, era, earners]);
+  }, [selectedLeague, era, earners, timeoutSaveMessage]);
 
   useEffect(() => {
     if (selectedLeague.length === 0) {
@@ -159,13 +166,6 @@ export const CommissionerCompleteSport = () => {
     }
     setIsSaveButtonEnabled(true);
   }, [era, selectedLeague, earners]);
-
-  const timeoutSaveMessage = useCallback((message) => {
-    setSaveMessageText(message);
-    setTimeout(() => {
-      setSaveMessageText("");
-    }, 3000);
-  }, []);
 
   return (
     <T.FlexColumnCenterContainer>

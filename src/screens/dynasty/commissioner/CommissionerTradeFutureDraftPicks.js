@@ -180,8 +180,8 @@ export const CommissionerTradeFutureDraftPicks = () => {
 
         // different pick matching logic depending if set grid or not
         const isCorrectPick = isGrid
-          ? overallPick == eachPick.overallPick.toString()
-          : roundAndPick == eachPick.pick;
+          ? overallPick === eachPick.overallPick.toString()
+          : roundAndPick === eachPick.pick;
 
         if (givingGm === eachPick.fantasyTeam && isCorrectPick) {
           eachPick["tradedTo"] = receivingGm;

@@ -96,7 +96,7 @@ export const CommissionerAssignLeagueTeamIds = () => {
 
   useEffect(() => {
     let anyEmptyValues = false;
-    for (const [key, value] of Object.entries(teamIds)) {
+    for (const [, value] of Object.entries(teamIds)) {
       if (value === "") {
         anyEmptyValues = true;
       }
@@ -170,7 +170,15 @@ export const CommissionerAssignLeagueTeamIds = () => {
     }
 
     timeoutSaveMessage("Successfully saved leagueId and teamIds");
-  }, [era, teamIds, sport, year, leagueId, timeoutSaveMessage]);
+  }, [
+    era,
+    teamIds,
+    sport,
+    year,
+    leagueId,
+    timeoutSaveMessage,
+    getAbbreviation,
+  ]);
 
   return (
     <T.FlexColumnCenterContainer>
