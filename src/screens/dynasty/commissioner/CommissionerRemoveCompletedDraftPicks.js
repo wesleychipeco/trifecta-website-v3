@@ -71,6 +71,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
         if (draftPickYear !== selectedYear) {
           return eachDraftPick;
         }
+        return false;
       });
     },
     [selectedYear]
