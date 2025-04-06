@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { returnMongoCollection } from "database-management";
-import { format } from "date-fns";
+import { format, isAfter, isBefore } from "date-fns";
 import { pick } from "lodash";
 import { LeagueCalendar } from "components/calendar/Calendar";
 import * as S from "styles/DynastyHomeScreen.styles";
@@ -84,12 +84,18 @@ export const DynastyHome = () => {
         era
       );
       const announcements = await leagueAnnouncementsCollection.find(
-        { archived: false },
-        { sort: { date: 1 } }
+        {},
+        { sort: { startDate: -1 } }
+      );
+      const now = new Date();
+      const inProgressAnnouncements = announcements.filter(
+        (ann) =>
+          isBefore(new Date(Date.parse(ann.startDate)), now) &&
+          isAfter(new Date(Date.parse(ann.endDate)), now)
       );
 
       setCalendarEvents(convertedCalendarEvents);
-      setAnnouncements(announcements);
+      setAnnouncements(inProgressAnnouncements);
     };
 
     load();
@@ -132,7 +138,7 @@ export const DynastyHome = () => {
               return (
                 <S.Announcement key={ann.title}>
                   <S.AnnouncementDate>
-                    {format(new Date(ann.date), "M/d/yy ")}
+                    {format(new Date(ann.startDate), "M/d/yy ")}
                   </S.AnnouncementDate>
                   <S.AnnouncementTitleText>{ann.title}</S.AnnouncementTitleText>
                 </S.Announcement>

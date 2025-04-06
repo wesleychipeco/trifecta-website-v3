@@ -42,6 +42,8 @@ import {
 } from "./player-stats/PlayerStatsHelper.js";
 import { extractBetweenParentheses } from "./utils/StringsUtils.js";
 import Bottleneck from "bottleneck";
+import { addDays, addHours, format } from "date-fns";
+import { TZDate } from "@date-fns/tz";
 
 const app = express();
 const corsOrigin = "*";
@@ -456,6 +458,149 @@ app.get("/api/total-player-stats/:sport", async (req, res) => {
   console.log(`Updated total player stats for ${sport} at ${updateDate}`);
 
   res.send(totalPlayerStatsArray);
+});
+
+// create league event for the calendar
+app.post("/api/commissioner/league-event", async (req, res) => {
+  const { title, startDate, startHourInMilitary, durationHours, description } =
+    req.body;
+
+  // validate required fields for payload
+  const missingRequiredFields = [];
+  if (!title) {
+    missingRequiredFields.push("title");
+  }
+  if (!startDate) {
+    missingRequiredFields.push("startDate");
+  }
+  if (!startHourInMilitary) {
+    missingRequiredFields.push("startHourInMilitary");
+  }
+  if (!durationHours) {
+    missingRequiredFields.push("durationHours");
+  }
+  if (!description) {
+    missingRequiredFields.push("description");
+  }
+  if (missingRequiredFields.length > 0) {
+    return res
+      .status(400)
+      .send(
+        `Required fields missing from payload: ${missingRequiredFields.join(
+          ", "
+        )}`
+      );
+  }
+
+  // parse startDate into individual numbers
+  const [startMonth, startDay, startYear] = startDate.split("/");
+  // validate fields for acceptable inputs
+  if (!startMonth || !startDay || !startYear) {
+    res
+      .status(400)
+      .send("startDate field incorrectly formatted. Send in 01/01/2025 format");
+  }
+  if (startHourInMilitary < 0 || startHourInMilitary > 23) {
+    res
+      .status(400)
+      .send("startHourInMilitary field needs to be between 0 and 23");
+  }
+  if (isNaN(durationHours)) {
+    res.status(400).send("durationHours field needs to be a valid number");
+  }
+
+  const timezone = "America/Los_Angeles";
+  const startOfDay = new TZDate(
+    Number(startYear),
+    Number(startMonth) - 1,
+    Number(startDay),
+    timezone
+  );
+  const startDateTime = addHours(startOfDay, startHourInMilitary);
+  const endDateTime = addHours(startDateTime, durationHours);
+
+  const formatString = "yyyy-MM-dd'T'HH:mm:ssXXX";
+  const startDateTimeFormatted = format(startDateTime, formatString);
+  const endDateTimeFormatted = format(endDateTime, formatString);
+
+  const leagueEventObj = {
+    title,
+    description,
+    start: startDateTimeFormatted,
+    end: endDateTimeFormatted,
+  };
+
+  const leagueEventsCollection = await returnMongoCollection("leagueCalendar");
+  leagueEventsCollection.insertOne(leagueEventObj);
+
+  res.send(leagueEventObj);
+});
+
+// create league announcement (include sending email/push notification?)
+app.post("/api/commissioner/league-announcement", async (req, res) => {
+  const { title, startDate, durationDays, notify } = req.body;
+
+  // validate required fields for payload
+  const missingRequiredFields = [];
+  if (!title) {
+    missingRequiredFields.push("title");
+  }
+  if (!startDate) {
+    missingRequiredFields.push("startDate");
+  }
+  if (!durationDays) {
+    missingRequiredFields.push("durationDays");
+  }
+  const notifyBool = notify ? notify : false;
+
+  if (missingRequiredFields.length > 0) {
+    return res
+      .status(400)
+      .send(
+        `Required fields missing from payload: ${missingRequiredFields.join(
+          ", "
+        )}`
+      );
+  }
+
+  // parse startDate into individual numbers
+  const [startMonth, startDay, startYear] = startDate.split("/");
+  // validate fields for acceptable inputs
+  if (!startMonth || !startDay || !startYear) {
+    res
+      .status(400)
+      .send("startDate field incorrectly formatted. Send in 01/01/2025 format");
+  }
+  if (isNaN(durationDays)) {
+    res.status(400).send("durationDays field needs to be a valid number");
+  }
+
+  const timezone = "America/Los_Angeles";
+  const startDateTime = new TZDate(
+    Number(startYear),
+    Number(startMonth) - 1,
+    Number(startDay),
+    timezone
+  );
+  const endDateTime = addDays(startDateTime, durationDays + 1); // add 1 day because will expire at midnight
+
+  const formatString = "yyyy-MM-dd'T'HH:mm:ssXXX";
+  const startDateTimeFormatted = format(startDateTime, formatString);
+  const endDateTimeFormatted = format(endDateTime, formatString);
+
+  const leagueAnnouncementObj = {
+    title,
+    startDate: startDateTimeFormatted,
+    endDate: endDateTimeFormatted,
+    notify: notifyBool,
+  };
+
+  const leagueEventsCollection = await returnMongoCollection(
+    "leagueAnnouncements"
+  );
+  leagueEventsCollection.insertOne(leagueAnnouncementObj);
+
+  res.send(leagueAnnouncementObj);
 });
 
 // initialize global variables from MongoDB for backend use
