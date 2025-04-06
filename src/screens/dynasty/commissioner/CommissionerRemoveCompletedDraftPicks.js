@@ -56,7 +56,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
     }
 
     return allSportYearsArray;
-  }, [inSeasonLeagues, completedLeagues]);
+  }, [inSeasonLeagues, completedLeagues, transformOptions]);
 
   const handleSelectedSportYear = useCallback((e) => {
     const { sport, year } = sportYearToSportAndYear(e.value);
@@ -76,7 +76,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
     [selectedYear]
   );
 
-  useEffect(async () => {
+  useEffect(() => {
     if (isReady && selectedSport !== "" && selectedYear !== "") {
       const retrieveSampleData = async () => {
         const gmsCollection = await returnMongoCollection("gms", era);
@@ -93,7 +93,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
 
       retrieveSampleData();
     }
-  }, [isReady, era, selectedSport, selectedYear]);
+  }, [isReady, era, selectedSport, selectedYear, filterOutDraftPicks]);
 
   const saveChanges = useCallback(async () => {
     const gmsCollection = await returnMongoCollection("gms", era);
@@ -124,7 +124,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
         `Successfully updated all GM's ${selectedYear} ${selectedSport} draft picks`
       );
     }
-  }, [era, selectedSport, selectedYear]);
+  }, [era, selectedSport, selectedYear, filterOutDraftPicks]);
 
   return (
     <T.FlexColumnCenterContainer>

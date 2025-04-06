@@ -52,7 +52,7 @@ export const Table = ({
     if (hiddenColumns.length > 0) {
       setHiddenColumns(hiddenColumns);
     }
-  }, [hiddenColumns]);
+  }, [hiddenColumns, setHiddenColumns]);
 
   useEffect(() => {
     const sortedRows = tableInstance?.sortedRows ?? [];
