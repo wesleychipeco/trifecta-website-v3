@@ -1,5 +1,12 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.2.0] - 2025-04-05
+
+### [PR-97] - 2025-04-05
+
+- New API endpoints for adding league events and league announcements. And clean up display
+- Bugfix to prevent infinite re-renders for Tables caused by hiddenColumns check
+
 ### [4.1.0] - 2025-04-02
 
 ### [PR-96] - 2025-04-02
