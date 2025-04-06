@@ -2,6 +2,10 @@
 
 ### [4.2.0] - 2025-04-05
 
+### [PR-98] - 2025-04-05
+
+- Resolve React warnings
+
 ### [PR-97] - 2025-04-05
 
 - New API endpoints for adding league events and league announcements. And clean up display
