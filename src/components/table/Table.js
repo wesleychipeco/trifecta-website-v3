@@ -49,7 +49,9 @@ export const Table = ({
   const [top3Array, setTop3Array] = useState([]);
 
   useEffect(() => {
-    setHiddenColumns(hiddenColumns);
+    if (hiddenColumns.length > 0) {
+      setHiddenColumns(hiddenColumns);
+    }
   }, [hiddenColumns]);
 
   useEffect(() => {
