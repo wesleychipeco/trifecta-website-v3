@@ -32,10 +32,10 @@ export const CommissionerCompleteSport = () => {
     (state) => state?.currentVariables?.seasonVariables?.dynasty
   );
   const [earners, setEarners] = useState({
-    CHAMPION_STRING: "",
-    RUNNER_UP_STRING: "",
-    SEMIFINALIST_1_STRING: "",
-    SEMIFINALIST_2_STRING: "",
+    [CHAMPION_STRING]: "",
+    [RUNNER_UP_STRING]: "",
+    [SEMIFINALIST_1_STRING]: "",
+    [SEMIFINALIST_2_STRING]: "",
   });
   const [gmsArray, setGmsArray] = useState([]);
   const [selectedLeague, setSelectedLeague] = useState("");
