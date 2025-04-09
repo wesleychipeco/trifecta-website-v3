@@ -1,6 +1,8 @@
 # 3x5 Trifecta Website README
 
-## Architecture
+## Architecture Diagram
+
+![Architecture Diagram](src/resources/images/3x5-website-architecture-diagram.png "Architecture Diagram")
 
 - All cloud infrastructure is hosted on Free Tier services
 - SSL certification running on Apache Web Server
@@ -8,15 +10,11 @@
 - Frontend React Web Server & Backend API are running on EC2 instance
 - Daily cron jobs refresh data from Fantrax API
 
-![Architecture Diagram](src/resources/images/3x5-website-architecture-diagram.png "Architecture Diagram")
-
 ## Commissioner Upkeep Actions
 
-- The Commissioner will be responsible for updating certain parameters and variables to allow the website to stay up to date
+## Metadata Updates
 
-### Data Updates
-
-##### When a new sport season starts
+#### When a new sport season starts
 
 In Fantrax...
 
@@ -31,28 +29,28 @@ In DB...
 
 - Add sportYear to `inSeasonLeagues` in globalVariables collection
 
-##### When a sport's fantasy playoffs start
+#### When a sport's fantasy playoffs start
 
 - On Fantrax, set Playoff Bracket matchups each week including 3rd place game
 
-##### When a sport's fantasy season ends
+#### When a sport's fantasy season ends
 
-- Using the **Complete Sport with Playoffs** Commissioner Action, assign Playoff Dynasty Points and remove sportYear from `inSeasonLeagues` global variable
+- Using the **"Complete Sport with Playoffs"** Commissioner Action, assign Playoff Dynasty Points (which also removes sportYear from `inSeasonLeagues` global variable)
 - Payout the winners of the sport
 - Conduct the lottery for the next season's supplementary draft
 - Renew the Fantrax League for next season
 - Update carryover FAAB
 - Update the `currentRosterLeagues` global variable with new sportYear in DB
-- Using the **Start New Sport with New IDs** Commissioner Action, assign the new sport and year's leagueId and individual teamIds. Find the leagueId and teamIds using the Network tab of the Chrome Inspector
+- Using the **"Start New Sport with New IDs"** Commissioner Action, assign the new sport and year's leagueId and individual teamIds. Find the leagueId and teamIds using the Network tab of the Chrome Inspector
 
-##### When a trade occurs
+#### When a trade occurs
 
-- In Commissioner Actions, **Enter Trade History** so the trade appears on the Trade History
-- If future draft picks are involved, **Trade Draft Picks** to update future Draft Boards and Trade Asset Dashboards
+- In Commissioner Actions, **"Enter Trade History"** so the trade appears on the Trade History
+- If future draft picks are involved, **"Trade Draft Picks"** to update future Draft Boards and Trade Asset Dashboards
 - Manually execute all available aspects of the trade
 - Ping involved GMs to let them know the trade has been processed and if there are any illegal rosters/lineups as a result, that the GM has to fix it before next lineup lock
 
-##### Adding draft results
+#### Adding draft results
 
 - From Fantrax, download .csv of the draft results
 - Remove all quotation marks from the .csv
@@ -62,6 +60,6 @@ In DB...
 - In DraftBoard.js, add to conditional about which csv to use given sport and year "loadCompletedDraft"
 - In "drafts" collection in DB, move the sportYear of completed draft from `futureDrafts` array to `completedDrafts` array
 
-### Website Updates
+## Website Updates
 
 See: https://tinyurl.com/trifectawebdoc
