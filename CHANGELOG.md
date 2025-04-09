@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-99] - 2024-04-08
+
+- README and architecture diagram update
+
 ### [4.2.0] - 2025-04-05
 
 ### [PR-98] - 2025-04-05
