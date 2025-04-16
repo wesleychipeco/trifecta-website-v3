@@ -368,7 +368,7 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
-    minTime: 3500, // how many milliseconds between each request
+    minTime: 10000, // how many milliseconds between each request
   });
 
   // place all team all player stats into promises to account for throttling
@@ -661,7 +661,7 @@ const sportStandingsRefreshCronJob = () => {
 };
 
 const dyanstyStandingsRefreshCronJob = () => {
-  const DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE = "5 1 * * *"; // 1:05am every day
+  const DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE = "10 1 * * *"; // 1:10am every day
   cron.schedule(DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE, async () => {
     const cronUpdateDate = new Date().toLocaleString();
     const cronUrl = `${localhostUrl}/api/dynasty-standings`;
@@ -679,11 +679,11 @@ const dyanstyStandingsRefreshCronJob = () => {
 };
 
 const rostersRefreshCronJob = () => {
-  const ROSTERS_REFRESH_CRON_SCHEDULE = "30 1 * * *"; // 1:30am every day
+  const ROSTERS_REFRESH_CRON_SCHEDULE = "0 2 * * *"; // 2:00am every day
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
-    minTime: 7000, // how many milliseconds between each request
+    minTime: 10000, // how many milliseconds between each request
   });
 
   cron.schedule(ROSTERS_REFRESH_CRON_SCHEDULE, async () => {
@@ -740,7 +740,7 @@ const transactionsRefreshCronJob = () => {
 };
 
 const playerStatsRefreshCronJob = () => {
-  const PLAYER_STATS_REFRESH__CRON_SCHEDULE = "15 1 * * *"; // 1:15am every day
+  const PLAYER_STATS_REFRESH__CRON_SCHEDULE = "30 1 * * *"; // 1:30am every day
 
   cron.schedule(PLAYER_STATS_REFRESH__CRON_SCHEDULE, async () => {
     const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
@@ -766,7 +766,7 @@ const playerStatsRefreshCronJob = () => {
 };
 
 const totalPlayerStatsRefreshCronJob = () => {
-  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "20 1 * * *"; // 1:20am every day
+  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "50 1 * * *"; // 1:50am every day
 
   cron.schedule(TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE, async () => {
     const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;
