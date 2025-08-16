@@ -368,7 +368,7 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
-    minTime: 3500, // how many milliseconds between each request
+    minTime: 10000, // how many milliseconds between each request
   });
 
   // place all team all player stats into promises to account for throttling
@@ -683,7 +683,7 @@ const rostersRefreshCronJob = () => {
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
-    minTime: 7000, // how many milliseconds between each request
+    minTime: 15000, // how many milliseconds between each request
   });
 
   cron.schedule(ROSTERS_REFRESH_CRON_SCHEDULE, async () => {
