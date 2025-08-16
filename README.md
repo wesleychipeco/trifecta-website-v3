@@ -24,6 +24,7 @@ In Fantrax...
 - Set Consolation Bracket to Commissioner initially set and then proceeding on own
 - Set Trade Deadline to be 2 weeks to the Monday before the end of the regular season
 - Set phone reminders to set Playoff Bracket matchups each Sunday night
+- For baseball specifically, set reminder on Opening Day to lock the player pool for the rest of the season
 
 In DB...
 
