@@ -84,7 +84,11 @@ export const compileBasketballStats = (row, gmName, year) => {
     turnoversObject,
   ] = cells;
 
-  if (gamesPlayedObject.content === "" || gamesPlayedObject.content === "0") {
+  if (
+    !gamesPlayedObject ||
+    gamesPlayedObject.content === "" ||
+    gamesPlayedObject.content === "0"
+  ) {
     return null;
   }
 
@@ -139,7 +143,11 @@ export const compileBaseballStats = (row, gmName, year) => {
       gamesPlayedObject,
     ] = cells;
 
-    if (gamesPlayedObject.content === "" || gamesPlayedObject.content === "0") {
+    if (
+      !gamesPlayedObject ||
+      gamesPlayedObject.content === "" ||
+      gamesPlayedObject.content === "0"
+    ) {
       return null;
     }
 
@@ -196,7 +204,11 @@ export const compileBaseballStats = (row, gmName, year) => {
       gamesPlayedObject,
     ] = cells;
 
-    if (gamesPlayedObject.content === "" || gamesPlayedObject.content === "0") {
+    if (
+      !gamesPlayedObject ||
+      gamesPlayedObject.content === "" ||
+      gamesPlayedObject.content === "0"
+    ) {
       return null;
     }
 
