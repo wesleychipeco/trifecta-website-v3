@@ -679,7 +679,7 @@ const dyanstyStandingsRefreshCronJob = () => {
 };
 
 const rostersRefreshCronJob = () => {
-  const ROSTERS_REFRESH_CRON_SCHEDULE = "30 1 * * *"; // 1:30am every day
+  const ROSTERS_REFRESH_CRON_SCHEDULE = "30 2 * * *"; // 2:30am every day
   // apply throttling to api requests to Fantrax
   const limiter = new Bottleneck({
     maxConcurrent: 1,
@@ -766,7 +766,7 @@ const playerStatsRefreshCronJob = () => {
 };
 
 const totalPlayerStatsRefreshCronJob = () => {
-  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "20 1 * * *"; // 1:20am every day
+  const TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE = "0 2 * * *"; // 2:00am every day
 
   cron.schedule(TOTAL_PLAYER_STATS_RERESH_CRON_SCHEDULE, async () => {
     const { inSeasonLeagues } = app.locals.dynastyGlobalVariables;

@@ -1,6 +1,10 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
-### [PR-99] - 2024-04-08
+### [PR-100] - 2025-08-15
+
+- Minor proxy server reliability fixes. Hopefully
+
+### [PR-99] - 2025-04-08
 
 - README and architecture diagram update
 
