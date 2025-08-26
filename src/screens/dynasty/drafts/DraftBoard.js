@@ -8,6 +8,7 @@ import BaseballStartup from "resources/data/draft-results-baseball-startup.csv";
 import FootballStartup from "resources/data/draft-results-football-startup.csv";
 import Basketball2025 from "resources/data/draft-results-basketball-2025.csv";
 import Baseball2025 from "resources/data/draft-results-baseball-2025.csv";
+import Football2025 from "resources/data/draft-results-football-2025.csv";
 import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
@@ -139,6 +140,8 @@ export const DraftBoard = () => {
         if (year === "startup") {
           csvToUse = FootballStartup;
           isStartup = true;
+        } else if (year === "2025") {
+          csvToUse = Football2025;
         }
       }
 
