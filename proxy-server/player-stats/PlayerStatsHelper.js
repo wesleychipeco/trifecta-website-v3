@@ -783,6 +783,7 @@ const totalExistingFootballPlayerStats = (
     rushingYards,
     rushingTDs,
     rushing1D,
+    rushing2PA,
     receptions,
     receivingYards,
     receivingTDs,
@@ -793,6 +794,7 @@ const totalExistingFootballPlayerStats = (
     returnTDs,
     // total2PA,
     // miscTDS,
+    teamName,
   } = playerObject;
 
   // sanity check
@@ -832,8 +834,8 @@ const totalExistingFootballPlayerStats = (
   fumblesLost += previousFumblesLost;
   fumbleRecoveryTDs += previousFumbleRecoveryTDs;
   returnTDs += previousReturnTDs;
-  total2PA = passing2PA + rushing2PA + receiving2PA;
-  miscTDs = fumbleRecoveryTDs + returnTDs;
+  const total2PA = passing2PA + rushing2PA + receiving2PA;
+  const miscTDs = fumbleRecoveryTDs + returnTDs;
 
   return {
     name,
