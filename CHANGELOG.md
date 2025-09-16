@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.2.1] - 2025-09-15
+
+### [PR-101] - 2025-09-15
+
+- Fixes bugs in total football stats
+
 ### [PR-100] - 2025-08-15
 
 - Minor proxy server reliability fixes. Hopefully

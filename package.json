@@ -1,6 +1,6 @@
 {
   "name": "trifecta-website-v3",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^2.0.0",
