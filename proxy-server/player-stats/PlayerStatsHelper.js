@@ -742,7 +742,7 @@ const totalExistingFootballPlayerStats = (
     agesArray,
     positionsArray,
     gamesPlayed: previousGamesPlayed,
-    fantasyPointsPoints: previousFantasyPoints,
+    fantasyPoints: previousFantasyPoints,
     passingYards: previousPassingYards,
     passingTDs: previousPassingTDs,
     interceptions: previousInterceptions,

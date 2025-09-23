@@ -66,7 +66,15 @@ app.get("/", (req, res) => {
 app.get("/api/standings/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
+  const { overwrite } = req.query;
   const sportYear = `${sport}${year}`;
+
+  const { completedLeagues } = app.locals.dynastyGlobalVariables;
+  if (completedLeagues.includes(sportYear) && overwrite !== "true") {
+    return res.send(
+      "This season has already been completed. Are you sure you want to scrape and overwrite? If so, add ?overwrite=true to the request"
+    );
+  }
 
   // retrieve leagueId
   const leagueId = leagueIdFromSportYear(sportYear);
@@ -88,9 +96,10 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
     gmNamesIdsMapping,
     sport
   );
+  const compareKey = sport === FOOTBALL ? "footballCompareKey" : "winPer";
   const dynastyStandingsNoPlayoffs = assignRankPoints(
     Object.values(divisionStandings).flat(1),
-    "winPer",
+    compareKey,
     HIGH_TO_LOW,
     "totalDynastyPoints",
     NUMBER_OF_TEAMS,
