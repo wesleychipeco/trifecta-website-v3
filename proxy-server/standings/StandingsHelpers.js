@@ -55,6 +55,9 @@ export const formatScrapedStandings = (standings, namesIdsObject, sport) => {
         divStandingsObj["pointsAgainst"] = parseFloat(
           eachTeam.cells[7].content.replace(",", "")
         ).toFixed(2);
+        divStandingsObj["footballCompareKey"] =
+          Number(divStandingsObj["winPer"]) * 100000000 + // to make winPercentage the largest place value
+          Number(divStandingsObj["pointsFor"]);
       }
       eachDivisionStandings.push(divStandingsObj);
     }
