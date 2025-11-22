@@ -2,6 +2,7 @@
 
 ### [PR-102] - 2025-11-21
 
+- Add 2026 Basketball draft results
 - Correctly display double traded pick recipient in Draft Board
 
 ### [4.2.1] - 2025-09-15
