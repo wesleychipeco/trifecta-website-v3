@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-102] - 2025-11-21
+
+- Correctly display double traded pick recipient in Draft Board
+
 ### [4.2.1] - 2025-09-15
 
 ### [PR-101] - 2025-09-15

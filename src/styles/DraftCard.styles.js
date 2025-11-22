@@ -33,9 +33,8 @@ export const PlayerText = styled.h6`
   margin: 0.25rem 0 0.25rem 0;
   padding: 0;
   font-weight: 500;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 `;
 
 export const TooltipContainer = styled.div`
