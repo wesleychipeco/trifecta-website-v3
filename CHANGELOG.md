@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-104] - 2025-12-30
+
+- Update Fantrax API version for requests
+
 ### [PR-102] - 2025-11-21
 
 - Add 2026 Basketball draft results
