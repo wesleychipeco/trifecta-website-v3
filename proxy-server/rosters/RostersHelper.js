@@ -28,7 +28,7 @@ export const scrapeRosters = async (leagueId, teamId) => {
     at: 0,
     av: null,
     tz: "America/Los_Angeles",
-    v: "73.0.0",
+    v: "179.0.1",
   };
 
   const data = await axios.post(backendUrl, body);
