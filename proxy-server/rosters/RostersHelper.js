@@ -28,7 +28,7 @@ export const scrapeRosters = async (leagueId, teamId) => {
     at: 0,
     av: null,
     tz: "America/Los_Angeles",
-    v: "179.0.1",
+    v: "183.1.0",
   };
 
   const data = await axios.post(backendUrl, body);
@@ -41,14 +41,14 @@ export const formatPlayers = (rawData) => {
   const formattedPlayers = roster
     .filter(
       (player) =>
-        player?.scorer !== undefined && player?.scorerColumn !== "Totals"
+        player?.scorer !== undefined && player?.scorerColumn !== "Totals",
     )
     .map((player) => {
       const name = player.scorer.name;
       const team = player.scorer?.teamShortName ?? player.scorer?.shortName;
       const positionsArray = player.scorer.posShortNames.split(",");
       const filteredPositionsArray = positionsArray.filter(
-        (pos) => pos !== "G" && pos !== "F" && pos !== "Flx"
+        (pos) => pos !== "G" && pos !== "F" && pos !== "Flx",
       );
       const playersArray = [name, filteredPositionsArray.join(", "), team];
 

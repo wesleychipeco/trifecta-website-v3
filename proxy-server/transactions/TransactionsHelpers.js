@@ -23,7 +23,7 @@ export const scrapeTransactions = async (leagueId) => {
     at: 0,
     dt: 0,
     tz: "America/Los_Angeles",
-    v: "179.0.1",
+    v: "183.1.0",
   };
 
   return axios.post(backendUrl, body);
@@ -41,7 +41,7 @@ export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
       const droppedPlayerName = eachRow.scorer.name;
       const droppedPlayerPos = eachRow.scorer.posShortNames.substr(
         0,
-        eachRow.scorer.posShortNames.indexOf(",")
+        eachRow.scorer.posShortNames.indexOf(","),
       );
       const droppedPlayerPosAndTeam = `${droppedPlayerPos} - ${eachRow.scorer.teamShortName}`;
       transactionObjectHoldover["droppedPlayerName"] = droppedPlayerName;
@@ -64,7 +64,7 @@ export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
     const addedPlayerName = eachRow.scorer.name;
     const addedPlayerPos = eachRow.scorer.posShortNames.substr(
       0,
-      eachRow.scorer.posShortNames.indexOf(",")
+      eachRow.scorer.posShortNames.indexOf(","),
     );
     const addedPlayerPosAndTeam = `${addedPlayerPos} - ${eachRow.scorer.teamShortName}`;
     const playerDisplay = `${addedPlayerName} - ${addedPlayerPosAndTeam}`;
@@ -73,14 +73,14 @@ export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
       : parseFloat(eachRow.cells?.[1]?.content);
     const isSuccessful = eachRow.executed;
     const isSuccessfulReason = formatFailedTransactionMessage(
-      eachRow.result?.toolTip
+      eachRow.result?.toolTip,
     );
-    const period = eachRow.cells?.[5]?.content ?? eachRow.cells?.[3]?.content; // football has fewer elements in array
-    const dateString = eachRow.cells?.[4]?.content ?? eachRow.cells[2]?.content; // football has fewer elements in array
+    const period = eachRow.cells?.[4]?.content ?? eachRow.cells?.[3]?.content; // football has fewer elements in array
+    const dateString = eachRow.cells?.[3]?.content ?? eachRow.cells[2]?.content; // football has fewer elements in array
     const transactionType = eachRow.transactionType;
     const newDate = add(
       parse(dateString, "EEE MMM d, yyyy, h:mma", new Date()),
-      { hours: -3 } // convert from default Eastern time zone
+      { hours: -3 }, // convert from default Eastern time zone
     );
 
     const transactionObject = {
@@ -108,10 +108,10 @@ export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
   // console.log("cleaned up", cleanedUpTransactions);
 
   const executedTransactions = cleanedUpTransactions.filter(
-    (eachTransaction) => eachTransaction.isSuccessful
+    (eachTransaction) => eachTransaction.isSuccessful,
   );
   const notExecutedTransactions = cleanedUpTransactions.filter(
-    (eachTransaction) => !eachTransaction.isSuccessful
+    (eachTransaction) => !eachTransaction.isSuccessful,
   );
 
   // loop through each executed transaction and see if there are any nonExecuted transactions for that addedPlayerName and make list of FAAB tiebreakers
@@ -150,7 +150,7 @@ export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
         transaction.faabTiebreakers = orderBy(
           transaction.faabTiebreakers,
           ["bidOffer"],
-          ["desc"]
+          ["desc"],
         );
       }
     }
@@ -161,7 +161,7 @@ export const formatTransactions = (tableRows, gmNamesIdsMappings) => {
   const sortedExecuted = orderBy(
     allTransactions,
     ["date", "isSuccessful", "transactionType", "bidOffer"],
-    ["desc", "desc", "asc", "desc"]
+    ["desc", "desc", "asc", "desc"],
   );
   // console.log("sortedEnrichedExecuted", sortedExecuted);
 
@@ -198,7 +198,7 @@ const removeBoldHtml = (stringWithBoldHtml) => {
 const changeFormatOfPlayerName = (fullString) => {
   const name = fullString.substring(
     fullString.indexOf("<b>") + 3,
-    fullString.indexOf("</b>")
+    fullString.indexOf("</b>"),
   );
   const nameArray = name.split(", ");
   const [last, first] = nameArray;

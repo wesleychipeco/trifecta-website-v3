@@ -13,6 +13,7 @@ import {
   HIGH_TO_LOW,
   NUMBER_OF_TEAMS,
   SPORTS_ARRAY,
+  TRIFECTA,
 } from "./APIConstants.js";
 import {
   filterForStandings,
@@ -51,7 +52,7 @@ const corsOrigin = "*";
 app.use(
   cors({
     origin: corsOrigin,
-  })
+  }),
 );
 app.use(bodyParser.json());
 const port = 5000;
@@ -62,8 +63,21 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// update sport standings for a sport and year
+// get sport standings for a sport and year
 app.get("/api/standings/:sport/:year", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport, year } = req.params;
+
+  const collection = await returnMongoCollection(`${sport}Standings`);
+  const data = await collection.find({ year }).toArray();
+  const object = data?.[0] ?? {};
+
+  // object has keys "lastScrapedString", "dynastyStandings", and "divisionStandings"
+  res.send(object);
+});
+
+// update sport standings for a sport and year
+app.get("/api/update/standings/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
   const { overwrite } = req.query;
@@ -72,7 +86,7 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
   const { completedLeagues } = app.locals.dynastyGlobalVariables;
   if (completedLeagues.includes(sportYear) && overwrite !== "true") {
     return res.send(
-      "This season has already been completed. Are you sure you want to scrape and overwrite? If so, add ?overwrite=true to the request"
+      "This season has already been completed. Are you sure you want to scrape and overwrite? If so, add ?overwrite=true to the request",
     );
   }
 
@@ -81,7 +95,7 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
 
   // retrieve gm names to ids mappings from MongoDB
   const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds");
-  const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
+  const gmNamesIds = await gmNamesIdsCollection.find({ leagueId }).toArray();
   const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};
 
   // scrape standings from Fantrax
@@ -89,12 +103,12 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
 
   // filter and enrich standings with custom fields
   const tableStandings = await filterForStandings(
-    apiResponse.data.responses[0].data.tableList
+    apiResponse.data.responses[0].data.tableList,
   );
   const divisionStandings = formatScrapedStandings(
     tableStandings,
     gmNamesIdsMapping,
-    sport
+    sport,
   );
   const compareKey = sport === FOOTBALL ? "footballCompareKey" : "winPer";
   const dynastyStandingsNoPlayoffs = assignRankPoints(
@@ -103,12 +117,12 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
     HIGH_TO_LOW,
     "totalDynastyPoints",
     NUMBER_OF_TEAMS,
-    1
+    1,
   );
   const dynastyStandings = addKeyValueToEachObjectInArray(
     dynastyStandingsNoPlayoffs,
     { dynastyPoints: "totalDynastyPoints" },
-    { playoffPoints: 0 }
+    { playoffPoints: 0 },
   );
 
   // delete, then save to mongodb
@@ -123,7 +137,7 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
     divisionStandings,
   });
   console.log(
-    `Updated ${year} ${sport}'s standings successfully at ${updateDate}`
+    `Updated ${year} ${sport}'s standings successfully at ${updateDate}`,
   );
 
   // return dynasty and division standings
@@ -133,19 +147,40 @@ app.get("/api/standings/:sport/:year", async (req, res) => {
   });
 });
 
-// update dynasty standings
+// update sport standings for a sport and year - raw (for completing sport use case)
+app.put("/api/update/standings/raw/:sport/:year", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport, year } = req.params;
+  const standingsBody = req.body;
+  const collection = await returnMongoCollection(`${sport}Standings`);
+  await collection.deleteOne({ year });
+  await collection.insertOne(standingsBody);
+  res.send("Ok!");
+});
+
+// get dynasty standings
 app.get("/api/dynasty-standings", async (req, res) => {
+  const collection = await returnMongoCollection("dynastyStandings");
+  const data = await collection.find().toArray();
+  const filteredData = data.filter(
+    (doc) => doc.type !== "test" && doc.type !== "backup",
+  );
+  res.send(filteredData);
+});
+
+// update dynasty standings
+app.get("/api/update/dynasty-standings", async (req, res) => {
   const allGms = {};
   // loop through each sport
   for (let i = 0; i < SPORTS_ARRAY.length; i++) {
     const sport = SPORTS_ARRAY[i];
     const collectionName = `${sport}Standings`;
     const standingsCollection = await returnMongoCollection(collectionName);
-    const standingsAllYears = await standingsCollection.find({});
+    const standingsAllYears = await standingsCollection.find({}).toArray();
     // filter out any test records
     const standingsAllYearsNoTest = standingsAllYears.filter(
       (record) =>
-        !record.year.includes("backup") && !record.year.includes("test")
+        !record.year.includes("backup") && !record.year.includes("test"),
     );
 
     // loop through each year of sport
@@ -228,21 +263,68 @@ app.get("/api/dynasty-standings", async (req, res) => {
     type: "dynastyStandings",
   });
   console.log(
-    `Updated Dynasty Standings standings successfully at ${updateDate}`
+    `Updated Dynasty Standings standings successfully at ${updateDate}`,
   );
 
   // return dynasty and division standings
   res.send(dyanstyStandingsArray);
 });
 
+// get dynasty trade history
+app.get("/api/trade-history", async (req, res) => {
+  const collection = await returnMongoCollection("tradeHistory");
+  const data = await collection.find({}).toArray();
+  res.send(data);
+});
+
+// update dynasty trade history
+app.put("/api/update/trade-history", async (req, res) => {
+  const collection = await returnMongoCollection("tradeHistory");
+  const tradeObject = req.body;
+  await collection.insertOne(tradeObject);
+  res.send();
+});
+
+// get asset dashboard home
+app.get("/api/trade-asset-home", async (req, res) => {
+  const collection = await returnMongoCollection("gms");
+  const data = await collection.find({ test: { $ne: true } }).toArray();
+  res.send(data);
+});
+
+// get asset dashboard for gm
+app.get("/api/trade-assets/:gmAbbreviation", async (req, res) => {
+  const { gmAbbreviation } = req.params;
+  const collection = await returnMongoCollection("gms");
+  const data = await collection
+    .find({ abbreviation: gmAbbreviation })
+    .toArray();
+  const gm = data?.[0];
+  res.send(gm);
+});
+
+// update asset dashboard for gm
+app.put("/api/update/trade-assets/:gmAbbreviation", async (req, res) => {
+  const { gmAbbreviation } = req.params;
+  const tradeAssets = req.body;
+  const collection = await returnMongoCollection("gms");
+  const { modifiedCount } = await collection.updateOne(
+    { abbreviation: gmAbbreviation },
+    { $set: { assets: tradeAssets } },
+  );
+  res.send({ modifiedCount });
+});
+
 // update rosters for trade asset dashboard for a specific GM
-app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
+app.get("/api/update/rosters/:gmAbbreviation", async (req, res) => {
   // retrieve gm abbreviation from path params
   const { gmAbbreviation } = req.params;
 
   // retrieve gm data
   const gmCollection = await returnMongoCollection("gms");
-  const gmData = await gmCollection.find({ abbreviation: gmAbbreviation });
+  const gmData = await gmCollection
+    .find({ abbreviation: gmAbbreviation })
+    .toArray();
   const gmObject = gmData?.[0] ?? {};
 
   // retrieve currentRosterLeagues from initialized global variables
@@ -282,13 +364,13 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   // update MongoDB
   const { modifiedCount } = await gmCollection.updateOne(
     { abbreviation: gmAbbreviation },
-    { $set: { assets: allAssets } }
+    { $set: { assets: allAssets } },
   );
   if (modifiedCount < 1) {
     console.error("Did NOT successfully update assets!");
   } else {
     console.log(
-      `Updated ${gmAbbreviation}'s assets successfully at ${updateDate}`
+      `Updated ${gmAbbreviation}'s assets successfully at ${updateDate}`,
     );
   }
 
@@ -296,8 +378,30 @@ app.get("/api/rosters/:gmAbbreviation", async (req, res) => {
   res.send(allAssets);
 });
 
-// update transactions history for a sport and year
+// update trade block for trade asset dashboard
+app.put("/api/update/trade-block/:gmAbbreviation", async (req, res) => {
+  const { gmAbbreviation } = req.params;
+  const userData = req.body;
+  const collection = await returnMongoCollection("gms");
+  const { modifiedCount } = await collection.updateOne(
+    { abbreviation: gmAbbreviation },
+    { $set: { tradeBlock: userData } },
+  );
+  res.send({ modifiedCount });
+});
+
+// get transactions history for a sport and year
 app.get("/api/transactions/:sport/:year", async (req, res) => {
+  const { sport, year } = req.params;
+  const sportYear = `${sport}${year}`;
+  const collection = await returnMongoCollection("transactionsHistory");
+  const data = await collection.find({ sportYear }).toArray();
+  const object = data?.[0] ?? {};
+  res.send(object);
+});
+
+// update transactions history for a sport and year
+app.get("/api/update/transactions/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
   const sportYear = `${sport}${year}`;
@@ -307,7 +411,7 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
 
   // retrieve gm names to ids mappings from MongoDB
   const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds");
-  const gmNamesIds = await gmNamesIdsCollection.find({ leagueId });
+  const gmNamesIds = await gmNamesIdsCollection.find({ leagueId }).toArray();
   const gmNamesIdsMapping = gmNamesIds?.[0]?.mappings ?? {};
 
   // scrape and format transactions history
@@ -315,17 +419,19 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
   const tableRows = apiResponse?.data?.responses?.[0]?.data?.table?.rows ?? [];
   const formattedTransactions = formatTransactions(
     tableRows,
-    gmNamesIdsMapping
+    gmNamesIdsMapping,
   );
   // console.log("formattedTransactions", formattedTransactions);
 
   // update MongoDB
   const transactionsHistoryCollection = await returnMongoCollection(
-    "transactionsHistory"
+    "transactionsHistory",
   );
-  const currentSportYearData = await transactionsHistoryCollection.find({
-    sportYear,
-  });
+  const currentSportYearData = await transactionsHistoryCollection
+    .find({
+      sportYear,
+    })
+    .toArray();
   if (currentSportYearData.length === 0) {
     console.log(`No ${year} ${sport} MongoDB document. Creating...`);
     await transactionsHistoryCollection.insertOne({
@@ -346,21 +452,30 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
     },
     {
       upsert: true,
-    }
+    },
   );
   if (modifiedCount < 1) {
     console.error("Did NOT successfully update transactions history!");
   } else {
     console.log(
-      `Updated ${year} ${sport}'s transactions successfully at ${updateDate}`
+      `Updated ${year} ${sport}'s transactions successfully at ${updateDate}`,
     );
   }
 
   res.send(formattedTransactions);
 });
 
+// get player stats per sport
+app.get("/api/player-stats/:sport", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport } = req.params;
+  const collection = await returnMongoCollection("playerStats");
+  const data = await collection.find({ sport }).toArray();
+  res.send(data);
+});
+
 // update player stats per sport and year
-app.get("/api/player-stats/:sport/:year", async (req, res) => {
+app.get("/api/update/player-stats/:sport/:year", async (req, res) => {
   // retrieve sport and year from path params
   const { sport, year } = req.params;
   const sportYear = `${sport}${year}`;
@@ -370,7 +485,9 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
 
   // retrieve all teamIds
   const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds");
-  const allTeamIdsData = await gmNamesIdsCollection.find({ leagueId });
+  const allTeamIdsData = await gmNamesIdsCollection
+    .find({ leagueId })
+    .toArray();
   const allTeamIdsMappings = allTeamIdsData?.[0]?.mappings ?? [];
   const allTeamIds = Object.keys(allTeamIdsMappings);
 
@@ -407,7 +524,7 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
 
   // resolve promises
   const allTeamAllPlayerStats = await Promise.all(
-    allTeamAllPlayerStatsPromises
+    allTeamAllPlayerStatsPromises,
   );
   // console.log("allTeamAllPlayerStats", allTeamAllPlayerStats);
 
@@ -429,15 +546,15 @@ app.get("/api/player-stats/:sport/:year", async (req, res) => {
 });
 
 // update aggregated player stats for a sport
-app.get("/api/total-player-stats/:sport", async (req, res) => {
+app.get("/api/update/total-player-stats/:sport", async (req, res) => {
   // retrieve sport and year from path params
   const { sport } = req.params;
 
   // fetch all records per sport in MongoDB
   const statsCollection = await returnMongoCollection("playerStats");
-  const allPlayerStatsData = await statsCollection.find({ sport });
+  const allPlayerStatsData = await statsCollection.find({ sport }).toArray();
   const allPlayerStatsWithoutTotal = allPlayerStatsData.filter(
-    (eachRecord) => eachRecord.year !== "total"
+    (eachRecord) => eachRecord.year !== "total",
   );
 
   // create flattened stats array for each player with each fantasy team, each season
@@ -452,7 +569,7 @@ app.get("/api/total-player-stats/:sport", async (req, res) => {
   // create unique total stats record for each player+fantasy team combination
   const totalPlayerStatsArray = totalPlayerStatsOverAllYears(
     sport,
-    flattenAllPlayerStats
+    flattenAllPlayerStats,
   );
 
   // Update record in MongoDB
@@ -467,6 +584,50 @@ app.get("/api/total-player-stats/:sport", async (req, res) => {
   console.log(`Updated total player stats for ${sport} at ${updateDate}`);
 
   res.send(totalPlayerStatsArray);
+});
+
+// get draft statuses list
+app.get("/api/drafts/list", async (req, res) => {
+  const collection = await returnMongoCollection("drafts");
+  const data = await collection.find({ type: "status" }).toArray();
+  res.send(data);
+});
+
+// get all draft boards
+app.get("/api/drafts", async (req, res) => {
+  const collection = await returnMongoCollection("drafts");
+  const data = await collection.find({}).toArray();
+  res.send(data);
+});
+
+// get specific draft board
+app.get("/api/drafts/:sport/:year", async (req, res) => {
+  const { sport, year } = req.params;
+  const collection = await returnMongoCollection("drafts");
+  const data = await collection.find({ type: `${sport}-${year}` }).toArray();
+  res.send(data);
+});
+
+// create new draft board for initialized supplementary draft board
+app.put("/api/create/drafts/:sport/:year", async (req, res) => {
+  const { sport, year } = req.params;
+  const sportYear = `${sport}-${year}`;
+  const grid = req.body;
+  const collection = await returnMongoCollection("drafts");
+  await collection.deleteOne({ type: sportYear });
+  await collection.insertOne({
+    type: sportYear,
+    grid,
+    createdAt: new Date().toLocaleString(),
+  });
+  res.send("Ok!");
+});
+
+// get league event from the calendar
+app.get("/api/commissioner/league-events", async (req, res) => {
+  const collection = await returnMongoCollection("leagueCalendar");
+  const events = await collection.find({}, { sort: { start: 1 } }).toArray();
+  res.send(events);
 });
 
 // create league event for the calendar
@@ -496,8 +657,8 @@ app.post("/api/commissioner/league-event", async (req, res) => {
       .status(400)
       .send(
         `Required fields missing from payload: ${missingRequiredFields.join(
-          ", "
-        )}`
+          ", ",
+        )}`,
       );
   }
 
@@ -523,7 +684,7 @@ app.post("/api/commissioner/league-event", async (req, res) => {
     Number(startYear),
     Number(startMonth) - 1,
     Number(startDay),
-    timezone
+    timezone,
   );
   const startDateTime = addHours(startOfDay, startHourInMilitary);
   const endDateTime = addHours(startDateTime, durationHours);
@@ -543,6 +704,13 @@ app.post("/api/commissioner/league-event", async (req, res) => {
   leagueEventsCollection.insertOne(leagueEventObj);
 
   res.send(leagueEventObj);
+});
+
+// get league announcements
+app.get("/api/commissioner/league-announcements", async (req, res) => {
+  const collection = await returnMongoCollection("leagueAnnouncements");
+  const data = await collection.find({}, { sort: { startDate: -1 } }).toArray();
+  res.send(data);
 });
 
 // create league announcement (include sending email/push notification?)
@@ -567,8 +735,8 @@ app.post("/api/commissioner/league-announcement", async (req, res) => {
       .status(400)
       .send(
         `Required fields missing from payload: ${missingRequiredFields.join(
-          ", "
-        )}`
+          ", ",
+        )}`,
       );
   }
 
@@ -589,7 +757,7 @@ app.post("/api/commissioner/league-announcement", async (req, res) => {
     Number(startYear),
     Number(startMonth) - 1,
     Number(startDay),
-    timezone
+    timezone,
   );
   const endDateTime = addDays(startDateTime, durationDays + 1); // add 1 day because will expire at midnight
 
@@ -605,17 +773,221 @@ app.post("/api/commissioner/league-announcement", async (req, res) => {
   };
 
   const leagueEventsCollection = await returnMongoCollection(
-    "leagueAnnouncements"
+    "leagueAnnouncements",
   );
   leagueEventsCollection.insertOne(leagueAnnouncementObj);
 
   res.send(leagueAnnouncementObj);
 });
 
+// routes for commissioner actions
+
+// update gms draft picks
+app.put("/api/update/gms/draft-picks/:gm/:sport", async (req, res) => {
+  const { gm, sport } = req.params;
+  const draftPicksPayload = req.body;
+  const collection = await returnMongoCollection("gms");
+  const gmKeyString = `assets.${sport}.draftPicks`;
+  const { modifiedCount } = await collection.updateOne(
+    { abbreviation: gm },
+    { $set: { [gmKeyString]: draftPicksPayload } },
+  );
+  res.send({ modifiedCount });
+});
+
+// update draft board after traded draft picks
+app.put("/api/update/drafts/:sport/:year/:draftKeyString", async (req, res) => {
+  const { sport, year, draftKeyString } = req.params;
+  const draftToUse = req.body;
+  const collection = await returnMongoCollection("drafts");
+  const { modifiedCount } = await collection.updateOne(
+    { type: `${sport}-${year}` },
+    { $set: { [draftKeyString]: draftToUse } },
+  );
+  res.send({ modifiedCount });
+});
+
+// update gm name id mappings
+app.put("/api/update/mappings/:abbreviation", async (req, res) => {
+  const { abbreviation } = req.params;
+  const copyMappings = req.body;
+  const collection = await returnMongoCollection("gms");
+  const { modifiedCount } = await collection.updateOne(
+    { abbreviation },
+    { $set: { mappings: copyMappings } },
+  );
+  res.send({ modifiedCount });
+});
+
+// end routes for commissioner actions
+
+// routes to get helper data from DB
+
+app.get("/api/global-variables", async (req, res) => {
+  const collection = await returnMongoCollection(GLOBAL_VARIABLES);
+  const data = await collection.find({}).toArray();
+  const object = data?.[0] ?? {};
+
+  // object has keys, "trifecta", and "dynasty"
+  res.send(object);
+});
+
+app.put("/api/update/global-variables", async (req, res) => {
+  const collection = await returnMongoCollection(GLOBAL_VARIABLES);
+  const globalVariablesBody = req.body;
+  collection.deleteOne({ type: "globalVariables" });
+  collection.insertOne(globalVariablesBody);
+  res.send(globalVariablesBody);
+});
+
+app.get("/api/gms", async (req, res) => {
+  const collection = await returnMongoCollection("gms");
+  const gmData = await collection.find({}).toArray();
+  res.send(gmData);
+});
+
+app.get("/api/gms/:gm", async (req, res) => {
+  const { gm } = req.params;
+  const collection = await returnMongoCollection("gms");
+  const data = await collection.find({ abbreviation: gm }).toArray();
+  res.send(data);
+});
+
+app.put("/api/gm-names-ids", async (req, res) => {
+  const bodyObject = req.body;
+  const collection = await returnMongoCollection("gmNamesIds");
+  await collection.insertOne(bodyObject);
+  res.send(bodyObject);
+});
+
+// end routes to get helper data from DB
+
+// routes for Trifecta-only collections
+
+app.get("/api/trifecta/standings/:sport/:year", async (req, res) => {
+  // retrieve sport and year from path params
+  const { sport, year } = req.params;
+
+  const collection = await returnMongoCollection(`${sport}Standings`, TRIFECTA);
+  const data = await collection.find({ year }).toArray();
+  const object = data?.[0] ?? {};
+  res.send(object);
+});
+
+app.get("/api/trifecta/trifecta-standings/all-years", async (req, res) => {
+  const collection = await returnMongoCollection("trifectaStandings", TRIFECTA);
+  const data = await collection.find({}).toArray();
+  res.send(data);
+});
+
+app.get("/api/trifecta/trifecta-standings/:year", async (req, res) => {
+  const { year } = req.params;
+  const collection = await returnMongoCollection("trifectaStandings", TRIFECTA);
+  const data = await collection.find({ year }).toArray();
+  const object = data?.[0] ?? {};
+  res.send(object);
+});
+
+app.get(
+  "/api/trifecta/football-top5-bottom5-standings/:year",
+  async (req, res) => {
+    const { year } = req.params;
+    const collection = await returnMongoCollection(
+      "footballTop5Bottom5Totals",
+      TRIFECTA,
+    );
+    const data = await collection.find({ year }).toArray();
+    const object = data?.[0] ?? {};
+    res.send(object);
+  },
+);
+
+app.get("/api/trifecta/trade-history", async (req, res) => {
+  const collection = await returnMongoCollection("tradeHistory", TRIFECTA);
+  const data = await collection.find({}).toArray();
+  res.send(data);
+});
+
+app.get("/api/trifecta/owner-profiles/:teamNumber", async (req, res) => {
+  const { teamNumber } = req.params;
+  const collection = await returnMongoCollection("ownerProfiles", TRIFECTA);
+  const data = await collection
+    .find({ teamNumber: Number(teamNumber) })
+    .toArray();
+  const DEFAULT_STATE = {
+    ownerNames: "",
+    trifectaHistory: [],
+    allTimeRecords: [],
+    allTimeBasketball: [],
+    allTimeBaseball: [],
+    allTimeFootball: [],
+  };
+
+  const object = data?.[0] ?? DEFAULT_STATE;
+  res.send(object);
+});
+
+app.get("/api/trifecta/hall-of-fame/past-champions", async (req, res) => {
+  const collection = await returnMongoCollection("hallOfFame", TRIFECTA);
+  const data = await collection.find({ type: "pastChampions" }).toArray();
+  const pc = data?.[0]?.pastChampions ?? [];
+  res.send(pc);
+});
+
+app.get("/api/trifecta/hall-of-fame/:sport", async (req, res) => {
+  const { sport } = req.params;
+
+  const DEFAULT_STATE = {
+    allTimeRecords: [],
+    pastChampions: [],
+    bestH2H: [],
+  };
+  if (sport === FOOTBALL) {
+    DEFAULT_STATE["bestWeeks"] = [];
+  } else {
+    DEFAULT_STATE["bestRoto"] = [];
+  }
+  const collection = await returnMongoCollection("hallOfFame", TRIFECTA);
+  const data = await collection.find({ sport }).toArray();
+  const returnData = data?.[0] ?? DEFAULT_STATE;
+  res.send(returnData);
+});
+
+app.get("/api/trifecta/owner-matchups/:teamNumber", async (req, res) => {
+  const { teamNumber } = req.params;
+  const collection = await returnMongoCollection(
+    `owner${teamNumber}Matchups`,
+    TRIFECTA,
+  );
+  const data = await collection.find({}).toArray();
+  res.send(data);
+});
+
+app.get("/api/trifecta/all-time-teams/:teamNumber", async (req, res) => {
+  const { teamNumber } = req.params;
+  const collection = await returnMongoCollection("allTimeTeams", TRIFECTA);
+  const data = await collection.find({ teamNumber }).toArray();
+  const object = data?.[0] ?? {};
+  res.send(object);
+});
+
+app.get("/api/trifecta/owner-ids", async (req, res) => {
+  const collection = await returnMongoCollection("ownerIds", TRIFECTA);
+  const data = await collection.find({}).toArray();
+  res.send(data);
+});
+
+app.get("/api/trifecta/team-lists/:year", async (req, res) => {
+  const { year } = req.params;
+  const collection = await returnMongoCollection("teamLists", TRIFECTA);
+  const data = await collection.find({ year }).toArray();
+  res.send(data);
+});
+
 // initialize global variables from MongoDB for backend use
 const initializeGlobalVariables = async () => {
   const gvCollection = await returnMongoCollection(GLOBAL_VARIABLES);
-  const data = await gvCollection.find({});
+  const data = await gvCollection.find({}).toArray();
   const object = data[0];
   const { trifecta: trifectaObject, dynasty: dynastyObject } = object;
   app.locals.dynastyGlobalVariables = dynastyObject;
@@ -652,15 +1024,15 @@ const sportStandingsRefreshCronJob = () => {
     for (let i = 0; i < inSeasonLeagues.length; i++) {
       const sportYear = inSeasonLeagues[i];
       const { sport, year } = sportYearToSportAndYear(sportYear);
-      const cronUrl = `${localhostUrl}/api/standings/${sport}/${year}`;
+      const cronUrl = `${localhostUrl}/api/update/standings/${sport}/${year}`;
       const response = await axios.get(cronUrl);
       if (response.status === 200) {
         console.log(
-          `Successful cron job standings refresh for ${year} ${sport} at ${cronUpdateDate}`
+          `Successful cron job standings refresh for ${year} ${sport} at ${cronUpdateDate}`,
         );
       } else {
         console.error(
-          `FAILED cron job standings refresh for ${year} ${sport} at ${cronUpdateDate}`
+          `FAILED cron job standings refresh for ${year} ${sport} at ${cronUpdateDate}`,
         );
       }
     }
@@ -673,15 +1045,15 @@ const dyanstyStandingsRefreshCronJob = () => {
   const DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE = "5 1 * * *"; // 1:05am every day
   cron.schedule(DYNASTY_STANDINGS_REFRESH_CRON_SCHEDULE, async () => {
     const cronUpdateDate = new Date().toLocaleString();
-    const cronUrl = `${localhostUrl}/api/dynasty-standings`;
+    const cronUrl = `${localhostUrl}/api/update/dynasty-standings`;
     const response = await axios.get(cronUrl);
     if (response.status === 200) {
       console.log(
-        `Successful cron job dynasty standings refresh at ${cronUpdateDate}`
+        `Successful cron job dynasty standings refresh at ${cronUpdateDate}`,
       );
     } else {
       console.error(
-        `FAILED cron job dynasty standings refresh at ${cronUpdateDate}`
+        `FAILED cron job dynasty standings refresh at ${cronUpdateDate}`,
       );
     }
   });
@@ -697,21 +1069,21 @@ const rostersRefreshCronJob = () => {
 
   cron.schedule(ROSTERS_REFRESH_CRON_SCHEDULE, async () => {
     const gmsCollection = await returnMongoCollection("gms");
-    const gmsData = await gmsCollection.find({});
+    const gmsData = await gmsCollection.find({}).toArray();
     const gmsAbbreviationArray = gmsData.map((gm) => gm?.abbreviation ?? "");
 
     gmsAbbreviationArray.map((gmAbbreviation) => {
       const cronUpdateDate = new Date().toLocaleString();
-      const cronUrl = `${localhostUrl}/api/rosters/${gmAbbreviation}`;
+      const cronUrl = `${localhostUrl}/api/update/rosters/${gmAbbreviation}`;
       limiter.schedule(async () => {
         const response = await axios.get(cronUrl);
         if (response.status === 200) {
           console.log(
-            `Successful cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
+            `Successful cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`,
           );
         } else {
           console.error(
-            `FAILED cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`
+            `FAILED cron job rosters refresh for ${gmAbbreviation} at ${cronUpdateDate}`,
           );
         }
         console.log("------------------------------");
@@ -731,15 +1103,15 @@ const transactionsRefreshCronJob = () => {
     for (let i = 0; i < inSeasonLeagues.length; i++) {
       const sportYear = inSeasonLeagues[i];
       const { sport, year } = sportYearToSportAndYear(sportYear);
-      const cronUrl = `${localhostUrl}/api/transactions/${sport}/${year}`;
+      const cronUrl = `${localhostUrl}/api/update/transactions/${sport}/${year}`;
       const response = await axios.get(cronUrl);
       if (response.status === 200) {
         console.log(
-          `Successful cron job transactions refresh for ${year} ${sport} at ${cronUpdateDate}`
+          `Successful cron job transactions refresh for ${year} ${sport} at ${cronUpdateDate}`,
         );
       } else {
         console.error(
-          `FAILED cron job transactions refresh for ${year} ${sport} at ${cronUpdateDate}`
+          `FAILED cron job transactions refresh for ${year} ${sport} at ${cronUpdateDate}`,
         );
       }
     }
@@ -757,15 +1129,15 @@ const playerStatsRefreshCronJob = () => {
     for (let i = 0; i < inSeasonLeagues.length; i++) {
       const sportYear = inSeasonLeagues[i];
       const { sport, year } = sportYearToSportAndYear(sportYear);
-      const cronUrl = `${localhostUrl}/api/player-stats/${sport}/${year}`;
+      const cronUrl = `${localhostUrl}/api/update/player-stats/${sport}/${year}`;
       const response = await axios.get(cronUrl);
       if (response.status === 200) {
         console.log(
-          `Successful cron job player stats refresh for ${year} ${sport} at ${cronUpdateDate}`
+          `Successful cron job player stats refresh for ${year} ${sport} at ${cronUpdateDate}`,
         );
       } else {
         console.error(
-          `FAILED cron job player stats refresh for ${year} ${sport} at ${cronUpdateDate}`
+          `FAILED cron job player stats refresh for ${year} ${sport} at ${cronUpdateDate}`,
         );
       }
     }
@@ -783,15 +1155,15 @@ const totalPlayerStatsRefreshCronJob = () => {
     for (let i = 0; i < inSeasonLeagues.length; i++) {
       const sportYear = inSeasonLeagues[i];
       const { sport } = sportYearToSportAndYear(sportYear);
-      const cronUrl = `${localhostUrl}/api/total-player-stats/${sport}`;
+      const cronUrl = `${localhostUrl}/api/update/total-player-stats/${sport}`;
       const response = await axios.get(cronUrl);
       if (response.status === 200) {
         console.log(
-          `Successful cron job total player stats refresh for ${sport} at ${cronUpdateDate}`
+          `Successful cron job total player stats refresh for ${sport} at ${cronUpdateDate}`,
         );
       } else {
         console.error(
-          `FAILED cron job total player stats refresh for ${sport} at ${cronUpdateDate}`
+          `FAILED cron job total player stats refresh for ${sport} at ${cronUpdateDate}`,
         );
       }
     }

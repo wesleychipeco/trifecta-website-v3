@@ -29,7 +29,7 @@ export const scrapePlayerStats = async (limiter, leagueId, teamId) => {
       at: "3.0",
       av: null,
       tz: "America/Los_Angeles",
-      v: "179.0.1",
+      v: "183.1.0",
     };
 
     return axios.post(backendUrl, body);
@@ -67,7 +67,7 @@ export const compileBasketballStats = (row, gmName, year) => {
   const { name, posShortNames, teamShortName } = scorer;
   const positionsList = posShortNames.split(",");
   const primaryPositionsList = positionsList.filter((pos) =>
-    PRIMARY_POSITIONS.includes(pos)
+    PRIMARY_POSITIONS.includes(pos),
   );
 
   const [
@@ -153,7 +153,7 @@ export const compileBaseballStats = (row, gmName, year) => {
 
     // reverse engineer earned runs and walks + hits from IP, ERA, and WHIP
     const ipString = inningsPitchedToNumberConverter(
-      inningsPitchedObject.content
+      inningsPitchedObject.content,
     );
     const ip = stringToFloatWithRounding(ipString, 3);
     const era = stringToFloatWithRounding(eraObject.content, 2);
@@ -345,7 +345,7 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
     // create unique key by which totals will be aggregated
     const uniqueKey = `${name}|${gmName}`;
     const playerAlreadyExists = Object.keys(
-      allPlayersTotalStatsObject
+      allPlayersTotalStatsObject,
     ).includes(uniqueKey);
     if (playerAlreadyExists) {
       const existingPlayer = allPlayersTotalStatsObject[uniqueKey];
@@ -353,7 +353,7 @@ export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
         case BASKETBALL:
           newPlayer = totalExistingBasketballPlayerStats(
             existingPlayer,
-            player
+            player,
           );
           break;
         case BASEBALL:
@@ -472,7 +472,7 @@ const totalNewBasketballPlayerStats = (playerObject) => {
 
 const totalExistingBasketballPlayerStats = (
   previousTotalPlayerObject,
-  playerObject
+  playerObject,
 ) => {
   const {
     name: previousName,
@@ -518,7 +518,7 @@ const totalExistingBasketballPlayerStats = (
       "Previous Name: ",
       previousName,
       " / Previous GM: ",
-      previousGmName
+      previousGmName,
     );
   }
 
@@ -572,7 +572,7 @@ const totalNewBaseballOrFootballPlayerStats = (playerObject) => {
 
 const totalExistingBaseballPlayerStats = (
   previousTotalPlayerObject,
-  playerObject
+  playerObject,
 ) => {
   const {
     name: previousName,
@@ -638,7 +638,7 @@ const totalExistingBaseballPlayerStats = (
       "Previous Name: ",
       previousName,
       " / Previous GM: ",
-      previousGmName
+      previousGmName,
     );
   }
 
@@ -733,7 +733,7 @@ const isStatNotBlank = (stat) => stat !== "--";
 
 const totalExistingFootballPlayerStats = (
   previousTotalPlayerObject,
-  playerObject
+  playerObject,
 ) => {
   const {
     name: previousName,
@@ -805,7 +805,7 @@ const totalExistingFootballPlayerStats = (
       "Previous Name: ",
       previousName,
       " / Previous GM: ",
-      previousGmName
+      previousGmName,
     );
   }
 
