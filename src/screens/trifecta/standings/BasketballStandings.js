@@ -19,8 +19,8 @@ import {
 } from "./BasketballColumns";
 import { Table } from "components/table/Table";
 import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
-import { returnMongoCollection } from "database-management";
 import { insertIntoArray } from "utils/arrays";
+import { api } from "utils/api";
 
 export const BasketballStandings = () => {
   const { year } = useParams();
@@ -30,7 +30,7 @@ export const BasketballStandings = () => {
     isBasketballInSeason,
     basketballAhead,
   } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.trifecta
+    (state) => state?.currentVariables?.seasonVariables?.trifecta,
   );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
@@ -50,79 +50,15 @@ export const BasketballStandings = () => {
         setRotoStandings(rotoStandings);
       };
 
-      // scrape, then display, then save to mongodb with new last scraped
-      const scrape = async (collection) => {
-        if (Object.keys(ownerNamesMapping).length > 0) {
-          const { h2hScrape, rotoScrape } = await standingsScraper(year);
-
-          const h2hStandings = await h2hScrapeToStandings(h2hScrape);
-          const rotoStandings = await rotoScrapeToStandings(rotoScrape);
-          const trifectaStandings = await compileTrifectaStandings(
-            h2hStandings,
-            rotoStandings,
-            ownerNamesMapping
-          );
-
-          display(trifectaStandings, h2hStandings, rotoStandings);
-
-          // delete, then save to mongodb
-          console.log("Delete, then save to mongodb");
-          await collection.deleteMany({ year });
-          await collection.insertOne({
-            year,
-            lastScraped: new Date().toLocaleString(),
-            trifectaStandings,
-            h2hStandings,
-            rotoStandings,
-          });
-        }
-      };
-
       // check if need to scrape or just display
       const check = async () => {
-        const collection = await returnMongoCollection("basketballStandings");
-        const data = await collection.find({ year });
-        const object = data[0] ?? {};
-        const lastScrapedString = object?.lastScraped;
+        const object = await api.get(`/trifecta/standings/basketball/${year}`);
         const { trifectaStandings, h2hStandings, rotoStandings } = object;
 
-        // if not current year or not started or in season, then just display, do not scrape
-        if (
-          !isBasketballStarted ||
-          !isBasketballInSeason ||
-          year !== currentYear
-        ) {
-          if (basketballAhead && Number(year) === Number(currentYear) + 1) {
-            console.log("BASKETBALL AHEAD! MOVE TO SCRAPE BLOCK");
-          } else {
-            if (isYear1AfterYear2(year, currentYear)) {
-              console.log("AHEAD of TIME!");
-            } else {
-              if (isYear1BeforeYear2(year, "2020")) {
-                setBasketballStandings(object.basketballStandings);
-              }
-              display(trifectaStandings, h2hStandings, rotoStandings);
-            }
-            return;
-          }
+        if (isYear1BeforeYear2(year, "2020")) {
+          setBasketballStandings(object.basketballStandings);
         }
-
-        // if there is no last scraped string (ie brand new, first time entering), scrape
-        if (!lastScrapedString) {
-          console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-          scrape(collection);
-        } else {
-          const now = new Date();
-          const alreadyScraped = isSameDay(now, new Date(lastScrapedString));
-
-          // only scrape if not already scraped today
-          if (!alreadyScraped) {
-            console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-            scrape(collection);
-          } else {
-            display(trifectaStandings, h2hStandings, rotoStandings);
-          }
-        }
+        display(trifectaStandings, h2hStandings, rotoStandings);
       };
 
       ///////////// only 1 function gets run inside useEffect /////////////

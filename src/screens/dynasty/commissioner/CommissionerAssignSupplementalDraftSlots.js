@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import Select from "react-select";
-import { returnMongoCollection } from "database-management";
 
 import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
@@ -21,6 +20,7 @@ import {
   SPORTS_ARRAY,
   STARTING_YEAR_SUPPLEMENTAL_DRAFT_PICKS,
 } from "Constants";
+import { api } from "utils/api";
 
 export const CommissionerAssignSupplementalDraftSlots = () => {
   const { era } = useParams();
@@ -36,11 +36,10 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
   // load data on page load
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
 
       const gmNamesArray = gmData.map(
-        (gm) => `${gm.name} (${gm.abbreviation})`
+        (gm) => `${gm.name} (${gm.abbreviation})`,
       );
 
       setGmsArray(gmNamesArray);
@@ -120,7 +119,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
 
       setDraftSlotAssignments(copyDraftSlotAssignments);
     },
-    [draftSlotAssignments, getAbbreviation]
+    [draftSlotAssignments, getAbbreviation],
   );
 
   // check for save button enable/disable
@@ -143,27 +142,15 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
 
   const saveToDraftsDB = useCallback(
     async (era, sport, year, grid) => {
-      const draftsCollection = await returnMongoCollection("drafts", era);
-      const sportYear = `${sport}-${year}`;
-
-      // delete record before re-adding with "grid" key instead of "picks"
-      (await draftsCollection).deleteOne({ type: sportYear });
-      const draftObject = {
-        type: sportYear,
-        grid,
-        createdAt: new Date().toLocaleString(),
-      };
-
-      (await draftsCollection).insertOne(draftObject);
+      await api.put(`/create/drafts/${sport}/${year}`, grid);
       timeoutSaveMessage("Successfully saved grid to drafts collection");
     },
-    [timeoutSaveMessage]
+    [timeoutSaveMessage],
   );
 
   const modifyAndSaveGmAssets = useCallback(
     async (era, sport, year, grid) => {
-      const gmsCollection = await returnMongoCollection("gms", era);
-      const gms = await gmsCollection.find({});
+      const gms = await api.get("/gms");
 
       let modifiedCountTotal = 0;
       // Loop through each team's assets to find the sport and year's supplemental draft picks
@@ -200,28 +187,27 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
 
             // if not appropriate year, just return back original draft pick asset text
             return eachPickOfGm;
-          } // end of if (isCorrectYear)
+          }, // end of if (isCorrectYear)
         ); // end of map
 
         console.log(
-          `final list for ${gmAbbreviation}: ${modifiedGmSportDraftPicks}`
+          `final list for ${gmAbbreviation}: ${modifiedGmSportDraftPicks}`,
         );
 
-        const keyString = `assets.${sport}.draftPicks`;
-        const { modifiedCount } = await gmsCollection.updateOne(
-          { abbreviation: gmAbbreviation },
-          { $set: { [keyString]: modifiedGmSportDraftPicks } }
+        const { modifiedCount } = await api.put(
+          `/update/gms/draft-picks/${gmAbbreviation}/${sport}`,
+          modifiedGmSportDraftPicks,
         );
         modifiedCountTotal += modifiedCount;
       } // end of for loop through gms
 
       if (modifiedCountTotal === NUMBER_OF_TEAMS) {
         timeoutSaveMessage(
-          "Successfully saved updated draft assets to all GM records"
+          "Successfully saved updated draft assets to all GM records",
         );
       }
     },
-    [timeoutSaveMessage]
+    [timeoutSaveMessage],
   );
 
   const saveDraftSlots = useCallback(async () => {
@@ -238,7 +224,7 @@ export const CommissionerAssignSupplementalDraftSlots = () => {
       era,
       selectedSport,
       selectedYear,
-      draftSlotAssignments
+      draftSlotAssignments,
     );
     console.log("Grid!", grid);
 

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Select from "react-select";
-import { returnMongoCollection } from "database-management";
 
 import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
@@ -12,6 +11,7 @@ import { capitalize } from "lodash";
 import { GLOBAL_VARIABLES } from "Constants";
 import { sportYearToSportAndYear } from "utils/years";
 import { extractBetweenParentheses } from "utils/strings";
+import { api } from "utils/api";
 
 const CHAMPION_STRING = "CHAMPION (9)";
 const RUNNER_UP_STRING = "RUNNER-UP (4)";
@@ -29,7 +29,7 @@ export const CommissionerCompleteSport = () => {
   const { era } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.dynasty
+    (state) => state?.currentVariables?.seasonVariables?.dynasty,
   );
   const [earners, setEarners] = useState({
     [CHAMPION_STRING]: "",
@@ -44,11 +44,10 @@ export const CommissionerCompleteSport = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
 
       const gmNamesArray = gmData.map(
-        (gm) => `${gm.name} (${gm.abbreviation})`
+        (gm) => `${gm.name} (${gm.abbreviation})`,
       );
 
       setGmsArray(gmNamesArray);
@@ -78,7 +77,7 @@ export const CommissionerCompleteSport = () => {
       copyEarners[earner] = event.value;
       setEarners(copyEarners);
     },
-    [earners]
+    [earners],
   );
 
   const options = useMemo(() => {
@@ -96,20 +95,12 @@ export const CommissionerCompleteSport = () => {
   }, []);
 
   const savePlayoffPoints = useCallback(async () => {
-    const globalVariablesCollection = await returnMongoCollection(
-      GLOBAL_VARIABLES
-    );
     const { sport, year } = sportYearToSportAndYear(selectedLeague);
-    const standingsCollection = await returnMongoCollection(
-      `${sport}Standings`,
-      era
-    );
 
-    const globalVariablesRaw = await globalVariablesCollection.find({});
-    const globalVariables = globalVariablesRaw[0];
-    const standingsRaw = await standingsCollection.find({ year });
-    const standingsCopy = { ...standingsRaw[0] };
-    const dynastyStandings = standingsRaw[0].dynastyStandings;
+    const globalVariables = await api.get("/global-variables");
+    const standingsData = await api.get(`/standings/${sport}/${year}`);
+    const standingsCopy = { ...standingsData };
+    const dynastyStandings = standingsData.dynastyStandings;
 
     // Add playoff points to standings object
     Object.keys(earners).forEach(function (k) {
@@ -146,11 +137,8 @@ export const CommissionerCompleteSport = () => {
     console.log("New global variables: ", globalVariables);
     console.log("Updated standings: ", standingsCopy);
     // save updated global variables and sport standings object
-    globalVariablesCollection.deleteOne({ type: "globalVariables" });
-    globalVariablesCollection.insertOne(globalVariables);
-
-    standingsCollection.deleteOne({ year });
-    standingsCollection.insertOne(standingsCopy);
+    await api.put("/update/global-variables", globalVariables);
+    await api.put(`/update/standings/${sport}/${year}`);
 
     timeoutSaveMessage("Successfully completed sport and saved collections");
   }, [selectedLeague, era, earners, timeoutSaveMessage]);

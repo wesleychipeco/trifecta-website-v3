@@ -10,11 +10,12 @@ import Basketball2025 from "resources/data/draft-results-basketball-2025.csv";
 import Baseball2025 from "resources/data/draft-results-baseball-2025.csv";
 import Football2025 from "resources/data/draft-results-football-2025.csv";
 import Basketball2026 from "resources/data/draft-results-basketball-2026.csv";
+import Baseball2026 from "resources/data/draft-results-baseball-2026.csv";
 import { DraftCard } from "components/draft/DraftCard";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/shared";
-import { returnMongoCollection } from "database-management";
 import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
+import { api } from "utils/api";
 
 export const DraftBoard = () => {
   const { era, sport, year } = useParams();
@@ -101,8 +102,7 @@ export const DraftBoard = () => {
 
   useEffect(() => {
     const checkForCompletedOrFuture = async () => {
-      const draftsCollection = await returnMongoCollection("drafts", era);
-      const draftsData = await draftsCollection.find();
+      const draftsData = await api.get("/drafts");
       const draftStatusObject =
         draftsData.filter((record) => record.type === "status")?.[0] ?? {};
       const { completedDrafts } = draftStatusObject;
@@ -138,6 +138,8 @@ export const DraftBoard = () => {
           isStartup = true;
         } else if (year === "2025") {
           csvToUse = Baseball2025;
+        } else if (year === "2026") {
+          csvToUse = Baseball2026;
         }
       } else if (sport === FOOTBALL) {
         if (year === "startup") {
@@ -188,7 +190,7 @@ export const DraftBoard = () => {
     <S.FlexColumnCenterContainer>
       <S.TitleContainer>
         <S.Title>{`${capitalize(sport)} ${capitalize(
-          year
+          year,
         )} Draft ${conditionalTitleText}`}</S.Title>
       </S.TitleContainer>
       <S.FlexColumnContainer>

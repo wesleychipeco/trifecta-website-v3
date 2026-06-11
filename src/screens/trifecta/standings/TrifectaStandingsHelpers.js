@@ -1,22 +1,20 @@
 import sum from "lodash/sum";
 import format from "date-fns/format";
 import max from "date-fns/max";
-import { returnMongoCollection } from "database-management";
 import { SeasonStatus } from "utils/years";
 import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
+import { api } from "utils/api";
 
 export const calculateTrifectaStandings = async (
   year,
   basketballSeasonStatus,
   baseballSeasonStatus,
-  footballSeasonStatus
+  footballSeasonStatus,
 ) => {
   const trifectaStandingsArray = [];
-  const teamListsCollection = await returnMongoCollection("teamLists");
-  const teamListsData = await teamListsCollection.find({ year });
+  const teamListsData = await api.get(`/trifecta/team-lists/${year}`);
   const ownerIdsPerTeamArray = teamListsData?.[0]?.teams ?? [];
-  const ownerIdsCollection = await returnMongoCollection("ownerIds");
-  const ownerIdsOwnerNamesArray = await ownerIdsCollection.find({});
+  const ownerIdsOwnerNamesArray = await api.get("/trifecta/owner-ids");
   let basketballLastScraped = null;
   let baseballLastScraped = null;
   let footballLastScraped = null;
@@ -64,7 +62,7 @@ export const calculateTrifectaStandings = async (
       trifectaStandings: sumTrifectaPoints(
         ownerIdsPerTeamArray,
         ownerIdsOwnerNamesArray,
-        trifectaStandingsArray
+        trifectaStandingsArray,
       ),
       updatedAsOf: format(updatedAsOf, "MM/dd/yy hh:mm a"),
     };
@@ -75,18 +73,8 @@ export const calculateTrifectaStandings = async (
 };
 
 const retrieveSportStandings = async (year, sport) => {
-  const collectionName = `${sport}Standings`;
-  const collection = await returnMongoCollection(collectionName);
-
-  const trifectaPointsKey = "trifectaStandings";
-
-  const projection1 = trifectaPointsKey + ".ownerIds";
-  const projection2 = trifectaPointsKey + ".totalTrifectaPoints";
-  const projection3 = "lastScraped";
-
-  const sportStandingsResponse = await collection.find(
-    { year },
-    { projection: { [projection1]: 1, [projection2]: 1, [projection3]: 1 } }
+  const sportStandingsResponse = await api.get(
+    `/trifecta/standings/${sport}/${year}`,
   );
 
   return {
@@ -109,14 +97,14 @@ const atLeastOneInTheOther = (array1, array2) => {
 
 const returnSportTrifectaPoints = (sportStandings, ownersPerTeam) => {
   return sportStandings.find((sportsTeam) =>
-    atLeastOneInTheOther(sportsTeam.ownerIds, ownersPerTeam)
+    atLeastOneInTheOther(sportsTeam.ownerIds, ownersPerTeam),
   ).totalTrifectaPoints;
 };
 
 const sumTrifectaPoints = (
   ownerIdsPerTeamArray,
   ownerIdsOwnerNamesArray,
-  combinedArray
+  combinedArray,
 ) => {
   const [basketballStandings, baseballStandings, footballStandings] =
     combinedArray;
@@ -133,14 +121,14 @@ const sumTrifectaPoints = (
 
     const ownerNames = returnOwnerNamesArray(
       ownerIdsOwnerNamesArray,
-      ownersPerTeam
+      ownersPerTeam,
     );
     teamTrifectaStandings.ownerNames = ownerNames.join(", ");
 
     if (basketballStandings) {
       const basketballTrifectaPoints = returnSportTrifectaPoints(
         basketballStandings,
-        ownersPerTeam
+        ownersPerTeam,
       );
       teamTrifectaStandings.basketballTrifectaPoints = basketballTrifectaPoints;
       totalTrifectaPointsArray.push(basketballTrifectaPoints);
@@ -152,7 +140,7 @@ const sumTrifectaPoints = (
     if (baseballStandings) {
       const baseballTrifectaPoints = returnSportTrifectaPoints(
         baseballStandings,
-        ownersPerTeam
+        ownersPerTeam,
       );
       teamTrifectaStandings.baseballTrifectaPoints = baseballTrifectaPoints;
       totalTrifectaPointsArray.push(baseballTrifectaPoints);
@@ -164,7 +152,7 @@ const sumTrifectaPoints = (
     if (footballStandings) {
       const footballTrifectaPoints = returnSportTrifectaPoints(
         footballStandings,
-        ownersPerTeam
+        ownersPerTeam,
       );
       teamTrifectaStandings.footballTrifectaPoints = footballTrifectaPoints;
       totalTrifectaPointsArray.push(footballTrifectaPoints);
@@ -188,7 +176,7 @@ const returnOwnerNamesArray = (ownerIdsOwnerNamesArray, ownersPerTeam) => {
     // in the array of ownerId/ownerNames, find the object where the ownerIds are the same
     // and return the "ownerName" value from that object and add it to the array
     const ownerNameObject = ownerIdsOwnerNamesArray.find(
-      (ownerIdsOwnerNames) => ownerIdsOwnerNames.ownerId === ownerId
+      (ownerIdsOwnerNames) => ownerIdsOwnerNames.ownerId === ownerId,
     );
     if (ownerNameObject) {
       ownerNames.push(ownerNameObject.ownerName);

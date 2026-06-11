@@ -7,10 +7,10 @@ import * as T from "styles/shared";
 import { STATIC_ROUTES } from "Routes";
 import { Button } from "components/button/Button";
 import { OwnerLinks } from "./OwnerLinks";
-import { returnMongoCollection } from "database-management";
 import { StandingsDropdown } from "components/dropdown/StandingsDropdown";
 import { splitInto2Arrays, splitIntoArraysOfLengthX } from "utils/arrays";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import { api } from "utils/api";
 
 export const HallOfFame = () => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
@@ -19,10 +19,7 @@ export const HallOfFame = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const trifectaCollection = await returnMongoCollection(
-        "trifectaStandings"
-      );
-      const yearsData = await trifectaCollection.find({});
+      const yearsData = await api.get("/trifecta/trifecta-standings/all-years");
 
       // remove years that are not 4 characters & dedupe (test/backup files)
       const filteredYears = yearsData
@@ -34,12 +31,10 @@ export const HallOfFame = () => {
         : splitInto2Arrays(yearsArray);
       setSortedYearsArray(comboYearsArray);
 
-      const hallOfFameCollection = await returnMongoCollection("hallOfFame");
-      const championsData = await hallOfFameCollection.find({
-        type: "pastChampions",
-      });
-      const pc = championsData?.[0]?.pastChampions ?? [];
-      const comboChampionsArray = splitInto2Arrays(pc);
+      const pastChampions = await api.get(
+        "/trifecta/hall-of-fame/past-champions",
+      );
+      const comboChampionsArray = splitInto2Arrays(pastChampions);
       setPastChampions(comboChampionsArray);
     };
 

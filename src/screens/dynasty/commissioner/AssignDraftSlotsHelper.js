@@ -1,6 +1,6 @@
 import { invert } from "lodash";
-import { returnMongoCollection } from "database-management";
 import { BASEBALL, BASKETBALL, FOOTBALL, NUMBER_OF_TEAMS } from "Constants";
+import { api } from "utils/api";
 
 export const BASKETBALL_STARTUP_DRAFT_ROUNDS = 15;
 export const BASEBALL_STARTUP_DRAFT_ROUNDS = 30;
@@ -15,14 +15,14 @@ export const ROUND_REVERSAL = 5;
 export const createDraftGrid = (
   sport,
   draftSlotAssignments,
-  isStartup = false
+  isStartup = false,
 ) => {
   const byPickNumbersDraftSlotAssignments = invert(draftSlotAssignments);
   const orderedDraftSlotNumbers = Object.keys(
-    byPickNumbersDraftSlotAssignments
+    byPickNumbersDraftSlotAssignments,
   ).sort((a, b) => a - b);
   const orderedAbbreviations = orderedDraftSlotNumbers.map(
-    (pickNumber) => byPickNumbersDraftSlotAssignments[pickNumber]
+    (pickNumber) => byPickNumbersDraftSlotAssignments[pickNumber],
   );
 
   let numberOfRounds;
@@ -99,12 +99,11 @@ export const assignSupplementalDraftSlots = async (
   era,
   sport,
   year,
-  draftSlotAssignments
+  draftSlotAssignments,
 ) => {
   const draftGrid = createDraftGrid(sport, draftSlotAssignments, false);
 
-  const draftsCollection = await returnMongoCollection("drafts", era);
-  const draft = await draftsCollection.find({ type: `${sport}-${year}` });
+  const draft = await api.get(`/drafts/${sport}/${year}`);
   const draftPicks = draft?.[0]?.picks ?? [];
 
   // create list of draft picks that are are traded

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as S from "styles/StandardScreen.styles";
-import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {
   TrifectaHistoryColumns,
@@ -9,6 +8,7 @@ import {
   AllTimeBColumns,
   AllTimeFootballColumns,
 } from "./columns";
+import { api } from "utils/api";
 
 const DEFAULT_STATE = {
   ownerNames: "",
@@ -25,9 +25,8 @@ export const OwnerRecords = () => {
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("ownerProfiles");
-      const data = await collection.find({ teamNumber: parseInt(teamNumber) });
-      setOwnerRecodrs(data?.[0] ?? DEFAULT_STATE);
+      const object = await api.get(`/trifecta/owner-profiles/${teamNumber}`);
+      setOwnerRecodrs(object ?? DEFAULT_STATE);
     };
 
     load();

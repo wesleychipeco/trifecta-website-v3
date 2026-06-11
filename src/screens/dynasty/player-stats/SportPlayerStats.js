@@ -1,4 +1,3 @@
-import { returnMongoCollection } from "database-management";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -15,7 +14,8 @@ import {
   FootballStatsColumns,
 } from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
-import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
+import { BASEBALL, BASKETBALL, ERA_1, FOOTBALL } from "Constants";
+import { api } from "utils/api";
 
 export const SportPlayerStats = () => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
@@ -29,11 +29,7 @@ export const SportPlayerStats = () => {
 
   const getAndSetGmsArray = useCallback(async () => {
     // get list of gm abbreviations
-    const gmCollection = await returnMongoCollection("gms", era);
-    const gmData = await gmCollection.find(
-      {},
-      { projection: { abbreviation: 1, name: 1 } }
-    );
+    const gmData = await api.get("/gms");
     const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
     setGmsArray(gmNamesArray);
   }, [setGmsArray, era]);
@@ -57,8 +53,7 @@ export const SportPlayerStats = () => {
         await getAndSetGmsArray();
 
         let lastScrapedDate = "";
-        const statsCollection = await returnMongoCollection("playerStats", era);
-        const data = await statsCollection.find({ sport });
+        const data = await api.get(`/player-stats/${sport}`);
 
         const allStats = [];
         const allYears = ["all"];
@@ -75,7 +70,7 @@ export const SportPlayerStats = () => {
         setPlayerStats(flattenAllStats);
         setIsLoading(false);
         console.log(
-          `${sport} Player Stats last scraped (Local time): ${lastScrapedDate}`
+          `${sport} Player Stats last scraped (Local time): ${lastScrapedDate}`,
         );
         if (lastScrapedDate) {
           const lastScrapedIndex = lastScrapedDate.indexOf(",");

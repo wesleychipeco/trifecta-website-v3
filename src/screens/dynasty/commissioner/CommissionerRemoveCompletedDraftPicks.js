@@ -1,4 +1,3 @@
-import { returnMongoCollection } from "database-management";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -15,6 +14,7 @@ import {
 } from "styles/Dropdown.styles";
 import { sportYearToSportAndYear } from "utils/years";
 import { capitalize } from "lodash";
+import { api } from "utils/api";
 
 const SAMPLE_GM = "CHIP";
 
@@ -22,7 +22,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
   const { era } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues, completedLeagues } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.dynasty
+    (state) => state?.currentVariables?.seasonVariables?.dynasty,
   );
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
   const [selectedSport, setSelectedSport] = useState("");
@@ -74,14 +74,13 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
         return false;
       });
     },
-    [selectedYear]
+    [selectedYear],
   );
 
   useEffect(() => {
     if (isReady && selectedSport !== "" && selectedYear !== "") {
       const retrieveSampleData = async () => {
-        const gmsCollection = await returnMongoCollection("gms", era);
-        const gmData = await gmsCollection.find({ abbreviation: SAMPLE_GM });
+        const gmData = await api.get(`/gms/${SAMPLE_GM}`);
         const gmObj = gmData?.[0] ?? {};
 
         const sportDraftPicks =
@@ -97,32 +96,30 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
   }, [isReady, era, selectedSport, selectedYear, filterOutDraftPicks]);
 
   const saveChanges = useCallback(async () => {
-    const gmsCollection = await returnMongoCollection("gms", era);
-    const gmsData = await gmsCollection.find({});
+    const gmsData = await api.get("/gms");
     let totalGmsCount = 0;
 
     for (const eachGm of gmsData) {
-      const { name, assets } = eachGm;
+      const { abbreviation, assets } = eachGm;
       const sportDraftPicks = assets?.[selectedSport]?.draftPicks ?? [];
 
       const filteredDraftPicks = filterOutDraftPicks(sportDraftPicks);
-      const newDraftPicksKey = `assets.${selectedSport}.draftPicks`;
-      const { modifiedCount } = await gmsCollection.updateOne(
-        { name },
-        { $set: { [newDraftPicksKey]: filteredDraftPicks } }
+      const { modifiedCount } = await api.put(
+        `/update/gms/draft-picks/${abbreviation}/${selectedSport}`,
+        filteredDraftPicks,
       );
 
       if (modifiedCount === 1) {
         totalGmsCount += modifiedCount;
         console.log(
-          `Successfully updated ${name}'s ${selectedSport} draft picks`
+          `Successfully updated ${abbreviation}'s ${selectedSport} draft picks`,
         );
       }
     }
 
     if (totalGmsCount === 16) {
       setSaveMessageText(
-        `Successfully updated all GM's ${selectedYear} ${selectedSport} draft picks`
+        `Successfully updated all GM's ${selectedYear} ${selectedSport} draft picks`,
       );
     }
   }, [era, selectedSport, selectedYear, filterOutDraftPicks]);
@@ -155,7 +152,7 @@ export const CommissionerRemoveCompletedDraftPicks = () => {
         </T.FlexColumnCenterContainer>
         <U.VerticalSpacer factor={4} />
         <S.SectionTitle>{`${SAMPLE_GM}'s ${capitalize(
-          selectedSport
+          selectedSport,
         )} Draft Picks`}</S.SectionTitle>
         <U.FlexRowStart style={{ alignItems: "end" }}>
           <U.FlexColumnStart style={{ alignItems: "start" }}>

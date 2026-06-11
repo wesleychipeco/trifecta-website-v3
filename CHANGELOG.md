@@ -1,5 +1,10 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-105] - 2026-06-12
+
+- Change MongoDB connection library and process
+- Add 2026 Baseball draft results
+
 ### [PR-104] - 2025-12-30
 
 - Update Fantrax API version for requests

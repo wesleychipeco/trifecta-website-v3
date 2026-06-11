@@ -1,4 +1,3 @@
-import { returnMongoCollection } from "database-management";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,6 +7,7 @@ import { STATIC_ROUTES } from "Routes";
 import { splitIntoArraysOfLengthX } from "utils/arrays";
 import * as S from "styles/DraftBoard.styles";
 import * as T from "styles/StandardScreen.styles";
+import { api } from "utils/api";
 
 export const DraftsHome = () => {
   const { era } = useParams();
@@ -17,8 +17,7 @@ export const DraftsHome = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const draftCollection = await returnMongoCollection("drafts", era);
-      const draftData = await draftCollection.find({ type: "status" });
+      const draftData = await api.get("/drafts/list");
       const draft = draftData?.[0] ?? {};
       const { completedDrafts, futureDrafts } = draft;
 

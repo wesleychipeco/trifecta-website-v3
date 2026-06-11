@@ -17,14 +17,14 @@ import {
   RotoStatsColumns,
 } from "./BaseballColumns";
 import { Table } from "components/table/Table";
-import { returnMongoCollection } from "database-management";
 import { insertIntoArray } from "utils/arrays";
 import { isYear1AfterYear2, isYear1BeforeYear2 } from "utils/years";
+import { api } from "utils/api";
 
 export const BaseballStandings = () => {
   const { year } = useParams();
   const { currentYear, isBaseballStarted, isBaseballInSeason } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.trifecta
+    (state) => state?.currentVariables?.seasonVariables?.trifecta,
   );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
@@ -40,7 +40,7 @@ export const BaseballStandings = () => {
         trifectaStandings,
         h2hStandings,
         rotoStandings,
-        rotoStats = []
+        rotoStats = [],
       ) => {
         const rotoStatsFillIn = rotoStats ? rotoStats : rotoStandings;
         // For standings pre-2018, rotoStandings and rotoStats have different data
@@ -49,7 +49,7 @@ export const BaseballStandings = () => {
         rotoStandings.forEach((eachRotoStandings) => {
           const foundRotoStats = rotoStatsFillIn.find(
             (eachRotoStats) =>
-              eachRotoStandings.teamName === eachRotoStats.teamName
+              eachRotoStandings.teamName === eachRotoStats.teamName,
           );
           rotoCombined.push({
             ...eachRotoStandings,
@@ -61,69 +61,13 @@ export const BaseballStandings = () => {
         setRotoStandings(rotoStats ? rotoCombined : rotoStandings);
       };
 
-      // scrape, then display, then save to mongodb with new last scraped
-      const scrape = async (collection) => {
-        if (Object.keys(ownerNamesMapping).length > 0) {
-          const { h2hScrape, rotoScrape } = await standingsScraper(year);
-
-          const h2hStandings = await h2hScrapeToStandings(h2hScrape);
-          const rotoStandings = await rotoScrapeToStandings(rotoScrape);
-          const trifectaStandings = await compileTrifectaStandings(
-            h2hStandings,
-            rotoStandings,
-            ownerNamesMapping
-          );
-
-          display(trifectaStandings, h2hStandings, rotoStandings);
-
-          // delete, then save to mongodb
-          console.log("Delete, then save to mongodb");
-          await collection.deleteMany({ year });
-          await collection.insertOne({
-            year,
-            lastScraped: new Date().toLocaleString(),
-            trifectaStandings,
-            h2hStandings,
-            rotoStandings,
-          });
-        }
-      };
-
       // check if need to scrape or just display
       const check = async () => {
-        const collection = await returnMongoCollection("baseballStandings");
-        const data = await collection.find({ year });
-        const object = data[0] ?? {};
-        const lastScrapedString = object?.lastScraped;
+        const object = await api.get(`/trifecta/standings/baseball/${year}`);
         const { trifectaStandings, h2hStandings, rotoStandings, rotoStats } =
           object;
 
-        // if not current year or not started or in season, then just display, do not scrape
-        if (!isBaseballStarted || !isBaseballInSeason || year !== currentYear) {
-          if (isYear1AfterYear2(year, currentYear)) {
-            console.log("AHEAD of TIME!");
-          } else {
-            display(trifectaStandings, h2hStandings, rotoStandings, rotoStats);
-          }
-          return;
-        }
-
-        // if there is no last scraped string (ie brand new, first time entering), scrape
-        if (!lastScrapedString) {
-          console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-          scrape(collection);
-        } else {
-          const now = new Date();
-          const alreadyScraped = isSameDay(now, new Date(lastScrapedString));
-
-          // only scrape if not already scraped today
-          if (!alreadyScraped) {
-            console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-            scrape(collection);
-          } else {
-            display(trifectaStandings, h2hStandings, rotoStandings, rotoStats);
-          }
-        }
+        display(trifectaStandings, h2hStandings, rotoStandings, rotoStats);
       };
 
       ///////////// only 1 function gets run inside useEffect /////////////

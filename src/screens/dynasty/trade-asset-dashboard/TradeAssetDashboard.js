@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { returnMongoCollection } from "database-management";
 import { capitalize, upperCase } from "lodash";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -15,6 +14,7 @@ import * as U from "styles/StandardScreen.styles";
 import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 import { BASEBALL } from "Constants";
+import { api } from "utils/api";
 
 const ALL_TRADE_BLOCK_SECTIONS = [
   {
@@ -62,7 +62,7 @@ export const TradeAssetDashboard = () => {
   const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues, leagueIdMappings } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.dynasty
+    (state) => state?.currentVariables?.seasonVariables?.dynasty,
   );
   const { isAuthenticated, user } = useAuth0();
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
@@ -71,9 +71,7 @@ export const TradeAssetDashboard = () => {
   // load data on page ready
   useEffect(() => {
     const display = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({ abbreviation: gmAbbreviation });
-      const gm = gmData?.[0];
+      const gm = await api.get(`/trade-assets/${gmAbbreviation}`);
       const name = gm?.name ?? "";
       setGmName(name);
 
@@ -93,7 +91,7 @@ export const TradeAssetDashboard = () => {
       const lastUpdatedDate =
         assets?.basketball?.lastUpdated ?? assets?.baseball?.lastUpdated;
       console.log(
-        `${gmAbbreviation} Trade Asset Dashboard last scraped (Local Time): ${lastUpdatedDate}`
+        `${gmAbbreviation} Trade Asset Dashboard last scraped (Local Time): ${lastUpdatedDate}`,
       );
 
       if (lastUpdatedDate) {
@@ -123,7 +121,7 @@ export const TradeAssetDashboard = () => {
         value: section.key,
         label: capitalize(section.key),
       })),
-    []
+    [],
   );
 
   // functions to correctly modify the immutable state
@@ -190,12 +188,9 @@ export const TradeAssetDashboard = () => {
       action: "save",
       label: "save trade block",
     });
-    const gmCollection = await returnMongoCollection("gms", era);
-    // console.log("FINAL TRADE BLOCK", tradeBlock);
-
-    const { modifiedCount } = await gmCollection.updateOne(
-      { abbreviation: gmAbbreviation },
-      { $set: { tradeBlock } }
+    const { modifiedCount } = await api.put(
+      `/update/trade-block/${gmAbbreviation}`,
+      tradeBlock,
     );
     if (modifiedCount < 1) {
       timeoutSaveMessage("Did NOT successfully update trade block!");
@@ -210,7 +205,7 @@ export const TradeAssetDashboard = () => {
       <S.Title
         style={{ marginBottom: "0.5rem" }}
       >{`Trade Asset Dashboard for ${gmName} (${upperCase(
-        gmAbbreviation
+        gmAbbreviation,
       )})`}</S.Title>
       {lastUpdatedDay && (
         <>
