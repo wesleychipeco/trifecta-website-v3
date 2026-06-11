@@ -1,5 +1,7 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.3.0] - 2026-06-12
+
 ### [PR-105] - 2026-06-12
 
 - Change MongoDB connection library and process
