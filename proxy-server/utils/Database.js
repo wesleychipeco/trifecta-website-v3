@@ -1,8 +1,9 @@
 import { ERA_0, ERA_1, GLOBAL_VARIABLES, TRIFECTA } from "../APIConstants.js";
 import { MongoClient, ServerApiVersion } from "mongodb";
+import * as dotenv from "dotenv";
 
-const CONNECTION_URI =
-  "mongodb+srv://wesley:centerfield8@trifectacluster1.kslbp.mongodb.net/?appName=TrifectaCluster1";
+dotenv.config();
+const CONNECTION_URI = process.env.MONGODB_URI;
 
 export const returnMongoCollection = async (
   collectionName,
