@@ -11,8 +11,6 @@ export const STATIC_ROUTES = {
   FootballHallOfFame: "hall-of-fame/football",
   GenericOwnerMatchups: "matchups",
   GenericOwnerRecords: "owner-records",
-  CompileMatchups: "compile-matchups",
-  CompileTotalMatchups: "compile-total-matchups",
   DynastyStandings: "standings/dynasty",
   TradeAssetHome: "trade-asset-home",
   DraftsHome: "drafts-home",

@@ -1,23 +1,33 @@
-import { ERA_0, ERA_1, GLOBAL_VARIABLES } from "../APIConstants.js";
-import * as Realm from "realm-web";
+import { ERA_0, ERA_1, GLOBAL_VARIABLES, TRIFECTA } from "../APIConstants.js";
+import { MongoClient, ServerApiVersion } from "mongodb";
+import * as dotenv from "dotenv";
 
-const REALM_APP_ID = "trifectafantasyleague-xqqjr";
-const REALM_SERVICE = "mongodb-atlas";
+dotenv.config();
+const CONNECTION_URI = process.env.MONGODB_URI;
 
 export const returnMongoCollection = async (
   collectionName,
-  dynastyEra = ERA_1
+  dynastyEra = ERA_1,
 ) => {
+  const client = new MongoClient(CONNECTION_URI, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
+  });
+
   let dbName;
   switch (dynastyEra) {
     case ERA_0:
       dbName = "dynasty1";
       break;
-    case ERA_1:
-      dbName = "dynasty-1";
-      break;
-    default:
+    case TRIFECTA:
       dbName = "trifecta";
+      break;
+    case ERA_1:
+    default:
+      dbName = "dynasty-1";
       break;
   }
 
@@ -25,10 +35,17 @@ export const returnMongoCollection = async (
     dbName = GLOBAL_VARIABLES;
   }
 
-  const app = Realm.App.getApp(REALM_APP_ID);
-  if (!app.currentUser) {
-    await app.logIn(Realm.Credentials.anonymous());
+  try {
+    await client.connect();
+    await client.db(dbName).command({ ping: 1 });
+    if (collectionName === GLOBAL_VARIABLES) {
+      console.log(
+        'Pinged the deployment. You\"ve successfully connected to MongoDB!',
+      );
+    }
+  } catch (err) {
+    console.log("ERROR!!!!!", err);
   }
-  const mongodb = app.currentUser.mongoClient(REALM_SERVICE);
-  return mongodb.db(dbName).collection(collectionName);
+
+  return client.db(dbName).collection(collectionName);
 };

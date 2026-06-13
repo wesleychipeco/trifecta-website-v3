@@ -19,7 +19,6 @@ import { BaseballStandings } from "screens/trifecta/standings/BaseballStandings"
 import { FootballStandings } from "screens/trifecta/standings/FootballStandings";
 import { TrifectaStandings } from "screens/trifecta/standings/TrifectaStandings";
 import { useEffect } from "react";
-import { returnMongoCollection } from "database-management";
 import { setSeasonVariables } from "store/currentVariablesSlice";
 import { setOwnerNames } from "store/namesSlice";
 import { BasketballHallOfFame } from "screens/trifecta/hall-of-fame/BasketballHallOfFame";
@@ -27,8 +26,6 @@ import { BaseballHallOfFame } from "screens/trifecta/hall-of-fame/BaseballHallOf
 import { FootballHallOfFame } from "screens/trifecta/hall-of-fame/FootballHallOfFame";
 import { OwnerMatchups } from "screens/trifecta/owner-matchups/OwnerMatchups";
 import { OwnerRecords } from "screens/trifecta/owner-records/OwnerRecords";
-import { CompileMatchups } from "screens/trifecta/compile-matchups/CompileMatchups";
-import { CompileTotalMatchups } from "screens/compile-matchups/CompileTotalMatchups";
 import { DynastyHome } from "screens/dynasty/DynastyHome";
 import { BASEBALL, BASKETBALL, FOOTBALL, GLOBAL_VARIABLES } from "Constants";
 import { DynastySportStandings } from "screens/dynasty/standings/DynastySportStandings";
@@ -53,6 +50,7 @@ import { SportPlayerStats } from "screens/dynasty/player-stats/SportPlayerStats"
 import { CommissionerCompleteSport } from "screens/dynasty/commissioner/CommissionerCompleteSport";
 import { CommissionerRemoveCompletedDraftPicks } from "screens/dynasty/commissioner/CommissionerRemoveCompletedDraftPicks";
 import { CommissionerAssignLeagueTeamIds } from "screens/dynasty/commissioner/CommissionerAssignLeagueTeamIds";
+import { api } from "utils/api";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -63,9 +61,7 @@ export const App = () => {
   useEffect(() => {
     if (!isReady) {
       const loadSeasonVariables = async () => {
-        const collection = await returnMongoCollection(GLOBAL_VARIABLES);
-        const data = await collection.find({});
-        const object = data[0];
+        const object = await api.get("/global-variables");
         const { trifecta: trifectaObject, dynasty: dynastyObject } = object;
         const { basketball, baseball, football } = trifectaObject;
         const trifectaVariables = {
@@ -90,8 +86,7 @@ export const App = () => {
 
     if (Object.keys(ownerNames).length === 0) {
       const loadOwnerNames = async () => {
-        const collection = await returnMongoCollection("ownerIds");
-        const data = await collection.find({});
+        const data = await api.get("/trifecta/owner-ids");
 
         const holder = {};
         data.forEach((owner) => {
@@ -179,16 +174,6 @@ export const App = () => {
               <Route
                 path={ROUTES.OwnerRecords}
                 element={<OwnerRecords />}
-                exact
-              />
-              <Route
-                path={STATIC_ROUTES.CompileMatchups}
-                element={<CompileMatchups />}
-                exact
-              />
-              <Route
-                path={STATIC_ROUTES.CompileTotalMatchups}
-                element={<CompileTotalMatchups />}
                 exact
               />
             </Route>
@@ -296,7 +281,7 @@ export const App = () => {
                   element={<CommissionerRemoveCompletedDraftPicks />}
                   exact
                 />
-                <Route 
+                <Route
                   path={ROUTES.CommissionerAssignLeagueTeamIds}
                   element={<CommissionerAssignLeagueTeamIds />}
                   exact

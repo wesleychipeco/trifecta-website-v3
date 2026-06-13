@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import Select from "react-select";
-import { returnMongoCollection } from "database-management";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as S from "styles/Commissioner.styles";
@@ -14,6 +13,7 @@ import {
   MobileMatchupsDropdownCustomStyles,
 } from "styles/Dropdown.styles";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import { api } from "utils/api";
 
 export const CommissionerEnterTrade = () => {
   const { era } = useParams();
@@ -100,10 +100,6 @@ export const CommissionerEnterTrade = () => {
   };
 
   const saveTrade = async () => {
-    const tradeHistoryCollection = await returnMongoCollection(
-      "tradeHistory",
-      era
-    );
     const tradeObject = {
       date,
       owner1: gms["gm1"],
@@ -112,7 +108,7 @@ export const CommissionerEnterTrade = () => {
       owner2PlayersReceived: assets["assets2"],
     };
 
-    await tradeHistoryCollection.insertOne(tradeObject);
+    await api.put("/update/trade-history", tradeObject);
 
     timeoutSaveMessage("Trade saved successfully!");
     setIsSaveButtonEnabled(false);
@@ -134,11 +130,10 @@ export const CommissionerEnterTrade = () => {
   // load data on page load
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
 
       const gmNamesArray = gmData.map(
-        (gm) => `${gm.name} (${gm.abbreviation})`
+        (gm) => `${gm.name} (${gm.abbreviation})`,
       );
 
       setGmsArray(gmNamesArray);

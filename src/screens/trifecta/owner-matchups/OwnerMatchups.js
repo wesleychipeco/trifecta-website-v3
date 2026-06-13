@@ -3,7 +3,6 @@ import { sortBy } from "lodash";
 import { useParams } from "react-router-dom";
 import * as S from "styles/StandardScreen.styles";
 import * as T from "styles/OwnerScreen.styles";
-import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {
   TotalMatchupsColumns,
@@ -11,6 +10,7 @@ import {
   FootballMatchupsColumns,
 } from "./columns";
 import { MatchupsDropdown } from "components/dropdown/MatchupsDropdown";
+import { api } from "utils/api";
 
 const DEFAULT_STATE = {
   totalMatchups: [],
@@ -27,18 +27,10 @@ export const OwnerMatchups = () => {
 
   useEffect(() => {
     const load = async () => {
-      const allTimesTeamCollection = await returnMongoCollection(
-        "allTimeTeams"
-      );
-      const data1 = await allTimesTeamCollection.find({
-        teamNumber,
-      });
-      setOwnerNames(data1?.[0]?.ownerNames ?? "");
+      const object1 = await api.get(`/trifecta/all-time-teams/${teamNumber}`);
+      setOwnerNames(object1?.ownerNames ?? "");
 
-      const collection = await returnMongoCollection(
-        `owner${teamNumber}Matchups`
-      );
-      const data = await collection.find({});
+      const data = await api.get(`/trifecta/owner-matchups/${teamNumber}`);
       const yearsOfMatchups = data.map((each) => each.year);
       const sortedYearsArray = sortBy(yearsOfMatchups);
       setYearsArray(sortedYearsArray);

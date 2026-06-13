@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as S from "styles/StandardScreen.styles";
 import * as T from "styles/SportHallOfFame.styles";
-import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {
   FootballAllTimeRecordsColumns,
@@ -9,7 +8,7 @@ import {
   Football10WinH2HColumns,
   FootballHighestSingleWeekColumns,
 } from "./columns";
-import { FOOTBALL } from "Constants";
+import { api } from "utils/api";
 
 const DEFAULT_STATE = {
   allTimeRecords: [],
@@ -23,9 +22,8 @@ export const FootballHallOfFame = () => {
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("hallOfFame");
-      const data = await collection.find({ sport: FOOTBALL });
-      setHallOfFameData(data?.[0] ?? DEFAULT_STATE);
+      const data = await api.get("/trifecta/hall-of-fame/football");
+      setHallOfFameData(data);
     };
 
     load();

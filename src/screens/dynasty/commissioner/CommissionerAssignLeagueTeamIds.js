@@ -1,4 +1,3 @@
-import { returnMongoCollection } from "database-management";
 import { capitalize } from "lodash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Select from "react-select";
@@ -14,6 +13,7 @@ import {
   MobileMatchupsDropdownCustomStyles,
 } from "styles/Dropdown.styles";
 import { GLOBAL_VARIABLES, NUMBER_OF_TEAMS, SPORTS_ARRAY } from "Constants";
+import { api } from "utils/api";
 
 export const CommissionerAssignLeagueTeamIds = () => {
   const { era } = useParams();
@@ -29,11 +29,10 @@ export const CommissionerAssignLeagueTeamIds = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
 
       const gmNamesArray = gmData.map(
-        (gm) => `${gm.name} (${gm.abbreviation})`
+        (gm) => `${gm.name} (${gm.abbreviation})`,
       );
 
       setGmsArray(gmNamesArray);
@@ -55,7 +54,7 @@ export const CommissionerAssignLeagueTeamIds = () => {
         setSaveMessageText("");
       }, 3000);
     },
-    [setSaveMessageText]
+    [setSaveMessageText],
   );
 
   const sportsOptions = useMemo(() => {
@@ -71,21 +70,21 @@ export const CommissionerAssignLeagueTeamIds = () => {
     (event) => {
       setSport(event?.value);
     },
-    [setSport]
+    [setSport],
   );
 
   const handleYearChange = useCallback(
     (event) => {
       setYear(event.target.value);
     },
-    [setYear]
+    [setYear],
   );
 
   const handleLeagueIdChange = useCallback(
     (event) => {
       setLeagueId(event.target.value);
     },
-    [setLeagueId]
+    [setLeagueId],
   );
 
   const handleTeamIdChange = (gm, event) => {
@@ -108,7 +107,7 @@ export const CommissionerAssignLeagueTeamIds = () => {
     const shouldDisableSaveOther =
       sport === "" || year === "" || leagueId === "";
     setIsSaveButtonEnabled(
-      !shouldDisableSaveTeamIds && !shouldDisableSaveOther
+      !shouldDisableSaveTeamIds && !shouldDisableSaveOther,
     );
   }, [teamIds, setIsSaveButtonEnabled, sport, year, leagueId]);
 
@@ -116,13 +115,7 @@ export const CommissionerAssignLeagueTeamIds = () => {
     console.log("teamIds in save", teamIds);
 
     // update global variables leagueIdMappings
-    const globalVariablesCollection = await returnMongoCollection(
-      GLOBAL_VARIABLES
-    );
-    const globalVariablesRaw = await globalVariablesCollection.find({
-      type: GLOBAL_VARIABLES,
-    });
-    const globalVariables = globalVariablesRaw[0];
+    const globalVariables = await api.get("/global-variables");
     const currentLeagueIdMappings = globalVariables.dynasty.leagueIdMappings;
     const sportYear = `${sport}${year}`;
     currentLeagueIdMappings[sportYear] = leagueId;
@@ -131,8 +124,7 @@ export const CommissionerAssignLeagueTeamIds = () => {
     delete globalVariables._id;
     globalVariables.type = GLOBAL_VARIABLES;
 
-    await globalVariablesCollection.deleteOne({ type: GLOBAL_VARIABLES });
-    await globalVariablesCollection.insertOne(globalVariables);
+    await api.put("/update/global-variables", globalVariables);
 
     // create new record in gmNamesIds for sportYear
     const mappings = {};
@@ -146,23 +138,20 @@ export const CommissionerAssignLeagueTeamIds = () => {
       sportYear,
     };
 
-    const gmNamesIdsCollection = await returnMongoCollection("gmNamesIds", era);
-    await gmNamesIdsCollection.insertOne(newGmNamesIdsObject);
+    await api.put("/gm-names-ids", newGmNamesIdsObject);
 
     // add new mapping to individual gm mappings records
-    const gmCollection = await returnMongoCollection("gms", era);
-
     for (const [gm, teamId] of Object.entries(teamIds)) {
       const abbreviation = getAbbreviation(gm);
-      const gmData = await gmCollection.find({ abbreviation });
+      const gmData = await api.get(`/gms/${abbreviation}`);
       const gmObject = gmData?.[0] ?? {};
       const { mappings } = gmObject;
       const copyMappings = { ...mappings };
       copyMappings[sportYear] = teamId;
 
-      const { modifiedCount } = await gmCollection.updateOne(
-        { abbreviation },
-        { $set: { mappings: copyMappings } }
+      const { modifiedCount } = await api.put(
+        `/update/mappings/${abbreviation}`,
+        copyMappings,
       );
       if (modifiedCount !== 1) {
         console.error(`Failed to update ${gm}'s teamId mappings.`);

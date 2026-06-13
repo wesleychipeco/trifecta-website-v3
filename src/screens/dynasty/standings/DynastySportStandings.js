@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { capitalize } from "lodash";
-import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import * as G from "styles/shared";
 import { Table } from "components/table/Table";
@@ -14,6 +13,7 @@ import { useSelector } from "react-redux";
 import { calculateWinPer } from "utils/winPer";
 import { insertIntoArray } from "utils/arrays";
 import { FOOTBALL } from "Constants";
+import { api } from "utils/api";
 
 const DIVISION_ORDER_ARRAY = ["North", "South", "East", "West"];
 
@@ -21,7 +21,7 @@ export const DynastySportStandings = ({ sport }) => {
   const { era, year } = useParams();
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const { inSeasonLeagues } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.dynasty
+    (state) => state?.currentVariables?.seasonVariables?.dynasty,
   );
 
   const [dynastyStandings, setDynastyStandings] = useState([]);
@@ -36,12 +36,8 @@ export const DynastySportStandings = ({ sport }) => {
   useEffect(() => {
     if (isReady) {
       const display = async () => {
-        const collection = await returnMongoCollection(
-          `${sport}Standings`,
-          era
-        );
-        const data = await collection.find({ year });
-        const object = data?.[0] ?? {};
+        const object = await api.get(`/standings/${sport}/${year}`);
+        console.log("HI!!!!!!!1", object);
         const {
           lastScraped: lastScrapedString,
           dynastyStandings,
@@ -49,7 +45,7 @@ export const DynastySportStandings = ({ sport }) => {
         } = object;
 
         console.log(
-          `${year} ${sport} Standings last scraped (Local time): ${lastScrapedString}`
+          `${year} ${sport} Standings last scraped (Local time): ${lastScrapedString}`,
         );
         setDynastyStandings(dynastyStandings);
         setDivisionStandings(divisionStandings);
@@ -58,7 +54,7 @@ export const DynastySportStandings = ({ sport }) => {
           const lastScrapedIndex = lastScrapedString.indexOf(",");
           const lastScrapedDay = lastScrapedString.substring(
             0,
-            lastScrapedIndex
+            lastScrapedIndex,
           );
           setLastScrapedDay(lastScrapedDay);
         }
@@ -158,7 +154,7 @@ export const DynastySportStandings = ({ sport }) => {
         sortDescFirst: true,
       },
     ],
-    [divisionRecordSorter]
+    [divisionRecordSorter],
   );
 
   const FootballDivisionColumns = useMemo(
@@ -219,7 +215,7 @@ export const DynastySportStandings = ({ sport }) => {
         sortDescFirst: true,
       },
     ],
-    [divisionRecordSorter]
+    [divisionRecordSorter],
   );
 
   const divisionStandingsColumns = useMemo(() => {

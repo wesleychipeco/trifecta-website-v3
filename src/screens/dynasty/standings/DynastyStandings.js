@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { capitalize } from "lodash";
-import { returnMongoCollection } from "database-management";
 import * as S from "styles/StandardScreen.styles";
 import * as G from "styles/shared";
 import { Table } from "components/table/Table";
@@ -13,6 +12,7 @@ import {
   Dynasty3x5GmColumn,
 } from "./StandingsColumns";
 import { sportYearToSportAndYear } from "utils/years";
+import { api } from "utils/api";
 
 const DEFAULT_TOGGLE_CHECKED = false;
 
@@ -21,13 +21,13 @@ export const DynastyStandings = () => {
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   // eslint-disable-next-line no-unused-vars
   const { inSeasonLeagues } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.dynasty
+    (state) => state?.currentVariables?.seasonVariables?.dynasty,
   );
 
   const [dynastyStandings, setDynastyStandings] = useState([]);
   const [lastUpdatedDate, setLastUpdatedDate] = useState("");
   const [hideInProgressLeagues, setHideInProgressLeagues] = useState(
-    DEFAULT_TOGGLE_CHECKED
+    DEFAULT_TOGGLE_CHECKED,
   );
 
   const hiddenInSeasonLeagues = useMemo(() => {
@@ -39,11 +39,7 @@ export const DynastyStandings = () => {
   useEffect(() => {
     if (isReady) {
       const display = async () => {
-        const collection = await returnMongoCollection("dynastyStandings", era);
-        const rawData = await collection.find({});
-        const data = rawData.filter(
-          (doc) => doc.type !== "test" && doc.type !== "backup"
-        );
+        const data = await api.get("/dynasty-standings");
         const standings = data?.[0]?.standings ?? [];
         const lastUpdated = data?.[0]?.lastUpdated ?? "";
         const lastUpdatedIndex = lastUpdated.indexOf(",");
@@ -68,7 +64,7 @@ export const DynastyStandings = () => {
             : "";
           return {
             Header: `${optionalAsterisk}${capitalize(
-              sport
+              sport,
             )} ${year}${optionalAsterisk}`,
             accessor: eachColumn,
             tableHeaderCell: S.NumberCenteredTableHeaderCell,
@@ -80,7 +76,7 @@ export const DynastyStandings = () => {
 
       // remove undefined
       const filteredSportColumns = sportColumns.filter(
-        (each) => each !== undefined
+        (each) => each !== undefined,
       );
 
       return [
@@ -102,7 +98,7 @@ export const DynastyStandings = () => {
         setHideInProgressLeagues(false);
       }
     },
-    [setHideInProgressLeagues]
+    [setHideInProgressLeagues],
   );
 
   const sortByArray = useMemo(() => {

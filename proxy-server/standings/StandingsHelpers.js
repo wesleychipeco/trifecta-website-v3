@@ -11,7 +11,7 @@ export const scrapeStandings = async (leagueId) => {
     at: 0,
     av: null,
     tz: "America/Los_Angeles",
-    v: "179.0.1",
+    v: "183.1.0",
   };
 
   return axios.post(backendUrl, body);
@@ -50,10 +50,10 @@ export const formatScrapedStandings = (standings, namesIdsObject, sport) => {
       };
       if (sport === FOOTBALL) {
         divStandingsObj["pointsFor"] = parseFloat(
-          eachTeam.cells[6].content.replace(",", "")
+          eachTeam.cells[6].content.replace(",", ""),
         ).toFixed(2);
         divStandingsObj["pointsAgainst"] = parseFloat(
-          eachTeam.cells[7].content.replace(",", "")
+          eachTeam.cells[7].content.replace(",", ""),
         ).toFixed(2);
         divStandingsObj["footballCompareKey"] =
           Number(divStandingsObj["winPer"]) * 100000000 + // to make winPercentage the largest place value

@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { returnMongoCollection } from "database-management";
 import * as S from "styles/TradeHistory.styles";
 import { TradeHistoryTable } from "components/table/TradeHistoryTable";
+import { api } from "utils/api";
 
 export const TrifectaTradeHistory = () => {
   const [tradeHistory, setTradeHistory] = useState([]);
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("tradeHistory");
-      const data = await collection.find({});
+      const data = await api.get("/trifecta/trade-history");
       setTradeHistory(data);
     };
     load();
@@ -47,7 +46,7 @@ export const TrifectaTradeHistory = () => {
         disableSortBy: true,
       },
     ],
-    []
+    [],
   );
 
   return (

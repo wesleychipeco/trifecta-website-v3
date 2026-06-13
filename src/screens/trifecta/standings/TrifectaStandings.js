@@ -18,9 +18,9 @@ import {
   SeasonStatus,
 } from "utils/years";
 import { Table } from "components/table/Table";
-import { returnMongoCollection } from "database-management";
 import { calculateTrifectaStandings } from "./TrifectaStandingsHelpers";
 import { BASE_ROUTES } from "Routes";
+import { api } from "utils/api";
 
 export const TrifectaStandings = () => {
   const { year } = useParams();
@@ -33,7 +33,7 @@ export const TrifectaStandings = () => {
     isFootballStarted,
     isFootballInSeason,
   } = useSelector(
-    (state) => state?.currentVariables?.seasonVariables?.trifecta
+    (state) => state?.currentVariables?.seasonVariables?.trifecta,
   );
   const isReady = useSelector((state) => state?.currentVariables?.isReady);
   const ownerNamesMapping = useSelector((state) => state?.names?.ownerNames);
@@ -50,51 +50,49 @@ export const TrifectaStandings = () => {
         setUpdatedAsOf(lastScraped);
       };
 
-      // scrape, then display, then save to mongodb with new last scraped
-      const scrape = async (collection, seasonStatusArray) => {
-        if (Object.keys(ownerNamesMapping).length > 0) {
-          const { trifectaStandings, updatedAsOf } =
-            await calculateTrifectaStandings(
-              year,
-              seasonStatusArray[0],
-              seasonStatusArray[1],
-              seasonStatusArray[2]
-            );
-          display(trifectaStandings);
-          setUpdatedAsOf(updatedAsOf);
+      // // scrape, then display, then save to mongodb with new last scraped
+      // const scrape = async (collection, seasonStatusArray) => {
+      //   if (Object.keys(ownerNamesMapping).length > 0) {
+      //     const { trifectaStandings, updatedAsOf } =
+      //       await calculateTrifectaStandings(
+      //         year,
+      //         seasonStatusArray[0],
+      //         seasonStatusArray[1],
+      //         seasonStatusArray[2],
+      //       );
+      //     display(trifectaStandings);
+      //     setUpdatedAsOf(updatedAsOf);
 
-          // delete, then save to mongodb
-          console.log("Delete, then save to mongodb");
-          await collection.deleteMany({ year });
-          await collection.insertOne({
-            year,
-            lastScraped: updatedAsOf
-              ? format(new Date(updatedAsOf), "MM/dd/yy hh:mm a")
-              : format(new Date(), "MM/dd/yy hh:mm a"),
-            trifectaStandings,
-          });
-        }
-      };
+      //     // delete, then save to mongodb
+      //     console.log("Delete, then save to mongodb");
+      //     await collection.deleteMany({ year });
+      //     await collection.insertOne({
+      //       year,
+      //       lastScraped: updatedAsOf
+      //         ? format(new Date(updatedAsOf), "MM/dd/yy hh:mm a")
+      //         : format(new Date(), "MM/dd/yy hh:mm a"),
+      //       trifectaStandings,
+      //     });
+      //   }
+      // };
 
       // check if need to scrape or just display
       const check = async () => {
-        const collection = await returnMongoCollection("trifectaStandings");
-        const data = await collection.find({ year });
-        const object = data[0] ?? {};
+        const object = await api.get(`/trifecta/trifecta-standings/${year}`);
         const lastScrapedString = object?.lastScraped;
         const { trifectaStandings, lastScraped } = object;
 
         const basketballSeasonStatus = determineSeasonStatus(
           isBasketballStarted,
-          isBasketballInSeason
+          isBasketballInSeason,
         );
         const baseballSeasonStatus = determineSeasonStatus(
           isBaseballStarted,
-          isBaseballInSeason
+          isBaseballInSeason,
         );
         const footballSeasonStatus = determineSeasonStatus(
           isFootballStarted,
-          isFootballInSeason
+          isFootballInSeason,
         );
 
         const seasonStatusArray = [
@@ -103,7 +101,7 @@ export const TrifectaStandings = () => {
           footballSeasonStatus,
         ];
         const inProgressIndex = seasonStatusArray.indexOf(
-          SeasonStatus.IN_PROGRESS
+          SeasonStatus.IN_PROGRESS,
         );
         let linkRoute = "";
         switch (inProgressIndex) {
@@ -134,8 +132,8 @@ export const TrifectaStandings = () => {
         // if there is no last scraped string (ie brand new, first time entering), scrape
         if (!lastScrapedString) {
           console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-          // return;
-          scrape(collection, seasonStatusArray);
+          return;
+          // scrape(collection, seasonStatusArray);
         } else {
           const now = new Date();
           const alreadyScraped = isSameDay(now, new Date(lastScrapedString));
@@ -143,8 +141,8 @@ export const TrifectaStandings = () => {
           // only scrape if not already scraped today
           if (!alreadyScraped) {
             console.log("SHOULD SCRAPE BUT DO NOT FOR TESTING");
-            // return;
-            scrape(collection, seasonStatusArray);
+            return;
+            // scrape(collection, seasonStatusArray);
           } else {
             display(trifectaStandings, lastScraped);
           }
@@ -173,7 +171,7 @@ export const TrifectaStandings = () => {
 
   const shouldDisplayUpdateMessage = !isSameDay(
     new Date(),
-    new Date(updatedAsOfDisplay)
+    new Date(updatedAsOfDisplay),
   );
 
   return (

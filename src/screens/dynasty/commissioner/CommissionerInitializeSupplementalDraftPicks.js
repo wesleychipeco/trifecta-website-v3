@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
-import { returnMongoCollection } from "database-management";
 import { numberToOrdinal } from "utils/strings";
 import { cloneDeep } from "lodash";
 import {
@@ -17,6 +16,7 @@ import {
   NUMBER_OF_TEAMS,
   SPORTS_ARRAY,
 } from "Constants";
+import { api } from "utils/api";
 
 export const CommissionerInitializeSupplementalDraftPicks = () => {
   const { era } = useParams();
@@ -26,8 +26,7 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
       console.log("initial gm data", gmData);
       setGmsData(gmData);
     };
@@ -56,10 +55,9 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
       return;
     }
 
-    const gmCollection = await returnMongoCollection("gms", era);
     const copyGmsData = cloneDeep(gmsData);
     for (let teamNumber = 0; teamNumber < gmsData.length; teamNumber++) {
-      const name = copyGmsData[teamNumber]["name"];
+      const abbreviation = copyGmsData[teamNumber]["abbreviation"];
 
       const copyAssets = cloneDeep(copyGmsData[teamNumber]["assets"]);
       for (let i = 0; i < SPORTS_ARRAY.length; i++) {
@@ -92,20 +90,20 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         copyAssets[sport]["draftPicks"] = defaultDraftPicks;
       }
 
-      const { modifiedCount } = await gmCollection.updateOne(
-        { name },
-        { $set: { assets: copyAssets } }
+      const { modifiedCount } = await api.put(
+        `/update/trade-assets/${abbreviation}`,
+        copyAssets,
       );
       numberOfTeamsCompleted += modifiedCount;
     }
 
     if (numberOfTeamsCompleted < NUMBER_OF_TEAMS) {
       timeoutSaveMessage(
-        "Did NOT successfully update assets with initialized supplemental draft picks!"
+        "Did NOT successfully update assets with initialized supplemental draft picks!",
       );
     } else if (numberOfTeamsCompleted === NUMBER_OF_TEAMS) {
       timeoutSaveMessage(
-        "Initial supplemental draft picks saved successfully to GMs collection!"
+        "Initial supplemental draft picks saved successfully to GMs collection!",
       );
     }
 
@@ -120,7 +118,6 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
       return;
     }
 
-    const draftsCollection = await returnMongoCollection("drafts", era);
     const copyGmsData = cloneDeep(gmsData);
     for (let i = 0; i < SPORTS_ARRAY.length; i++) {
       const sport = SPORTS_ARRAY[i];
@@ -143,7 +140,6 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
 
       for (let year = numberYear; year < numberYear + 4; year++) {
         const eachSportYearGmPicksGrid = [];
-        const sportYear = `${sport}-${year}`;
 
         for (
           let teamNumber = 0;
@@ -167,16 +163,12 @@ export const CommissionerInitializeSupplementalDraftPicks = () => {
         // console.log(`SPORT-YEAR ${sportYear}: `, eachSportYearGmPicksGrid);
 
         // save each as sportYear keyed record in mongodb
-        await draftsCollection.insertOne({
-          type: sportYear,
-          picks: eachSportYearGmPicksGrid,
-          createdAt: new Date().toLocaleString(),
-        });
+        await api.put(`/create/drafts/${sport}/${year}`);
       }
     }
 
     timeoutSaveMessage(
-      "Initial supplemental draft picks saved successfully to drafts collection!"
+      "Initial supplemental draft picks saved successfully to drafts collection!",
     );
     // save to drafts collection in DB the raw list (and figure out how to display non-grid)
   }, [startingYear, era, gmsData, timeoutSaveMessage]);

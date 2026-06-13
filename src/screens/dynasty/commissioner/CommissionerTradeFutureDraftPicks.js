@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import Select from "react-select";
-import { returnMongoCollection } from "database-management";
 import { MOBILE_MAX_WIDTH } from "styles/global";
 
 import * as S from "styles/Commissioner.styles";
@@ -15,6 +14,7 @@ import {
 } from "styles/Dropdown.styles";
 import { SPORTS_ARRAY } from "Constants";
 import { capitalize, flatten, lowerCase, sortBy } from "lodash";
+import { api } from "utils/api";
 
 export const CommissionerTradeFutureDraftPicks = () => {
   const { era } = useParams();
@@ -30,8 +30,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
 
       const gmObjectByAbbreviation = {};
       for (let i = 0; i < gmData.length; i++) {
@@ -66,7 +65,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
       givingGm.length > 0 &&
         selectedDraftPick.length > 0 &&
         receivingGm.length > 0 &&
-        givingGm !== receivingGm
+        givingGm !== receivingGm,
     );
   }, [givingGm, selectedDraftPick, receivingGm]);
 
@@ -91,7 +90,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
       console.log("Giving GM: ", e, "assets: ", allAssetsFlattened);
       setGivingGmAssets(allAssetsFlattened);
     },
-    [gmsObject]
+    [gmsObject],
   );
 
   const handleReceivingGmChange = useCallback((e) => {
@@ -106,7 +105,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
   const saveTrade = useCallback(async () => {
     console.log(
       "Save selected ",
-      `${selectedDraftPick} via ${givingGm} to ${receivingGm}`
+      `${selectedDraftPick} via ${givingGm} to ${receivingGm}`,
     );
     const sportIndex = selectedDraftPick.indexOf(" ");
     const sport = lowerCase(selectedDraftPick.substring(0, sportIndex));
@@ -117,7 +116,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
     const givingGmDraftPicks =
       gmsObject[givingGm]["assets"][sport]["draftPicks"];
     const withoutRemovedSelectedDraftPick = givingGmDraftPicks.filter(
-      (pick) => pick !== matchDraftPick
+      (pick) => pick !== matchDraftPick,
     );
     console.log("wr", withoutRemovedSelectedDraftPick);
 
@@ -129,32 +128,27 @@ export const CommissionerTradeFutureDraftPicks = () => {
 
     let totalSuccessfulOperations = 0;
     // remove from giving gm's assets and save
-    const gmsCollection = await returnMongoCollection("gms", era);
-    const gmKeyString = `assets.${sport}.draftPicks`;
-    const { modifiedCount: givingGmModifiedCount } =
-      await gmsCollection.updateOne(
-        { abbreviation: givingGm },
-        { $set: { [gmKeyString]: withoutRemovedSelectedDraftPick } }
-      );
+    const { givingGmModifiedCount } = await api.put(
+      `/update/gms/draft-picks/${givingGm}/${sport}`,
+      withoutRemovedSelectedDraftPick,
+    );
     totalSuccessfulOperations += givingGmModifiedCount;
 
     // add to receiving gm's assets and save
-    const { modifiedCount: receivingGmModifiedCount } =
-      await gmsCollection.updateOne(
-        { abbreviation: receivingGm },
-        { $set: { [gmKeyString]: sortedReceivingGmDraftPicks } }
-      );
+    const { receivingGmModifiedCount } = await api.put(
+      `/update/gms/draft-picks/${receivingGm}/${sport}`,
+      sortedReceivingGmDraftPicks,
+    );
     totalSuccessfulOperations += receivingGmModifiedCount;
 
     console.log(
       "TOTAL SUCCESSFUL OPERATIONS COUNT: ",
-      totalSuccessfulOperations
+      totalSuccessfulOperations,
     );
 
     const year = matchDraftPick.substring(0, 4);
     const roundAndPick = matchDraftPick.substring(5);
-    const draftsCollection = await returnMongoCollection("drafts", era);
-    const draftData = await draftsCollection.find({ type: `${sport}-${year}` });
+    const draftData = await api.get(`/drafts/${sport}/${year}`);
     console.log("matchd", matchDraftPick);
 
     console.log("draft data", draftData);
@@ -175,7 +169,7 @@ export const CommissionerTradeFutureDraftPicks = () => {
         const endParentheses = roundAndPick.indexOf(")");
         const overallPick = roundAndPick.substring(
           startParentheses,
-          endParentheses
+          endParentheses,
         );
 
         // different pick matching logic depending if set grid or not
@@ -190,13 +184,11 @@ export const CommissionerTradeFutureDraftPicks = () => {
     }
 
     console.log("DRAFT TO USE", draftToUse);
-    const draftKeyString = isGrid ? "grid" : "picks";
     // add `tradedTo` to draft board for this pick and save
-    const { modifiedCount: draftsModifiedCount } =
-      await draftsCollection.updateOne(
-        { type: `${sport}-${year}` },
-        { $set: { [draftKeyString]: draftToUse } }
-      );
+    const { draftsModifiedCount } = await api.put(
+      `/update/drafts/${sport}/${year}/${isGrid}`,
+      draftToUse,
+    );
     totalSuccessfulOperations += draftsModifiedCount;
 
     if (totalSuccessfulOperations === 3) {

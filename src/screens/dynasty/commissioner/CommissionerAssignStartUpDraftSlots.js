@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import Select from "react-select";
-import { returnMongoCollection } from "database-management";
 
 import * as S from "styles/Commissioner.styles";
 import * as T from "styles/StandardScreen.styles";
@@ -16,6 +15,7 @@ import { MOBILE_MAX_WIDTH } from "styles/global";
 import { capitalize, uniq } from "lodash";
 import { assignStartupDraftSlots } from "./AssignDraftSlotsHelper";
 import { ALPHABET, NUMBER_OF_TEAMS, SPORTS_ARRAY } from "Constants";
+import { api } from "utils/api";
 
 export const CommissionerAssignStartupDraftSlots = () => {
   const { era } = useParams();
@@ -30,11 +30,10 @@ export const CommissionerAssignStartupDraftSlots = () => {
   // load data on page load
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({});
+      const gmData = await api.get("/gms");
 
       const gmNamesArray = gmData.map(
-        (gm) => `${gm.name} (${gm.abbreviation})`
+        (gm) => `${gm.name} (${gm.abbreviation})`,
       );
 
       setGmsArray(gmNamesArray);
@@ -96,7 +95,7 @@ export const CommissionerAssignStartupDraftSlots = () => {
 
       setDraftSlotAssignments(copyDraftSlotAssignments);
     },
-    [draftSlotAssignments, getAbbreviation]
+    [draftSlotAssignments, getAbbreviation],
   );
 
   // check for save button enable/disable
@@ -115,17 +114,10 @@ export const CommissionerAssignStartupDraftSlots = () => {
 
   const saveToDB = useCallback(
     async (era, sport, year, grid) => {
-      const draftsCollection = returnMongoCollection("drafts", era);
-      const draftObject = {
-        type: `${sport}-${year}`,
-        grid,
-        createdAt: new Date().toLocaleString(),
-      };
-
-      (await draftsCollection).insertOne(draftObject);
+      await api.put(`/create/drafts/${sport}/${year}`, grid);
       timeoutSaveMessage("Successfully saved grid to drafts collection");
     },
-    [timeoutSaveMessage]
+    [timeoutSaveMessage],
   );
 
   const saveDraftSlots = useCallback(async () => {

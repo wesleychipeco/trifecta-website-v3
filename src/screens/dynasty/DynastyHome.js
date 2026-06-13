@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
-import { returnMongoCollection } from "database-management";
 import { format, isAfter, isBefore } from "date-fns";
 import { pick } from "lodash";
 import { LeagueCalendar } from "components/calendar/Calendar";
@@ -16,6 +15,7 @@ import {
   Dynasty3x5GmColumn,
 } from "./standings/StandingsColumns";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import { api } from "utils/api";
 
 export const DynastyHome = () => {
   const [isMobile] = useState(useMediaQuery({ query: MOBILE_MAX_WIDTH }));
@@ -33,23 +33,23 @@ export const DynastyHome = () => {
       Dynasty3x5DynastyPointsColumn,
       Dynasty3x5DynastyPointsInProgressColumn,
     ],
-    []
+    [],
   );
 
   useEffect(() => {
     if (isReady) {
       const display = async () => {
-        const collection = await returnMongoCollection("dynastyStandings", era);
-        const rawData = await collection.find({});
-        const data = rawData.filter(
-          (doc) => doc.type !== "test" && doc.type !== "backup"
-        );
+        const data = await api.get("/dynasty-standings");
         const standings = data?.[0]?.standings ?? [];
         const lastUpdated = data?.[0]?.lastUpdated ?? "";
         const lastUpdatedIndex = lastUpdated.indexOf(",");
         const lastUpdatedDay = lastUpdated.substring(0, lastUpdatedIndex);
         const dynastyPointsOnlyStandings = standings.map((team) =>
-          pick(team, ["gm", "totalDynastyPoints", "totalDynastyPointsInSeason"])
+          pick(team, [
+            "gm",
+            "totalDynastyPoints",
+            "totalDynastyPointsInSeason",
+          ]),
         );
         setDynastyStandings(dynastyPointsOnlyStandings);
         setLastUpdatedDay(lastUpdatedDay);
@@ -60,14 +60,7 @@ export const DynastyHome = () => {
 
   useEffect(() => {
     const load = async () => {
-      const leagueCalendarCollection = await returnMongoCollection(
-        "leagueCalendar",
-        era
-      );
-      const calendarEvents = await leagueCalendarCollection.find(
-        {},
-        { sort: { start: 1 } }
-      );
+      const calendarEvents = await api.get("/commissioner/league-events");
 
       const convertedCalendarEvents = calendarEvents.map(
         ({ start, end, ...rest }) => {
@@ -76,22 +69,15 @@ export const DynastyHome = () => {
             end: new Date(Date.parse(end)),
             ...rest,
           };
-        }
+        },
       );
 
-      const leagueAnnouncementsCollection = await returnMongoCollection(
-        "leagueAnnouncements",
-        era
-      );
-      const announcements = await leagueAnnouncementsCollection.find(
-        {},
-        { sort: { startDate: -1 } }
-      );
+      const announcements = await api.get("/commissioner/league-announcements");
       const now = new Date();
       const inProgressAnnouncements = announcements.filter(
         (ann) =>
           isBefore(new Date(Date.parse(ann.startDate)), now) &&
-          isAfter(new Date(Date.parse(ann.endDate)), now)
+          isAfter(new Date(Date.parse(ann.endDate)), now),
       );
 
       setCalendarEvents(convertedCalendarEvents);

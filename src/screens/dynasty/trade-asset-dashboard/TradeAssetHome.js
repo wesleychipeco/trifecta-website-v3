@@ -1,4 +1,3 @@
-import { returnMongoCollection } from "database-management";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -11,6 +10,7 @@ import * as S from "styles/TradeAssetDashboard.styles";
 import * as T from "styles/StandardScreen.styles";
 import * as G from "styles/shared";
 import { MOBILE_MAX_WIDTH } from "styles/global";
+import { api } from "utils/api";
 
 export const TradeAssetHome = () => {
   const { era } = useParams();
@@ -21,8 +21,7 @@ export const TradeAssetHome = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const gmCollection = await returnMongoCollection("gms", era);
-      const gmData = await gmCollection.find({ test: { $ne: true } });
+      const gmData = await api.get("/trade-asset-home");
 
       // for gm buttons
       const pickedGmData = gmData.map((gm) => ({
@@ -47,7 +46,7 @@ export const TradeAssetHome = () => {
       const flattenedFiltered = flatten(filteredOutAvailable);
       const splitAvailable = splitIntoArraysOfLengthX(
         flattenedFiltered,
-        isMobile ? 2 : 4
+        isMobile ? 2 : 4,
       );
       setAvailableForTrade(splitAvailable);
     };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import * as S from "styles/StandardScreen.styles";
-import { returnMongoCollection } from "database-management";
 import { Table } from "components/table/Table";
 import {
   AllTimeRecordsColumns,
@@ -8,7 +7,7 @@ import {
   BestRotoColumns,
   PastChampionsColumns,
 } from "./columns";
-import { BASEBALL } from "Constants";
+import { api } from "utils/api";
 
 const DEFAULT_STATE = {
   allTimeRecords: [],
@@ -22,9 +21,8 @@ export const BaseballHallOfFame = () => {
 
   useEffect(() => {
     const load = async () => {
-      const collection = await returnMongoCollection("hallOfFame");
-      const data = await collection.find({ sport: BASEBALL });
-      setHallOfFameData(data?.[0] ?? DEFAULT_STATE);
+      const data = await api.get("/trifecta/hall-of-fame/baseball");
+      setHallOfFameData(data);
     };
 
     load();
