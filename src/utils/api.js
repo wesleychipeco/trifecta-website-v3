@@ -1,4 +1,4 @@
-const BASE = "http://localhost:5000/api";
+const BASE = process.env.REACT_APP_API_URL ?? "" + "/api";
 
 export const api = {
   get: async (path) => await fetch(`${BASE}${path}`).then((r) => r.json()),
