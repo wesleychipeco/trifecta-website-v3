@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.3.1] - 2026-06-17
+
+### [PR-107] - 2026-06-17
+
+- Use singleton MongoDB instance to prevent new connections from being created each time
+
 ### [PR-106] - 2026-06-13
 
 - Fix URL routing from FE to API server

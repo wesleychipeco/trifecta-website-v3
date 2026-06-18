@@ -5,10 +5,14 @@ import * as dotenv from "dotenv";
 dotenv.config();
 const CONNECTION_URI = process.env.MONGODB_URI;
 
-export const returnMongoCollection = async (
-  collectionName,
-  dynastyEra = ERA_1,
-) => {
+// module-level singleton
+let cachedClient = null;
+
+const getClient = async () => {
+  if (cachedClient) {
+    return cachedClient;
+  }
+
   const client = new MongoClient(CONNECTION_URI, {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -17,6 +21,15 @@ export const returnMongoCollection = async (
     },
   });
 
+  await client.connect();
+  cachedClient = client;
+  return cachedClient;
+};
+
+export const returnMongoCollection = async (
+  collectionName,
+  dynastyEra = ERA_1,
+) => {
   let dbName;
   switch (dynastyEra) {
     case ERA_0:
@@ -36,16 +49,11 @@ export const returnMongoCollection = async (
   }
 
   try {
-    await client.connect();
-    await client.db(dbName).command({ ping: 1 });
-    if (collectionName === GLOBAL_VARIABLES) {
-      console.log(
-        'Pinged the deployment. You\"ve successfully connected to MongoDB!',
-      );
-    }
+    const client = await getClient();
+    return client.db(dbName).collection(collectionName);
   } catch (err) {
     console.log("ERROR!!!!!", err);
+    cachedClient = null;
+    throw err;
   }
-
-  return client.db(dbName).collection(collectionName);
 };
