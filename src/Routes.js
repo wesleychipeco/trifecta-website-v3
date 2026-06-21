@@ -14,6 +14,7 @@ export const STATIC_ROUTES = {
   DynastyStandings: "standings/dynasty",
   TradeAssetHome: "trade-asset-home",
   DraftsHome: "drafts-home",
+  LotterySimulator: "lottery-simulator",
   CommissionerHome: "commissioner-home",
   CommissionerEnterTrade: "commissioner-enter-trade",
   CommissionerAssignStartupDraftSlots:

@@ -37,7 +37,6 @@ export const DynastySportStandings = ({ sport }) => {
     if (isReady) {
       const display = async () => {
         const object = await api.get(`/standings/${sport}/${year}`);
-        console.log("HI!!!!!!!1", object);
         const {
           lastScraped: lastScrapedString,
           dynastyStandings,
