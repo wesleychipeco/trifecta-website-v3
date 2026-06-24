@@ -15,6 +15,7 @@ export const returnMongoCollection = async (
       strict: true,
       deprecationErrors: true,
     },
+    maxPoolSize: 25,
   });
 
   let dbName;
