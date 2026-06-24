@@ -1,4 +1,4 @@
-import { useState } from "react";
+import * as S from "styles/LotterySimulator.styles";
 
 const ordinal = (x) => {
   let suffix;
@@ -54,38 +54,24 @@ const Row = ({
   i,
   chances,
   lotteryResults,
-  loadingProbs,
   names,
   probs,
+  isReadyToHighlight,
   setChances,
   setLotteryResults,
   setNames,
   setPresetKey,
 }) => {
-  const [highlight, setHighlight] = useState(false);
-
   const nameId = `name-${i}`;
   const chancesId = `chances-${i}`;
 
   return (
-    <tr
-      className={`border-b ${
-        highlight
-          ? "odd:bg-yellow-200 even:bg-yellow-100 hover:bg-[#f6edaa]"
-          : "odd:bg-gray-100 hover:bg-gray-200"
-      }`}
-      onClick={(event) => {
-        const ignoredElements = ["BUTTON", "INPUT"];
-        if (ignoredElements.includes(event.target.nodeName)) {
-          return;
-        }
-        setHighlight((value) => !value);
-      }}
-    >
+    <tr>
       <td className="py-0 w-0">
-        <button
-          className="text-red-600 text-xl"
-          type="button"
+        <S.LotteryTableClearTeamButton
+          icon="fa-circle-xmark"
+          size="xl"
+          color="red"
           onClick={() => {
             setLotteryResults(undefined);
             setChances(chances.filter((_chance, j) => j !== i));
@@ -96,17 +82,12 @@ const Row = ({
             } else {
               setNames(names.filter((_name, j) => j !== i));
             }
-            setHighlight(false);
           }}
-          title="Remove team"
-        >
-          ✕
-        </button>
+        />
       </td>
-      <td className="py-0">
-        <input
+      <td>
+        <S.LotteryTableNameInput
           id={nameId}
-          className="form-control py-1 px-2 text-sm w-[100px]"
           type="text"
           value={names[i]}
           onChange={(event) => {
@@ -115,10 +96,9 @@ const Row = ({
           }}
         />
       </td>
-      <td className="py-0 w-0">
-        <input
+      <td>
+        <S.LotteryTableChancesInput
           id={chancesId}
-          className="form-control py-1 px-2 text-sm"
           type="text"
           value={chance}
           onChange={(event) => {
@@ -135,15 +115,14 @@ const Row = ({
       </td>
       {chances.map((_chance, j) => {
         const pct = formatPercent(probs[i]?.[j]);
+        const shouldHighlight =
+          lotteryResults &&
+          lotteryResults[j] === names[i] &&
+          isReadyToHighlight;
         return (
-          <td
-            key={j}
-            className={`${
-              lotteryResults && lotteryResults[j] === i ? "bg-green-200" : ""
-            }${loadingProbs ? " text-gray-500" : ""}`}
-          >
+          <S.LotteryTableCell key={j} shouldHighlight={shouldHighlight}>
             {pct ?? "\u00A0"}
-          </td>
+          </S.LotteryTableCell>
         );
       })}
     </tr>
@@ -152,27 +131,24 @@ const Row = ({
 
 export const LotteryTable = (props) => {
   return (
-    <table
-      className="table-auto"
-      style={{
-        width: "unset",
-      }}
-    >
-      <thead className="text-center">
-        <tr className="border-b-2 border-gray-500">
+    <S.LotteryTableTable>
+      <thead>
+        <tr>
           <th />
-          <th>Team Name</th>
-          <th>Chances</th>
+          <S.LotteryTableHeaderText>Team Name</S.LotteryTableHeaderText>
+          <S.LotteryTableHeaderText>Chances</S.LotteryTableHeaderText>
           {props.chances.map((_chance, i) => (
-            <th key={i}>{ordinal(i + 3)}</th> // start at 3rd pick
+            <S.LotteryTableHeaderText key={i}>
+              {ordinal(i + 3)}
+            </S.LotteryTableHeaderText> // start at 3rd pick
           ))}
         </tr>
       </thead>
-      <tbody className="text-end">
+      <tbody>
         {props.chances.map((chance, i) => {
           return <Row key={i} i={i} chance={chance} {...props} />;
         })}
       </tbody>
-    </table>
+    </S.LotteryTableTable>
   );
 };

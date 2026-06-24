@@ -7,6 +7,7 @@ import Select from "react-select";
 import * as S from "styles/LotterySimulator.styles";
 import * as T from "styles/StandardScreen.styles";
 import * as X from "styles/TransactionsHistory.styles";
+import * as G from "styles/shared";
 import { api } from "utils/api";
 import { sportYearToSportAndYear } from "utils/years";
 import { LotteryTable } from "./LotteryTable";
@@ -31,9 +32,10 @@ export const LotterySimulator = () => {
   const [selectedLeagueStandings, setSelectedLeagueStandings] = useState([]);
   const [chances, setChances] = useState(DEFAULT_CHANCES);
   const [loadingProbs, setLoadingProbs] = useState(true);
-  const [lotteryResults, setLotteryResults] = useState([DEFAULT_NAMES]);
-  const [names, setNames] = useState();
+  const [lotteryResults, setLotteryResults] = useState(undefined);
+  const [names, setNames] = useState(DEFAULT_NAMES);
   const [probs, setProbs] = useState([]);
+  const [shouldHighlight, setShouldHighlight] = useState(false);
 
   const StandingsColumns = [
     {
@@ -115,7 +117,6 @@ export const LotterySimulator = () => {
     if (completedLeaguesArray && completedLeaguesArray.length > 0) {
       return completedLeaguesArray.map((sportYear) => {
         const { sport, year } = sportYearToSportAndYear(sportYear);
-        console.log("sport", sport, "/", "year", year);
         return {
           value: sportYear,
           label: `${year} ${capitalize(sport)}`,
@@ -139,8 +140,6 @@ export const LotterySimulator = () => {
     setNames([...names, newName]);
   }, [chances, names, setLotteryResults, setChances, setNames]);
 
-  console.log("DDDD", selectedLeagueStandings);
-
   const { sport: selectedSport, year: selectedYear } =
     sportYearToSportAndYear(selectedSportYear);
 
@@ -154,8 +153,6 @@ export const LotterySimulator = () => {
     setLotteryResults(orderedResults);
   }, [chances, setLotteryResults, names]);
 
-  console.log("LRRRRRRRRRRRR", lotteryResults);
-
   return (
     <T.FlexColumnCenterContainer>
       <T.Title>3x5 Trifecta Lottery Simulator</T.Title>
@@ -164,7 +161,7 @@ export const LotterySimulator = () => {
         <S.LotterySimulatorColumn>
           <S.LotterySimulatorSimButtons>
             <Select
-              placeholder="Select Sport & Year"
+              placeholder="Load Past Standings"
               defaultValue={""} //last in list of completed sportyears
               onChange={handleSportYearChange}
               options={options} //ilst of completed sports in appropriate select format
@@ -177,6 +174,7 @@ export const LotterySimulator = () => {
             <S.SimLotteryButton
               onClick={simLotteryAction}
               disabled={chances.length === 0}
+              style={{ backgroundColor: "green" }}
             >
               Sim Lottery!
             </S.SimLotteryButton>
@@ -190,16 +188,26 @@ export const LotterySimulator = () => {
             setChances={setChances}
             setLotteryResults={setLotteryResults}
             setNames={setNames}
+            isReadyToHighlight={shouldHighlight}
           />
         </S.LotterySimulatorColumn>
-        {lotteryResults.length > 0 && (
-          <S.LotterySimulatorColumn>
-            <h4>Lottery Results</h4>
-            {lotteryResults.map((team, i) => (
-              <p key={team}>{`${i + 3}${numberToOrdinal(i + 3)}: ${team}`}</p> // start at 3rd pick
+        <S.LotteryResultsColumn
+          visible={lotteryResults && lotteryResults.length > 0}
+        >
+          <T.TableTitle>Lottery Results</T.TableTitle>
+          <G.VerticalSpacer factor={2} />
+          {lotteryResults &&
+            lotteryResults.map((team, i) => (
+              <S.LotteryResultsText
+                key={team}
+                index={i}
+                total={lotteryResults.length}
+                onAnimationEnd={
+                  i === 0 ? () => setShouldHighlight(true) : undefined
+                }
+              >{`${i + 3}${numberToOrdinal(i + 3)}: ${team}`}</S.LotteryResultsText> // start at 3rd pick
             ))}
-          </S.LotterySimulatorColumn>
-        )}
+        </S.LotteryResultsColumn>
         <S.LotterySimulatorColumn>
           <T.SingleTableContainer>
             {selectedSportYear && (
