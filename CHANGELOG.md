@@ -1,5 +1,9 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [PR-107] - 2026-06-24
+
+- Add lottery simulator!
+
 ### [PR-106] - 2026-06-13
 
 - Fix URL routing from FE to API server

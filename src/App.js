@@ -51,6 +51,7 @@ import { CommissionerCompleteSport } from "screens/dynasty/commissioner/Commissi
 import { CommissionerRemoveCompletedDraftPicks } from "screens/dynasty/commissioner/CommissionerRemoveCompletedDraftPicks";
 import { CommissionerAssignLeagueTeamIds } from "screens/dynasty/commissioner/CommissionerAssignLeagueTeamIds";
 import { api } from "utils/api";
+import { LotterySimulator } from "screens/dynasty/lottery-simulator/LotterySimulator";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -287,6 +288,11 @@ export const App = () => {
                   exact
                 />
               </Route>
+              <Route
+                path={ROUTES.LotterySimulator}
+                element={<LotterySimulator />}
+                exact
+              />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
