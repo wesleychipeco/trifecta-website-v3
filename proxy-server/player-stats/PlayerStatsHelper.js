@@ -631,6 +631,7 @@ const totalExistingBaseballPlayerStats = (
     earnedRuns,
     walksPlusHits,
     teamName,
+    type,
   } = playerObject;
 
   // sanity check
@@ -729,6 +730,7 @@ const totalExistingBaseballPlayerStats = (
     earnedRuns,
     walksPlusHits,
     teamNamesArray: newTeamNamesArray,
+    type,
   };
 };
 
