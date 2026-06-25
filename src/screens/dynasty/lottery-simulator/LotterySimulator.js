@@ -223,6 +223,15 @@ export const LotterySimulator = () => {
           </T.SingleTableContainer>
         </S.LotterySimulatorColumn>
       </S.LotterySimulatorColumns>
+      <S.Shoutout>
+        <S.ShoutoutText>
+          Shoutout to{" "}
+          <a href="https://zengm.com/universal-draft-lottery-simulator/">
+            ZenGM
+          </a>{" "}
+          for making their lottery simulator code open source!
+        </S.ShoutoutText>
+      </S.Shoutout>
     </T.FlexColumnCenterContainer>
   );
 };
