@@ -1,5 +1,12 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.4.0] - 2026-06-25
+
+### [PR-108] - 2026-06-25
+
+- Fix transaction history bugs
+- Fix player stats bugs
+
 ### [PR-107] - 2026-06-24
 
 - Add lottery simulator!
