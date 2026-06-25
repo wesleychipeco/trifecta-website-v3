@@ -150,7 +150,7 @@ export const PlayerStatsTable = ({
       yearQuery,
       baseballTypeQuery,
       totalQuery,
-    ]
+    ],
   );
 
   const tableInstance = useTable(
@@ -165,7 +165,7 @@ export const PlayerStatsTable = ({
       globalFilter: globalFilterFunction,
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
   );
 
   const {
@@ -313,7 +313,7 @@ export const PlayerStatsTable = ({
                     return (
                       <TableHeaderCellComponent
                         {...column.getHeaderProps(
-                          column.getSortByToggleProps({ title: undefined })
+                          column.getSortByToggleProps({ title: undefined }),
                         )}
                         doNotStickFirstColumn
                       >
@@ -372,14 +372,14 @@ export const PlayerStatsTable = ({
                         {cell.render((c) => {
                           if (
                             EXCLUDED_PER_GAME_HEADERS.includes(
-                              c.column.Header
+                              c.column.Header,
                             ) ||
                             perGameQuery === ""
                           ) {
-                            return c.value;
+                            return c.value ?? "";
                           } else {
                             return (c.value / c.row.values.gamesPlayed).toFixed(
-                              1
+                              1,
                             );
                           }
                         })}

@@ -14,7 +14,7 @@ import {
   FootballStatsColumns,
 } from "./StatsColumns";
 import { PlayerStatsTable } from "./PlayerStatsTable";
-import { BASEBALL, BASKETBALL, ERA_1, FOOTBALL } from "Constants";
+import { BASEBALL, BASKETBALL, FOOTBALL } from "Constants";
 import { api } from "utils/api";
 
 export const SportPlayerStats = () => {
@@ -49,6 +49,10 @@ export const SportPlayerStats = () => {
 
   useEffect(() => {
     if (isReady) {
+      setPlayerStats([]);
+      setYearsArray([]);
+      setIsLoading(true);
+
       const display = async () => {
         await getAndSetGmsArray();
 
@@ -106,6 +110,7 @@ export const SportPlayerStats = () => {
           </G.FlexRowStart>
           <G.VerticalSpacer factor={isMobile ? 0 : 4} />
           <PlayerStatsTable
+            key={sport}
             sport={sport}
             columns={statsColumns}
             data={playerStats}

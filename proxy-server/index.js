@@ -395,7 +395,9 @@ app.get("/api/transactions/:sport/:year", async (req, res) => {
   const { sport, year } = req.params;
   const sportYear = `${sport}${year}`;
   const collection = await returnMongoCollection("transactionsHistory");
-  const data = await collection.find({ sportYear }).toArray();
+  const data = await collection
+    .find({ sportYear }, { sort: { date: -1 } })
+    .toArray();
   const object = data?.[0] ?? {};
   res.send(object);
 });

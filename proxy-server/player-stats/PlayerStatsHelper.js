@@ -126,11 +126,11 @@ export const compileBaseballStats = (row, gmName, year) => {
     const [
       ageObject,
       inningsPitchedObject,
-      winsObject,
-      qualityStartObject,
-      ksObject,
       eraObject,
       whipObject,
+      ksObject,
+      winsObject,
+      qualityStartObject,
       savesHoldsObject, // H // AB // R // RBI // HR // SO // OBP
       ,
       ,
@@ -330,8 +330,11 @@ const inningsPitchedToNumberConverter = (inningsPitchedString) => {
 };
 
 const inningsPitchedToDisplayStringConverter = (inningsPitchedNumber) => {
-  const inningsPitchedString = inningsPitchedNumber.toString();
-  return inningsPitchedString.replace(".333", ".1").replace(".667", ".2");
+  const inningsPitchedString = Math.trunc(inningsPitchedNumber * 10) / 10;
+  return inningsPitchedString
+    .toString()
+    .replace(".3", ".1")
+    .replace(".6", ".2");
 };
 
 export const totalPlayerStatsOverAllYears = (sport, allYearsStats) => {
@@ -844,7 +847,7 @@ const totalExistingFootballPlayerStats = (
     agesArray,
     positionsArray: newPositionsArray,
     gamesPlayed,
-    fantasyPoints,
+    fantasyPoints: Math.round(fantasyPoints * 10) / 10, // round to 1 decimal point and keep a number
     passingYards,
     passingTDs,
     interceptions,
