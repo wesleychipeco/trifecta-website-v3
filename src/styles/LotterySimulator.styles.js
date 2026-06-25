@@ -154,3 +154,12 @@ export const LotteryResultsText = styled.p`
     }
   }
 `;
+
+export const Shoutout = styled.div`
+  position: absolute;
+  bottom: 4%;
+`;
+
+export const ShoutoutText = styled.p`
+  font-size: 1rem;
+`;
