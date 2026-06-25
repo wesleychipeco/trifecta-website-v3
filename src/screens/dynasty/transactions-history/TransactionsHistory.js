@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { capitalize } from "lodash";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { parseISO } from "date-fns";
+import { toZonedTime, format } from "date-fns-tz";
 import * as S from "styles/TransactionsHistory.styles";
 import * as T from "styles/StandardScreen.styles";
 import * as G from "styles/shared";
@@ -21,7 +23,7 @@ export const TransactionsHistory = () => {
 
   const getAndSetGmsArray = useCallback(async () => {
     // get list of gm abbreviations
-    const gmData = await api.get(`/gms/${era}`);
+    const gmData = await api.get("/gms");
     const gmNamesArray = gmData.map((gm) => `${gm.name} (${gm.abbreviation})`);
     setGmsArray(gmNamesArray);
   }, [setGmsArray, era]);
@@ -55,7 +57,12 @@ export const TransactionsHistory = () => {
     return [
       {
         Header: "Date",
-        accessor: "date",
+        accessor: (data) => {
+          const tz = "America/Los_Angeles";
+          const zonedTime = toZonedTime(parseISO(data.date), tz);
+          const formatted = format(zonedTime, "M/d/yy h:mmaaa", { tz });
+          return formatted;
+        },
         tableHeaderCell: T.StringTableHeaderCell,
       },
       {
@@ -123,7 +130,7 @@ export const TransactionsHistory = () => {
       <TransactionsHistoryTable
         columns={transactionsColumns}
         data={transactions}
-        sortBy={[{ id: "date", desc: false }]}
+        sortBy={[{ id: "period", desc: true }]}
         hiddenColumns={["transactionType", "isSuccessfulReason"]}
         gmsArray={gmsArray}
       />
