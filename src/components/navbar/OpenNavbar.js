@@ -22,15 +22,13 @@ export const OpenNavbar = () => {
   }, []);
 
   // dynasty season variables
-  const { inSeasonLeagues, completedLeagues } = useSelector(
+  const { inSeasonLeagues } = useSelector(
     (state) => state?.currentVariables?.seasonVariables?.dynasty,
   );
 
   // local state
   const [currentPath, setCurrentPath] = useState("");
   const [isActiveStandingsExpanded, toggleActiveStandingsExpansion] =
-    useState(false);
-  const [isPastStandingsExpanded, togglePastStandingsExpansion] =
     useState(false);
   const [isStatsExpanded, toggleStatsExpansion] = useState(false);
   const [isCommissioner, setIsCommissioner] = useState(false);
@@ -59,10 +57,6 @@ export const OpenNavbar = () => {
   const expandActiveStandingsFunction = useCallback(() => {
     toggleActiveStandingsExpansion(!isActiveStandingsExpanded);
   }, [toggleActiveStandingsExpansion, isActiveStandingsExpanded]);
-
-  const expandPastStandingsFunction = useCallback(() => {
-    togglePastStandingsExpansion(!isPastStandingsExpanded);
-  }, [togglePastStandingsExpansion, isPastStandingsExpanded]);
 
   const expandStatsFunction = useCallback(() => {
     toggleStatsExpansion(!isStatsExpanded);
@@ -102,19 +96,11 @@ export const OpenNavbar = () => {
                 >{`${year} ${capitalize(sport)} Standings`}</S.IndentedLink>
               );
             })}
-          <S.Standings onClick={expandPastStandingsFunction}>
+          <S.Link
+            to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.PastStandingsHome}`}
+          >
             Past Sport Standings
-          </S.Standings>
-          {isPastStandingsExpanded &&
-            completedLeagues.map((completedLeague) => {
-              const { sport, year } = sportYearToSportAndYear(completedLeague);
-              return (
-                <S.IndentedLink
-                  key={completedLeague}
-                  to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/standings/${sport}/${year}`}
-                >{`${year} ${capitalize(sport)} Standings`}</S.IndentedLink>
-              );
-            })}
+          </S.Link>
           <S.Link
             to={`${STATIC_ROUTES.DynastyHome}/${ERA_1}/${STATIC_ROUTES.TradeAssetHome}`}
           >
