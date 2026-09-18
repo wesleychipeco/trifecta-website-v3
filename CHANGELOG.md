@@ -1,6 +1,12 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
-### [PR-109 ] -2026-09-18
+### [4.4.1] - 2026-09-18
+
+### [PR-110] - 2026-09-18
+
+- Added 2026 Football draft results
+
+### [PR-109] -2026-09-18
 
 - Fix reusing MongoDB connections
 
