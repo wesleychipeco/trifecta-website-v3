@@ -52,6 +52,7 @@ import { CommissionerRemoveCompletedDraftPicks } from "screens/dynasty/commissio
 import { CommissionerAssignLeagueTeamIds } from "screens/dynasty/commissioner/CommissionerAssignLeagueTeamIds";
 import { api } from "utils/api";
 import { LotterySimulator } from "screens/dynasty/lottery-simulator/LotterySimulator";
+import { PastStandingsHome } from "screens/dynasty/standings/PastStandingsHome";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -185,6 +186,11 @@ export const App = () => {
                 <Route
                   path={STATIC_ROUTES.DynastyStandings}
                   element={<DynastyStandings />}
+                  exact
+                />
+                <Route
+                  path={STATIC_ROUTES.PastStandingsHome}
+                  element={<PastStandingsHome />}
                   exact
                 />
                 <Route
