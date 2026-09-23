@@ -92,7 +92,7 @@ export const DraftBoard = () => {
 
     // after ending final loop, add last arrayOfPicks to arrayOfRounds
     const toAdd =
-      arrayOfPicks[0]?.fantasyTeam === firstPickGM
+      arrayOfPicks[0]?.fantasyTeam === firstPickGM || !isStartup
         ? arrayOfPicks
         : arrayOfPicks.reverse();
     arrayOfRounds.push(toAdd);
