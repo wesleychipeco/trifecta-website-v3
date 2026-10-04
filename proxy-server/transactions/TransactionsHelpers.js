@@ -23,7 +23,7 @@ export const scrapeTransactions = async (leagueId) => {
     at: 0,
     dt: 0,
     tz: "America/Los_Angeles",
-    v: "183.1.0",
+    v: "187.0.6",
   };
 
   return axios.post(backendUrl, body);

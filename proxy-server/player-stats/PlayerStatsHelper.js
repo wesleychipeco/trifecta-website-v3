@@ -29,7 +29,7 @@ export const scrapePlayerStats = async (limiter, leagueId, teamId) => {
       at: "3.0",
       av: null,
       tz: "America/Los_Angeles",
-      v: "183.1.0",
+      v: "187.0.6",
     };
 
     return axios.post(backendUrl, body);

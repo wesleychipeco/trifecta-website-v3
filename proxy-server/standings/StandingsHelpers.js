@@ -11,7 +11,7 @@ export const scrapeStandings = async (leagueId) => {
     at: 0,
     av: null,
     tz: "America/Los_Angeles",
-    v: "187.0.1",
+    v: "187.0.6",
   };
 
   return axios.post(backendUrl, body);
