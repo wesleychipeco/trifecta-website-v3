@@ -1,5 +1,11 @@
 ### PR links (https://github.com/wesleychipeco/trifecta-website-v3/pulls?q=is%3Apr+is%3Aclosed)
 
+### [4.4.2] - 2026-10-17
+
+### [PR-111] - 2026-10-17
+
+- Added 2027 Basketball draft results
+
 ### [4.4.1] - 2026-09-18
 
 ### [PR-110] - 2026-09-18
